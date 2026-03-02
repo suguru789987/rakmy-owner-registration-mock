@@ -440,11 +440,11 @@
           <div class="step"><span class="sn">3</span><span>PW設定</span></div>
         </div>
         <div class="fs"><div class="fst">会社情報</div>
-          <div class="fg"><label>会社名 <span class="req">*</span></label><input value="株式会社サンプル"></div>
+          <div class="fg"><label>会社名 <span class="req">※</span></label><input value="株式会社サンプル"></div>
         </div>
         <div class="fs"><div class="fst">オーナー情報</div>
-          <div class="fg"><label>名前 <span class="req">*</span></label><input value="山田 太郎"></div>
-          <div class="fg"><label>メールアドレス <span class="req">*</span></label><input value="yamada@sample-company.jp"><div class="hint">このアドレスに確認メールが送信されます</div></div>
+          <div class="fg"><label>名前 <span class="req">※</span></label><input value="山田 太郎"></div>
+          <div class="fg"><label>メールアドレス <span class="req">※</span></label><input value="yamada@sample-company.jp"><div class="hint">このアドレスに確認メールが送信されます</div></div>
         </div>
         <div class="cb-grp"><input type="checkbox" checked><label><a href="#" class="tl">利用規約</a> と <a href="#" class="tl">プライバシーポリシー</a> に同意する</label></div>
         <button class="btn btn-p btn-lg" onclick="go('a2')">確認メールを送信</button>
@@ -469,7 +469,7 @@
         </div>
         <div class="al al-i"><span>📧</span><div><strong>yamada@sample-company.jp</strong> に6桁の確認コードを送信しました。</div></div>
         <div class="fg">
-          <label>確認コード（6桁） <span class="req">*</span></label>
+          <label>確認コード（6桁） <span class="req">※</span></label>
           <div class="code-grp">
             <input class="code-in" value="4" maxlength="1"><input class="code-in" value="8" maxlength="1"><input class="code-in" value="2" maxlength="1">
             <input class="code-in" value="9" maxlength="1"><input class="code-in" value="1" maxlength="1"><input class="code-in" value="5" maxlength="1">
@@ -497,8 +497,8 @@
           <div class="step active"><span class="sn">3</span><span>PW設定</span></div>
         </div>
         <div class="al al-s"><span>✓</span><div>メールアドレスの確認が完了しました</div></div>
-        <div class="fg"><label>パスワード <span class="req">*</span></label><input type="password" value="securepass123"><div class="pw-str"><div class="bar"><div class="bf strong"></div></div><div class="lbl">強い</div></div><div class="hint">8文字以上</div></div>
-        <div class="fg"><label>パスワード（確認） <span class="req">*</span></label><input type="password" value="securepass123"></div>
+        <div class="fg"><label>パスワード <span class="req">※</span></label><input type="password" value="securepass123"><div class="pw-str"><div class="bar"><div class="bf strong"></div></div><div class="lbl">強い</div></div><div class="hint">8文字以上</div></div>
+        <div class="fg"><label>パスワード（確認） <span class="req">※</span></label><input type="password" value="securepass123"></div>
         <button class="btn btn-p btn-lg" onclick="go('a4')">登録を完了する</button>
       </div>
     </div>
@@ -573,17 +573,17 @@
         <div class="modal">
           <div class="mh"><h3>管理者を招待</h3><button class="mx" onclick="go('b1')">✕</button></div>
           <div class="mb">
-            <div class="fg"><label>メールアドレス <span class="req">*</span></label><input value="sato@example.jp" style="max-width:100%;"></div>
-            <div class="fg"><label>名前 <span class="req">*</span></label><input value="佐藤 一郎" style="max-width:100%;"></div>
+            <div class="fg"><label>メールアドレス <span class="req">※</span></label><input value="sato@example.jp" style="max-width:100%;"></div>
+            <div class="fg"><label>名前 <span class="req">※</span></label><input value="佐藤 一郎" style="max-width:100%;"></div>
             <div class="fg">
-              <label>権限 <span class="req">*</span></label>
+              <label>権限 <span class="req">※</span></label>
               <div class="radio-grp">
                 <div class="ro sel" onclick="selRole(this,false)"><input type="radio" name="r" checked><div><div class="rl">オーナー（全権管理者）</div><div class="rd">全店舗・全機能にアクセス。店舗追加・従業員追加もすべて可能</div></div></div>
                 <div class="ro" onclick="selRole(this,true)"><input type="radio" name="r"><div><div class="rl">店長（店舗管理者）</div><div class="rd">担当店舗の従業員管理・勤怠管理を委譲</div></div></div>
               </div>
             </div>
             <div class="fg" id="sa" style="display:none;">
-              <label>担当店舗 <span class="req">*</span></label>
+              <label>担当店舗 <span class="req">※</span></label>
               <div class="store-chk-grid">
                 <label class="store-chk"><input type="checkbox"> 渋谷店</label>
                 <label class="store-chk"><input type="checkbox"> 新宿店</label>
@@ -626,8 +626,8 @@
         <div class="logo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
         <h2>招待を受諾</h2>
         <div class="ib"><div class="ir"><span class="il">会社:</span><strong>株式会社サンプル</strong></div><div class="ir"><span class="il">権限:</span><span class="rb rb-owner">オーナー</span></div><div class="ir"><span class="il">名前:</span><strong>佐藤 一郎</strong></div></div>
-        <div class="fg"><label>パスワード <span class="req">*</span></label><input type="password" value="strongpass1"><div class="pw-str"><div class="bar"><div class="bf strong"></div></div><div class="lbl">強い</div></div><div class="hint">8文字以上</div></div>
-        <div class="fg"><label>パスワード（確認） <span class="req">*</span></label><input type="password" value="strongpass1"></div>
+        <div class="fg"><label>パスワード <span class="req">※</span></label><input type="password" value="strongpass1"><div class="pw-str"><div class="bar"><div class="bf strong"></div></div><div class="lbl">強い</div></div><div class="hint">8文字以上</div></div>
+        <div class="fg"><label>パスワード（確認） <span class="req">※</span></label><input type="password" value="strongpass1"></div>
         <button class="btn btn-p btn-lg">登録を完了してログイン</button>
       </div>
     </div>
@@ -773,11 +773,11 @@
           <div class="mh"><h3>店舗登録</h3><button class="mx" onclick="go('c1')">✕</button></div>
           <div class="mb">
             <!-- 既存フィールド -->
-            <div class="fg"><label>店舗名 <span class="req">*</span></label><input value="横浜店" style="max-width:100%;"></div>
-            <div class="fg"><label>業態・ブランド <span class="req">*</span></label><select style="max-width:100%;"><option>選択してください</option><option selected>飲食店向けBI_SaaS</option></select></div>
+            <div class="fg"><label>店舗名 <span class="req">※</span></label><input value="横浜店" style="max-width:100%;"></div>
+            <div class="fg"><label>業態・ブランド <span class="req">※</span></label><select style="max-width:100%;"><option>選択してください</option><option selected>飲食店向けBI_SaaS</option></select></div>
             <div class="fr">
-              <div class="fg"><label>郵便番号 <span class="req">*</span></label><input value="220-0011" style="max-width:100%;"></div>
-              <div class="fg" style="flex:2;"><label>住所 <span class="req">*</span></label><input value="神奈川県横浜市西区高島2丁目" style="max-width:100%;"></div>
+              <div class="fg"><label>郵便番号 <span class="req">※</span></label><input value="220-0011" style="max-width:100%;"></div>
+              <div class="fg" style="flex:2;"><label>住所 <span class="req">※</span></label><input value="神奈川県横浜市西区高島2丁目" style="max-width:100%;"></div>
             </div>
 
             <div class="dv"></div>
@@ -817,8 +817,8 @@
           <div class="mh"><h3>店長を招待 — 池袋店</h3><button class="mx" onclick="go('c1')">✕</button></div>
           <div class="mb">
             <div class="al al-i"><span>ℹ️</span><div><strong>池袋店</strong> の店長として招待します。従業員の招待・勤怠管理を委譲できます。</div></div>
-            <div class="fg"><label>名前 <span class="req">*</span></label><input value="伊藤 四郎" style="max-width:100%;"></div>
-            <div class="fg"><label>メールアドレス <span class="req">*</span></label><input value="ito@example.jp" style="max-width:100%;"></div>
+            <div class="fg"><label>名前 <span class="req">※</span></label><input value="伊藤 四郎" style="max-width:100%;"></div>
+            <div class="fg"><label>メールアドレス <span class="req">※</span></label><input value="ito@example.jp" style="max-width:100%;"></div>
             <div class="btn-grp"><button class="btn btn-s" onclick="go('c1')">キャンセル</button><button class="btn btn-p" onclick="go('c4')">招待メールを送信</button></div>
           </div>
         </div>
@@ -842,8 +842,8 @@
           <div class="ir"><span class="il">名前:</span><strong>伊藤 四郎</strong></div>
         </div>
         <div class="al al-i"><span>💡</span><div>店長として以下の操作が可能です：<br>・従業員の招待・管理<br>・勤怠データの閲覧・承認</div></div>
-        <div class="fg"><label>パスワード <span class="req">*</span></label><input type="password" value="mgrpass123"><div class="pw-str"><div class="bar"><div class="bf strong"></div></div><div class="lbl">強い</div></div><div class="hint">8文字以上</div></div>
-        <div class="fg"><label>パスワード（確認） <span class="req">*</span></label><input type="password" value="mgrpass123"></div>
+        <div class="fg"><label>パスワード <span class="req">※</span></label><input type="password" value="mgrpass123"><div class="pw-str"><div class="bar"><div class="bf strong"></div></div><div class="lbl">強い</div></div><div class="hint">8文字以上</div></div>
+        <div class="fg"><label>パスワード（確認） <span class="req">※</span></label><input type="password" value="mgrpass123"></div>
         <button class="btn btn-p btn-lg" onclick="go('d2')">登録を完了してログイン</button>
       </div>
     </div>
@@ -1080,7 +1080,7 @@
           <div class="mb">
             <!-- ★ 新規追加: 所属店舗（オーナーのみ表示） -->
             <div class="fg">
-              <label>所属店舗 <span class="req">*</span></label>
+              <label>所属店舗 <span class="req">※</span></label>
               <select style="max-width:100%;"><option>選択してください</option><option>渋谷店</option><option>新宿店</option><option selected>池袋店</option></select>
               <div class="hint">オーナーは全店舗に従業員を登録できます</div>
             </div>
@@ -1089,25 +1089,25 @@
 
             <!-- 既存フィールド再現 -->
             <div class="fr">
-              <div class="fg"><label>名前 <span class="req">*</span></label><input placeholder="名前を入力" value="吉田 七美" style="max-width:100%;"></div>
-              <div class="fg"><label>電話番号 <span class="req">*</span></label><input placeholder="電話番号を入力" value="090-1234-5678" style="max-width:100%;"></div>
+              <div class="fg"><label>名前 <span class="req">※</span></label><input placeholder="名前を入力" value="吉田 七美" style="max-width:100%;"></div>
+              <div class="fg"><label>電話番号 <span class="req">※</span></label><input placeholder="電話番号を入力" value="090-1234-5678" style="max-width:100%;"></div>
             </div>
             <div class="fr">
-              <div class="fg"><label>メールアドレス <span class="req">*</span></label><input placeholder="メールアドレスを入力" value="yoshida@example.jp" style="max-width:100%;"></div>
+              <div class="fg"><label>メールアドレス <span class="req">※</span></label><input placeholder="メールアドレスを入力" value="yoshida@example.jp" style="max-width:100%;"></div>
               <div class="fg"><label>従業員コード</label><input placeholder="従業員コードを入力" style="max-width:100%;"><div class="hint">未入力の場合は自動生成されます</div></div>
             </div>
             <div class="fr">
               <div class="fg">
-                <label>雇用区分 <span class="req">*</span></label>
+                <label>雇用区分 <span class="req">※</span></label>
                 <select style="max-width:100%;"><option>雇用区分を選択</option><option>業務委託</option><option selected>バイトさん</option><option>代表取締役</option></select>
               </div>
               <div class="fg">
-                <label>交通費単位 <span class="req">*</span></label>
+                <label>交通費単位 <span class="req">※</span></label>
                 <select style="max-width:100%;"><option selected>日額</option><option>月額</option></select>
               </div>
             </div>
             <div class="fg">
-              <label>交通費/日 <span class="req">*</span></label>
+              <label>交通費/日 <span class="req">※</span></label>
               <input placeholder="交通費を入力" value="¥500" style="max-width:200px;">
             </div>
 
@@ -1137,8 +1137,8 @@
           <div class="ir"><span class="il">名前:</span><strong>吉田 七美</strong></div>
           <div class="ir"><span class="il">区分:</span><strong>アルバイト</strong></div>
         </div>
-        <div class="fg"><label>パスワード <span class="req">*</span></label><input type="password" value="employee1"><div class="pw-str"><div class="bar"><div class="bf strong"></div></div><div class="lbl">強い</div></div><div class="hint">8文字以上</div></div>
-        <div class="fg"><label>パスワード（確認） <span class="req">*</span></label><input type="password" value="employee1"></div>
+        <div class="fg"><label>パスワード <span class="req">※</span></label><input type="password" value="employee1"><div class="pw-str"><div class="bar"><div class="bf strong"></div></div><div class="lbl">強い</div></div><div class="hint">8文字以上</div></div>
+        <div class="fg"><label>パスワード（確認） <span class="req">※</span></label><input type="password" value="employee1"></div>
         <button class="btn btn-p btn-lg">登録を完了してログイン</button>
         <div class="al al-i" style="margin-top:14px;"><span>📱</span><div>ログイン後、スマートフォンから打刻できるようになります。</div></div>
       </div>
@@ -1162,7 +1162,7 @@
           <div class="sline"></div>
           <div class="step"><span class="sn">3</span><span>新PW設定</span></div>
         </div>
-        <div class="fg"><label>メールアドレス <span class="req">*</span></label><input value="yamada@sample-company.jp"><div class="hint">登録時のメールアドレスを入力してください</div></div>
+        <div class="fg"><label>メールアドレス <span class="req">※</span></label><input value="yamada@sample-company.jp"><div class="hint">登録時のメールアドレスを入力してください</div></div>
         <button class="btn btn-p btn-lg" onclick="go('e2')">確認コードを送信</button>
         <p class="tc" style="margin-top:16px;"><a href="#" class="tl" onclick="event.preventDefault();go('login')">ログインに戻る</a></p>
       </div>
@@ -1185,7 +1185,7 @@
         </div>
         <div class="al al-i"><span>📧</span><div><strong>yamada@sample-company.jp</strong> に6桁の確認コードを送信しました。</div></div>
         <div class="fg">
-          <label>確認コード（6桁） <span class="req">*</span></label>
+          <label>確認コード（6桁） <span class="req">※</span></label>
           <div class="code-grp">
             <input class="code-in" value="7" maxlength="1"><input class="code-in" value="3" maxlength="1"><input class="code-in" value="9" maxlength="1">
             <input class="code-in" value="2" maxlength="1"><input class="code-in" value="0" maxlength="1"><input class="code-in" value="4" maxlength="1">
@@ -1213,8 +1213,8 @@
           <div class="step active"><span class="sn">3</span><span>新PW設定</span></div>
         </div>
         <div class="al al-s"><span>✓</span><div>メールアドレスが確認されました。新しいパスワードを設定してください。</div></div>
-        <div class="fg"><label>新しいパスワード <span class="req">*</span></label><input type="password" value="newsecurepass1"><div class="pw-str"><div class="bar"><div class="bf strong"></div></div><div class="lbl">強い</div></div><div class="hint">8文字以上</div></div>
-        <div class="fg"><label>新しいパスワード（確認） <span class="req">*</span></label><input type="password" value="newsecurepass1"></div>
+        <div class="fg"><label>新しいパスワード <span class="req">※</span></label><input type="password" value="newsecurepass1"><div class="pw-str"><div class="bar"><div class="bf strong"></div></div><div class="lbl">強い</div></div><div class="hint">8文字以上</div></div>
+        <div class="fg"><label>新しいパスワード（確認） <span class="req">※</span></label><input type="password" value="newsecurepass1"></div>
         <button class="btn btn-p btn-lg" onclick="go('login')">パスワードを再設定してログイン</button>
       </div>
     </div>
