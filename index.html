@@ -290,7 +290,6 @@
     <span class="nav-sep"></span>
     <span class="nav-flow">F PW管理</span>
     <span class="nav-tab" onclick="go('f1')" id="nav-f1">PW確認・変更</span>
-    <span class="nav-tab" onclick="go('f2')" id="nav-f2">従業員PW依頼</span>
     <span class="nav-sep"></span>
     <span class="nav-tab" onclick="go('login')" id="nav-login">ログイン</span>
   </div>
@@ -384,8 +383,8 @@
       <div class="flow-card" onclick="go('f1')">
         <span class="badge" style="background:#f3e8ff;color:#7b1fa2;">F</span>
         <h3>PW管理</h3>
-        <p>自分のPW確認・変更、従業員のPW再発行依頼</p>
-        <ul class="steps"><li>F-1: PW確認・変更（オーナー/店長）</li><li>F-2: PW再発行依頼（従業員）</li></ul>
+        <p>自分のPW確認・変更（オーナー/店長）</p>
+        <ul class="steps"><li>F-1: PW確認・変更</li></ul>
       </div>
     </div>
 
@@ -403,7 +402,6 @@
         <tr><td>自分のPW確認・変更</td><td>✅</td><td>✅</td><td>❌</td></tr>
         <tr><td>PW再設定（パスワードを忘れた）</td><td>✅</td><td>✅</td><td>✅</td></tr>
         <tr><td>部下のPW再発行</td><td>✅ 全ユーザー</td><td>✅ 担当店舗従業員</td><td>❌</td></tr>
-        <tr><td>PW再発行依頼</td><td>❌</td><td>❌</td><td>✅ 管理者へ依頼</td></tr>
         <tr><td>招待メール再送信</td><td>✅</td><td>✅ 担当店舗従業員</td><td>❌</td></tr>
         <tr><td>打刻データの修正</td><td>✅ 全店舗</td><td>✅ 担当店舗のみ</td><td>❌</td></tr>
         <tr><td>打刻操作</td><td>❌</td><td>❌</td><td>✅</td></tr>
@@ -436,7 +434,6 @@
         <tr><td>E-2</td><td>PW再設定（確認コード）</td><td>/password/reset/verify</td><td>全ユーザー</td></tr>
         <tr><td>E-3</td><td>PW再設定（新PW設定）</td><td>/password/reset/new</td><td>全ユーザー</td></tr>
         <tr><td>F-1</td><td>PW確認・変更</td><td>/dashboard/account/password</td><td>オーナー / 店長</td></tr>
-        <tr><td>F-2</td><td>PW再発行依頼</td><td>/dashboard/account/password_request</td><td>従業員</td></tr>
       </tbody>
     </table>
   </div>
@@ -1270,39 +1267,6 @@
 
       <div class="al al-i" style="max-width:520px;margin-top:16px;"><span>💡</span><div>パスワード変更後、他のデバイスのセッションは自動的にログアウトされます。</div></div>
     </main>
-  </div>
-</div>
-
-<!-- ===== F-2: PW再発行依頼（従業員） ===== -->
-<div class="page" id="page-f2">
-  <div class="public-page">
-    <div class="public-left">
-      <div class="pf">
-        <div class="logo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-        <h2>パスワード再発行依頼</h2>
-        <p class="desc">管理者にパスワードの再発行を依頼します</p>
-
-        <div class="ib">
-          <div class="ir"><span class="il">名前:</span><strong>吉田 七美</strong></div>
-          <div class="ir"><span class="il">店舗:</span><strong>池袋店</strong></div>
-          <div class="ir"><span class="il">メール:</span><strong>yoshida@example.jp</strong></div>
-        </div>
-
-        <div class="fg"><label>依頼理由</label>
-          <select style="max-width:100%;"><option>パスワードを忘れた</option><option>アカウントがロックされた</option><option>その他</option></select>
-        </div>
-
-        <button class="btn btn-p btn-lg">再発行を依頼する</button>
-
-        <div class="al al-i" style="margin-top:16px;"><span>📧</span><div>依頼後、店長またはオーナーが新しい一時パスワードを発行します。メールに届いた一時パスワードでログインしてください。</div></div>
-
-        <div class="dv"></div>
-
-        <p class="tc"><span class="tm">メールアドレスが分かる場合は</span> <a href="#" class="tl" onclick="event.preventDefault();go('e1')">自分でパスワードを再設定</a></p>
-        <p class="tc" style="margin-top:8px;"><a href="#" class="tl" onclick="event.preventDefault();go('login')">ログインに戻る</a></p>
-      </div>
-    </div>
-    <div class="public-right"><div class="clock-ph"><div class="clock-bar"></div></div></div>
   </div>
 </div>
 
