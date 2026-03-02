@@ -283,6 +283,11 @@
     <span class="nav-tab" onclick="go('d3')" id="nav-d3">招待</span>
     <span class="nav-tab" onclick="go('d4')" id="nav-d4">従業員PW</span>
     <span class="nav-sep"></span>
+    <span class="nav-flow">E PW再設定</span>
+    <span class="nav-tab" onclick="go('e1')" id="nav-e1">メール入力</span>
+    <span class="nav-tab" onclick="go('e2')" id="nav-e2">認証</span>
+    <span class="nav-tab" onclick="go('e3')" id="nav-e3">新PW</span>
+    <span class="nav-sep"></span>
     <span class="nav-tab" onclick="go('login')" id="nav-login">ログイン</span>
   </div>
 </nav>
@@ -321,7 +326,7 @@
           <ul class="a-desc">
             <li>担当店舗のみ管理</li>
             <li>従業員の招待・管理</li>
-            <li>勤怠承認・シフト管理</li>
+            <li>勤怠承認</li>
             <li>店舗追加は不可</li>
             <li>他店舗へのアクセス不可</li>
             <li>※ 店長の配置は任意</li>
@@ -333,7 +338,6 @@
           <ul class="a-desc">
             <li>打刻操作</li>
             <li>自分の勤怠確認</li>
-            <li>シフト確認</li>
             <li>管理機能へのアクセス不可</li>
           </ul>
         </div>
@@ -365,6 +369,12 @@
         <p>オーナー / 店長どちらからも追加可能</p>
         <ul class="steps"><li>D-1: オーナー視点（全店舗横断）</li><li>D-2: 店長視点（担当店舗のみ）</li><li>D-3: 招待 → D-4: PW設定</li></ul>
       </div>
+      <div class="flow-card" onclick="go('e1')">
+        <span class="badge" style="background:#fce4ec;color:#c62828;">E</span>
+        <h3>パスワード再設定</h3>
+        <p>パスワードを忘れた場合の再設定フロー</p>
+        <ul class="steps"><li>E-1: メールアドレス入力</li><li>E-2: 確認コード入力</li><li>E-3: 新パスワード設定</li></ul>
+      </div>
     </div>
 
     <h3 style="font-size:13px; margin:20px 0 10px;">権限マトリクス（案3）</h3>
@@ -378,6 +388,8 @@
         <tr><td>従業員の招待・追加</td><td>✅ 全店舗</td><td>✅ 担当店舗のみ</td><td>❌</td></tr>
         <tr><td>従業員情報の閲覧・編集</td><td>✅ 全店舗</td><td>✅ 担当店舗のみ</td><td>❌</td></tr>
         <tr><td>勤怠データ閲覧</td><td>✅ 全店舗</td><td>✅ 担当店舗のみ</td><td>✅ 自分のみ</td></tr>
+        <tr><td>部下のPW再発行</td><td>✅ 全ユーザー</td><td>✅ 担当店舗従業員</td><td>❌</td></tr>
+        <tr><td>招待メール再送信</td><td>✅</td><td>✅ 担当店舗従業員</td><td>❌</td></tr>
         <tr><td>打刻操作</td><td>❌</td><td>❌</td><td>✅</td></tr>
         <tr><td>給与・経営管理</td><td>✅</td><td>❌</td><td>❌</td></tr>
         <tr><td>外部連携設定</td><td>✅</td><td>❌</td><td>❌</td></tr>
@@ -404,6 +416,9 @@
         <tr><td>D-2</td><td>従業員一覧（店長・担当店舗のみ）</td><td>/dashboard/employees</td><td>店長</td></tr>
         <tr><td>D-3</td><td>従業員招待モーダル</td><td>/dashboard/employees#invite</td><td>オーナー / 店長</td></tr>
         <tr><td>D-4</td><td>従業員PW設定</td><td>/invite/accept?token=xxx</td><td>従業員</td></tr>
+        <tr><td>E-1</td><td>PW再設定（メール入力）</td><td>/password/reset</td><td>全ユーザー</td></tr>
+        <tr><td>E-2</td><td>PW再設定（確認コード）</td><td>/password/reset/verify</td><td>全ユーザー</td></tr>
+        <tr><td>E-3</td><td>PW再設定（新PW設定）</td><td>/password/reset/new</td><td>全ユーザー</td></tr>
       </tbody>
     </table>
   </div>
@@ -539,8 +554,8 @@
         <thead><tr><th>名前</th><th>メール</th><th>権限</th><th>担当店舗</th><th>状態</th><th></th></tr></thead>
         <tbody>
           <tr><td><strong>山田 太郎</strong></td><td>yamada@sample-company.jp</td><td><span class="rb rb-owner">オーナー</span></td><td>全店舗</td><td><span class="sb-badge sb-active">有効</span></td><td style="color:#999;font-size:10px;">（自分）</td></tr>
-          <tr><td><strong>鈴木 花子</strong></td><td>suzuki@sample.jp</td><td><span class="rb rb-mgr">店長</span></td><td>渋谷店</td><td><span class="sb-badge sb-active">有効</span></td><td><button class="acts">⋯</button></td></tr>
-          <tr><td><strong>田中 次郎</strong></td><td>tanaka@example.jp</td><td><span class="rb rb-mgr">店長</span></td><td>新宿店</td><td><span class="sb-badge sb-pending">招待中</span></td><td><button class="acts">⋯</button></td></tr>
+          <tr><td><strong>鈴木 花子</strong></td><td>suzuki@sample.jp</td><td><span class="rb rb-mgr">店長</span></td><td>渋谷店</td><td><span class="sb-badge sb-active">有効</span></td><td style="white-space:nowrap;"><button class="btn btn-s btn-sm" title="パスワードを再発行して通知">PW再発行</button> <button class="acts">⋯</button></td></tr>
+          <tr><td><strong>田中 次郎</strong></td><td>tanaka@example.jp</td><td><span class="rb rb-mgr">店長</span></td><td>新宿店</td><td><span class="sb-badge sb-pending">招待中</span></td><td style="white-space:nowrap;"><button class="btn btn-o btn-sm" title="招待メールを再送信">再送信</button> <button class="acts">⋯</button></td></tr>
         </tbody>
       </table>
     </main>
@@ -690,6 +705,7 @@
               <div style="display:flex;align-items:center;gap:5px;">
                 <div style="width:22px;height:22px;border-radius:50%;background:#eef0ff;display:flex;align-items:center;justify-content:center;font-size:9px;color:#5264f0;">田</div>
                 <div><div style="font-size:11px;font-weight:600;">田中 次郎</div><div style="font-size:9px;color:#f0960a;">招待中</div></div>
+                <button class="btn btn-o btn-sm" style="margin-left:4px;" title="招待メールを再送信">再送信</button>
               </div>
             </td>
             <td style="white-space:nowrap;">
@@ -827,7 +843,7 @@
           <div class="ir"><span class="il">権限:</span><span class="rb rb-mgr">店長</span></div>
           <div class="ir"><span class="il">名前:</span><strong>伊藤 四郎</strong></div>
         </div>
-        <div class="al al-i"><span>💡</span><div>店長として以下の操作が可能です：<br>・従業員の招待・管理<br>・勤怠データの閲覧・承認<br>・シフト管理</div></div>
+        <div class="al al-i"><span>💡</span><div>店長として以下の操作が可能です：<br>・従業員の招待・管理<br>・勤怠データの閲覧・承認</div></div>
         <div class="fg"><label>パスワード <span class="req">*</span></label><input type="password" value="mgrpass123"><div class="pw-str"><div class="bar"><div class="bf strong"></div></div><div class="lbl">強い</div></div><div class="hint">8文字以上</div></div>
         <div class="fg"><label>パスワード（確認） <span class="req">*</span></label><input type="password" value="mgrpass123"></div>
         <button class="btn btn-p btn-lg" onclick="go('d2')">登録を完了してログイン</button>
@@ -897,7 +913,7 @@
             <td>nishikata+test2@wshoulder.com</td><td>090-1234-1234</td>
             <td><span style="color:#2ec4a5;">● アクティブ</span></td>
             <td>渋谷店</td>
-            <td style="white-space:nowrap;"><button class="acts">✎</button> <button class="acts">🗑</button></td>
+            <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" title="パスワードを再発行して通知">PW再発行</button> <button class="acts">✎</button> <button class="acts">🗑</button></td>
           </tr>
           <tr>
             <td><strong>TEST TARO</strong></td>
@@ -906,7 +922,7 @@
             <td>nishikata+test@wshoulder.com</td><td>090-1234-1234</td>
             <td><span style="color:#2ec4a5;">● アクティブ</span></td>
             <td>渋谷店</td>
-            <td style="white-space:nowrap;"><button class="acts">✎</button> <button class="acts">🗑</button></td>
+            <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" title="パスワードを再発行して通知">PW再発行</button> <button class="acts">✎</button> <button class="acts">🗑</button></td>
           </tr>
           <tr>
             <td><strong>岩田</strong></td>
@@ -915,7 +931,7 @@
             <td>ryo.leo.tabichii@gmail.com</td><td>-</td>
             <td><span style="color:#2ec4a5;">● アクティブ</span></td>
             <td>新宿店</td>
-            <td style="white-space:nowrap;"><button class="acts">✎</button> <button class="acts">🗑</button></td>
+            <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" title="パスワードを再発行して通知">PW再発行</button> <button class="acts">✎</button> <button class="acts">🗑</button></td>
           </tr>
           <tr>
             <td><strong>佐々木</strong></td>
@@ -924,7 +940,7 @@
             <td>sasaki.kiminori.7023@gmail.com</td><td>-</td>
             <td><span style="color:#2ec4a5;">● アクティブ</span></td>
             <td>池袋店</td>
-            <td style="white-space:nowrap;"><button class="acts">✎</button> <button class="acts">🗑</button></td>
+            <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" title="パスワードを再発行して通知">PW再発行</button> <button class="acts">✎</button> <button class="acts">🗑</button></td>
           </tr>
           <tr>
             <td><strong>にしかた</strong></td>
@@ -933,7 +949,7 @@
             <td>nishikata@wshoulder.com</td><td>090-7829-5836</td>
             <td><span style="color:#f0960a;">● 招待中</span></td>
             <td>池袋店</td>
-            <td style="white-space:nowrap;"><button class="acts">✎</button> <button class="acts">🗑</button></td>
+            <td style="white-space:nowrap;"><button class="btn btn-o btn-sm" title="招待メールを再送信">再送信</button> <button class="acts">✎</button> <button class="acts">🗑</button></td>
           </tr>
         </tbody>
       </table>
@@ -1003,7 +1019,7 @@
             <td>日額</td><td>¥0</td>
             <td>sasaki.kiminori.7023@gmail.com</td><td>-</td>
             <td><span style="color:#2ec4a5;">● アクティブ</span></td>
-            <td style="white-space:nowrap;"><button class="acts">✎</button> <button class="acts">🗑</button></td>
+            <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" title="パスワードを再発行して通知">PW再発行</button> <button class="acts">✎</button> <button class="acts">🗑</button></td>
           </tr>
           <tr>
             <td><strong>にしかた</strong></td>
@@ -1011,7 +1027,7 @@
             <td>日額</td><td>¥10</td>
             <td>nishikata@wshoulder.com</td><td>090-7829-5836</td>
             <td><span style="color:#f0960a;">● 招待中</span></td>
-            <td style="white-space:nowrap;"><button class="acts">✎</button> <button class="acts">🗑</button></td>
+            <td style="white-space:nowrap;"><button class="btn btn-o btn-sm" title="招待メールを再送信">再送信</button> <button class="acts">✎</button> <button class="acts">🗑</button></td>
           </tr>
           <tr>
             <td><strong>駒井良則</strong></td>
@@ -1019,7 +1035,7 @@
             <td>日額</td><td>¥0</td>
             <td>kmi.44.nr@gmail.com</td><td>-</td>
             <td><span style="color:#2ec4a5;">● アクティブ</span></td>
-            <td style="white-space:nowrap;"><button class="acts">✎</button> <button class="acts">🗑</button></td>
+            <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" title="パスワードを再発行して通知">PW再発行</button> <button class="acts">✎</button> <button class="acts">🗑</button></td>
           </tr>
         </tbody>
       </table>
@@ -1123,6 +1139,81 @@
   </div>
 </div>
 
+<!-- ===== E-1: PW再設定 メール入力 ===== -->
+<div class="page" id="page-e1">
+  <div class="public-page">
+    <div class="public-left">
+      <div class="pf">
+        <div class="logo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+        <h2>パスワードの再設定</h2>
+        <p class="desc">登録済みのメールアドレスを入力してください</p>
+        <div class="stepper">
+          <div class="step active"><span class="sn">1</span><span>メール入力</span></div>
+          <div class="sline"></div>
+          <div class="step"><span class="sn">2</span><span>確認コード</span></div>
+          <div class="sline"></div>
+          <div class="step"><span class="sn">3</span><span>新PW設定</span></div>
+        </div>
+        <div class="fg"><label>メールアドレス <span class="req">*</span></label><input value="yamada@sample-company.jp"><div class="hint">登録時のメールアドレスを入力してください</div></div>
+        <button class="btn btn-p btn-lg" onclick="go('e2')">確認コードを送信</button>
+        <p class="tc" style="margin-top:16px;"><a href="#" class="tl" onclick="event.preventDefault();go('login')">ログインに戻る</a></p>
+      </div>
+    </div>
+    <div class="public-right"><div class="clock-ph"><div class="clock-bar"></div></div></div>
+  </div>
+</div>
+
+<!-- ===== E-2: PW再設定 確認コード ===== -->
+<div class="page" id="page-e2">
+  <div class="public-page">
+    <div class="public-left">
+      <div class="pf">
+        <div class="logo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+        <h2>確認コードの入力</h2>
+        <div class="stepper">
+          <div class="step done"><span class="sn">✓</span><span>メール入力</span></div><div class="sline done"></div>
+          <div class="step active"><span class="sn">2</span><span>確認コード</span></div><div class="sline"></div>
+          <div class="step"><span class="sn">3</span><span>新PW設定</span></div>
+        </div>
+        <div class="al al-i"><span>📧</span><div><strong>yamada@sample-company.jp</strong> に6桁の確認コードを送信しました。</div></div>
+        <div class="fg">
+          <label>確認コード（6桁） <span class="req">*</span></label>
+          <div class="code-grp">
+            <input class="code-in" value="7" maxlength="1"><input class="code-in" value="3" maxlength="1"><input class="code-in" value="9" maxlength="1">
+            <input class="code-in" value="2" maxlength="1"><input class="code-in" value="0" maxlength="1"><input class="code-in" value="4" maxlength="1">
+          </div>
+          <div class="hint">有効期限: 30分 ／ 残り試行: 5回</div>
+        </div>
+        <button class="btn btn-p btn-lg" onclick="go('e3')">確認する</button>
+        <p class="tc" style="margin-top:14px;"><a href="#" class="tl">確認コードを再送信</a></p>
+      </div>
+    </div>
+    <div class="public-right"><div class="clock-ph"><div class="clock-bar"></div></div></div>
+  </div>
+</div>
+
+<!-- ===== E-3: PW再設定 新パスワード設定 ===== -->
+<div class="page" id="page-e3">
+  <div class="public-page">
+    <div class="public-left">
+      <div class="pf">
+        <div class="logo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+        <h2>新しいパスワードの設定</h2>
+        <div class="stepper">
+          <div class="step done"><span class="sn">✓</span><span>メール入力</span></div><div class="sline done"></div>
+          <div class="step done"><span class="sn">✓</span><span>確認コード</span></div><div class="sline done"></div>
+          <div class="step active"><span class="sn">3</span><span>新PW設定</span></div>
+        </div>
+        <div class="al al-s"><span>✓</span><div>メールアドレスが確認されました。新しいパスワードを設定してください。</div></div>
+        <div class="fg"><label>新しいパスワード <span class="req">*</span></label><input type="password" value="newsecurepass1"><div class="pw-str"><div class="bar"><div class="bf strong"></div></div><div class="lbl">強い</div></div><div class="hint">8文字以上</div></div>
+        <div class="fg"><label>新しいパスワード（確認） <span class="req">*</span></label><input type="password" value="newsecurepass1"></div>
+        <button class="btn btn-p btn-lg" onclick="go('login')">パスワードを再設定してログイン</button>
+      </div>
+    </div>
+    <div class="public-right"><div class="clock-ph"><div class="clock-bar"></div></div></div>
+  </div>
+</div>
+
 <!-- ===== Login ===== -->
 <div class="page" id="page-login">
   <div class="public-page">
@@ -1135,7 +1226,7 @@
         <div class="fg"><label>パスワード</label><input type="password" value="••••••••••" style="max-width:100%;"></div>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
           <label style="display:flex;align-items:center;gap:5px;font-size:11px;color:#666;"><input type="checkbox"> 30日間保存する</label>
-          <a href="#" class="tl">パスワードを忘れた</a>
+          <a href="#" class="tl" onclick="event.preventDefault();go('e1')">パスワードを忘れた</a>
         </div>
         <button class="btn btn-p btn-lg">ログイン</button>
         <div class="dv"></div>
