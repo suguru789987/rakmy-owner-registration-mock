@@ -289,8 +289,7 @@
     <span class="nav-tab" onclick="go('e2')" id="nav-e2">認証</span>
     <span class="nav-tab" onclick="go('e3')" id="nav-e3">新PW</span>
     <span class="nav-sep"></span>
-    <span class="nav-flow">F PW確認・変更</span>
-    <span class="nav-tab" onclick="go('f1')" id="nav-f1">PW確認・変更</span>
+    <span class="nav-tab" onclick="go('f1')" id="nav-f1">既存: PW変更</span>
   </div>
 </nav>
 
@@ -379,12 +378,6 @@
         <p>パスワードを忘れた場合の再設定フロー（未ログイン）</p>
         <ul class="steps"><li>ログイン →「パスワードを忘れた」</li><li>E-1: メール入力 → E-2: 認証 → E-3: 新PW設定</li><li>→ ログインへ戻る</li></ul>
       </div>
-      <div class="flow-card" onclick="go('f1')">
-        <span class="badge" style="background:#f3e8ff;color:#7b1fa2;">F</span>
-        <h3>PW確認・変更</h3>
-        <p>ログイン後、自分のPWを確認・変更（オーナー/店長）</p>
-        <ul class="steps"><li>F-1: PW確認・変更（ダッシュボード内）</li></ul>
-      </div>
     </div>
 
     <h3 style="font-size:13px; margin:20px 0 10px;">権限マトリクス（案3）</h3>
@@ -432,7 +425,14 @@
         <tr><td>E-1</td><td>PW再設定（メール入力）</td><td>/password/reset</td><td>全ユーザー</td></tr>
         <tr><td>E-2</td><td>PW再設定（確認コード）</td><td>/password/reset/verify</td><td>全ユーザー</td></tr>
         <tr><td>E-3</td><td>PW再設定（新PW設定）</td><td>/password/reset/new</td><td>全ユーザー</td></tr>
-        <tr><td>F-1</td><td>PW確認・変更</td><td>/dashboard/account/password</td><td>オーナー / 店長</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-size:13px; margin:20px 0 10px;">既存画面の変更</h3>
+    <table class="spec-table">
+      <thead><tr><th>画面ID</th><th>画面名</th><th>URL</th><th>変更内容</th></tr></thead>
+      <tbody>
+        <tr><td>F-1</td><td>アカウント設定 ー パスワード</td><td>/dashboard/account/password</td><td>既存画面。全ユーザーがサイドバー「アカウント設定」からアクセス</td></tr>
       </tbody>
     </table>
   </div>
@@ -1236,7 +1236,7 @@
   </div>
 </div>
 
-<!-- ===== F-1: PW確認・変更（オーナー/店長） ===== -->
+<!-- ===== F-1: アカウント設定 ー パスワード（既存画面変更） ===== -->
 <div class="page" id="page-f1">
   <div class="dash">
     <aside class="sb">
