@@ -344,8 +344,8 @@
       <div class="flow-card" onclick="go('a1')">
         <span class="badge a">A</span>
         <h3>新規会社オーナー登録</h3>
-        <p>会社 + 複数店舗を一括登録</p>
-        <ul class="steps"><li>会社・オーナー・店舗入力</li><li>メール認証 → PW設定</li></ul>
+        <p>会社名 + オーナー情報のみでシンプルに登録</p>
+        <ul class="steps"><li>会社名・オーナー情報入力</li><li>メール認証 → PW設定</li></ul>
       </div>
       <div class="flow-card" onclick="go('b1')">
         <span class="badge b">B</span>
@@ -388,7 +388,7 @@
     <table class="spec-table">
       <thead><tr><th>ID</th><th>画面</th><th>URL</th><th>操作者</th></tr></thead>
       <tbody>
-        <tr><td>A-1</td><td>新規登録（複数店舗）</td><td>/signup</td><td>新規オーナー</td></tr>
+        <tr><td>A-1</td><td>新規登録（会社+オーナー）</td><td>/signup</td><td>新規オーナー</td></tr>
         <tr><td>A-2</td><td>メール認証</td><td>/signup/verify</td><td>新規オーナー</td></tr>
         <tr><td>A-3</td><td>PW設定</td><td>/signup/password</td><td>新規オーナー</td></tr>
         <tr><td>A-4</td><td>登録完了</td><td>/signup/complete</td><td>新規オーナー</td></tr>
@@ -433,15 +433,6 @@
             <div class="fg"><label>名 <span class="req">*</span></label><input value="太郎"></div>
           </div>
           <div class="fg"><label>メールアドレス <span class="req">*</span></label><input value="yamada@sample-company.jp"><div class="hint">このアドレスに確認メールが送信されます</div></div>
-        </div>
-        <div class="fs"><div class="fst">店舗情報（複数登録可）</div>
-          <div class="store-list" id="store-list">
-            <div class="store-item"><span class="store-num">1</span><input value="渋谷店"><button class="store-rm">✕</button></div>
-            <div class="store-item"><span class="store-num">2</span><input value="新宿店"><button class="store-rm">✕</button></div>
-            <div class="store-item"><span class="store-num">3</span><input value="池袋店"><button class="store-rm">✕</button></div>
-          </div>
-          <button class="add-store" onclick="addStore()">＋ 店舗を追加</button>
-          <div class="hint" style="margin-top:4px;">最低1店舗必要。登録後にも追加できます。</div>
         </div>
         <div class="cb-grp"><input type="checkbox" checked><label><a href="#" class="tl">利用規約</a> と <a href="#" class="tl">プライバシーポリシー</a> に同意する</label></div>
         <button class="btn btn-p btn-lg" onclick="go('a2')">確認メールを送信</button>
@@ -516,16 +507,17 @@
           <div class="ir"><span class="il">会社名:</span><strong>株式会社サンプル</strong></div>
           <div class="ir"><span class="il">オーナー:</span><strong>山田 太郎</strong></div>
           <div class="ir"><span class="il">メール:</span><strong>yamada@sample-company.jp</strong></div>
-          <div class="ir"><span class="il">店舗:</span><strong>渋谷店、新宿店、池袋店（3店舗）</strong></div>
         </div>
         <div class="al al-i" style="text-align:left;">
           <span>💡</span>
           <div><strong>次のステップ:</strong><br>
-          1. 各店舗の店長を招待する（任意）<br>
-          2. 従業員を追加する（自分で or 店長に委譲）<br>
-          3. 外部連携を設定する</div>
+          1. 店舗を登録する<br>
+          2. 店長を招待する（任意）<br>
+          3. 従業員を追加する<br>
+          4. 外部連携を設定する</div>
         </div>
-        <button class="btn btn-p btn-lg" onclick="go('c1')">ダッシュボードへ進む</button>
+        <button class="btn btn-p btn-lg" onclick="go('c1')">店舗を登録する</button>
+        <button class="btn btn-s btn-lg" style="margin-top:8px;" onclick="go('c1')">あとで設定する</button>
       </div>
     </div>
     <div class="public-right"><div class="clock-ph"><div class="clock-bar"></div></div></div>
