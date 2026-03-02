@@ -288,14 +288,9 @@
     <span class="nav-tab" onclick="go('e2')" id="nav-e2">認証</span>
     <span class="nav-tab" onclick="go('e3')" id="nav-e3">新PW</span>
     <span class="nav-sep"></span>
-    <span class="nav-flow">F 初回ログイン</span>
-    <span class="nav-tab" onclick="go('f1')" id="nav-f1">オーナー</span>
-    <span class="nav-tab" onclick="go('f2')" id="nav-f2">店長</span>
-    <span class="nav-tab" onclick="go('f3')" id="nav-f3">従業員</span>
-    <span class="nav-sep"></span>
-    <span class="nav-flow">G PW管理</span>
-    <span class="nav-tab" onclick="go('g1')" id="nav-g1">PW確認・変更</span>
-    <span class="nav-tab" onclick="go('g2')" id="nav-g2">従業員PW依頼</span>
+    <span class="nav-flow">F PW管理</span>
+    <span class="nav-tab" onclick="go('f1')" id="nav-f1">PW確認・変更</span>
+    <span class="nav-tab" onclick="go('f2')" id="nav-f2">従業員PW依頼</span>
     <span class="nav-sep"></span>
     <span class="nav-tab" onclick="go('login')" id="nav-login">ログイン</span>
   </div>
@@ -387,16 +382,10 @@
         <ul class="steps"><li>E-1: メールアドレス入力</li><li>E-2: 確認コード入力</li><li>E-3: 新パスワード設定</li></ul>
       </div>
       <div class="flow-card" onclick="go('f1')">
-        <span class="badge" style="background:#e8f4fd;color:#1976d2;">F</span>
-        <h3>初回ログイン後</h3>
-        <p>各権限ごとのダッシュボード初回表示</p>
-        <ul class="steps"><li>F-1: オーナー初回ログイン</li><li>F-2: 店長初回ログイン</li><li>F-3: 従業員初回ログイン</li></ul>
-      </div>
-      <div class="flow-card" onclick="go('g1')">
-        <span class="badge" style="background:#f3e8ff;color:#7b1fa2;">G</span>
+        <span class="badge" style="background:#f3e8ff;color:#7b1fa2;">F</span>
         <h3>PW管理</h3>
         <p>自分のPW確認・変更、従業員のPW再発行依頼</p>
-        <ul class="steps"><li>G-1: PW確認・変更（オーナー/店長）</li><li>G-2: PW再発行依頼（従業員）</li></ul>
+        <ul class="steps"><li>F-1: PW確認・変更（オーナー/店長）</li><li>F-2: PW再発行依頼（従業員）</li></ul>
       </div>
     </div>
 
@@ -446,11 +435,8 @@
         <tr><td>E-1</td><td>PW再設定（メール入力）</td><td>/password/reset</td><td>全ユーザー</td></tr>
         <tr><td>E-2</td><td>PW再設定（確認コード）</td><td>/password/reset/verify</td><td>全ユーザー</td></tr>
         <tr><td>E-3</td><td>PW再設定（新PW設定）</td><td>/password/reset/new</td><td>全ユーザー</td></tr>
-        <tr><td>F-1</td><td>初回ログイン（オーナー）</td><td>/dashboard</td><td>オーナー</td></tr>
-        <tr><td>F-2</td><td>初回ログイン（店長）</td><td>/dashboard</td><td>店長</td></tr>
-        <tr><td>F-3</td><td>初回ログイン（従業員）</td><td>/dashboard</td><td>従業員</td></tr>
-        <tr><td>G-1</td><td>PW確認・変更</td><td>/dashboard/account/password</td><td>オーナー / 店長</td></tr>
-        <tr><td>G-2</td><td>PW再発行依頼</td><td>/dashboard/account/password_request</td><td>従業員</td></tr>
+        <tr><td>F-1</td><td>PW確認・変更</td><td>/dashboard/account/password</td><td>オーナー / 店長</td></tr>
+        <tr><td>F-2</td><td>PW再発行依頼</td><td>/dashboard/account/password_request</td><td>従業員</td></tr>
       </tbody>
     </table>
   </div>
@@ -1254,129 +1240,8 @@
   </div>
 </div>
 
-<!-- ===== F-1: 初回ログイン オーナー ===== -->
+<!-- ===== F-1: PW確認・変更（オーナー/店長） ===== -->
 <div class="page" id="page-f1">
-  <div class="dash">
-    <aside class="sb">
-      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📥</span>エクスポート</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
-      <div class="sb-sec"><div class="sl">設定</div><a href="#" onclick="go('d1')"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#" onclick="go('c1')"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="go('b1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a><a href="#"><span class="ic">🔗</span>外部連携</a></div>
-      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
-    </aside>
-    <main class="mc">
-      <div style="max-width:640px;">
-        <div class="al al-s" style="margin-bottom:20px;"><span>✓</span><div><strong>ようこそ、山田 太郎 さん！</strong><br>オーナーとして初めてのログインです。</div></div>
-
-        <h2 style="font-size:17px;margin-bottom:6px;">はじめに設定しましょう</h2>
-        <p style="font-size:12px;color:#666;margin-bottom:20px;">以下のステップで利用を開始できます。</p>
-
-        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;">
-          <div style="display:flex;align-items:center;gap:14px;padding:16px;background:#fff;border:2px solid #e8e8e8;border-radius:10px;cursor:pointer;" onclick="go('c2')">
-            <div style="width:36px;height:36px;border-radius:50%;background:#fef3e2;display:flex;align-items:center;justify-content:center;font-size:16px;">🏠</div>
-            <div style="flex:1;"><div style="font-size:13px;font-weight:700;">1. 店舗を登録する</div><div style="font-size:11px;color:#666;">店舗名・住所・業態を登録</div></div>
-            <span style="color:#2ec4a5;font-size:14px;font-weight:700;">→</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:14px;padding:16px;background:#fff;border:2px solid #e8e8e8;border-radius:10px;cursor:pointer;" onclick="go('c3')">
-            <div style="width:36px;height:36px;border-radius:50%;background:#eef0ff;display:flex;align-items:center;justify-content:center;font-size:16px;">👔</div>
-            <div style="flex:1;"><div style="font-size:13px;font-weight:700;">2. 店長を招待する（任意）</div><div style="font-size:11px;color:#666;">店舗管理を委譲する場合</div></div>
-            <span style="color:#ccc;font-size:14px;font-weight:700;">→</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:14px;padding:16px;background:#fff;border:2px solid #e8e8e8;border-radius:10px;cursor:pointer;" onclick="go('d3')">
-            <div style="width:36px;height:36px;border-radius:50%;background:#e8f8f5;display:flex;align-items:center;justify-content:center;font-size:16px;">👤</div>
-            <div style="flex:1;"><div style="font-size:13px;font-weight:700;">3. 従業員を追加する</div><div style="font-size:11px;color:#666;">従業員を登録して打刻を開始</div></div>
-            <span style="color:#ccc;font-size:14px;font-weight:700;">→</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:14px;padding:16px;background:#fff;border:2px solid #e8e8e8;border-radius:10px;cursor:pointer;" onclick="go('b1')">
-            <div style="width:36px;height:36px;border-radius:50%;background:#f3e8ff;display:flex;align-items:center;justify-content:center;font-size:16px;">👥</div>
-            <div style="flex:1;"><div style="font-size:13px;font-weight:700;">4. 他のオーナーを招待する（任意）</div><div style="font-size:11px;color:#666;">共同管理者を追加する場合</div></div>
-            <span style="color:#ccc;font-size:14px;font-weight:700;">→</span>
-          </div>
-        </div>
-
-        <div class="al al-i"><span>💡</span><div>これらの設定はいつでもサイドメニューから変更できます。</div></div>
-      </div>
-    </main>
-  </div>
-</div>
-
-<!-- ===== F-2: 初回ログイン 店長 ===== -->
-<div class="page" id="page-f2">
-  <div class="dash">
-    <aside class="sb">
-      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
-      <div class="sb-sec"><div class="sl">店舗管理</div><a href="#" onclick="go('d2')"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#"><span class="ic">🔗</span>外部連携</a></div>
-      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#eef0ff;color:#5264f0;">伊</div><div><div class="sb-name">伊藤 四郎</div><div class="sb-role">店長 ・ 池袋店</div></div></div></div>
-    </aside>
-    <main class="mc">
-      <div style="max-width:640px;">
-        <div class="al al-s" style="margin-bottom:20px;"><span>✓</span><div><strong>ようこそ、伊藤 四郎 さん！</strong><br>池袋店の店長として初めてのログインです。</div></div>
-
-        <div class="ib" style="margin-bottom:20px;">
-          <div class="ir"><span class="il">会社:</span><strong>株式会社サンプル</strong></div>
-          <div class="ir"><span class="il">担当店舗:</span><strong>池袋店</strong></div>
-          <div class="ir"><span class="il">権限:</span><span class="rb rb-mgr">店長</span></div>
-        </div>
-
-        <h2 style="font-size:17px;margin-bottom:6px;">店長としてできること</h2>
-        <p style="font-size:12px;color:#666;margin-bottom:20px;">池袋店の管理を始めましょう。</p>
-
-        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;">
-          <div style="display:flex;align-items:center;gap:14px;padding:16px;background:#fff;border:2px solid #e8e8e8;border-radius:10px;cursor:pointer;" onclick="go('d3')">
-            <div style="width:36px;height:36px;border-radius:50%;background:#e8f8f5;display:flex;align-items:center;justify-content:center;font-size:16px;">👤</div>
-            <div style="flex:1;"><div style="font-size:13px;font-weight:700;">1. 従業員を追加する</div><div style="font-size:11px;color:#666;">池袋店の従業員を登録して打刻を開始</div></div>
-            <span style="color:#2ec4a5;font-size:14px;font-weight:700;">→</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:14px;padding:16px;background:#fff;border:2px solid #e8e8e8;border-radius:10px;cursor:pointer;" onclick="go('d2')">
-            <div style="width:36px;height:36px;border-radius:50%;background:#e8f4fd;display:flex;align-items:center;justify-content:center;font-size:16px;">📊</div>
-            <div style="flex:1;"><div style="font-size:13px;font-weight:700;">2. 従業員一覧を確認する</div><div style="font-size:11px;color:#666;">登録済みの従業員を管理</div></div>
-            <span style="color:#ccc;font-size:14px;font-weight:700;">→</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:14px;padding:16px;background:#fff;border:2px solid #e8e8e8;border-radius:10px;">
-            <div style="width:36px;height:36px;border-radius:50%;background:#fff8e1;display:flex;align-items:center;justify-content:center;font-size:16px;">⏱</div>
-            <div style="flex:1;"><div style="font-size:13px;font-weight:700;">3. 勤怠データを確認する</div><div style="font-size:11px;color:#666;">池袋店の打刻記録・勤務時間を閲覧</div></div>
-            <span style="color:#ccc;font-size:14px;font-weight:700;">→</span>
-          </div>
-        </div>
-
-        <div class="al al-i"><span>💡</span><div>店長として担当店舗の従業員管理・勤怠管理が可能です。店舗の追加やオーナー招待はオーナーのみ行えます。</div></div>
-      </div>
-    </main>
-  </div>
-</div>
-
-<!-- ===== F-3: 初回ログイン 従業員 ===== -->
-<div class="page" id="page-f3">
-  <div class="public-page">
-    <div class="public-left">
-      <div class="pf tc">
-        <div class="logo" style="justify-content:center;"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-        <div class="si">✓</div>
-        <h2>ようこそ！</h2>
-        <p class="desc">従業員として登録が完了しました</p>
-
-        <div class="ib" style="text-align:left;">
-          <div class="ir"><span class="il">会社:</span><strong>株式会社サンプル</strong></div>
-          <div class="ir"><span class="il">店舗:</span><strong>池袋店</strong></div>
-          <div class="ir"><span class="il">名前:</span><strong>吉田 七美</strong></div>
-          <div class="ir"><span class="il">区分:</span><strong>バイトさん</strong></div>
-        </div>
-
-        <div style="background:#f0faf7;border:2px solid #2ec4a5;border-radius:12px;padding:24px;margin:20px 0;text-align:center;">
-          <div style="font-size:11px;color:#666;margin-bottom:8px;">現在の時刻</div>
-          <div style="font-size:32px;font-weight:700;color:#333;margin-bottom:12px;">09:00</div>
-          <button class="btn btn-p btn-lg" style="font-size:16px;padding:14px 32px;">出勤する</button>
-        </div>
-
-        <div class="al al-i" style="text-align:left;"><span>📱</span><div>スマートフォンからも打刻できます。このページをブックマークしてご利用ください。</div></div>
-      </div>
-    </div>
-    <div class="public-right"><div class="clock-ph"><div class="clock-bar"></div></div></div>
-  </div>
-</div>
-
-<!-- ===== G-1: PW確認・変更（オーナー/店長） ===== -->
-<div class="page" id="page-g1">
   <div class="dash">
     <aside class="sb">
       <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
@@ -1408,8 +1273,8 @@
   </div>
 </div>
 
-<!-- ===== G-2: PW再発行依頼（従業員） ===== -->
-<div class="page" id="page-g2">
+<!-- ===== F-2: PW再発行依頼（従業員） ===== -->
+<div class="page" id="page-f2">
   <div class="public-page">
     <div class="public-left">
       <div class="pf">
