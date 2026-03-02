@@ -396,8 +396,8 @@
         <tr><td>B-2</td><td>管理者招待モーダル</td><td>/dashboard/administrators#invite</td><td>オーナー</td></tr>
         <tr><td>B-3</td><td>招待メール</td><td>（メール）</td><td>被招待者</td></tr>
         <tr><td>B-4</td><td>招待受諾PW設定</td><td>/invite/accept?token=xxx</td><td>被招待者</td></tr>
-        <tr><td>C-1</td><td>店舗一覧</td><td>/dashboard/stores</td><td>オーナー</td></tr>
-        <tr><td>C-2</td><td>店舗追加（+店長同時招待）</td><td>/dashboard/stores#add</td><td>オーナー</td></tr>
+        <tr><td>C-1</td><td>店舗情報（既存テーブル+店長列追加）</td><td>/dashboard/stores</td><td>オーナー</td></tr>
+        <tr><td>C-2</td><td>店舗登録モーダル（既存+店長招待追加）</td><td>/dashboard/stores#add</td><td>オーナー</td></tr>
         <tr><td>C-3</td><td>店長招待モーダル</td><td>/dashboard/stores/:id/invite</td><td>オーナー</td></tr>
         <tr><td>C-4</td><td>店長PW設定</td><td>/invite/accept?token=xxx</td><td>店長</td></tr>
         <tr><td>D-1</td><td>従業員一覧（オーナー・全店舗横断）</td><td>/dashboard/employees</td><td>オーナー</td></tr>
@@ -623,7 +623,7 @@
   </div>
 </div>
 
-<!-- ===== C-1: 店舗一覧 ===== -->
+<!-- ===== C-1: 店舗情報（既存UIベース・テーブル形式） ===== -->
 <div class="page" id="page-c1">
   <div class="dash">
     <aside class="sb">
@@ -633,36 +633,115 @@
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc">
-      <div class="ph"><h2>店舗一覧</h2><button class="btn btn-p" onclick="go('c2')">+ 店舗を追加</button></div>
-      <div class="sc-grid">
-        <div class="sc">
-          <div class="sc-head"><div class="sc-name">渋谷店</div><button class="acts">⋯</button></div>
-          <div class="sc-stats"><div class="sc-stat"><div class="sc-num">12</div><div class="sc-lbl">従業員</div></div><div class="sc-stat"><div class="sc-num">3</div><div class="sc-lbl">出勤中</div></div></div>
-          <div class="sc-mgr"><div class="sc-mgr-av">鈴</div><div><div style="font-weight:600;">鈴木 花子</div><div style="font-size:9px;color:#999;">店長</div></div></div>
-        </div>
-        <div class="sc">
-          <div class="sc-head"><div class="sc-name">新宿店</div><button class="acts">⋯</button></div>
-          <div class="sc-stats"><div class="sc-stat"><div class="sc-num">8</div><div class="sc-lbl">従業員</div></div><div class="sc-stat"><div class="sc-num">2</div><div class="sc-lbl">出勤中</div></div></div>
-          <div class="sc-mgr"><div class="sc-mgr-av">田</div><div><div style="font-weight:600;">田中 次郎</div><div style="font-size:9px;color:#f0960a;">招待中</div></div></div>
-        </div>
-        <div class="sc">
-          <div class="sc-head"><div class="sc-name">池袋店</div><button class="acts">⋯</button></div>
-          <div class="sc-stats"><div class="sc-stat"><div class="sc-num">5</div><div class="sc-lbl">従業員</div></div><div class="sc-stat"><div class="sc-num">1</div><div class="sc-lbl">出勤中</div></div></div>
-          <div style="padding:8px 10px;font-size:11px;color:#999;font-style:italic;">
-            店長なし（オーナーが直接管理中）
-            <button class="btn btn-o btn-sm" style="margin-left:6px;" onclick="go('c3')">店長を招待</button>
-          </div>
-        </div>
-        <div class="sc" style="border:2px dashed #ccc;display:flex;align-items:center;justify-content:center;cursor:pointer;min-height:160px;" onclick="go('c2')">
-          <div class="tc" style="color:#999;"><div style="font-size:28px;">+</div><div style="font-size:12px;">店舗を追加</div></div>
+      <div class="ph">
+        <h2>店舗情報</h2>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-s" style="border:1px solid #ddd;">🏷 業態・ブランド登録</button>
+          <button class="btn btn-p" onclick="go('c2')">+ 店舗登録</button>
         </div>
       </div>
-      <div class="al al-i"><span>💡</span><div>店長がいない店舗の従業員管理は、オーナーが直接行えます。店長の招待は任意です。</div></div>
+
+      <!-- フィルター＆検索（既存UI再現） -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+        <div style="display:flex;align-items:center;gap:6px;border:1px solid #ddd;border-radius:6px;padding:7px 14px;font-size:11px;color:#555;cursor:pointer;">
+          🏷 すべての業態・ブランド <span style="color:#ccc;margin-left:4px;">▼</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;border:1px solid #ddd;border-radius:6px;padding:7px 14px;font-size:11px;color:#999;min-width:260px;">
+          🔍 店舗名・住所・郵便番号で検索
+        </div>
+      </div>
+
+      <!-- 店舗テーブル（既存UIに店長列を追加） -->
+      <table class="dt">
+        <thead>
+          <tr>
+            <th style="cursor:pointer;">店舗名 ↕</th>
+            <th style="cursor:pointer;">業態・ブランド ↕</th>
+            <th style="cursor:pointer;">郵便番号 ↕</th>
+            <th style="cursor:pointer;">住所 ↕</th>
+            <th>店長</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>ラクミー本社</strong></td>
+            <td><span style="border:1px solid #ddd;border-radius:4px;padding:2px 8px;font-size:10px;">飲食店向けBI_SaaS</span></td>
+            <td>150-0042</td>
+            <td>東京都渋谷区宇田川町37-13 下田ビル3階</td>
+            <td>
+              <div style="display:flex;align-items:center;gap:5px;">
+                <div style="width:22px;height:22px;border-radius:50%;background:#eef0ff;display:flex;align-items:center;justify-content:center;font-size:9px;color:#5264f0;">鈴</div>
+                <div><div style="font-size:11px;font-weight:600;">鈴木 花子</div></div>
+              </div>
+            </td>
+            <td style="white-space:nowrap;">
+              <button class="acts" title="QR">⊞</button>
+              <button class="acts" title="編集">✎</button>
+              <button class="acts" title="削除">🗑</button>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>北海道支店</strong></td>
+            <td><span style="border:1px solid #ddd;border-radius:4px;padding:2px 8px;font-size:10px;">飲食店向けBI_SaaS</span></td>
+            <td>111-1111</td>
+            <td>北海道</td>
+            <td>
+              <div style="display:flex;align-items:center;gap:5px;">
+                <div style="width:22px;height:22px;border-radius:50%;background:#eef0ff;display:flex;align-items:center;justify-content:center;font-size:9px;color:#5264f0;">田</div>
+                <div><div style="font-size:11px;font-weight:600;">田中 次郎</div><div style="font-size:9px;color:#f0960a;">招待中</div></div>
+              </div>
+            </td>
+            <td style="white-space:nowrap;">
+              <button class="acts">⊞</button>
+              <button class="acts">✎</button>
+              <button class="acts">🗑</button>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>TEST店舗222</strong></td>
+            <td><span style="border:1px solid #ddd;border-radius:4px;padding:2px 8px;font-size:10px;">飲食店向けBI_SaaS</span></td>
+            <td>111-1111</td>
+            <td>沖縄</td>
+            <td>
+              <span style="color:#999;font-size:10px;">未設定</span>
+              <button class="btn btn-o btn-sm" style="margin-left:4px;" onclick="go('c3')">店長を招待</button>
+            </td>
+            <td style="white-space:nowrap;">
+              <button class="acts">⊞</button>
+              <button class="acts">✎</button>
+              <button class="acts">🗑</button>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>ラクミー</strong></td>
+            <td><span style="border:1px solid #ddd;border-radius:4px;padding:2px 8px;font-size:10px;">飲食店向けBI_SaaS</span></td>
+            <td>155-6903</td>
+            <td>aaa</td>
+            <td>
+              <span style="color:#999;font-size:10px;">未設定</span>
+              <button class="btn btn-o btn-sm" style="margin-left:4px;" onclick="go('c3')">店長を招待</button>
+            </td>
+            <td style="white-space:nowrap;">
+              <button class="acts">⊞</button>
+              <button class="acts">✎</button>
+              <button class="acts">🗑</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- ページネーション -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;">
+        <button class="btn btn-s btn-sm" style="opacity:0.4;">← 前</button>
+        <span style="border:1px solid #ddd;border-radius:4px;padding:4px 12px;font-size:12px;font-weight:600;">1</span>
+        <button class="btn btn-s btn-sm" style="opacity:0.4;">次 →</button>
+      </div>
     </main>
   </div>
 </div>
 
-<!-- ===== C-2: 店舗追加 ===== -->
+<!-- ===== C-2: 店舗登録（既存UIベース + 店長招待追加） ===== -->
 <div class="page" id="page-c2">
   <div class="dash">
     <aside class="sb">
@@ -671,22 +750,36 @@
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc">
-      <div class="ph"><h2>店舗一覧</h2></div>
+      <div class="ph"><h2>店舗情報</h2></div>
       <div class="mo">
-        <div class="modal">
-          <div class="mh"><h3>店舗を追加</h3><button class="mx" onclick="go('c1')">✕</button></div>
+        <div class="modal" style="max-width:560px;">
+          <div class="mh"><h3>店舗登録</h3><button class="mx" onclick="go('c1')">✕</button></div>
           <div class="mb">
+            <!-- 既存フィールド -->
             <div class="fg"><label>店舗名 <span class="req">*</span></label><input value="横浜店" style="max-width:100%;"></div>
-            <div class="fg"><label>業態・ブランド</label><select style="max-width:100%;"><option>選択してください</option><option selected>イタリアン</option></select></div>
-            <div class="dv"></div>
-            <div class="fg"><label>店長を同時に招待（任意）</label>
-              <div class="cb-grp"><input type="checkbox" id="inv-mgr" checked onchange="document.getElementById('mgr-fields').style.display=this.checked?'block':'none'"><label for="inv-mgr">店長を招待する</label></div>
+            <div class="fg"><label>業態・ブランド <span class="req">*</span></label><select style="max-width:100%;"><option>選択してください</option><option selected>飲食店向けBI_SaaS</option></select></div>
+            <div class="fr">
+              <div class="fg"><label>郵便番号 <span class="req">*</span></label><input value="220-0011" style="max-width:100%;"></div>
+              <div class="fg" style="flex:2;"><label>住所 <span class="req">*</span></label><input value="神奈川県横浜市西区高島2丁目" style="max-width:100%;"></div>
             </div>
-            <div id="mgr-fields" style="background:#f8f9fa;border-radius:7px;padding:14px;">
-              <div class="fr"><div class="fg"><label>店長 姓</label><input value="高橋" style="max-width:100%;"></div><div class="fg"><label>店長 名</label><input value="三郎" style="max-width:100%;"></div></div>
+
+            <div class="dv"></div>
+
+            <!-- ★ 新規追加: 店長招待セクション -->
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+              <label style="font-size:12px;font-weight:600;color:#444;">店長を同時に招待（任意）</label>
+              <label style="display:flex;align-items:center;gap:5px;font-size:11px;color:#555;cursor:pointer;">
+                <input type="checkbox" id="inv-mgr2" checked onchange="document.getElementById('mgr-fields2').style.display=this.checked?'block':'none'" style="accent-color:#2ec4a5;"> 店長を招待する
+              </label>
+            </div>
+            <div id="mgr-fields2" style="background:#f8f9fa;border:1px solid #e8e8e8;border-radius:8px;padding:16px;">
+              <div class="fr">
+                <div class="fg"><label>店長 姓</label><input value="高橋" style="max-width:100%;"></div>
+                <div class="fg"><label>店長 名</label><input value="三郎" style="max-width:100%;"></div>
+              </div>
               <div class="fg"><label>メールアドレス</label><input value="takahashi@example.jp" style="max-width:100%;"></div>
             </div>
-            <div class="al al-i" style="margin-top:14px;"><span>💡</span><div>店長なしで店舗を追加し、オーナーが直接従業員を管理することもできます。</div></div>
+            <div class="al al-i" style="margin-top:12px;"><span>💡</span><div>店長なしで店舗を追加し、オーナーが直接従業員を管理することもできます。</div></div>
             <div class="btn-grp"><button class="btn btn-s" onclick="go('c1')">キャンセル</button><button class="btn btn-p" onclick="go('c1')">店舗を追加</button></div>
           </div>
         </div>
