@@ -3,6 +3,7 @@
 > **バージョン:** v1.0
 > **作成日:** 2026-03-02
 > **モック:** https://suguru789987.github.io/rakmy-owner-registration-mock/
+> **モックソース:** https://github.com/suguru789987/rakmy-owner-registration-mock/blob/main/index.html
 > **対象リポジトリ:** rakmy/rakmy_server (Rails 7.2 / MySQL / Sidekiq / Redis)
 
 ---
