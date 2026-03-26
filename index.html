@@ -338,6 +338,24 @@
       </tbody>
     </table>
 
+    <h3 style="font-size:13px; margin:20px 0 10px;">権限マトリクス</h3>
+    <table class="spec-table">
+      <thead><tr><th>操作</th><th>オーナー / 本部管理者</th><th>管理者（店長）</th><th>従業員</th></tr></thead>
+      <tbody>
+        <tr><td>店舗の追加・編集・削除</td><td>✅</td><td>❌</td><td>❌</td></tr>
+        <tr><td>管理者の登録・編集</td><td>✅</td><td>❌</td><td>❌</td></tr>
+        <tr><td>管理者のPW再発行</td><td>✅</td><td>❌</td><td>❌</td></tr>
+        <tr><td>従業員の登録（＝自動招待）</td><td>✅ 全店舗</td><td>✅ 担当店舗のみ</td><td>❌</td></tr>
+        <tr><td>従業員情報の閲覧・編集</td><td>✅ 全店舗</td><td>✅ 担当店舗のみ</td><td>❌</td></tr>
+        <tr><td>従業員PW操作（再送 / PW再発行）</td><td>✅ 全店舗</td><td>✅ 担当店舗のみ</td><td>❌</td></tr>
+        <tr><td>勤怠データ閲覧</td><td>✅ 全店舗</td><td>✅ 担当店舗のみ</td><td>✅ 自分のみ</td></tr>
+        <tr><td>打刻操作</td><td>❌</td><td>❌</td><td>✅</td></tr>
+        <tr><td>給与・経営管理</td><td>✅ 全店舗</td><td>✅ 担当店舗のみ</td><td>❌</td></tr>
+        <tr><td>外部連携設定</td><td>✅</td><td>✅</td><td>❌</td></tr>
+        <tr><td>PW再設定（自分・パスワードを忘れた）</td><td>✅</td><td>✅</td><td>✅</td></tr>
+      </tbody>
+    </table>
+
     <h3 style="font-size:13px; margin:20px 0 10px;">v5に含まれない画面（v4を参照）</h3>
     <table class="spec-table">
       <thead><tr><th>ID</th><th>画面</th><th>理由</th></tr></thead>
