@@ -310,11 +310,25 @@
       <tbody>
         <tr><td>従業員登録</td><td>登録と同時に招待メールを自動送信。従業員が自分でPW設定。</td></tr>
         <tr><td>管理者登録</td><td>オーナーが直接登録（初期PW設定 → 口頭等で共有）。招待フローなし。</td></tr>
-        <tr><td>従業員一覧 ステータス列</td><td>テキストのみ表示（「設定済み」/「招待中」）</td></tr>
-        <tr><td>従業員一覧 PW操作列</td><td>ステータス列の右に配置。設定済み → 「PW再発行」ボタン / 招待中 → 「再送」ボタン</td></tr>
+        <tr><td>従業員一覧 ステータス列</td><td>招待ステータスとユーザーステータスを統合表示（下記「ステータスバッジ仕様」参照）</td></tr>
+        <tr><td>従業員一覧 PW操作列</td><td>ステータス列の右に配置。状態に応じてボタンが変わる（下記参照）</td></tr>
         <tr><td>PW再発行の処理</td><td>現行PWを無効化 → 再設定メール送信 → ステータスが「招待中」に変わる</td></tr>
-        <tr><td>管理者一覧</td><td>ステータス列なし（常に設定済み）。PW操作列のみ（「PW再発行」ボタン）</td></tr>
+        <tr><td>管理者一覧</td><td>ステータス列なし（常に有効）。PW操作列のみ（「PW再発行」ボタン）</td></tr>
         <tr><td>管理者のPW再発行</td><td>オーナーのみ操作可能</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-size:13px; margin:20px 0 10px;">ステータスバッジ仕様</h3>
+    <p style="font-size:11px;color:#666;margin-bottom:12px;">招待ステータスとユーザーステータスを組み合わせ、ステータス列に1つのバッジとして表示する。</p>
+    <table class="spec-table">
+      <thead><tr><th>招待ステータス</th><th>ユーザーステータス</th><th>表示</th><th>バッジ色</th><th>PW操作列</th></tr></thead>
+      <tbody>
+        <tr><td>招待中</td><td>—</td><td><span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#fff8e1;color:#f0960a;">招待中</span></td><td>オレンジ <code>#f0960a</code></td><td><button class="btn btn-o btn-sm" style="pointer-events:none;">再送</button></td></tr>
+        <tr><td>招待期限切れ</td><td>—</td><td><span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#fce4ec;color:#c62828;">期限切れ</span></td><td>赤 <code>#c62828</code></td><td><button class="btn btn-o btn-sm" style="pointer-events:none;">再送</button></td></tr>
+        <tr><td>招待キャンセル</td><td>—</td><td><span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#f5f5f5;color:#999;">キャンセル</span></td><td>グレー <code>#999</code></td><td><button class="btn btn-s btn-sm" style="pointer-events:none;">再招待</button></td></tr>
+        <tr><td>承諾済み</td><td>有効</td><td><span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#e8f8f5;color:#2ec4a5;">有効</span></td><td>緑 <code>#2ec4a5</code></td><td><button class="btn btn-s btn-sm" style="pointer-events:none;">PW再発行</button></td></tr>
+        <tr><td>承諾済み</td><td>無効</td><td><span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#fce4ec;color:#c62828;">無効</span></td><td>赤 <code>#c62828</code></td><td><span style="color:#999;font-size:10px;">—</span></td></tr>
+        <tr><td>承諾済み</td><td>退会済み</td><td><span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#f5f5f5;color:#999;">退会済み</span></td><td>グレー <code>#999</code></td><td><span style="color:#999;font-size:10px;">—</span></td></tr>
       </tbody>
     </table>
 
@@ -535,7 +549,7 @@
             <td>日額</td><td>¥1</td>
             <td>nishikata+test2@wshoulder.com</td><td>090-1234-1234</td>
             <td>渋谷店</td>
-            <td><span style="color:#2ec4a5;font-size:10px;">設定済み</span></td>
+            <td><span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#e8f8f5;color:#2ec4a5;">有効</span></td>
             <td><button class="btn btn-s btn-sm" onclick="showConfirm(this)">PW再発行</button></td>
             <td style="white-space:nowrap;"><button class="acts">✎</button> <button class="acts">🗑</button></td>
           </tr>
@@ -545,7 +559,7 @@
             <td>日額</td><td>¥1</td>
             <td>nishikata+test@wshoulder.com</td><td>090-1234-1234</td>
             <td>渋谷店</td>
-            <td><span style="color:#2ec4a5;font-size:10px;">設定済み</span></td>
+            <td><span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#e8f8f5;color:#2ec4a5;">有効</span></td>
             <td><button class="btn btn-s btn-sm" onclick="showConfirm(this)">PW再発行</button></td>
             <td style="white-space:nowrap;"><button class="acts">✎</button> <button class="acts">🗑</button></td>
           </tr>
@@ -555,7 +569,7 @@
             <td>日額</td><td>¥0</td>
             <td>ryo.leo.tabichii@gmail.com</td><td>-</td>
             <td>新宿店</td>
-            <td><span style="color:#2ec4a5;font-size:10px;">設定済み</span></td>
+            <td><span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#e8f8f5;color:#2ec4a5;">有効</span></td>
             <td><button class="btn btn-s btn-sm" onclick="showConfirm(this)">PW再発行</button></td>
             <td style="white-space:nowrap;"><button class="acts">✎</button> <button class="acts">🗑</button></td>
           </tr>
@@ -565,7 +579,7 @@
             <td>日額</td><td>¥0</td>
             <td>sasaki.kiminori.7023@gmail.com</td><td>-</td>
             <td>池袋店</td>
-            <td><span style="color:#f0960a;font-size:10px;">招待中</span></td>
+            <td><span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#fff8e1;color:#f0960a;">招待中</span></td>
             <td><button class="btn btn-o btn-sm">再送</button></td>
             <td style="white-space:nowrap;"><button class="acts">✎</button> <button class="acts">🗑</button></td>
           </tr>
@@ -575,8 +589,48 @@
             <td>日額</td><td>¥10</td>
             <td>nishikata@wshoulder.com</td><td>090-7829-5836</td>
             <td>池袋店</td>
-            <td><span style="color:#f0960a;font-size:10px;">招待中</span></td>
+            <td><span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#fff8e1;color:#f0960a;">招待中</span></td>
             <td><button class="btn btn-o btn-sm">再送</button></td>
+            <td style="white-space:nowrap;"><button class="acts">✎</button> <button class="acts">🗑</button></td>
+          </tr>
+          <tr>
+            <td><strong>高橋 三郎</strong></td>
+            <td><span style="border:1px solid #ddd;border-radius:4px;padding:2px 7px;font-size:10px;">バイトさん</span></td>
+            <td>日額</td><td>¥0</td>
+            <td>takahashi@example.jp</td><td>090-0000-1111</td>
+            <td>渋谷店</td>
+            <td><span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#fce4ec;color:#c62828;">期限切れ</span></td>
+            <td><button class="btn btn-o btn-sm">再送</button></td>
+            <td style="white-space:nowrap;"><button class="acts">✎</button> <button class="acts">🗑</button></td>
+          </tr>
+          <tr>
+            <td><strong>中村 五郎</strong></td>
+            <td><span style="border:1px solid #ddd;border-radius:4px;padding:2px 7px;font-size:10px;">業務委託</span></td>
+            <td>日額</td><td>¥0</td>
+            <td>nakamura@example.jp</td><td>-</td>
+            <td>新宿店</td>
+            <td><span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#f5f5f5;color:#999;">キャンセル</span></td>
+            <td><button class="btn btn-s btn-sm">再招待</button></td>
+            <td style="white-space:nowrap;"><button class="acts">✎</button> <button class="acts">🗑</button></td>
+          </tr>
+          <tr>
+            <td><strong>渡辺 六美</strong></td>
+            <td><span style="border:1px solid #ddd;border-radius:4px;padding:2px 7px;font-size:10px;">代表取締役</span></td>
+            <td>月額</td><td>¥10,000</td>
+            <td>watanabe@example.jp</td><td>090-2222-3333</td>
+            <td>渋谷店</td>
+            <td><span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#fce4ec;color:#c62828;">無効</span></td>
+            <td><span style="color:#999;font-size:10px;">—</span></td>
+            <td style="white-space:nowrap;"><button class="acts">✎</button> <button class="acts">🗑</button></td>
+          </tr>
+          <tr>
+            <td><strong>小林 七子</strong></td>
+            <td><span style="border:1px solid #ddd;border-radius:4px;padding:2px 7px;font-size:10px;">バイトさん</span></td>
+            <td>日額</td><td>¥500</td>
+            <td>kobayashi@example.jp</td><td>-</td>
+            <td>池袋店</td>
+            <td><span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#f5f5f5;color:#999;">退会済み</span></td>
+            <td><span style="color:#999;font-size:10px;">—</span></td>
             <td style="white-space:nowrap;"><button class="acts">✎</button> <button class="acts">🗑</button></td>
           </tr>
         </tbody>
@@ -641,7 +695,7 @@
             <td><span style="border:1px solid #ddd;border-radius:4px;padding:2px 7px;font-size:10px;">業務委託</span></td>
             <td>日額</td><td>¥0</td>
             <td>sasaki.kiminori.7023@gmail.com</td><td>-</td>
-            <td><span style="color:#2ec4a5;font-size:10px;">設定済み</span></td>
+            <td><span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#e8f8f5;color:#2ec4a5;">有効</span></td>
             <td><button class="btn btn-s btn-sm" onclick="showConfirm(this)">PW再発行</button></td>
             <td style="white-space:nowrap;"><button class="acts">✎</button> <button class="acts">🗑</button></td>
           </tr>
@@ -650,7 +704,7 @@
             <td><span style="border:1px solid #ddd;border-radius:4px;padding:2px 7px;font-size:10px;">業務委託</span></td>
             <td>日額</td><td>¥10</td>
             <td>nishikata@wshoulder.com</td><td>090-7829-5836</td>
-            <td><span style="color:#f0960a;font-size:10px;">招待中</span></td>
+            <td><span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#fff8e1;color:#f0960a;">招待中</span></td>
             <td><button class="btn btn-o btn-sm">再送</button></td>
             <td style="white-space:nowrap;"><button class="acts">✎</button> <button class="acts">🗑</button></td>
           </tr>
@@ -659,7 +713,7 @@
             <td><span style="border:1px solid #ddd;border-radius:4px;padding:2px 7px;font-size:10px;">業務委託</span></td>
             <td>日額</td><td>¥0</td>
             <td>kmi.44.nr@gmail.com</td><td>-</td>
-            <td><span style="color:#2ec4a5;font-size:10px;">設定済み</span></td>
+            <td><span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#e8f8f5;color:#2ec4a5;">有効</span></td>
             <td><button class="btn btn-s btn-sm" onclick="showConfirm(this)">PW再発行</button></td>
             <td style="white-space:nowrap;"><button class="acts">✎</button> <button class="acts">🗑</button></td>
           </tr>
@@ -886,8 +940,8 @@ function showConfirm(btn) {
     const tds = tr.querySelectorAll('td');
     // Find status td (contains 設定済み) and pw-op td (contains button)
     for (let i = 0; i < tds.length; i++) {
-      if (tds[i].textContent.includes('設定済み')) {
-        tds[i].innerHTML = '<span style="color:#f0960a;font-size:10px;">招待中</span>';
+      if (tds[i].textContent.includes('有効')) {
+        tds[i].innerHTML = '<span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#fff8e1;color:#f0960a;">招待中</span>';
         tds[i+1].innerHTML = '<button class="btn btn-o btn-sm">再送</button>';
         break;
       }
