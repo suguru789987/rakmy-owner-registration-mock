@@ -245,6 +245,7 @@
     <span class="nav-sep"></span>
     <span class="nav-flow">D 管理者</span>
     <span class="nav-tab" onclick="go('d1')" id="nav-d1">管理者一覧</span>
+    <span class="nav-tab" onclick="go('d1e')" id="nav-d1e">管理者編集</span>
     <span class="nav-sep"></span>
     <span class="nav-flow">E PW</span>
     <span class="nav-tab" onclick="go('login')" id="nav-login">ログイン</span>
@@ -345,6 +346,7 @@
         <tr><td>C-4</td><td>招待メール（自動送信）</td><td>（メール）</td><td>従業員</td></tr>
         <tr><td>C-5</td><td>従業員PW設定</td><td>/invite/accept?token=xxx</td><td>従業員</td></tr>
         <tr><td>D-1</td><td>管理者一覧</td><td>/dashboard/administrators</td><td>オーナー</td></tr>
+        <tr><td>D-1E</td><td>管理者編集モーダル</td><td>/dashboard/administrators/:id/edit</td><td>オーナー</td></tr>
         <tr><td>Login</td><td>ログイン</td><td>/login</td><td>全ユーザー</td></tr>
         <tr><td>E-1</td><td>PW再設定（メール入力）</td><td>/password/reset</td><td>全ユーザー</td></tr>
         <tr><td>E-2</td><td>PW再設定（確認コード）</td><td>/password/reset/verify</td><td>全ユーザー</td></tr>
@@ -800,7 +802,7 @@
             <td><span class="rb rb-mgr">管理者</span></td>
             <td>渋谷店</td>
             <td><button class="btn btn-s btn-sm">PW再発行</button></td>
-            <td style="white-space:nowrap;"><button class="acts">✎</button> <button class="acts">🗑</button></td>
+            <td style="white-space:nowrap;"><button class="acts" onclick="go('d1e')">✎</button> <button class="acts">🗑</button></td>
           </tr>
           <tr>
             <td><strong>田中 次郎</strong></td>
@@ -808,12 +810,51 @@
             <td><span class="rb rb-mgr">管理者</span></td>
             <td>新宿店, 池袋店</td>
             <td><button class="btn btn-s btn-sm">PW再発行</button></td>
-            <td style="white-space:nowrap;"><button class="acts">✎</button> <button class="acts">🗑</button></td>
+            <td style="white-space:nowrap;"><button class="acts" onclick="go('d1e')">✎</button> <button class="acts">🗑</button></td>
           </tr>
         </tbody>
       </table>
 
       <div class="al al-i" style="margin-top:16px;max-width:600px;"><span>💡</span><div>管理者はオーナーが直接登録します。初期パスワードを設定し、口頭やチャット等で管理者に共有してください。</div></div>
+    </main>
+  </div>
+</div>
+
+<!-- ===== D-1E: 管理者編集モーダル ===== -->
+<div class="page" id="page-d1e">
+  <div class="dash">
+    <aside class="sb">
+      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+      <div class="sb-sec"><div class="sl">設定</div><a href="#" onclick="go('c1')"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">🏠</span>店舗情報</a><a href="#" class="act"><span class="ic">👥</span>管理者</a></div>
+      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
+    </aside>
+    <main class="mc">
+      <div class="ph"><h2>管理者一覧</h2></div>
+      <div class="mo">
+        <div class="modal">
+          <div class="mh"><h3>管理者を編集</h3><button class="mx" onclick="go('d1')">✕</button></div>
+          <div class="mb">
+            <div class="fg"><label>名前 <span class="req">✳</span></label><input value="鈴木 花子" style="max-width:100%;"></div>
+            <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input value="suzuki@sample.jp" style="max-width:100%;"></div>
+
+            <div class="dv" style="margin:14px 0;"></div>
+
+            <div class="fg">
+              <label>担当店舗 <span class="req">✳</span></label>
+              <div class="store-chk-grid">
+                <label class="store-chk"><input type="checkbox" checked> 渋谷店</label>
+                <label class="store-chk"><input type="checkbox"> 新宿店</label>
+                <label class="store-chk"><input type="checkbox"> 池袋店</label>
+                <label class="store-chk"><input type="checkbox"> 北海道支店</label>
+              </div>
+              <div class="hint" style="margin-top:6px;">担当店舗の従業員管理・勤怠管理が可能になります</div>
+            </div>
+
+            <div class="al al-i"><span>💡</span><div>パスワードの変更は管理者一覧の「PW再発行」から行えます。</div></div>
+            <div class="btn-grp"><button class="btn btn-s" onclick="go('d1')">キャンセル</button><button class="btn btn-p" onclick="go('d1')">保存</button></div>
+          </div>
+        </div>
+      </div>
     </main>
   </div>
 </div>
