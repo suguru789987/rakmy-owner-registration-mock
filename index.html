@@ -729,6 +729,42 @@
             <td><button class="btn btn-s btn-sm" onclick="showConfirm(this)">PW再発行</button></td>
             <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" onclick="empEdit(this,'active')">編集</button> <button class="btn btn-s btn-sm" style="color:#c62828;" onclick="empDelete(this,'active')">削除</button></td>
           </tr>
+          <tr>
+            <td><strong>田中 花子</strong></td>
+            <td><span style="border:1px solid #ddd;border-radius:4px;padding:2px 7px;font-size:10px;">バイトさん</span></td>
+            <td>日額</td><td>¥0</td>
+            <td>tanaka.h@example.jp</td><td>090-1111-2222</td>
+            <td><span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#fce4ec;color:#c62828;">期限切れ</span></td>
+            <td><button class="btn btn-o btn-sm">再送</button></td>
+            <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" onclick="empEdit(this,'expired')">編集</button> <button class="btn btn-s btn-sm" style="color:#c62828;" onclick="empDelete(this,'pending')">削除</button></td>
+          </tr>
+          <tr>
+            <td><strong>山本 太一</strong></td>
+            <td><span style="border:1px solid #ddd;border-radius:4px;padding:2px 7px;font-size:10px;">業務委託</span></td>
+            <td>日額</td><td>¥0</td>
+            <td>yamamoto@example.jp</td><td>-</td>
+            <td><span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#f5f5f5;color:#999;">キャンセル</span></td>
+            <td><button class="btn btn-s btn-sm">再招待</button></td>
+            <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" disabled style="opacity:0.4;">編集</button> <button class="btn btn-s btn-sm" style="color:#c62828;" onclick="empDelete(this,'cancelled')">削除</button></td>
+          </tr>
+          <tr>
+            <td><strong>木村 二郎</strong></td>
+            <td><span style="border:1px solid #ddd;border-radius:4px;padding:2px 7px;font-size:10px;">代表取締役</span></td>
+            <td>月額</td><td>¥5,000</td>
+            <td>kimura@example.jp</td><td>090-3333-4444</td>
+            <td><span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#fce4ec;color:#c62828;">無効</span></td>
+            <td><span style="color:#999;font-size:10px;">—</span></td>
+            <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" disabled style="opacity:0.4;">編集</button> <button class="btn btn-s btn-sm" disabled style="color:#c62828;opacity:0.4;">削除</button></td>
+          </tr>
+          <tr>
+            <td><strong>松本 三子</strong></td>
+            <td><span style="border:1px solid #ddd;border-radius:4px;padding:2px 7px;font-size:10px;">バイトさん</span></td>
+            <td>日額</td><td>¥800</td>
+            <td>matsumoto@example.jp</td><td>-</td>
+            <td><span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#f5f5f5;color:#999;">退会済み</span></td>
+            <td><span style="color:#999;font-size:10px;">—</span></td>
+            <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" disabled style="opacity:0.4;">編集</button> <button class="btn btn-s btn-sm" style="color:#c62828;" onclick="empDelete(this,'withdrawn')">削除</button></td>
+          </tr>
         </tbody>
       </table>
 
