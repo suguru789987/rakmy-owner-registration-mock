@@ -237,7 +237,7 @@
     <span class="nav-flow">A 新規登録</span>
     <span class="nav-tab" onclick="go('a1')" id="nav-a1">入力</span>
     <span class="nav-tab" onclick="go('a2')" id="nav-a2">認証</span>
-    <span class="nav-tab" onclick="go('a3')" id="nav-a3">PW</span>
+    <span class="nav-tab" onclick="go('a3')" id="nav-a3">会社登録</span>
     <span class="nav-tab" onclick="go('a4')" id="nav-a4">完了</span>
     <span class="nav-sep"></span>
     <span class="nav-flow">C 従業員</span>
@@ -402,31 +402,28 @@
       <div class="pf">
         <div class="logo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
         <h2>新規登録</h2>
-        <p class="desc">会社情報を入力して利用を開始しましょう</p>
+        <p class="desc">アカウントを作成して利用を開始しましょう</p>
         <div class="stepper">
-          <div class="step active"><span class="sn">1</span><span>情報入力</span></div>
+          <div class="step active"><span class="sn">1</span><span>アカウント作成</span></div>
           <div class="sline"></div>
           <div class="step"><span class="sn">2</span><span>メール認証</span></div>
           <div class="sline"></div>
-          <div class="step"><span class="sn">3</span><span>PW設定</span></div>
+          <div class="step"><span class="sn">3</span><span>会社登録</span></div>
         </div>
-        <div class="fs"><div class="fst">会社情報</div>
-          <div class="fg"><label>会社名 <span class="req">✳</span></label><input value="株式会社サンプル"></div>
-        </div>
-        <div class="fs"><div class="fst">オーナー情報</div>
-          <div class="fg"><label>名前 <span class="req">✳</span></label><input value="山田 太郎"></div>
-          <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input value="yamada@sample-company.jp"><div class="hint">このアドレスに確認メールが送信されます</div></div>
-        </div>
+        <div class="fg"><label>名前 <span class="req">✳</span></label><input value="山田 太郎"></div>
+        <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input value="yamada@sample-company.jp"></div>
+        <div class="fg"><label>パスワード <span class="req">✳</span></label><input type="password" value="securepass123"><div class="pw-str"><div class="bar"><div class="bf strong"></div></div><div class="lbl">強い</div></div><div class="hint">8文字以上</div></div>
         <div class="cb-grp"><input type="checkbox" checked><label><a href="#" class="tl">利用規約</a> と <a href="#" class="tl">プライバシーポリシー</a> に同意する</label></div>
-        <button class="btn btn-p btn-lg" onclick="go('a2')">確認メールを送信</button>
+        <button class="btn btn-p btn-lg" onclick="go('a2')">アカウントを作成</button>
         <p class="tc" style="margin-top:16px;"><span class="tm">既にアカウントをお持ちの方は</span> <a href="#" class="tl" onclick="go('login')">ログイン</a></p>
+        <div style="text-align:center;margin-top:12px;"><span style="font-size:9px;color:#bbb;background:#f8f8f8;padding:3px 10px;border-radius:10px;">Secured by Clerk</span></div>
       </div>
     </div>
     <div class="public-right"><div class="clock-ph"><div class="clock-bar"></div></div></div>
   </div>
 </div>
 
-<!-- ===== A-2: メール認証 ===== -->
+<!-- ===== A-2: メール認証（Clerk） ===== -->
 <div class="page" id="page-a2">
   <div class="public-page">
     <div class="public-left">
@@ -436,40 +433,40 @@
         <div class="stepper">
           <div class="step done"><span class="sn">✓</span><span>情報入力</span></div><div class="sline done"></div>
           <div class="step active"><span class="sn">2</span><span>メール認証</span></div><div class="sline"></div>
-          <div class="step"><span class="sn">3</span><span>PW設定</span></div>
+          <div class="step"><span class="sn">3</span><span>会社登録</span></div>
         </div>
-        <div class="al al-i"><span>📧</span><div><strong>yamada@sample-company.jp</strong> に6桁の確認コードを送信しました。</div></div>
+        <div class="al al-i"><span>📧</span><div><strong>yamada@sample-company.jp</strong> に確認コードを送信しました。</div></div>
         <div class="fg">
-          <label>確認コード（6桁） <span class="req">✳</span></label>
+          <label>確認コード <span class="req">✳</span></label>
           <div class="code-grp">
             <input class="code-in" value="4" maxlength="1"><input class="code-in" value="8" maxlength="1"><input class="code-in" value="2" maxlength="1">
             <input class="code-in" value="9" maxlength="1"><input class="code-in" value="1" maxlength="1"><input class="code-in" value="5" maxlength="1">
           </div>
-          <div class="hint">有効期限: 30分 ／ 残り試行: 5回</div>
+          <div class="hint" style="color:#999;">Clerkによるメール認証</div>
         </div>
         <button class="btn btn-p btn-lg" onclick="go('a3')">確認する</button>
         <p class="tc" style="margin-top:14px;"><a href="#" class="tl">確認コードを再送信</a></p>
+        <div style="text-align:center;margin-top:16px;"><span style="font-size:9px;color:#bbb;background:#f8f8f8;padding:3px 10px;border-radius:10px;">Secured by Clerk</span></div>
       </div>
     </div>
     <div class="public-right"><div class="clock-ph"><div class="clock-bar"></div></div></div>
   </div>
 </div>
 
-<!-- ===== A-3: PW設定 ===== -->
+<!-- ===== A-3: 会社登録（Clerk認証後） ===== -->
 <div class="page" id="page-a3">
   <div class="public-page">
     <div class="public-left">
       <div class="pf">
         <div class="logo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-        <h2>パスワードの設定</h2>
+        <h2>会社情報の登録</h2>
         <div class="stepper">
           <div class="step done"><span class="sn">✓</span><span>情報入力</span></div><div class="sline done"></div>
           <div class="step done"><span class="sn">✓</span><span>メール認証</span></div><div class="sline done"></div>
-          <div class="step active"><span class="sn">3</span><span>PW設定</span></div>
+          <div class="step active"><span class="sn">3</span><span>会社登録</span></div>
         </div>
-        <div class="al al-s"><span>✓</span><div>メールアドレスの確認が完了しました</div></div>
-        <div class="fg"><label>パスワード <span class="req">✳</span></label><input type="password" value="securepass123"><div class="pw-str"><div class="bar"><div class="bf strong"></div></div><div class="lbl">強い</div></div><div class="hint">8文字以上</div></div>
-        <div class="fg"><label>パスワード（確認） <span class="req">✳</span></label><input type="password" value="securepass123"></div>
+        <div class="al al-s"><span>✓</span><div>アカウントが作成されました。会社情報を登録してください。</div></div>
+        <div class="fg"><label>会社名 <span class="req">✳</span></label><input value="株式会社サンプル"></div>
         <button class="btn btn-p btn-lg" onclick="go('a4')">登録を完了する</button>
       </div>
     </div>
@@ -876,6 +873,7 @@
         <div class="fg"><label>パスワード（確認） <span class="req">✳</span></label><input type="password" value="employee1"></div>
         <button class="btn btn-p btn-lg">登録を完了してログイン</button>
         <div class="al al-i" style="margin-top:14px;"><span>📱</span><div>ログイン後、スマートフォンから打刻できるようになります。</div></div>
+        <div style="text-align:center;margin-top:12px;"><span style="font-size:9px;color:#bbb;background:#f8f8f8;padding:3px 10px;border-radius:10px;">Secured by Clerk</span></div>
       </div>
     </div>
     <div class="public-right"><div class="clock-ph"><div class="clock-bar"></div></div></div>
@@ -979,11 +977,12 @@
           <a href="#" class="tl" onclick="event.preventDefault();go('e1')">パスワードを忘れた</a>
         </div>
         <button class="btn btn-p btn-lg">ログイン</button>
+        <div style="text-align:center;margin-top:10px;"><span style="font-size:9px;color:#bbb;background:#f8f8f8;padding:3px 10px;border-radius:10px;">Secured by Clerk</span></div>
         <div class="dv"></div>
         <div class="tc">
           <div style="background:linear-gradient(135deg,#f0faf7,#eef0ff);border:2px dashed #2ec4a5;border-radius:10px;padding:16px;position:relative;">
             <div style="font-size:12px;font-weight:600;margin-bottom:3px;">はじめてのご利用ですか？</div>
-            <div style="font-size:10px;color:#666;margin-bottom:10px;">会社情報を登録してすぐに利用開始</div>
+            <div style="font-size:10px;color:#666;margin-bottom:10px;">アカウントを作成してすぐに利用開始</div>
             <button class="btn btn-o" onclick="go('a1')">新規登録はこちら</button>
           </div>
         </div>
@@ -1011,6 +1010,7 @@
         <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input value="yamada@sample-company.jp"><div class="hint">登録時のメールアドレスを入力してください</div></div>
         <button class="btn btn-p btn-lg" onclick="go('e2')">確認コードを送信</button>
         <p class="tc" style="margin-top:16px;"><a href="#" class="tl" onclick="event.preventDefault();go('login')">ログインに戻る</a></p>
+        <div style="text-align:center;margin-top:12px;"><span style="font-size:9px;color:#bbb;background:#f8f8f8;padding:3px 10px;border-radius:10px;">Secured by Clerk</span></div>
       </div>
     </div>
     <div class="public-right"><div class="clock-ph"><div class="clock-bar"></div></div></div>
