@@ -240,17 +240,23 @@
     <span class="nav-tab" onclick="go('a3')" id="nav-a3">会社登録</span>
     <span class="nav-tab" onclick="go('a4')" id="nav-a4">完了</span>
     <span class="nav-sep"></span>
+    <span class="nav-flow">B 店舗</span>
+    <span class="nav-tab" onclick="go('b1')" id="nav-b1">店舗一覧</span>
+    <span class="nav-tab" onclick="go('b2')" id="nav-b2">店舗追加</span>
+    <span class="nav-sep"></span>
     <span class="nav-flow">C 従業員</span>
     <span class="nav-tab" onclick="go('c1')" id="nav-c1">オーナー視点</span>
     <span class="nav-tab" onclick="go('c2')" id="nav-c2">管理者視点</span>
     <span class="nav-tab" onclick="go('c1e-active')" id="nav-c1e-active">編集（有効）</span>
     <span class="nav-tab" onclick="go('c1e-pending')" id="nav-c1e-pending">編集（招待中）</span>
+    <span class="nav-tab" onclick="go('c3')" id="nav-c3">登録モーダル</span>
     <span class="nav-tab" onclick="go('c4')" id="nav-c4">招待メール</span>
     <span class="nav-tab" onclick="go('c5')" id="nav-c5">PW設定</span>
     <span class="nav-sep"></span>
     <span class="nav-flow">D 管理者</span>
     <span class="nav-tab" onclick="go('d1')" id="nav-d1">管理者一覧</span>
     <span class="nav-tab" onclick="go('d1e')" id="nav-d1e">管理者編集</span>
+    <span class="nav-tab" onclick="go('d2')" id="nav-d2">管理者登録</span>
     <span class="nav-sep"></span>
     <span class="nav-flow">E PW</span>
     <span class="nav-tab" onclick="go('login')" id="nav-login">ログイン</span>
@@ -267,21 +273,23 @@
 <div class="page active" id="page-overview">
   <div class="overview">
     <h2>ラクミー タイムレコード — 仕様モック v5（エンジニア共有用）</h2>
-    <p class="subtitle">開発対象の画面のみ抜粋。全画面は v4（開発用）を参照。</p>
+    <p class="subtitle">開発対象の全画面を収録。エンジニア共有用。</p>
 
     <div class="v4-note">
-      <strong>v5 に含まれる画面:</strong><br>
-      ・<strong>A 新規登録</strong>: 入力 → メール認証 → PW設定 → 完了<br>
-      ・<strong>C 従業員管理</strong>: オーナー視点一覧 / 管理者視点一覧 / 招待メール（自動送信） / 従業員PW設定<br>
-      ・<strong>D 管理者管理</strong>: 管理者一覧（PW操作列あり・ステータス列なし）<br>
-      ・<strong>E ログイン / PW再設定</strong>: ログイン → メール入力 → 認証 → 新PW設定
+      <strong>収録画面:</strong><br>
+      ・<strong>A 新規登録</strong>: アカウント作成 → メール認証 → 会社登録 → 完了<br>
+      ・<strong>B 店舗管理</strong>: 店舗一覧 / 店舗追加モーダル<br>
+      ・<strong>C 従業員管理</strong>: オーナー視点一覧 / 管理者視点一覧 / 編集モーダル（有効/招待中） / 登録モーダル / 招待メール / PW設定<br>
+      ・<strong>D 管理者管理</strong>: 管理者一覧（PW操作列なし・ステータス列なし） / 編集モーダル / 登録モーダル<br>
+      ・<strong>E ログイン / PW再設定</strong>: ログイン → メール入力 → 認証 → 新PW設定<br>
+      ・<strong>エラー</strong>: 無効な招待リンク
     </div>
 
     <div class="arch-box">
       <h3>権限階層</h3>
       <div class="arch-diagram">
         <div class="arch-node owner">
-          <div class="a-title">オーナー / 本部管理者</div>
+          <div class="a-title">オーナー</div>
           <ul class="a-desc">
             <li>全店舗・全機能にアクセス</li>
             <li>店舗の追加・編集・削除</li>
@@ -342,18 +350,22 @@
     <table class="spec-table">
       <thead><tr><th>ID</th><th>画面</th><th>URL</th><th>操作者</th></tr></thead>
       <tbody>
-        <tr><td>A-1</td><td>新規登録（会社+オーナー）</td><td>/signup</td><td>新規オーナー</td></tr>
+        <tr><td>A-1</td><td>新規登録（アカウント作成）</td><td>/signup</td><td>新規オーナー</td></tr>
         <tr><td>A-2</td><td>メール認証</td><td>/signup/verify</td><td>新規オーナー</td></tr>
-        <tr><td>A-3</td><td>PW設定</td><td>/signup/password</td><td>新規オーナー</td></tr>
+        <tr><td>A-3</td><td>会社登録</td><td>/signup/company</td><td>新規オーナー</td></tr>
         <tr><td>A-4</td><td>登録完了</td><td>/signup/complete</td><td>新規オーナー</td></tr>
+        <tr><td>B-1</td><td>店舗一覧</td><td>/dashboard/stores</td><td>オーナー</td></tr>
+        <tr><td>B-2</td><td>店舗追加モーダル</td><td>/dashboard/stores#add</td><td>オーナー</td></tr>
         <tr><td>C-1</td><td>従業員一覧（オーナー・全店舗横断）</td><td>/dashboard/employees</td><td>オーナー</td></tr>
         <tr><td>C-2</td><td>従業員一覧（管理者・担当店舗のみ）</td><td>/dashboard/employees</td><td>管理者</td></tr>
+        <tr><td>C-3</td><td>従業員登録モーダル</td><td>/dashboard/employees#add</td><td>オーナー / 管理者</td></tr>
         <tr><td>C-1E</td><td>従業員編集モーダル（有効）</td><td>/dashboard/employees/:id/edit</td><td>オーナー / 管理者</td></tr>
         <tr><td>C-1E</td><td>従業員編集モーダル（招待中）</td><td>/dashboard/employees/:id/edit</td><td>オーナー / 管理者</td></tr>
         <tr><td>C-4</td><td>招待メール（自動送信）</td><td>（メール）</td><td>従業員</td></tr>
         <tr><td>C-5</td><td>従業員PW設定</td><td>/invite/accept?token=xxx</td><td>従業員</td></tr>
         <tr><td>D-1</td><td>管理者一覧</td><td>/dashboard/administrators</td><td>オーナー</td></tr>
         <tr><td>D-1E</td><td>管理者編集モーダル</td><td>/dashboard/administrators/:id/edit</td><td>オーナー</td></tr>
+        <tr><td>D-2</td><td>管理者登録モーダル</td><td>/dashboard/administrators#add</td><td>オーナー</td></tr>
         <tr><td>Login</td><td>ログイン</td><td>/login</td><td>全ユーザー</td></tr>
         <tr><td>E-1</td><td>PW再設定（メール入力）</td><td>/password/reset</td><td>全ユーザー</td></tr>
         <tr><td>E-2</td><td>PW再設定（確認コード）</td><td>/password/reset/verify</td><td>全ユーザー</td></tr>
@@ -364,7 +376,7 @@
 
     <h3 style="font-size:13px; margin:20px 0 10px;">権限マトリクス</h3>
     <table class="spec-table">
-      <thead><tr><th>操作</th><th>オーナー / 本部管理者</th><th>管理者</th><th>従業員</th></tr></thead>
+      <thead><tr><th>操作</th><th>オーナー</th><th>管理者</th><th>従業員</th></tr></thead>
       <tbody>
         <tr><td>店舗の追加・編集・削除</td><td>✅</td><td>❌</td><td>❌</td></tr>
         <tr><td>管理者の登録・編集</td><td>✅</td><td>❌</td><td>❌</td></tr>
@@ -382,16 +394,6 @@
       </tbody>
     </table>
 
-    <h3 style="font-size:13px; margin:20px 0 10px;">v5に含まれない画面（v4を参照）</h3>
-    <table class="spec-table">
-      <thead><tr><th>ID</th><th>画面</th><th>理由</th></tr></thead>
-      <tbody>
-        <tr><td>B-1</td><td>店舗一覧</td><td>既存画面の延長（変更少）</td></tr>
-        <tr><td>B-2</td><td>店舗追加モーダル</td><td>既存画面の延長（変更少）</td></tr>
-        <tr><td>C-3</td><td>従業員登録モーダル</td><td>既存画面の延長（自動招待メール送信が追加されるのみ）</td></tr>
-        <tr><td>D-2</td><td>管理者登録モーダル</td><td>v4を参照</td></tr>
-      </tbody>
-    </table>
   </div>
 </div>
 
@@ -501,6 +503,128 @@
       </div>
     </div>
     <div class="public-right"><div class="clock-ph"><div class="clock-bar"></div></div></div>
+  </div>
+</div>
+
+<!-- ===== B-1: 店舗一覧 ===== -->
+<div class="page" id="page-b1">
+  <div class="dash">
+    <aside class="sb">
+      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+      <div class="sb-sec"><a href="#"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📥</span>エクスポート</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
+      <div class="sb-sec"><div class="sl">設定</div><a href="#" onclick="go('c1')"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#" class="act"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a><a href="#"><span class="ic">🔗</span>外部連携</a></div>
+      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
+    </aside>
+    <main class="mc">
+      <div class="ph">
+        <h2>店舗情報</h2>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-s" style="border:1px solid #ddd;">🏷 業態・ブランド登録</button>
+          <button class="btn btn-p" onclick="go('b2')">+ 店舗登録</button>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+        <div style="display:flex;align-items:center;gap:6px;border:1px solid #ddd;border-radius:6px;padding:7px 14px;font-size:11px;color:#555;cursor:pointer;">
+          🏷 すべての業態・ブランド <span style="color:#ccc;margin-left:4px;">▼</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;border:1px solid #ddd;border-radius:6px;padding:7px 14px;font-size:11px;color:#999;min-width:260px;">
+          🔍 店舗名・住所・郵便番号で検索
+        </div>
+      </div>
+
+      <table class="dt">
+        <thead>
+          <tr>
+            <th style="cursor:pointer;">店舗名 ↕</th>
+            <th style="cursor:pointer;">業態・ブランド ↕</th>
+            <th style="cursor:pointer;">郵便番号 ↕</th>
+            <th style="cursor:pointer;">住所 ↕</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>ラクミー本社</strong></td>
+            <td><span style="border:1px solid #ddd;border-radius:4px;padding:2px 8px;font-size:10px;">飲食店向けBI_SaaS</span></td>
+            <td>150-0042</td>
+            <td>東京都渋谷区宇田川町37-13 下田ビル3階</td>
+            <td style="white-space:nowrap;">
+              <button class="acts" title="QR">⊞</button>
+              <button class="acts" title="編集">✎</button>
+              <button class="acts" title="削除">🗑</button>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>北海道支店</strong></td>
+            <td><span style="border:1px solid #ddd;border-radius:4px;padding:2px 8px;font-size:10px;">飲食店向けBI_SaaS</span></td>
+            <td>111-1111</td>
+            <td>北海道</td>
+            <td style="white-space:nowrap;">
+              <button class="acts">⊞</button>
+              <button class="acts">✎</button>
+              <button class="acts">🗑</button>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>TEST店舗222</strong></td>
+            <td><span style="border:1px solid #ddd;border-radius:4px;padding:2px 8px;font-size:10px;">飲食店向けBI_SaaS</span></td>
+            <td>111-1111</td>
+            <td>沖縄</td>
+            <td style="white-space:nowrap;">
+              <button class="acts">⊞</button>
+              <button class="acts">✎</button>
+              <button class="acts">🗑</button>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>ラクミー</strong></td>
+            <td><span style="border:1px solid #ddd;border-radius:4px;padding:2px 8px;font-size:10px;">飲食店向けBI_SaaS</span></td>
+            <td>155-6903</td>
+            <td>aaa</td>
+            <td style="white-space:nowrap;">
+              <button class="acts">⊞</button>
+              <button class="acts">✎</button>
+              <button class="acts">🗑</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;">
+        <button class="btn btn-s btn-sm" style="opacity:0.4;">← 前</button>
+        <span style="border:1px solid #ddd;border-radius:4px;padding:4px 12px;font-size:12px;font-weight:600;">1</span>
+        <button class="btn btn-s btn-sm" style="opacity:0.4;">次 →</button>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ===== B-2: 店舗追加モーダル ===== -->
+<div class="page" id="page-b2">
+  <div class="dash">
+    <aside class="sb">
+      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+      <div class="sb-sec"><div class="sl">設定</div><a href="#" class="act"><span class="ic">🏠</span>店舗情報</a></div>
+      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
+    </aside>
+    <main class="mc">
+      <div class="ph"><h2>店舗情報</h2></div>
+      <div class="mo">
+        <div class="modal" style="max-width:560px;">
+          <div class="mh"><h3>店舗登録</h3><button class="mx" onclick="go('b1')">✕</button></div>
+          <div class="mb">
+            <div class="fg"><label>店舗名 <span class="req">✳</span></label><input value="横浜店" style="max-width:100%;"></div>
+            <div class="fg"><label>業態・ブランド <span class="req">✳</span></label><select style="max-width:100%;"><option>選択してください</option><option selected>飲食店向けBI_SaaS</option></select></div>
+            <div class="fr">
+              <div class="fg"><label>郵便番号 <span class="req">✳</span></label><input value="220-0011" style="max-width:100%;"></div>
+              <div class="fg" style="flex:2;"><label>住所 <span class="req">✳</span></label><input value="神奈川県横浜市西区高島2丁目" style="max-width:100%;"></div>
+            </div>
+            <div class="btn-grp"><button class="btn btn-s" onclick="go('b1')">キャンセル</button><button class="btn btn-p" onclick="go('b1')">店舗を追加</button></div>
+          </div>
+        </div>
+      </div>
+    </main>
   </div>
 </div>
 
@@ -836,6 +960,70 @@
   </div>
 </div>
 
+<!-- ===== C-3: 従業員登録モーダル ===== -->
+<div class="page" id="page-c3">
+  <div class="dash">
+    <aside class="sb">
+      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+      <div class="sb-sec"><div class="sl">設定</div><a href="#" class="act"><span class="ic">👤</span>従業員</a></div>
+      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
+    </aside>
+    <main class="mc">
+      <div class="ph"><h2>従業員</h2></div>
+      <div class="mo">
+        <div class="modal" style="max-width:520px;">
+          <div class="mh" style="padding:20px 24px 0;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="width:40px;height:40px;border-radius:50%;border:2px solid #e8e8e8;display:flex;align-items:center;justify-content:center;font-size:18px;color:#ccc;">👤</div>
+              <h3 style="font-size:15px;font-weight:700;">従業員登録</h3>
+            </div>
+            <button class="mx" onclick="go('c1')">✕</button>
+          </div>
+          <div class="mb">
+            <div class="al al-i"><span>📧</span><div>登録完了と同時に、従業員にパスワード設定メールが<strong>自動送信</strong>されます。</div></div>
+
+            <div class="fg">
+              <label>所属店舗 <span class="req">✳</span></label>
+              <select style="max-width:100%;"><option>選択してください</option><option>渋谷店</option><option>新宿店</option><option selected>池袋店</option></select>
+              <div class="hint">オーナーは全店舗に従業員を登録できます</div>
+            </div>
+
+            <div class="dv" style="margin:14px 0;"></div>
+
+            <div class="fr">
+              <div class="fg"><label>名前 <span class="req">✳</span></label><input placeholder="名前を入力" value="吉田 七美" style="max-width:100%;"></div>
+              <div class="fg"><label>電話番号 <span class="req">✳</span></label><input placeholder="電話番号を入力" value="090-1234-5678" style="max-width:100%;"></div>
+            </div>
+            <div class="fr">
+              <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input placeholder="メールアドレスを入力" value="yoshida@example.jp" style="max-width:100%;"></div>
+              <div class="fg"><label>従業員コード</label><input placeholder="従業員コードを入力" style="max-width:100%;"><div class="hint">未入力の場合は自動生成されます</div></div>
+            </div>
+            <div class="fr">
+              <div class="fg">
+                <label>雇用区分 <span class="req">✳</span></label>
+                <select style="max-width:100%;"><option>雇用区分を選択</option><option>業務委託</option><option selected>バイトさん</option><option>代表取締役</option></select>
+              </div>
+              <div class="fg">
+                <label>交通費単位 <span class="req">✳</span></label>
+                <select style="max-width:100%;"><option selected>日額</option><option>月額</option></select>
+              </div>
+            </div>
+            <div class="fg">
+              <label>交通費/日 <span class="req">✳</span></label>
+              <input placeholder="交通費を入力" value="¥500" style="max-width:200px;">
+            </div>
+
+            <div class="btn-grp" style="margin-top:20px;">
+              <button class="btn btn-s" onclick="go('c1')" style="flex:1;justify-content:center;">キャンセル</button>
+              <button class="btn btn-p" onclick="go('c4')" style="flex:1;justify-content:center;">登録して招待メールを送信</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
 <!-- ===== C-4: 招待メール（自動送信プレビュー） ===== -->
 <div class="page" id="page-c4">
   <div style="background:#f0f0f0; min-height:calc(100vh - 86px); padding:32px 16px;">
@@ -955,6 +1143,55 @@
 
             <div class="al al-i"><span>💡</span><div>管理者がパスワードを忘れた場合は、ログイン画面の「パスワードを忘れた」から自分でリセットできます。</div></div>
             <div class="btn-grp"><button class="btn btn-s" onclick="go('d1')">キャンセル</button><button class="btn btn-p" onclick="go('d1')">保存</button></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ===== D-2: 管理者登録モーダル ===== -->
+<div class="page" id="page-d2">
+  <div class="dash">
+    <aside class="sb">
+      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+      <div class="sb-sec"><div class="sl">設定</div><a href="#" onclick="go('c1')"><span class="ic">👤</span>従業員</a><a href="#" onclick="go('b1')"><span class="ic">🏠</span>店舗情報</a><a href="#" class="act"><span class="ic">👥</span>管理者</a></div>
+      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
+    </aside>
+    <main class="mc">
+      <div class="ph"><h2>管理者一覧</h2></div>
+      <div class="mo">
+        <div class="modal">
+          <div class="mh"><h3>管理者を登録</h3><button class="mx" onclick="go('d1')">✕</button></div>
+          <div class="mb">
+            <div class="fg"><label>名前 <span class="req">✳</span></label><input value="伊藤 四郎" style="max-width:100%;"></div>
+            <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input value="ito@example.jp" style="max-width:100%;"></div>
+
+            <div class="dv" style="margin:14px 0;"></div>
+
+            <div class="fg">
+              <label>初期パスワード <span class="req">✳</span></label>
+              <input type="password" value="admin1234" style="max-width:100%;">
+              <div class="pw-str"><div class="bar"><div class="bf strong"></div></div><div class="lbl">強い</div></div>
+              <div class="hint">8文字以上。登録後、管理者に口頭やチャット等で共有してください</div>
+            </div>
+            <div class="fg"><label>初期パスワード（確認） <span class="req">✳</span></label><input type="password" value="admin1234" style="max-width:100%;"></div>
+
+            <div class="dv" style="margin:14px 0;"></div>
+
+            <div class="fg">
+              <label>担当店舗 <span class="req">✳</span></label>
+              <div class="store-chk-grid">
+                <label class="store-chk"><input type="checkbox"> 渋谷店</label>
+                <label class="store-chk"><input type="checkbox" checked> 新宿店</label>
+                <label class="store-chk"><input type="checkbox" checked> 池袋店</label>
+                <label class="store-chk"><input type="checkbox"> 北海道支店</label>
+              </div>
+              <div class="hint" style="margin-top:6px;">担当店舗の従業員管理・勤怠管理が可能になります</div>
+            </div>
+
+            <div class="al al-w"><span>⚠️</span><div>管理者は担当店舗の従業員情報・勤怠データにアクセスできます。</div></div>
+            <div class="btn-grp"><button class="btn btn-s" onclick="go('d1')">キャンセル</button><button class="btn btn-p" onclick="go('d1')">管理者を登録</button></div>
           </div>
         </div>
       </div>
