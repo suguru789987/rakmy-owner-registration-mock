@@ -878,11 +878,11 @@
             </div>
             <div style="display:flex;gap:12px;">
               <div class="fg" style="flex:1;"><label>交通費単位</label>
-                <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+                <select id="c1e-a-trans-unit" style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
                   <option selected>日額</option><option>月額</option>
                 </select>
               </div>
-              <div class="fg" style="flex:1;"><label>交通費/単位</label><input value="1" style="max-width:100%;"></div>
+              <div class="fg" style="flex:1;"><label>交通費/単位</label><input id="c1e-a-trans-cost" value="1" style="max-width:100%;"></div>
             </div>
             <div class="fg"><label>社員コード</label><input value="" placeholder="任意" style="max-width:100%;"></div>
 
@@ -890,7 +890,7 @@
 
             <div class="fg">
               <label>所属店舗 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" data-original="0" onchange="document.getElementById('store-change-alert-owner-active').style.display=this.selectedIndex===0?'none':'flex'">
+              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" data-original="0" onchange="var ch=this.selectedIndex!==0;document.getElementById('store-change-alert-owner-active').style.display=ch?'flex':'none';document.getElementById('c1e-a-trans-cost').style.cssText=ch?'max-width:100%;border:2px solid #c62828;background:#fff5f5;border-radius:6px;padding:8px 12px':'max-width:100%';document.getElementById('c1e-a-trans-unit').style.cssText=ch?'width:100%;padding:8px 12px;border:2px solid #c62828;background:#fff5f5;border-radius:6px;font-size:12px':'width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px'">
                 <option selected>渋谷店</option>
                 <option>新宿店</option>
                 <option>池袋店</option>
@@ -940,11 +940,11 @@
             </div>
             <div style="display:flex;gap:12px;">
               <div class="fg" style="flex:1;"><label>交通費単位</label>
-                <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+                <select id="c1e-p-trans-unit" style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
                   <option selected>日額</option><option>月額</option>
                 </select>
               </div>
-              <div class="fg" style="flex:1;"><label>交通費/単位</label><input value="0" style="max-width:100%;"></div>
+              <div class="fg" style="flex:1;"><label>交通費/単位</label><input id="c1e-p-trans-cost" value="0" style="max-width:100%;"></div>
             </div>
             <div class="fg"><label>社員コード</label><input value="" placeholder="任意" style="max-width:100%;"></div>
 
@@ -952,7 +952,7 @@
 
             <div class="fg">
               <label>所属店舗 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" data-original="2" onchange="document.getElementById('store-change-alert-owner-pending').style.display=this.selectedIndex===2?'none':'flex'">
+              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" data-original="2" onchange="var ch=this.selectedIndex!==2;document.getElementById('store-change-alert-owner-pending').style.display=ch?'flex':'none';document.getElementById('c1e-p-trans-cost').style.cssText=ch?'max-width:100%;border:2px solid #c62828;background:#fff5f5;border-radius:6px;padding:8px 12px':'max-width:100%';document.getElementById('c1e-p-trans-unit').style.cssText=ch?'width:100%;padding:8px 12px;border:2px solid #c62828;background:#fff5f5;border-radius:6px;font-size:12px':'width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px'">
                 <option>渋谷店</option>
                 <option>新宿店</option>
                 <option selected>池袋店</option>
@@ -1117,11 +1117,11 @@
             </div>
             <div style="display:flex;gap:12px;">
               <div class="fg" style="flex:1;"><label>交通費単位</label>
-                <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+                <select id="c2e-a-trans-unit" style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
                   <option selected>日額</option><option>月額</option>
                 </select>
               </div>
-              <div class="fg" style="flex:1;"><label>交通費/単位</label><input value="0" style="max-width:100%;"></div>
+              <div class="fg" style="flex:1;"><label>交通費/単位</label><input id="c2e-a-trans-cost" value="0" style="max-width:100%;"></div>
             </div>
             <div class="fg"><label>社員コード</label><input value="" placeholder="任意" style="max-width:100%;"></div>
 
@@ -1129,7 +1129,7 @@
 
             <div class="fg">
               <label>所属店舗 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" data-original="1" onchange="document.getElementById('store-change-alert-active').style.display=this.selectedIndex===1?'none':'flex'">
+              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" data-original="1" onchange="var ch=this.selectedIndex!==1;document.getElementById('store-change-alert-active').style.display=ch?'flex':'none';document.getElementById('c2e-a-trans-cost').style.cssText=ch?'max-width:100%;border:2px solid #c62828;background:#fff5f5;border-radius:6px;padding:8px 12px':'max-width:100%';document.getElementById('c2e-a-trans-unit').style.cssText=ch?'width:100%;padding:8px 12px;border:2px solid #c62828;background:#fff5f5;border-radius:6px;font-size:12px':'width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px'">
                 <option>新宿店</option>
                 <option selected>池袋店</option>
               </select>
@@ -1178,11 +1178,11 @@
             </div>
             <div style="display:flex;gap:12px;">
               <div class="fg" style="flex:1;"><label>交通費単位</label>
-                <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+                <select id="c2e-p-trans-unit" style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
                   <option selected>日額</option><option>月額</option>
                 </select>
               </div>
-              <div class="fg" style="flex:1;"><label>交通費/単位</label><input value="10" style="max-width:100%;"></div>
+              <div class="fg" style="flex:1;"><label>交通費/単位</label><input id="c2e-p-trans-cost" value="10" style="max-width:100%;"></div>
             </div>
             <div class="fg"><label>社員コード</label><input value="" placeholder="任意" style="max-width:100%;"></div>
 
@@ -1190,7 +1190,7 @@
 
             <div class="fg">
               <label>所属店舗 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" data-original="1" onchange="document.getElementById('store-change-alert-pending').style.display=this.selectedIndex===1?'none':'flex'">
+              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" data-original="1" onchange="var ch=this.selectedIndex!==1;document.getElementById('store-change-alert-pending').style.display=ch?'flex':'none';document.getElementById('c2e-p-trans-cost').style.cssText=ch?'max-width:100%;border:2px solid #c62828;background:#fff5f5;border-radius:6px;padding:8px 12px':'max-width:100%';document.getElementById('c2e-p-trans-unit').style.cssText=ch?'width:100%;padding:8px 12px;border:2px solid #c62828;background:#fff5f5;border-radius:6px;font-size:12px':'width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px'">
                 <option>新宿店</option>
                 <option selected>池袋店</option>
               </select>
