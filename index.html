@@ -1545,7 +1545,7 @@
 
       <div class="fg">
         <label>所属店舗 <span class="req">✳</span></label>
-        <select id="emp-edit-store" style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" onchange="var a=document.getElementById('emp-edit-store-alert');if(this.selectedIndex!=parseInt(this.getAttribute('data-orig'))){a.style.display='flex'}else{a.style.display='none'}">
+        <select id="emp-edit-store" style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" onchange="var a=document.getElementById('emp-edit-store-alert'),c=document.getElementById('emp-edit-trans-cost'),changed=this.selectedIndex!=parseInt(this.getAttribute('data-orig'));a.style.display=changed?'flex':'none';c.style.border=changed?'2px solid #c62828':'1px solid #ddd';c.style.background=changed?'#fff5f5':'#fff'">
           <option>渋谷店</option><option>新宿店</option><option>池袋店</option><option>北海道支店</option>
         </select>
       </div>
@@ -1625,6 +1625,9 @@ function empEdit(btn, status) {
   }
   storeSelect.setAttribute('data-orig', storeSelect.selectedIndex);
   document.getElementById('emp-edit-store-alert').style.display = 'none';
+  var costInput = document.getElementById('emp-edit-trans-cost');
+  costInput.style.border = '1px solid #ddd';
+  costInput.style.background = '#fff';
 
   // ステータス別の表示制御
   var emailInput = document.getElementById('emp-edit-email');
