@@ -1545,12 +1545,12 @@
 
       <div class="fg">
         <label>所属店舗 <span class="req">✳</span></label>
-        <select id="emp-edit-store" style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" onchange="document.getElementById('emp-edit-store-alert').style.display=(this.selectedIndex===this.dataset.orig*1)?'none':'flex'">
+        <select id="emp-edit-store" style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" onchange="var a=document.getElementById('emp-edit-store-alert');if(this.selectedIndex!=parseInt(this.getAttribute('data-orig'))){a.style.display='flex'}else{a.style.display='none'}">
           <option>渋谷店</option><option>新宿店</option><option>池袋店</option><option>北海道支店</option>
         </select>
       </div>
 
-      <div id="emp-edit-store-alert" class="al al-w" style="display:none;margin-bottom:12px;"><span>⚠️</span><div>所属店舗を変更する場合は、<strong>交通費（日額）</strong>を新しい店舗に合わせて更新してください。</div></div>
+      <div id="emp-edit-store-alert" class="al al-w" style="display:none;background:#fff8e1;border:1px solid #ffe082;border-radius:8px;padding:10px 14px;font-size:12px;align-items:flex-start;gap:8px;margin-bottom:12px;"><span>⚠️</span><div>所属店舗を変更する場合は、<strong>交通費（日額）</strong>を新しい店舗に合わせて更新してください。</div></div>
 
       <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:20px;">
         <button class="btn btn-s" onclick="closeEmpEdit()">キャンセル</button>
@@ -1623,7 +1623,7 @@ function empEdit(btn, status) {
       if (storeSelect.options[i].text === store) { storeSelect.selectedIndex = i; break; }
     }
   }
-  storeSelect.dataset.orig = storeSelect.selectedIndex;
+  storeSelect.setAttribute('data-orig', storeSelect.selectedIndex);
   document.getElementById('emp-edit-store-alert').style.display = 'none';
 
   // ステータス別の表示制御
