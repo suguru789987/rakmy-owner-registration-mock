@@ -890,13 +890,15 @@
 
             <div class="fg">
               <label>所属店舗 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" onchange="document.getElementById('store-change-alert-owner-active').style.display=this.value==='渋谷店'?'none':'flex'">
                 <option selected>渋谷店</option>
                 <option>新宿店</option>
                 <option>池袋店</option>
                 <option>北海道支店</option>
               </select>
             </div>
+
+            <div class="al al-w" id="store-change-alert-owner-active" style="display:none;margin-bottom:12px;"><span>⚠️</span><div>所属店舗を変更する場合は、<strong>交通費（日額）</strong>を新しい店舗に合わせて更新してください。</div></div>
 
             <div class="btn-grp"><button class="btn btn-s" onclick="go('c1')">キャンセル</button><button class="btn btn-p" onclick="go('c1')">保存</button></div>
           </div>
@@ -950,13 +952,15 @@
 
             <div class="fg">
               <label>所属店舗 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" onchange="document.getElementById('store-change-alert-owner-pending').style.display=this.value==='池袋店'?'none':'flex'">
                 <option>渋谷店</option>
                 <option>新宿店</option>
                 <option selected>池袋店</option>
                 <option>北海道支店</option>
               </select>
             </div>
+
+            <div class="al al-w" id="store-change-alert-owner-pending" style="display:none;margin-bottom:12px;"><span>⚠️</span><div>所属店舗を変更する場合は、<strong>交通費（日額）</strong>を新しい店舗に合わせて更新してください。</div></div>
 
             <div class="btn-grp"><button class="btn btn-s" onclick="go('c1')">キャンセル</button><button class="btn btn-p" onclick="go('c1')">保存</button></div>
           </div>
@@ -1125,12 +1129,14 @@
 
             <div class="fg">
               <label>所属店舗 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" onchange="document.getElementById('store-change-alert-active').style.display=this.value==='池袋店'?'none':'flex'">
                 <option>新宿店</option>
                 <option selected>池袋店</option>
               </select>
               <div class="hint">担当店舗間で異動できます</div>
             </div>
+
+            <div class="al al-w" id="store-change-alert-active" style="display:none;margin-bottom:12px;"><span>⚠️</span><div>所属店舗を変更する場合は、<strong>交通費（日額）</strong>を新しい店舗に合わせて更新してください。</div></div>
 
             <div class="btn-grp"><button class="btn btn-s" onclick="go('c2')">キャンセル</button><button class="btn btn-p" onclick="go('c2')">保存</button></div>
           </div>
@@ -1184,12 +1190,14 @@
 
             <div class="fg">
               <label>所属店舗 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" onchange="document.getElementById('store-change-alert-pending').style.display=this.value==='池袋店'?'none':'flex'">
                 <option>新宿店</option>
                 <option selected>池袋店</option>
               </select>
               <div class="hint">担当店舗間で異動できます</div>
             </div>
+
+            <div class="al al-w" id="store-change-alert-pending" style="display:none;margin-bottom:12px;"><span>⚠️</span><div>所属店舗を変更する場合は、<strong>交通費（日額）</strong>を新しい店舗に合わせて更新してください。</div></div>
 
             <div class="btn-grp"><button class="btn btn-s" onclick="go('c2')">キャンセル</button><button class="btn btn-p" onclick="go('c2')">保存</button></div>
           </div>
