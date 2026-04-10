@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>費用実績入力 - 地代家賃実績編集モーダル モック</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif; background: #f0f2f5; color: #333; }
+
+    /* ===== サイドバー ===== */
+    .sidebar {
+      position: fixed; top: 0; left: 0; bottom: 0; width: 220px;
+      background: #1e1e2d; color: #a2a3b7; overflow-y: auto; z-index: 100;
+    }
+    .sidebar-logo {
+      padding: 18px 16px; display: flex; align-items: center; gap: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .sidebar-logo .badge { background: #2ec4a5; color: #fff; font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 4px; }
+    .sidebar-logo span { color: #fff; font-size: 14px; font-weight: 600; }
+    .sidebar-section { padding: 16px 0 4px 16px; font-size: 10px; color: #585873; font-weight: 600; letter-spacing: 1px; }
+    .sidebar-item {
+      display: flex; align-items: center; gap: 10px; padding: 10px 16px; font-size: 13px;
+      cursor: pointer; transition: background 0.15s; color: #a2a3b7; text-decoration: none;
+    }
+    .sidebar-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+    .sidebar-item.active { background: rgba(46,196,165,0.12); color: #2ec4a5; }
+    .sidebar-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+    /* ===== メインコンテンツ ===== */
+    .main { margin-left: 220px; min-height: 100vh; }
+    .topbar {
+      background: #fff; height: 60px; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 28px; border-bottom: 1px solid #e8e8e8;
+    }
+    .store-select {
+      display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid #ddd;
+      border-radius: 8px; padding: 8px 16px; font-size: 14px; cursor: pointer;
+    }
+    .store-select .icon { font-size: 18px; }
+    .topbar-right { display: flex; align-items: center; gap: 16px; }
+    .topbar-right .help { width: 32px; height: 32px; border-radius: 50%; background: #2ec4a5; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; cursor: pointer; }
+    .topbar-right .avatar { width: 36px; height: 36px; border-radius: 50%; background: #ddd; cursor: pointer; }
+
+    .content { padding: 24px 28px; }
+    .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .page-title { font-size: 20px; font-weight: 700; }
+    .breadcrumb { font-size: 12px; color: #888; margin-left: 16px; }
+    .breadcrumb span { margin: 0 4px; }
+    .btn-csv-import {
+      display: flex; align-items: center; gap: 6px; background: #fff; border: 2px solid #2ec4a5;
+      color: #2ec4a5; padding: 8px 20px; border-radius: 8px; font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .btn-csv-import:hover { background: #e8f8f5; }
+
+    /* ===== フィルター ===== */
+    .filter-bar {
+      background: #fff; border-radius: 12px; padding: 16px 20px; margin-bottom: 20px;
+      display: flex; align-items: center; gap: 16px; border: 1px solid #e8e8e8;
+    }
+    .filter-label { font-size: 12px; color: #888; }
+    .filter-select {
+      padding: 8px 32px 8px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px;
+      background: #fff; cursor: pointer; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 10px center;
+    }
+    .btn-display {
+      background: #2ec4a5; color: #fff; border: none; padding: 8px 24px; border-radius: 6px;
+      font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.15s;
+    }
+    .btn-display:hover { background: #27b396; }
+
+    /* ===== テーブル ===== */
+    .table-container {
+      background: #fff; border-radius: 12px; border: 1px solid #e8e8e8; overflow-x: auto;
+    }
+    .expense-table { width: 100%; border-collapse: collapse; min-width: 1100px; }
+    .expense-table thead th {
+      padding: 12px 14px; font-size: 12px; font-weight: 600; color: #6b7280;
+      border-bottom: 2px solid #e8e8e8; text-align: center; white-space: nowrap;
+    }
+    .expense-table thead th:first-child { text-align: left; }
+    .expense-table tbody td {
+      padding: 14px 14px; font-size: 14px; border-bottom: 1px solid #f0f0f0;
+      text-align: center; vertical-align: middle;
+    }
+    .expense-table tbody td:first-child { text-align: left; font-weight: 500; }
+    .expense-table tbody tr:last-child td { border-bottom: none; }
+    .budget-val { color: #333; font-weight: 500; }
+    .actual-input {
+      width: 110px; padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px;
+      font-size: 14px; text-align: right; background: #f9fafb; transition: border-color 0.15s;
+    }
+    .actual-input:focus { border-color: #2ec4a5; outline: none; background: #fff; }
+    .actual-input.empty { border: 2px solid #f59e0b; background: #fffbeb; }
+
+    /* 地代家賃行 */
+    .rent-row { transition: background 0.15s; }
+    .rent-row:hover { background: #f0fdf9; }
+
+    /* 地代家賃 実績セル */
+    .rent-actual-cell {
+      position: relative; display: inline-block;
+    }
+    .rent-actual-val {
+      font-size: 14px; color: #333; font-weight: 500;
+      background: #f9fafb; padding: 8px 10px; border-radius: 6px; border: 1px solid #ddd;
+      display: block; width: 110px; text-align: right; cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .rent-actual-cell:hover .rent-actual-val { border-color: #2ec4a5; }
+    .btn-rent-edit {
+      position: absolute; top: -8px; right: -8px;
+      width: 22px; height: 22px; border: 2px solid #fff; background: #2ec4a5;
+      border-radius: 50%; cursor: pointer; display: flex;
+      align-items: center; justify-content: center; transition: all 0.15s;
+      opacity: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    }
+    .rent-actual-cell:hover .btn-rent-edit { opacity: 1; }
+    .btn-rent-edit:hover { background: #1a9e7e; transform: scale(1.1); }
+    .btn-rent-edit svg { width: 10px; height: 10px; color: #fff; }
+
+    .btn-save-bottom {
+      display: flex; justify-content: flex-end; padding: 16px 20px;
+    }
+    .btn-save {
+      display: flex; align-items: center; gap: 8px; background: #2ec4a5; color: #fff;
+      border: none; padding: 12px 32px; border-radius: 8px; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .btn-save:hover { background: #27b396; }
+
+    /* ===== モーダルオーバーレイ ===== */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+      z-index: 500; align-items: center; justify-content: center;
+    }
+    .modal-overlay.active { display: flex; }
+
+    /* ===== 地代家賃実績設定モーダル ===== */
+    .modal {
+      background: #fff; border-radius: 12px; width: 560px; max-height: 90vh;
+      overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      animation: modalIn 0.2s ease-out;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(12px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* モーダルヘッダー */
+    .modal-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      padding: 24px 28px 0 28px;
+    }
+    .modal-title-row {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 6px;
+    }
+    .modal-title-icon {
+      width: 28px; height: 28px; background: #e8f8f5; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .modal-title-icon svg { width: 16px; height: 16px; color: #2ec4a5; }
+    .modal-title-text { font-size: 18px; font-weight: 700; color: #333; }
+    .modal-month-select {
+      padding: 5px 28px 5px 12px; border: 1px solid #ddd; border-radius: 6px;
+      font-size: 13px; background: #fff; cursor: pointer; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 8px center;
+    }
+    .modal-subtitle { font-size: 13px; color: #888; padding-left: 40px; margin-bottom: 20px; }
+    .modal-close {
+      width: 28px; height: 28px; border: none; background: none;
+      cursor: pointer; font-size: 20px; color: #aaa; display: flex;
+      align-items: center; justify-content: center; transition: color 0.15s;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .modal-close:hover { color: #333; }
+
+    .modal-body { padding: 0 28px 24px 28px; }
+
+    /* 区切り線 */
+    .modal-divider { border: none; border-top: 1px solid #e8e8e8; margin: 0 0 20px 0; }
+
+    /* デフォルト計算額 + この月の地代家賃 */
+    .rent-edit-row {
+      display: flex; align-items: flex-end; gap: 16px; margin-bottom: 20px;
+    }
+    .rent-field { display: flex; flex-direction: column; }
+    .rent-field-label { font-size: 12px; color: #888; margin-bottom: 6px; }
+    .rent-default-val {
+      background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 8px;
+      padding: 12px 16px; font-size: 16px; font-weight: 600; color: #333;
+      min-width: 160px;
+    }
+    .rent-input-wrap {
+      display: flex; align-items: center; border: 1px solid #ddd; border-radius: 8px;
+      overflow: hidden; transition: border-color 0.15s;
+    }
+    .rent-input-wrap:focus-within { border-color: #2ec4a5; }
+    .rent-input-prefix {
+      padding: 12px 0 12px 14px; font-size: 16px; color: #888; font-weight: 500;
+      background: #fff;
+    }
+    .rent-input {
+      border: none; outline: none; padding: 12px 14px 12px 6px; font-size: 16px;
+      font-weight: 500; width: 140px; background: #fff;
+    }
+    .btn-reset {
+      background: none; border: 2px solid #2ec4a5; color: #2ec4a5; padding: 10px 18px;
+      border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: all 0.15s; white-space: nowrap; align-self: flex-end;
+    }
+    .btn-reset:hover { background: #e8f8f5; }
+
+    /* 計算条件詳細（アコーディオン） */
+    .detail-toggle {
+      display: flex; align-items: center; gap: 6px; background: none; border: none;
+      cursor: pointer; font-size: 13px; color: #888; padding: 0; margin-bottom: 8px;
+      transition: color 0.15s;
+    }
+    .detail-toggle:hover { color: #555; }
+    .detail-toggle .arrow {
+      transition: transform 0.2s; display: inline-block; font-size: 10px;
+    }
+    .detail-toggle.open .arrow { transform: rotate(90deg); }
+    .detail-content {
+      display: none; background: #f8f9fb; border-radius: 10px; padding: 16px 20px;
+      margin-bottom: 20px; border: 1px solid #e8e8e8;
+    }
+    .detail-content.open { display: block; }
+    .detail-table { width: 100%; }
+    .detail-table tr td {
+      padding: 7px 0; font-size: 13px; border-bottom: 1px solid #eee;
+      vertical-align: top;
+    }
+    .detail-table tr:last-child td { border-bottom: none; }
+    .detail-table .dt-label { color: #888; width: 140px; }
+    .detail-table .dt-value { text-align: right; color: #333; font-weight: 500; }
+    .detail-table .dt-sub { padding-left: 20px; color: #aaa; font-size: 12px; }
+    .detail-table .dt-sub-val { font-size: 12px; }
+
+    /* モーダルフッター */
+    .modal-footer {
+      display: flex; align-items: center; justify-content: flex-end; gap: 12px;
+      padding: 16px 28px; border-top: 1px solid #e8e8e8;
+    }
+    .btn-cancel {
+      background: #fff; border: 1px solid #ddd; color: #666; padding: 10px 24px;
+      border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.15s;
+    }
+    .btn-cancel:hover { background: #f3f4f6; }
+    .btn-modal-save {
+      background: #2ec4a5; color: #fff; border: none; padding: 10px 28px;
+      border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.15s;
+    }
+    .btn-modal-save:hover { background: #27b396; }
+
+    /* ===== モック注釈バー ===== */
+    .mock-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000;
+      background: #1e1e2d; color: #fff; padding: 8px 20px; display: flex;
+      align-items: center; justify-content: space-between; font-size: 12px;
+    }
+    .mock-bar .label { background: #ef4444; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; margin-right: 8px; }
+    .mock-bar .hint { color: #a2a3b7; }
+    .mock-bar .actions { display: flex; gap: 8px; }
+    .mock-bar .actions button {
+      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+      color: #fff; padding: 4px 14px; border-radius: 4px; font-size: 11px; cursor: pointer;
+    }
+    .mock-bar .actions button:hover { background: rgba(255,255,255,0.2); }
+    .mock-bar .actions button.active-btn { background: #2ec4a5; border-color: #2ec4a5; }
+  </style>
+</head>
+<body>
+
+<!-- サイドバー -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <span class="badge">ラクミー</span>
+    <span>経営管理</span>
+  </div>
+  <div class="sidebar-section">分析</div>
+  <a class="sidebar-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 4-6"/></svg>
+    売上分析
+  </a>
+  <a class="sidebar-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
+    仕入分析
+  </a>
+  <a class="sidebar-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l4 4"/></svg>
+    詳細分析
+  </a>
+  <a class="sidebar-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 10h16"/><path d="M10 4v16"/></svg>
+    集計
+  </a>
+  <div class="sidebar-section">登録・管理</div>
+  <a class="sidebar-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><circle cx="7" cy="7" r="1"/></svg>
+    ラベル
+  </a>
+  <a class="sidebar-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="8.5" cy="7" r="4"/></svg>
+    発注先&仕入商品
+  </a>
+  <div class="sidebar-section">設定</div>
+  <a class="sidebar-item active" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/><rect x="6" y="6" width="12" height="12" rx="1"/></svg>
+    費用設定
+  </a>
+  <a class="sidebar-item" href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
+    店舗情報
+  </a>
+</div>
+
+<!-- メインコンテンツ -->
+<div class="main">
+  <!-- トップバー -->
+  <div class="topbar">
+    <div class="store-select">
+      <span class="icon">🏢</span>
+      居酒屋青山2号店
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
+    <div class="topbar-right">
+      <div class="help">?</div>
+      <div class="avatar"></div>
+    </div>
+  </div>
+
+  <!-- コンテンツ -->
+  <div class="content">
+    <div class="page-header">
+      <div style="display:flex; align-items:baseline;">
+        <h1 class="page-title">費用実績入力</h1>
+        <span class="breadcrumb">ホーム <span>-</span> 費用設定 <span>-</span> 費用実績入力</span>
+      </div>
+      <button class="btn-csv-import" onclick="alert('CSVインポート画面へ遷移')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        CSVインポート
+      </button>
+    </div>
+
+    <!-- フィルター -->
+    <div class="filter-bar">
+      <div>
+        <div class="filter-label">開始月</div>
+        <select class="filter-select">
+          <option>2026年1月</option>
+          <option>2026年2月</option>
+          <option>2026年3月</option>
+        </select>
+      </div>
+      <div>
+        <div class="filter-label">終了月</div>
+        <select class="filter-select">
+          <option>2026年4月</option>
+          <option>2026年3月</option>
+          <option>2026年2月</option>
+        </select>
+      </div>
+      <button class="btn-display">表示</button>
+    </div>
+
+    <!-- テーブル -->
+    <div class="table-container">
+      <table class="expense-table">
+        <thead>
+          <tr>
+            <th style="width:140px;">費目</th>
+            <th>2026年1月 予算</th>
+            <th>2026年1月 実績</th>
+            <th>2026年2月 予算</th>
+            <th>2026年2月 実績</th>
+            <th>2026年3月 予算</th>
+            <th>2026年3月 実績</th>
+            <th>2026年4月 予算</th>
+            <th>2026年4月 実績</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 地代家賃行 -->
+          <tr class="rent-row">
+            <td>地代家賃</td>
+            <td><span class="budget-val">&yen;800,000</span></td>
+            <td>
+              <div class="rent-actual-cell">
+                <span class="rent-actual-val">800,000</span>
+                <button class="btn-rent-edit" onclick="openModal(1)" title="2026年1月 地代家賃設定">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                </button>
+              </div>
+            </td>
+            <td><span class="budget-val">&yen;800,000</span></td>
+            <td>
+              <div class="rent-actual-cell">
+                <span class="rent-actual-val">800,000</span>
+                <button class="btn-rent-edit" onclick="openModal(2)" title="2026年2月 地代家賃設定">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                </button>
+              </div>
+            </td>
+            <td><span class="budget-val">&yen;800,000</span></td>
+            <td>
+              <div class="rent-actual-cell">
+                <span class="rent-actual-val">800,000</span>
+                <button class="btn-rent-edit" onclick="openModal(3)" title="2026年3月 地代家賃設定">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                </button>
+              </div>
+            </td>
+            <td><span class="budget-val">&yen;800,000</span></td>
+            <td>
+              <div class="rent-actual-cell">
+                <span class="rent-actual-val">800,000</span>
+                <button class="btn-rent-edit" onclick="openModal(4)" title="2026年4月 地代家賃設定">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <!-- 人件費 -->
+          <tr>
+            <td>人件費</td>
+            <td></td>
+            <td><input class="actual-input" value="2300000"></td>
+            <td></td>
+            <td><input class="actual-input" value="2500000"></td>
+            <td></td>
+            <td><input class="actual-input empty"></td>
+            <td></td>
+            <td><input class="actual-input empty"></td>
+          </tr>
+          <!-- 固定人件費 -->
+          <tr>
+            <td>固定人件費</td>
+            <td><span class="budget-val">&yen;1,203,862</span></td>
+            <td><input class="actual-input" value="1000000"></td>
+            <td><span class="budget-val">&yen;1,201,817</span></td>
+            <td><input class="actual-input" value="1100000"></td>
+            <td><span class="budget-val">&yen;1,200,000</span></td>
+            <td><input class="actual-input empty"></td>
+            <td><span class="budget-val">&yen;1,200,000</span></td>
+            <td><input class="actual-input empty"></td>
+          </tr>
+          <!-- 水道光熱費 -->
+          <tr>
+            <td>水道光熱費</td>
+            <td><span class="budget-val">&yen;151,203</span></td>
+            <td><input class="actual-input" value="140000"></td>
+            <td><span class="budget-val">&yen;151,169</span></td>
+            <td><input class="actual-input" value="180000"></td>
+            <td><span class="budget-val">&yen;150,287</span></td>
+            <td><input class="actual-input empty"></td>
+            <td><span class="budget-val">&yen;150,287</span></td>
+            <td><input class="actual-input empty"></td>
+          </tr>
+          <!-- 減価償却費 -->
+          <tr>
+            <td>減価償却費</td>
+            <td><span class="budget-val">&yen;73,331</span></td>
+            <td><input class="actual-input" value="69648"></td>
+            <td><span class="budget-val">&yen;79,149</span></td>
+            <td><input class="actual-input" value="69648"></td>
+            <td><span class="budget-val">&yen;69,648</span></td>
+            <td><input class="actual-input empty"></td>
+            <td><span class="budget-val">&yen;69,648</span></td>
+            <td><input class="actual-input empty"></td>
+          </tr>
+          <!-- 資材費 -->
+          <tr>
+            <td>資材費</td>
+            <td></td>
+            <td><input class="actual-input empty"></td>
+            <td></td>
+            <td><input class="actual-input empty"></td>
+            <td></td>
+            <td><input class="actual-input empty"></td>
+            <td></td>
+            <td><input class="actual-input empty"></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="btn-save-bottom">
+        <button class="btn-save">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          保存
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 地代家賃実績設定モーダル ===== -->
+<div class="modal-overlay" id="rentModal">
+  <div class="modal" onclick="event.stopPropagation()">
+    <!-- ヘッダー -->
+    <div class="modal-header">
+      <div>
+        <div class="modal-title-row">
+          <div class="modal-title-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <span class="modal-title-text">地代家賃設定:</span>
+          <select class="modal-month-select" id="modalMonth" onchange="switchMonth(this.value)">
+            <option value="1">2026年1月</option>
+            <option value="2">2026年2月</option>
+            <option value="3">2026年3月</option>
+            <option value="4">2026年4月</option>
+          </select>
+        </div>
+        <div class="modal-subtitle">この月の地代家賃の金額を設定します</div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+
+    <!-- ボディ -->
+    <div class="modal-body">
+      <hr class="modal-divider">
+
+      <!-- デフォルト計算額 + この月の地代家賃 + リセット -->
+      <div class="rent-edit-row">
+        <div class="rent-field">
+          <div class="rent-field-label">デフォルト計算額</div>
+          <div class="rent-default-val" id="defaultVal">&yen;800,000</div>
+        </div>
+        <div class="rent-field">
+          <div class="rent-field-label">この月の地代家賃</div>
+          <div class="rent-input-wrap">
+            <span class="rent-input-prefix">&yen;</span>
+            <input class="rent-input" id="rentInput" value="800,000" oninput="onRentInput()">
+          </div>
+        </div>
+        <button class="btn-reset" onclick="resetToDefault()">リセット</button>
+      </div>
+
+      <!-- デフォルト値の計算条件詳細 -->
+      <button class="detail-toggle" id="detailToggle" onclick="toggleDetail()">
+        <span class="arrow">&#9654;</span>
+        デフォルト値の計算条件詳細
+      </button>
+      <div class="detail-content" id="detailContent">
+        <table class="detail-table">
+          <tr>
+            <td class="dt-label">賃料パターン</td>
+            <td class="dt-value">段階別歩合 / 大きい方</td>
+          </tr>
+          <tr>
+            <td class="dt-label">固定賃料</td>
+            <td class="dt-value">&yen;180,532</td>
+          </tr>
+          <tr>
+            <td class="dt-label">売上歩合対象率</td>
+            <td class="dt-value">50%</td>
+          </tr>
+          <tr>
+            <td class="dt-label">最低保証額</td>
+            <td class="dt-value">&yen;800,000</td>
+          </tr>
+          <tr>
+            <td class="dt-label">段階別歩合</td>
+            <td class="dt-value"></td>
+          </tr>
+          <tr>
+            <td class="dt-label dt-sub">段階1</td>
+            <td class="dt-value dt-sub-val">&yen;0 〜 &yen;3,000,000 → 5.00%</td>
+          </tr>
+          <tr>
+            <td class="dt-label dt-sub">段階2</td>
+            <td class="dt-value dt-sub-val">&yen;3,000,001 〜 &yen;7,000,000 → 8.00%</td>
+          </tr>
+          <tr>
+            <td class="dt-label dt-sub">段階3</td>
+            <td class="dt-value dt-sub-val">&yen;7,000,001〜 → 10.00%</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- フッター -->
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
+      <button class="btn-modal-save" onclick="saveAndClose()">保存する</button>
+    </div>
+  </div>
+</div>
+
+<!-- モック操作バー -->
+<div class="mock-bar">
+  <div>
+    <span class="label">MOCK</span>
+    費用実績入力 - 地代家賃実績編集モーダル
+    <span class="hint" style="margin-left:12px;">地代家賃行をクリックでモーダルを表示</span>
+  </div>
+  <div class="actions">
+    <button onclick="openModal()">モーダルを開く</button>
+    <button onclick="closeModal()">モーダルを閉じる</button>
+  </div>
+</div>
+
+<script>
+  // 月別データ（デフォルト計算額 / 現在の実績値）
+  var monthData = {
+    1: { default: 800000, actual: 800000 },
+    2: { default: 800000, actual: 800000 },
+    3: { default: 800000, actual: 800000 },
+    4: { default: 800000, actual: 800000 }
+  };
+  var currentMonth = 1;
+
+  function formatNum(n) {
+    return n.toLocaleString();
+  }
+
+  function openModal(month) {
+    currentMonth = month || 1;
+    document.getElementById('modalMonth').value = currentMonth;
+    loadMonthData(currentMonth);
+    document.getElementById('rentModal').classList.add('active');
+  }
+
+  function closeModal() {
+    document.getElementById('rentModal').classList.remove('active');
+  }
+
+  // オーバーレイクリックで閉じる
+  document.getElementById('rentModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // 月切り替え
+  function switchMonth(m) {
+    // 現在の入力値を保存
+    saveCurrentInput();
+    currentMonth = parseInt(m);
+    loadMonthData(currentMonth);
+  }
+
+  function loadMonthData(m) {
+    var data = monthData[m];
+    document.getElementById('defaultVal').textContent = '\u00A5' + formatNum(data.default);
+    document.getElementById('rentInput').value = formatNum(data.actual);
+  }
+
+  function saveCurrentInput() {
+    var val = parseInt(document.getElementById('rentInput').value.replace(/,/g, '')) || 0;
+    monthData[currentMonth].actual = val;
+  }
+
+  // リセットボタン
+  function resetToDefault() {
+    var def = monthData[currentMonth].default;
+    document.getElementById('rentInput').value = formatNum(def);
+    monthData[currentMonth].actual = def;
+  }
+
+  // 入力時のフォーマット
+  function onRentInput() {
+    // リアルタイム保存（カンマなしで保持）
+    var raw = document.getElementById('rentInput').value.replace(/,/g, '');
+    monthData[currentMonth].actual = parseInt(raw) || 0;
+  }
+
+  // 計算条件詳細のトグル
+  function toggleDetail() {
+    var toggle = document.getElementById('detailToggle');
+    var content = document.getElementById('detailContent');
+    toggle.classList.toggle('open');
+    content.classList.toggle('open');
+  }
+
+  // 保存してモーダルを閉じる
+  function saveAndClose() {
+    saveCurrentInput();
+    // テーブルの実績セルに全月の値を反映
+    var cells = document.querySelectorAll('.rent-actual-val');
+    for (var m = 1; m <= 4; m++) {
+      cells[m - 1].textContent = formatNum(monthData[m].actual);
+    }
+    closeModal();
+  }
+
+  // 地代家賃行の各セルクリックで該当月のモーダルを開く
+  document.querySelectorAll('.rent-actual-val').forEach(function(el, i) {
+    el.addEventListener('click', function(e) {
+      e.stopPropagation();
+      openModal(i + 1);
+    });
+  });
+</script>
+
+</body>
+</html>
