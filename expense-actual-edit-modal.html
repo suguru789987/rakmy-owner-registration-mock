@@ -165,11 +165,9 @@
     }
     .modal-title-icon svg { width: 16px; height: 16px; color: #2ec4a5; }
     .modal-title-text { font-size: 18px; font-weight: 700; color: #333; }
-    .modal-month-select {
-      padding: 5px 28px 5px 12px; border: 1px solid #ddd; border-radius: 6px;
-      font-size: 13px; background: #fff; cursor: pointer; appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 8px center;
+    .modal-month-label {
+      font-size: 14px; font-weight: 600; color: #333;
+      background: #f3f4f6; padding: 5px 14px; border-radius: 6px; border: 1px solid #e5e7eb;
     }
     .modal-subtitle { font-size: 13px; color: #888; padding-left: 40px; margin-bottom: 20px; }
     .modal-close {
@@ -510,12 +508,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
           </div>
           <span class="modal-title-text">地代家賃設定:</span>
-          <select class="modal-month-select" id="modalMonth" onchange="switchMonth(this.value)">
-            <option value="1">2026年1月</option>
-            <option value="2">2026年2月</option>
-            <option value="3">2026年3月</option>
-            <option value="4">2026年4月</option>
-          </select>
+          <span class="modal-month-label" id="modalMonthLabel">2026年1月</span>
         </div>
         <div class="modal-subtitle">この月の地代家賃の金額を設定します</div>
       </div>
@@ -620,9 +613,14 @@
     return n.toLocaleString();
   }
 
+  // 開始月・終了月から月名リストを取得
+  function getMonthLabel(m) {
+    return '2026年' + m + '月';
+  }
+
   function openModal(month) {
     currentMonth = month || 1;
-    document.getElementById('modalMonth').value = currentMonth;
+    document.getElementById('modalMonthLabel').textContent = getMonthLabel(currentMonth);
     loadMonthData(currentMonth);
     document.getElementById('rentModal').classList.add('active');
   }
@@ -635,14 +633,6 @@
   document.getElementById('rentModal').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
   });
-
-  // 月切り替え
-  function switchMonth(m) {
-    // 現在の入力値を保存
-    saveCurrentInput();
-    currentMonth = parseInt(m);
-    loadMonthData(currentMonth);
-  }
 
   function loadMonthData(m) {
     var data = monthData[m];
