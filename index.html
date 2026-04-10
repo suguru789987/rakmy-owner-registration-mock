@@ -890,7 +890,7 @@
 
             <div class="fg">
               <label>所属店舗 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" data-original="0" onchange="var ch=this.selectedIndex!==0;document.getElementById('store-change-alert-owner-active').style.display=ch?'flex':'none';document.getElementById('c1e-a-trans-cost').style.cssText=ch?'max-width:100%;border:2px solid #c62828;background:#fff5f5;border-radius:6px;padding:8px 12px':'max-width:100%';document.getElementById('c1e-a-trans-unit').style.cssText=ch?'width:100%;padding:8px 12px;border:2px solid #c62828;background:#fff5f5;border-radius:6px;font-size:12px':'width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px'">
+              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" onchange="storeChangeHighlight('store-change-alert-owner-active','c1e-a-trans-cost','c1e-a-trans-unit',0,this.selectedIndex)">
                 <option selected>渋谷店</option>
                 <option>新宿店</option>
                 <option>池袋店</option>
@@ -952,7 +952,7 @@
 
             <div class="fg">
               <label>所属店舗 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" data-original="2" onchange="var ch=this.selectedIndex!==2;document.getElementById('store-change-alert-owner-pending').style.display=ch?'flex':'none';document.getElementById('c1e-p-trans-cost').style.cssText=ch?'max-width:100%;border:2px solid #c62828;background:#fff5f5;border-radius:6px;padding:8px 12px':'max-width:100%';document.getElementById('c1e-p-trans-unit').style.cssText=ch?'width:100%;padding:8px 12px;border:2px solid #c62828;background:#fff5f5;border-radius:6px;font-size:12px':'width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px'">
+              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" onchange="storeChangeHighlight('store-change-alert-owner-pending','c1e-p-trans-cost','c1e-p-trans-unit',2,this.selectedIndex)">
                 <option>渋谷店</option>
                 <option>新宿店</option>
                 <option selected>池袋店</option>
@@ -1129,7 +1129,7 @@
 
             <div class="fg">
               <label>所属店舗 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" data-original="1" onchange="var ch=this.selectedIndex!==1;document.getElementById('store-change-alert-active').style.display=ch?'flex':'none';document.getElementById('c2e-a-trans-cost').style.cssText=ch?'max-width:100%;border:2px solid #c62828;background:#fff5f5;border-radius:6px;padding:8px 12px':'max-width:100%';document.getElementById('c2e-a-trans-unit').style.cssText=ch?'width:100%;padding:8px 12px;border:2px solid #c62828;background:#fff5f5;border-radius:6px;font-size:12px':'width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px'">
+              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" onchange="storeChangeHighlight('store-change-alert-active','c2e-a-trans-cost','c2e-a-trans-unit',1,this.selectedIndex)">
                 <option>新宿店</option>
                 <option selected>池袋店</option>
               </select>
@@ -1190,7 +1190,7 @@
 
             <div class="fg">
               <label>所属店舗 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" data-original="1" onchange="var ch=this.selectedIndex!==1;document.getElementById('store-change-alert-pending').style.display=ch?'flex':'none';document.getElementById('c2e-p-trans-cost').style.cssText=ch?'max-width:100%;border:2px solid #c62828;background:#fff5f5;border-radius:6px;padding:8px 12px':'max-width:100%';document.getElementById('c2e-p-trans-unit').style.cssText=ch?'width:100%;padding:8px 12px;border:2px solid #c62828;background:#fff5f5;border-radius:6px;font-size:12px':'width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px'">
+              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" onchange="storeChangeHighlight('store-change-alert-pending','c2e-p-trans-cost','c2e-p-trans-unit',1,this.selectedIndex)">
                 <option>新宿店</option>
                 <option selected>池袋店</option>
               </select>
@@ -1545,7 +1545,7 @@
 
       <div class="fg">
         <label>所属店舗 <span class="req">✳</span></label>
-        <select id="emp-edit-store" style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" onchange="var a=document.getElementById('emp-edit-store-alert'),c=document.getElementById('emp-edit-trans-cost'),u=document.getElementById('emp-edit-trans-unit'),changed=this.selectedIndex!=parseInt(this.getAttribute('data-orig'));a.style.display=changed?'flex':'none';c.style.cssText=changed?'max-width:100%;border:2px solid #c62828;background:#fff5f5;border-radius:6px;padding:8px 12px':'max-width:100%;border:1px solid #ddd;border-radius:6px;padding:8px 12px';u.style.cssText=changed?'width:100%;padding:8px 12px;border:2px solid #c62828;background:#fff5f5;border-radius:6px;font-size:12px':'width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px'">
+        <select id="emp-edit-store" style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" onchange="storeChangeHighlight('emp-edit-store-alert','emp-edit-trans-cost','emp-edit-trans-unit',parseInt(this.getAttribute('data-orig')),this.selectedIndex)">
           <option>渋谷店</option><option>新宿店</option><option>池袋店</option><option>北海道支店</option>
         </select>
       </div>
@@ -1624,9 +1624,7 @@ function empEdit(btn, status) {
     }
   }
   storeSelect.setAttribute('data-orig', storeSelect.selectedIndex);
-  document.getElementById('emp-edit-store-alert').style.display = 'none';
-  document.getElementById('emp-edit-trans-cost').style.cssText = 'max-width:100%;border:1px solid #ddd;border-radius:6px;padding:8px 12px';
-  document.getElementById('emp-edit-trans-unit').style.cssText = 'width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px';
+  storeChangeHighlight('emp-edit-store-alert','emp-edit-trans-cost','emp-edit-trans-unit', storeSelect.selectedIndex, storeSelect.selectedIndex);
 
   // ステータス別の表示制御
   var emailInput = document.getElementById('emp-edit-email');
@@ -1658,6 +1656,25 @@ function empEdit(btn, status) {
 
 function closeEmpEdit() {
   document.getElementById('emp-edit-overlay').style.display = 'none';
+}
+
+/* 店舗変更時の交通費ハイライト */
+function storeChangeHighlight(alertId, costId, unitId, origIdx, currentIdx) {
+  var changed = currentIdx !== origIdx;
+  var alert = document.getElementById(alertId);
+  var cost = document.getElementById(costId);
+  var unit = document.getElementById(unitId);
+  if (alert) alert.style.display = changed ? 'flex' : 'none';
+  if (cost) {
+    cost.style.outline = changed ? '2px solid #c62828' : 'none';
+    cost.style.outlineOffset = changed ? '-1px' : '0';
+    cost.style.background = changed ? '#fff5f5' : '';
+  }
+  if (unit) {
+    unit.style.outline = changed ? '2px solid #c62828' : 'none';
+    unit.style.outlineOffset = changed ? '-1px' : '0';
+    unit.style.background = changed ? '#fff5f5' : '';
+  }
 }
 
 /* 従業員削除 */
