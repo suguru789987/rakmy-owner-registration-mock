@@ -890,7 +890,7 @@
 
             <div class="fg">
               <label>所属店舗 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" onchange="document.getElementById('store-change-alert-owner-active').style.display=this.value==='渋谷店'?'none':'flex'">
+              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" data-original="0" onchange="document.getElementById('store-change-alert-owner-active').style.display=this.selectedIndex===0?'none':'flex'">
                 <option selected>渋谷店</option>
                 <option>新宿店</option>
                 <option>池袋店</option>
@@ -952,7 +952,7 @@
 
             <div class="fg">
               <label>所属店舗 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" onchange="document.getElementById('store-change-alert-owner-pending').style.display=this.value==='池袋店'?'none':'flex'">
+              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" data-original="2" onchange="document.getElementById('store-change-alert-owner-pending').style.display=this.selectedIndex===2?'none':'flex'">
                 <option>渋谷店</option>
                 <option>新宿店</option>
                 <option selected>池袋店</option>
@@ -1129,7 +1129,7 @@
 
             <div class="fg">
               <label>所属店舗 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" onchange="document.getElementById('store-change-alert-active').style.display=this.value==='池袋店'?'none':'flex'">
+              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" data-original="1" onchange="document.getElementById('store-change-alert-active').style.display=this.selectedIndex===1?'none':'flex'">
                 <option>新宿店</option>
                 <option selected>池袋店</option>
               </select>
@@ -1190,7 +1190,7 @@
 
             <div class="fg">
               <label>所属店舗 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" onchange="document.getElementById('store-change-alert-pending').style.display=this.value==='池袋店'?'none':'flex'">
+              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" data-original="1" onchange="document.getElementById('store-change-alert-pending').style.display=this.selectedIndex===1?'none':'flex'">
                 <option>新宿店</option>
                 <option selected>池袋店</option>
               </select>
