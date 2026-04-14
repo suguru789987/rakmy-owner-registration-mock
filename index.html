@@ -240,26 +240,17 @@
     <span class="nav-tab" onclick="go('a3')" id="nav-a3">会社登録</span>
     <span class="nav-tab" onclick="go('a4')" id="nav-a4">完了</span>
     <span class="nav-sep"></span>
-    <span class="nav-flow">B 店舗</span>
-    <span class="nav-tab" onclick="go('b1')" id="nav-b1">店舗一覧</span>
-    <span class="nav-tab" onclick="go('b2')" id="nav-b2">店舗追加</span>
-    <span class="nav-sep"></span>
     <span class="nav-flow">C 従業員</span>
     <span class="nav-tab" onclick="go('c1')" id="nav-c1">オーナー視点</span>
     <span class="nav-tab" onclick="go('c2')" id="nav-c2">管理者視点</span>
-    <span class="nav-tab" onclick="go('c1e-active')" id="nav-c1e-active">編集/有効（オーナー）</span>
-    <span class="nav-tab" onclick="go('c1e-pending')" id="nav-c1e-pending">編集/招待中（オーナー）</span>
-    <span class="nav-tab" onclick="go('c2e-active')" id="nav-c2e-active">編集/有効（管理者）</span>
-    <span class="nav-tab" onclick="go('c2e-pending')" id="nav-c2e-pending">編集/招待中（管理者）</span>
-    <span class="nav-tab" onclick="go('c3')" id="nav-c3">登録（オーナー）</span>
-    <span class="nav-tab" onclick="go('c3m')" id="nav-c3m">登録（管理者）</span>
+    <span class="nav-tab" onclick="go('c1e-active')" id="nav-c1e-active">編集（有効）</span>
+    <span class="nav-tab" onclick="go('c1e-pending')" id="nav-c1e-pending">編集（招待中）</span>
     <span class="nav-tab" onclick="go('c4')" id="nav-c4">招待メール</span>
     <span class="nav-tab" onclick="go('c5')" id="nav-c5">PW設定</span>
     <span class="nav-sep"></span>
     <span class="nav-flow">D 管理者</span>
     <span class="nav-tab" onclick="go('d1')" id="nav-d1">管理者一覧</span>
     <span class="nav-tab" onclick="go('d1e')" id="nav-d1e">管理者編集</span>
-    <span class="nav-tab" onclick="go('d2')" id="nav-d2">管理者登録</span>
     <span class="nav-sep"></span>
     <span class="nav-flow">E PW</span>
     <span class="nav-tab" onclick="go('login')" id="nav-login">ログイン</span>
@@ -276,16 +267,14 @@
 <div class="page active" id="page-overview">
   <div class="overview">
     <h2>ラクミー タイムレコード — 仕様モック v5（エンジニア共有用）</h2>
-    <p class="subtitle">開発対象の全画面を収録。エンジニア共有用。</p>
+    <p class="subtitle">開発対象の画面のみ抜粋。全画面は v4（開発用）を参照。</p>
 
     <div class="v4-note">
-      <strong>収録画面:</strong><br>
-      ・<strong>A 新規登録</strong>: アカウント作成 → メール認証 → 会社登録 → 完了<br>
-      ・<strong>B 店舗管理</strong>: 店舗一覧 / 店舗追加モーダル<br>
-      ・<strong>C 従業員管理</strong>: オーナー視点一覧 / 管理者視点一覧 / 編集モーダル（オーナー/管理者 × 有効/招待中） / 登録モーダル（オーナー/管理者） / 招待メール / PW設定<br>
-      ・<strong>D 管理者管理</strong>: 管理者一覧（PW操作列なし・ステータス列なし） / 編集モーダル / 登録モーダル<br>
-      ・<strong>E ログイン / PW再設定</strong>: ログイン → メール入力 → 認証 → 新PW設定<br>
-      ・<strong>エラー</strong>: 無効な招待リンク
+      <strong>v5 に含まれる画面:</strong><br>
+      ・<strong>A 新規登録</strong>: 入力 → メール認証 → PW設定 → 完了<br>
+      ・<strong>C 従業員管理</strong>: オーナー視点一覧 / 管理者視点一覧 / 招待メール（自動送信） / 従業員PW設定<br>
+      ・<strong>D 管理者管理</strong>: 管理者一覧（PW操作列あり・ステータス列なし）<br>
+      ・<strong>E ログイン / PW再設定</strong>: ログイン → メール入力 → 認証 → 新PW設定
     </div>
 
     <div class="arch-box">
@@ -353,25 +342,18 @@
     <table class="spec-table">
       <thead><tr><th>ID</th><th>画面</th><th>URL</th><th>操作者</th></tr></thead>
       <tbody>
-        <tr><td>A-1</td><td>新規登録（アカウント作成）</td><td>/signup</td><td>新規オーナー</td></tr>
+        <tr><td>A-1</td><td>新規登録（会社+オーナー）</td><td>/signup</td><td>新規オーナー</td></tr>
         <tr><td>A-2</td><td>メール認証</td><td>/signup/verify</td><td>新規オーナー</td></tr>
-        <tr><td>A-3</td><td>会社登録</td><td>/signup/company</td><td>新規オーナー</td></tr>
+        <tr><td>A-3</td><td>PW設定</td><td>/signup/password</td><td>新規オーナー</td></tr>
         <tr><td>A-4</td><td>登録完了</td><td>/signup/complete</td><td>新規オーナー</td></tr>
-        <tr><td>B-1</td><td>店舗一覧</td><td>/dashboard/stores</td><td>オーナー</td></tr>
-        <tr><td>B-2</td><td>店舗追加モーダル</td><td>/dashboard/stores#add</td><td>オーナー</td></tr>
         <tr><td>C-1</td><td>従業員一覧（オーナー・全店舗横断）</td><td>/dashboard/employees</td><td>オーナー</td></tr>
         <tr><td>C-2</td><td>従業員一覧（管理者・担当店舗のみ）</td><td>/dashboard/employees</td><td>管理者</td></tr>
-        <tr><td>C-3</td><td>従業員登録モーダル（オーナー視点）</td><td>/dashboard/employees#add</td><td>オーナー</td></tr>
-        <tr><td>C-3M</td><td>従業員登録モーダル（管理者視点）</td><td>/dashboard/employees#add</td><td>管理者</td></tr>
-        <tr><td>C-1E</td><td>従業員編集モーダル（オーナー・有効）</td><td>/dashboard/employees/:id/edit</td><td>オーナー</td></tr>
-        <tr><td>C-1E</td><td>従業員編集モーダル（オーナー・招待中）</td><td>/dashboard/employees/:id/edit</td><td>オーナー</td></tr>
-        <tr><td>C-2E</td><td>従業員編集モーダル（管理者・有効）</td><td>/dashboard/employees/:id/edit</td><td>管理者</td></tr>
-        <tr><td>C-2E</td><td>従業員編集モーダル（管理者・招待中）</td><td>/dashboard/employees/:id/edit</td><td>管理者</td></tr>
+        <tr><td>C-1E</td><td>従業員編集モーダル（有効）</td><td>/dashboard/employees/:id/edit</td><td>オーナー / 管理者</td></tr>
+        <tr><td>C-1E</td><td>従業員編集モーダル（招待中）</td><td>/dashboard/employees/:id/edit</td><td>オーナー / 管理者</td></tr>
         <tr><td>C-4</td><td>招待メール（自動送信）</td><td>（メール）</td><td>従業員</td></tr>
         <tr><td>C-5</td><td>従業員PW設定</td><td>/invite/accept?token=xxx</td><td>従業員</td></tr>
         <tr><td>D-1</td><td>管理者一覧</td><td>/dashboard/administrators</td><td>オーナー</td></tr>
         <tr><td>D-1E</td><td>管理者編集モーダル</td><td>/dashboard/administrators/:id/edit</td><td>オーナー</td></tr>
-        <tr><td>D-2</td><td>管理者登録モーダル</td><td>/dashboard/administrators#add</td><td>オーナー</td></tr>
         <tr><td>Login</td><td>ログイン</td><td>/login</td><td>全ユーザー</td></tr>
         <tr><td>E-1</td><td>PW再設定（メール入力）</td><td>/password/reset</td><td>全ユーザー</td></tr>
         <tr><td>E-2</td><td>PW再設定（確認コード）</td><td>/password/reset/verify</td><td>全ユーザー</td></tr>
@@ -400,6 +382,16 @@
       </tbody>
     </table>
 
+    <h3 style="font-size:13px; margin:20px 0 10px;">v5に含まれない画面（v4を参照）</h3>
+    <table class="spec-table">
+      <thead><tr><th>ID</th><th>画面</th><th>理由</th></tr></thead>
+      <tbody>
+        <tr><td>B-1</td><td>店舗一覧</td><td>既存画面の延長（変更少）</td></tr>
+        <tr><td>B-2</td><td>店舗追加モーダル</td><td>既存画面の延長（変更少）</td></tr>
+        <tr><td>C-3</td><td>従業員登録モーダル</td><td>既存画面の延長（自動招待メール送信が追加されるのみ）</td></tr>
+        <tr><td>D-2</td><td>管理者登録モーダル</td><td>v4を参照</td></tr>
+      </tbody>
+    </table>
   </div>
 </div>
 
@@ -509,128 +501,6 @@
       </div>
     </div>
     <div class="public-right"><div class="clock-ph"><div class="clock-bar"></div></div></div>
-  </div>
-</div>
-
-<!-- ===== B-1: 店舗一覧 ===== -->
-<div class="page" id="page-b1">
-  <div class="dash">
-    <aside class="sb">
-      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📥</span>エクスポート</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
-      <div class="sb-sec"><div class="sl">設定</div><a href="#" onclick="go('c1')"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#" class="act"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a><a href="#"><span class="ic">🔗</span>外部連携</a></div>
-      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
-    </aside>
-    <main class="mc">
-      <div class="ph">
-        <h2>店舗情報</h2>
-        <div style="display:flex;gap:8px;">
-          <button class="btn btn-s" style="border:1px solid #ddd;">🏷 業態・ブランド登録</button>
-          <button class="btn btn-p" onclick="go('b2')">+ 店舗登録</button>
-        </div>
-      </div>
-
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
-        <div style="display:flex;align-items:center;gap:6px;border:1px solid #ddd;border-radius:6px;padding:7px 14px;font-size:11px;color:#555;cursor:pointer;">
-          🏷 すべての業態・ブランド <span style="color:#ccc;margin-left:4px;">▼</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:6px;border:1px solid #ddd;border-radius:6px;padding:7px 14px;font-size:11px;color:#999;min-width:260px;">
-          🔍 店舗名・住所・郵便番号で検索
-        </div>
-      </div>
-
-      <table class="dt">
-        <thead>
-          <tr>
-            <th style="cursor:pointer;">店舗名 ↕</th>
-            <th style="cursor:pointer;">業態・ブランド ↕</th>
-            <th style="cursor:pointer;">郵便番号 ↕</th>
-            <th style="cursor:pointer;">住所 ↕</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>ラクミー本社</strong></td>
-            <td><span style="border:1px solid #ddd;border-radius:4px;padding:2px 8px;font-size:10px;">飲食店向けBI_SaaS</span></td>
-            <td>150-0042</td>
-            <td>東京都渋谷区宇田川町37-13 下田ビル3階</td>
-            <td style="white-space:nowrap;">
-              <button class="acts" title="QR">⊞</button>
-              <button class="acts" title="編集">✎</button>
-              <button class="acts" title="削除">🗑</button>
-            </td>
-          </tr>
-          <tr>
-            <td><strong>北海道支店</strong></td>
-            <td><span style="border:1px solid #ddd;border-radius:4px;padding:2px 8px;font-size:10px;">飲食店向けBI_SaaS</span></td>
-            <td>111-1111</td>
-            <td>北海道</td>
-            <td style="white-space:nowrap;">
-              <button class="acts">⊞</button>
-              <button class="acts">✎</button>
-              <button class="acts">🗑</button>
-            </td>
-          </tr>
-          <tr>
-            <td><strong>TEST店舗222</strong></td>
-            <td><span style="border:1px solid #ddd;border-radius:4px;padding:2px 8px;font-size:10px;">飲食店向けBI_SaaS</span></td>
-            <td>111-1111</td>
-            <td>沖縄</td>
-            <td style="white-space:nowrap;">
-              <button class="acts">⊞</button>
-              <button class="acts">✎</button>
-              <button class="acts">🗑</button>
-            </td>
-          </tr>
-          <tr>
-            <td><strong>ラクミー</strong></td>
-            <td><span style="border:1px solid #ddd;border-radius:4px;padding:2px 8px;font-size:10px;">飲食店向けBI_SaaS</span></td>
-            <td>155-6903</td>
-            <td>aaa</td>
-            <td style="white-space:nowrap;">
-              <button class="acts">⊞</button>
-              <button class="acts">✎</button>
-              <button class="acts">🗑</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;">
-        <button class="btn btn-s btn-sm" style="opacity:0.4;">← 前</button>
-        <span style="border:1px solid #ddd;border-radius:4px;padding:4px 12px;font-size:12px;font-weight:600;">1</span>
-        <button class="btn btn-s btn-sm" style="opacity:0.4;">次 →</button>
-      </div>
-    </main>
-  </div>
-</div>
-
-<!-- ===== B-2: 店舗追加モーダル ===== -->
-<div class="page" id="page-b2">
-  <div class="dash">
-    <aside class="sb">
-      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><div class="sl">設定</div><a href="#" class="act"><span class="ic">🏠</span>店舗情報</a></div>
-      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
-    </aside>
-    <main class="mc">
-      <div class="ph"><h2>店舗情報</h2></div>
-      <div class="mo">
-        <div class="modal" style="max-width:560px;">
-          <div class="mh"><h3>店舗登録</h3><button class="mx" onclick="go('b1')">✕</button></div>
-          <div class="mb">
-            <div class="fg"><label>店舗名 <span class="req">✳</span></label><input value="横浜店" style="max-width:100%;"></div>
-            <div class="fg"><label>業態・ブランド <span class="req">✳</span></label><select style="max-width:100%;"><option>選択してください</option><option selected>飲食店向けBI_SaaS</option></select></div>
-            <div class="fr">
-              <div class="fg"><label>郵便番号 <span class="req">✳</span></label><input value="220-0011" style="max-width:100%;"></div>
-              <div class="fg" style="flex:2;"><label>住所 <span class="req">✳</span></label><input value="神奈川県横浜市西区高島2丁目" style="max-width:100%;"></div>
-            </div>
-            <div class="btn-grp"><button class="btn btn-s" onclick="go('b1')">キャンセル</button><button class="btn btn-p" onclick="go('b1')">店舗を追加</button></div>
-          </div>
-        </div>
-      </div>
-    </main>
   </div>
 </div>
 
@@ -769,7 +639,7 @@
     <main class="mc">
       <div class="ph">
         <h2>従業員</h2>
-        <button class="btn btn-p" onclick="go('c3m')">+ 従業員登録</button>
+        <button class="btn btn-p" onclick="go('c3')">+ 従業員登録</button>
       </div>
 
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
@@ -860,47 +730,36 @@
       <div class="ph"><h2>従業員</h2></div>
       <div class="mo">
         <div class="modal">
-          <div class="mh"><h3>従業員を編集 <span style="font-size:11px;font-weight:400;color:#2ec4a5;margin-left:8px;">有効</span></h3><button class="mx" onclick="go('c1')">✕</button></div>
+          <div class="mh"><h3>従業員編集</h3><button class="mx" onclick="go('c1')">✕</button></div>
           <div class="mb">
-            <div class="fg"><label>名前 <span class="req">✳</span></label><input value="test" style="max-width:100%;"></div>
-            <div class="fg"><label>メールアドレス</label><input value="nishikata+test2@wshoulder.com" style="max-width:100%;" disabled><div class="hint">承諾済みのためメールアドレスは変更できません</div></div>
-            <div class="fg"><label>電話番号</label><input value="090-1234-1234" style="max-width:100%;"></div>
-
-            <div class="dv" style="margin:14px 0;"></div>
-
-            <div class="fg">
-              <label>雇用区分 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-                <option selected>業務委託</option>
-                <option>代表取締役</option>
-                <option>バイトさん</option>
-              </select>
+            <div style="display:flex;gap:12px;">
+              <div class="fg" style="flex:1;"><label>名前 <span class="req">✳</span></label><input value="test" style="max-width:100%;"></div>
+              <div class="fg" style="flex:1;"><label>電話番号 <span class="req">✳</span></label><input value="090-1234-1234" style="max-width:100%;"></div>
             </div>
             <div style="display:flex;gap:12px;">
-              <div class="fg" style="flex:1;"><label>交通費単位</label>
-                <select id="c1e-a-trans-unit" style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-                  <option selected>日額</option><option>月額</option>
-                </select>
-              </div>
-              <div class="fg" style="flex:1;"><label>交通費/単位</label><input id="c1e-a-trans-cost" value="1" style="max-width:100%;"></div>
+              <div class="fg" style="flex:1;"><label>メールアドレス <span class="req">✳</span></label><input value="nishikata+test2@wshoulder.com" style="max-width:100%;" disabled><div class="hint">承諾済みのためメールアドレスは変更できません</div></div>
+              <div class="fg" style="flex:1;"><label>従業員コード</label><input value="EMP-12345" style="max-width:100%;"></div>
             </div>
-            <div class="fg"><label>社員コード</label><input value="" placeholder="任意" style="max-width:100%;"></div>
-
-            <div class="dv" style="margin:14px 0;"></div>
-
+            <div style="display:flex;gap:12px;">
+              <div class="fg" style="flex:1;"><label>雇用区分 <span class="req">✳</span></label>
+                <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;"><option selected>業務委託</option><option>代表取締役</option><option>バイトさん</option><option>正社員</option></select>
+              </div>
+              <div class="fg" style="flex:1;"><label>ステータス <span class="req">✳</span></label>
+                <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;"><option selected>在籍中</option><option>休職中</option><option>退職済み</option></select>
+              </div>
+            </div>
+            <div style="display:flex;gap:12px;">
+              <div class="fg" style="flex:1;"><label>交通費単位 <span class="req">✳</span></label>
+                <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;"><option selected>日額</option><option>月額</option></select>
+              </div>
+              <div class="fg" style="flex:1;"><label>交通費/日 <span class="req">✳</span></label><input value="¥1" style="max-width:100%;"></div>
+            </div>
             <div class="fg">
               <label>所属店舗 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" onchange="storeChangeHighlight('store-change-alert-owner-active','c1e-a-trans-cost','c1e-a-trans-unit',0,this.selectedIndex)">
-                <option selected>渋谷店</option>
-                <option>新宿店</option>
-                <option>池袋店</option>
-                <option>北海道支店</option>
-              </select>
+              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;"><option selected>渋谷店</option><option>新宿店</option><option>池袋店</option><option>北海道支店</option></select>
+              <div class="hint">担当店舗間で異動できます</div>
             </div>
-
-            <div class="al al-w" id="store-change-alert-owner-active" style="display:none;margin-bottom:12px;"><span>⚠️</span><div>所属店舗を変更する場合は、<strong>交通費（日額）</strong>を新しい店舗に合わせて更新してください。</div></div>
-
-            <div class="btn-grp"><button class="btn btn-s" onclick="go('c1')">キャンセル</button><button class="btn btn-p" onclick="go('c1')">保存</button></div>
+            <div class="btn-grp"><button class="btn btn-s" onclick="go('c1')">キャンセル</button><button class="btn btn-p" onclick="go('c1')">保存する</button></div>
           </div>
         </div>
       </div>
@@ -921,285 +780,37 @@
       <div class="ph"><h2>従業員</h2></div>
       <div class="mo">
         <div class="modal">
-          <div class="mh"><h3>従業員を編集 <span style="font-size:11px;font-weight:400;color:#f0960a;margin-left:8px;">招待中</span></h3><button class="mx" onclick="go('c1')">✕</button></div>
+          <div class="mh"><h3>従業員編集 <span style="font-size:11px;font-weight:400;color:#f0960a;margin-left:8px;">招待中</span></h3><button class="mx" onclick="go('c1')">✕</button></div>
           <div class="mb">
-            <div class="fg"><label>名前 <span class="req">✳</span></label><input value="佐々木" style="max-width:100%;"></div>
-            <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input value="sasaki.kiminori.7023@gmail.com" style="max-width:100%;"></div>
             <div class="al al-i" style="margin-bottom:12px;"><span>💡</span><div>メールアドレスを変更すると、古い招待リンクが無効になり、新しい招待メールが自動送信されます。</div></div>
-            <div class="fg"><label>電話番号</label><input value="" placeholder="任意" style="max-width:100%;"></div>
-
-            <div class="dv" style="margin:14px 0;"></div>
-
-            <div class="fg">
-              <label>雇用区分 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-                <option selected>業務委託</option>
-                <option>代表取締役</option>
-                <option>バイトさん</option>
-              </select>
+            <div style="display:flex;gap:12px;">
+              <div class="fg" style="flex:1;"><label>名前 <span class="req">✳</span></label><input value="佐々木" style="max-width:100%;"></div>
+              <div class="fg" style="flex:1;"><label>電話番号 <span class="req">✳</span></label><input value="" placeholder="090-0000-0000" style="max-width:100%;"></div>
             </div>
             <div style="display:flex;gap:12px;">
-              <div class="fg" style="flex:1;"><label>交通費単位</label>
-                <select id="c1e-p-trans-unit" style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-                  <option selected>日額</option><option>月額</option>
-                </select>
-              </div>
-              <div class="fg" style="flex:1;"><label>交通費/単位</label><input id="c1e-p-trans-cost" value="0" style="max-width:100%;"></div>
-            </div>
-            <div class="fg"><label>社員コード</label><input value="" placeholder="任意" style="max-width:100%;"></div>
-
-            <div class="dv" style="margin:14px 0;"></div>
-
-            <div class="fg">
-              <label>所属店舗 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" onchange="storeChangeHighlight('store-change-alert-owner-pending','c1e-p-trans-cost','c1e-p-trans-unit',2,this.selectedIndex)">
-                <option>渋谷店</option>
-                <option>新宿店</option>
-                <option selected>池袋店</option>
-                <option>北海道支店</option>
-              </select>
-            </div>
-
-            <div class="al al-w" id="store-change-alert-owner-pending" style="display:none;margin-bottom:12px;"><span>⚠️</span><div>所属店舗を変更する場合は、<strong>交通費（日額）</strong>を新しい店舗に合わせて更新してください。</div></div>
-
-            <div class="btn-grp"><button class="btn btn-s" onclick="go('c1')">キャンセル</button><button class="btn btn-p" onclick="go('c1')">保存</button></div>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
-</div>
-
-<!-- ===== C-3: 従業員登録モーダル ===== -->
-<div class="page" id="page-c3">
-  <div class="dash">
-    <aside class="sb">
-      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><div class="sl">設定</div><a href="#" class="act"><span class="ic">👤</span>従業員</a></div>
-      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
-    </aside>
-    <main class="mc">
-      <div class="ph"><h2>従業員</h2></div>
-      <div class="mo">
-        <div class="modal" style="max-width:520px;">
-          <div class="mh"><h3>従業員登録</h3><button class="mx" onclick="go('c1')">✕</button></div>
-          <div class="mb">
-            <div class="al al-i"><span>📧</span><div>登録完了と同時に、従業員にパスワード設定メールが<strong>自動送信</strong>されます。</div></div>
-
-            <div class="fg">
-              <label>所属店舗 <span class="req">✳</span></label>
-              <select style="max-width:100%;"><option>選択してください</option><option>渋谷店</option><option>新宿店</option><option selected>池袋店</option></select>
-              <div class="hint">オーナーは全店舗に従業員を登録できます</div>
-            </div>
-
-            <div class="dv" style="margin:14px 0;"></div>
-
-            <div class="fr">
-              <div class="fg"><label>名前 <span class="req">✳</span></label><input placeholder="名前を入力" value="吉田 七美" style="max-width:100%;"></div>
-              <div class="fg"><label>電話番号 <span class="req">✳</span></label><input placeholder="電話番号を入力" value="090-1234-5678" style="max-width:100%;"></div>
-            </div>
-            <div class="fr">
-              <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input placeholder="メールアドレスを入力" value="yoshida@example.jp" style="max-width:100%;"></div>
-              <div class="fg"><label>従業員コード</label><input placeholder="従業員コードを入力" style="max-width:100%;"><div class="hint">未入力の場合は自動生成されます</div></div>
-            </div>
-            <div class="fr">
-              <div class="fg">
-                <label>雇用区分 <span class="req">✳</span></label>
-                <select style="max-width:100%;"><option>雇用区分を選択</option><option>業務委託</option><option selected>バイトさん</option><option>代表取締役</option></select>
-              </div>
-              <div class="fg">
-                <label>交通費単位 <span class="req">✳</span></label>
-                <select style="max-width:100%;"><option selected>日額</option><option>月額</option></select>
-              </div>
-            </div>
-            <div class="fg">
-              <label>交通費/日 <span class="req">✳</span></label>
-              <input placeholder="交通費を入力" value="¥500" style="max-width:200px;">
-            </div>
-
-            <div class="btn-grp" style="margin-top:20px;">
-              <button class="btn btn-s" onclick="go('c1')" style="flex:1;justify-content:center;">キャンセル</button>
-              <button class="btn btn-p" onclick="go('c4')" style="flex:1;justify-content:center;">登録して招待メールを送信</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
-</div>
-
-<!-- ===== C-3M: 従業員登録モーダル（管理者視点） ===== -->
-<div class="page" id="page-c3m">
-  <div class="dash">
-    <aside class="sb">
-      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><div class="sl">店舗管理</div><a href="#" class="act"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#"><span class="ic">🔗</span>外部連携</a></div>
-      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#eef0ff;color:#5264f0;">伊</div><div><div class="sb-name">伊藤 四郎</div><div class="sb-role">管理者 ・ 池袋店</div></div></div></div>
-    </aside>
-    <main class="mc">
-      <div class="ph"><h2>従業員</h2></div>
-      <div class="mo">
-        <div class="modal" style="max-width:520px;">
-          <div class="mh"><h3>従業員登録</h3><button class="mx" onclick="go('c2')">✕</button></div>
-          <div class="mb">
-            <div class="al al-i"><span>📧</span><div>登録完了と同時に、従業員にパスワード設定メールが<strong>自動送信</strong>されます。</div></div>
-
-            <div class="fg">
-              <label>所属店舗 <span class="req">✳</span></label>
-              <select style="max-width:100%;"><option>選択してください</option><option>新宿店</option><option selected>池袋店</option></select>
-              <div class="hint">担当店舗に従業員を登録できます</div>
-            </div>
-
-            <div class="dv" style="margin:14px 0;"></div>
-
-            <div class="fr">
-              <div class="fg"><label>名前 <span class="req">✳</span></label><input placeholder="名前を入力" value="吉田 七美" style="max-width:100%;"></div>
-              <div class="fg"><label>電話番号 <span class="req">✳</span></label><input placeholder="電話番号を入力" value="090-1234-5678" style="max-width:100%;"></div>
-            </div>
-            <div class="fr">
-              <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input placeholder="メールアドレスを入力" value="yoshida@example.jp" style="max-width:100%;"></div>
-              <div class="fg"><label>従業員コード</label><input placeholder="従業員コードを入力" style="max-width:100%;"><div class="hint">未入力の場合は自動生成されます</div></div>
-            </div>
-            <div class="fr">
-              <div class="fg">
-                <label>雇用区分 <span class="req">✳</span></label>
-                <select style="max-width:100%;"><option>雇用区分を選択</option><option>業務委託</option><option selected>バイトさん</option><option>代表取締役</option></select>
-              </div>
-              <div class="fg">
-                <label>交通費単位 <span class="req">✳</span></label>
-                <select style="max-width:100%;"><option selected>日額</option><option>月額</option></select>
-              </div>
-            </div>
-            <div class="fg">
-              <label>交通費/日 <span class="req">✳</span></label>
-              <input placeholder="交通費を入力" value="¥500" style="max-width:200px;">
-            </div>
-
-            <div class="btn-grp" style="margin-top:20px;">
-              <button class="btn btn-s" onclick="go('c2')" style="flex:1;justify-content:center;">キャンセル</button>
-              <button class="btn btn-p" onclick="go('c4')" style="flex:1;justify-content:center;">登録して招待メールを送信</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
-</div>
-
-<!-- ===== C-2E-Active: 従業員編集モーダル（管理者視点・有効） ===== -->
-<div class="page" id="page-c2e-active">
-  <div class="dash">
-    <aside class="sb">
-      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
-      <div class="sb-sec"><div class="sl">店舗管理</div><a href="#" class="act"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#"><span class="ic">🔗</span>外部連携</a></div>
-      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#eef0ff;color:#5264f0;">伊</div><div><div class="sb-name">伊藤 四郎</div><div class="sb-role">管理者 ・ 池袋店</div></div></div></div>
-    </aside>
-    <main class="mc">
-      <div class="ph"><h2>従業員</h2></div>
-      <div class="mo">
-        <div class="modal">
-          <div class="mh"><h3>従業員を編集 <span style="font-size:11px;font-weight:400;color:#2ec4a5;margin-left:8px;">有効</span></h3><button class="mx" onclick="go('c2')">✕</button></div>
-          <div class="mb">
-            <div class="fg"><label>名前 <span class="req">✳</span></label><input value="佐々木" style="max-width:100%;"></div>
-            <div class="fg"><label>メールアドレス</label><input value="sasaki.kiminori.7023@gmail.com" style="max-width:100%;" disabled><div class="hint">承諾済みのためメールアドレスは変更できません</div></div>
-            <div class="fg"><label>電話番号</label><input value="" placeholder="任意" style="max-width:100%;"></div>
-
-            <div class="dv" style="margin:14px 0;"></div>
-
-            <div class="fg">
-              <label>雇用区分 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-                <option selected>業務委託</option>
-                <option>代表取締役</option>
-                <option>バイトさん</option>
-              </select>
+              <div class="fg" style="flex:1;"><label>メールアドレス <span class="req">✳</span></label><input value="sasaki.kiminori.7023@gmail.com" style="max-width:100%;"></div>
+              <div class="fg" style="flex:1;"><label>従業員コード</label><input value="" placeholder="未入力の場合は自動生成されます" style="max-width:100%;"></div>
             </div>
             <div style="display:flex;gap:12px;">
-              <div class="fg" style="flex:1;"><label>交通費単位</label>
-                <select id="c2e-a-trans-unit" style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-                  <option selected>日額</option><option>月額</option>
-                </select>
+              <div class="fg" style="flex:1;"><label>雇用区分 <span class="req">✳</span></label>
+                <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;"><option selected>業務委託</option><option>代表取締役</option><option>バイトさん</option><option>正社員</option></select>
               </div>
-              <div class="fg" style="flex:1;"><label>交通費/単位</label><input id="c2e-a-trans-cost" value="0" style="max-width:100%;"></div>
+              <div class="fg" style="flex:1;"><label>ステータス <span class="req">✳</span></label>
+                <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;"><option selected>在籍中</option><option>休職中</option><option>退職済み</option></select>
+              </div>
             </div>
-            <div class="fg"><label>社員コード</label><input value="" placeholder="任意" style="max-width:100%;"></div>
-
-            <div class="dv" style="margin:14px 0;"></div>
-
+            <div style="display:flex;gap:12px;">
+              <div class="fg" style="flex:1;"><label>交通費単位 <span class="req">✳</span></label>
+                <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;"><option selected>日額</option><option>月額</option></select>
+              </div>
+              <div class="fg" style="flex:1;"><label>交通費/日 <span class="req">✳</span></label><input value="¥0" style="max-width:100%;"></div>
+            </div>
             <div class="fg">
               <label>所属店舗 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" onchange="storeChangeHighlight('store-change-alert-active','c2e-a-trans-cost','c2e-a-trans-unit',1,this.selectedIndex)">
-                <option>新宿店</option>
-                <option selected>池袋店</option>
-              </select>
+              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;"><option>渋谷店</option><option>新宿店</option><option selected>池袋店</option><option>北海道支店</option></select>
               <div class="hint">担当店舗間で異動できます</div>
             </div>
-
-            <div class="al al-w" id="store-change-alert-active" style="display:none;margin-bottom:12px;"><span>⚠️</span><div>所属店舗を変更する場合は、<strong>交通費（日額）</strong>を新しい店舗に合わせて更新してください。</div></div>
-
-            <div class="btn-grp"><button class="btn btn-s" onclick="go('c2')">キャンセル</button><button class="btn btn-p" onclick="go('c2')">保存</button></div>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
-</div>
-
-<!-- ===== C-2E-Pending: 従業員編集モーダル（管理者視点・招待中/期限切れ） ===== -->
-<div class="page" id="page-c2e-pending">
-  <div class="dash">
-    <aside class="sb">
-      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
-      <div class="sb-sec"><div class="sl">店舗管理</div><a href="#" class="act"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#"><span class="ic">🔗</span>外部連携</a></div>
-      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#eef0ff;color:#5264f0;">伊</div><div><div class="sb-name">伊藤 四郎</div><div class="sb-role">管理者 ・ 池袋店</div></div></div></div>
-    </aside>
-    <main class="mc">
-      <div class="ph"><h2>従業員</h2></div>
-      <div class="mo">
-        <div class="modal">
-          <div class="mh"><h3>従業員を編集 <span style="font-size:11px;font-weight:400;color:#f0960a;margin-left:8px;">招待中</span></h3><button class="mx" onclick="go('c2')">✕</button></div>
-          <div class="mb">
-            <div class="fg"><label>名前 <span class="req">✳</span></label><input value="にしかた" style="max-width:100%;"></div>
-            <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input value="nishikata@wshoulder.com" style="max-width:100%;"></div>
-            <div class="al al-i" style="margin-bottom:12px;"><span>💡</span><div>メールアドレスを変更すると、古い招待リンクが無効になり、新しい招待メールが自動送信されます。</div></div>
-            <div class="fg"><label>電話番号</label><input value="090-7829-5836" style="max-width:100%;"></div>
-
-            <div class="dv" style="margin:14px 0;"></div>
-
-            <div class="fg">
-              <label>雇用区分 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-                <option selected>業務委託</option>
-                <option>代表取締役</option>
-                <option>バイトさん</option>
-              </select>
-            </div>
-            <div style="display:flex;gap:12px;">
-              <div class="fg" style="flex:1;"><label>交通費単位</label>
-                <select id="c2e-p-trans-unit" style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-                  <option selected>日額</option><option>月額</option>
-                </select>
-              </div>
-              <div class="fg" style="flex:1;"><label>交通費/単位</label><input id="c2e-p-trans-cost" value="10" style="max-width:100%;"></div>
-            </div>
-            <div class="fg"><label>社員コード</label><input value="" placeholder="任意" style="max-width:100%;"></div>
-
-            <div class="dv" style="margin:14px 0;"></div>
-
-            <div class="fg">
-              <label>所属店舗 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" onchange="storeChangeHighlight('store-change-alert-pending','c2e-p-trans-cost','c2e-p-trans-unit',1,this.selectedIndex)">
-                <option>新宿店</option>
-                <option selected>池袋店</option>
-              </select>
-              <div class="hint">担当店舗間で異動できます</div>
-            </div>
-
-            <div class="al al-w" id="store-change-alert-pending" style="display:none;margin-bottom:12px;"><span>⚠️</span><div>所属店舗を変更する場合は、<strong>交通費（日額）</strong>を新しい店舗に合わせて更新してください。</div></div>
-
-            <div class="btn-grp"><button class="btn btn-s" onclick="go('c2')">キャンセル</button><button class="btn btn-p" onclick="go('c2')">保存</button></div>
+            <div class="btn-grp"><button class="btn btn-s" onclick="go('c1')">キャンセル</button><button class="btn btn-p" onclick="go('c1')">保存する</button></div>
           </div>
         </div>
       </div>
@@ -1326,55 +937,6 @@
 
             <div class="al al-i"><span>💡</span><div>管理者がパスワードを忘れた場合は、ログイン画面の「パスワードを忘れた」から自分でリセットできます。</div></div>
             <div class="btn-grp"><button class="btn btn-s" onclick="go('d1')">キャンセル</button><button class="btn btn-p" onclick="go('d1')">保存</button></div>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
-</div>
-
-<!-- ===== D-2: 管理者登録モーダル ===== -->
-<div class="page" id="page-d2">
-  <div class="dash">
-    <aside class="sb">
-      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><div class="sl">設定</div><a href="#" onclick="go('c1')"><span class="ic">👤</span>従業員</a><a href="#" onclick="go('b1')"><span class="ic">🏠</span>店舗情報</a><a href="#" class="act"><span class="ic">👥</span>管理者</a></div>
-      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
-    </aside>
-    <main class="mc">
-      <div class="ph"><h2>管理者一覧</h2></div>
-      <div class="mo">
-        <div class="modal">
-          <div class="mh"><h3>管理者を登録</h3><button class="mx" onclick="go('d1')">✕</button></div>
-          <div class="mb">
-            <div class="fg"><label>名前 <span class="req">✳</span></label><input value="伊藤 四郎" style="max-width:100%;"></div>
-            <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input value="ito@example.jp" style="max-width:100%;"></div>
-
-            <div class="dv" style="margin:14px 0;"></div>
-
-            <div class="fg">
-              <label>初期パスワード <span class="req">✳</span></label>
-              <input type="password" value="admin1234" style="max-width:100%;">
-              <div class="pw-str"><div class="bar"><div class="bf strong"></div></div><div class="lbl">強い</div></div>
-              <div class="hint">8文字以上。登録後、管理者に口頭やチャット等で共有してください</div>
-            </div>
-            <div class="fg"><label>初期パスワード（確認） <span class="req">✳</span></label><input type="password" value="admin1234" style="max-width:100%;"></div>
-
-            <div class="dv" style="margin:14px 0;"></div>
-
-            <div class="fg">
-              <label>担当店舗 <span class="req">✳</span></label>
-              <div class="store-chk-grid">
-                <label class="store-chk"><input type="checkbox"> 渋谷店</label>
-                <label class="store-chk"><input type="checkbox" checked> 新宿店</label>
-                <label class="store-chk"><input type="checkbox" checked> 池袋店</label>
-                <label class="store-chk"><input type="checkbox"> 北海道支店</label>
-              </div>
-              <div class="hint" style="margin-top:6px;">担当店舗の従業員管理・勤怠管理が可能になります</div>
-            </div>
-
-            <div class="al al-w"><span>⚠️</span><div>管理者は担当店舗の従業員情報・勤怠データにアクセスできます。</div></div>
-            <div class="btn-grp"><button class="btn btn-s" onclick="go('d1')">キャンセル</button><button class="btn btn-p" onclick="go('d1')">管理者を登録</button></div>
           </div>
         </div>
       </div>
@@ -1512,49 +1074,56 @@
 
 <!-- 従業員編集モーダル（オーバーレイ） -->
 <div id="emp-edit-overlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:2000;justify-content:center;align-items:center;">
-  <div style="background:#fff;border-radius:12px;width:520px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+  <div style="background:#fff;border-radius:12px;width:620px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
     <div class="mh" style="display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid #eee;">
-      <h3 style="font-size:15px;" id="emp-edit-title">従業員を編集</h3>
+      <h3 style="font-size:15px;" id="emp-edit-title">従業員編集</h3>
       <button class="mx" onclick="closeEmpEdit()" style="background:none;border:none;font-size:18px;cursor:pointer;color:#999;">✕</button>
     </div>
     <div style="padding:20px;">
-      <div class="fg"><label>名前 <span class="req">✳</span></label><input id="emp-edit-name" value="" style="max-width:100%;"></div>
-      <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input id="emp-edit-email" value="" style="max-width:100%;"><div id="emp-edit-email-hint" class="hint"></div></div>
       <div id="emp-edit-email-alert" style="display:none;" class="al al-i"><span>💡</span><div>メールアドレスを変更すると、古い招待リンクが無効になり、新しい招待メールが自動送信されます。</div></div>
-      <div class="fg"><label>電話番号</label><input id="emp-edit-phone" value="" style="max-width:100%;"></div>
 
-      <div class="dv" style="margin:14px 0;border-top:1px solid #eee;"></div>
-
-      <div class="fg">
-        <label>雇用区分 <span class="req">✳</span></label>
-        <select id="emp-edit-type" style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-          <option>業務委託</option><option>代表取締役</option><option>バイトさん</option>
-        </select>
+      <div style="display:flex;gap:12px;">
+        <div class="fg" style="flex:1;"><label>名前 <span class="req">✳</span></label><input id="emp-edit-name" value="" style="max-width:100%;"></div>
+        <div class="fg" style="flex:1;"><label>電話番号 <span class="req">✳</span></label><input id="emp-edit-phone" value="" style="max-width:100%;"></div>
       </div>
       <div style="display:flex;gap:12px;">
-        <div class="fg" style="flex:1;"><label>交通費単位</label>
+        <div class="fg" style="flex:1;"><label>メールアドレス <span class="req">✳</span></label><input id="emp-edit-email" value="" style="max-width:100%;"><div id="emp-edit-email-hint" class="hint"></div></div>
+        <div class="fg" style="flex:1;"><label>従業員コード</label><input id="emp-edit-code" value="" placeholder="未入力の場合は自動生成されます" style="max-width:100%;"></div>
+      </div>
+      <div style="display:flex;gap:12px;">
+        <div class="fg" style="flex:1;">
+          <label>雇用区分 <span class="req">✳</span></label>
+          <select id="emp-edit-type" style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+            <option>業務委託</option><option>代表取締役</option><option>バイトさん</option><option>正社員</option>
+          </select>
+        </div>
+        <div class="fg" style="flex:1;">
+          <label>ステータス <span class="req">✳</span></label>
+          <select id="emp-edit-status" style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+            <option>在籍中</option><option>休職中</option><option>退職済み</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;">
+        <div class="fg" style="flex:1;">
+          <label>交通費単位 <span class="req">✳</span></label>
           <select id="emp-edit-trans-unit" style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
             <option>日額</option><option>月額</option>
           </select>
         </div>
-        <div class="fg" style="flex:1;"><label>交通費/単位</label><input id="emp-edit-trans-cost" value="" style="max-width:100%;"></div>
+        <div class="fg" style="flex:1;"><label>交通費/日 <span class="req">✳</span></label><input id="emp-edit-trans-cost" value="" style="max-width:100%;"></div>
       </div>
-      <div class="fg"><label>社員コード</label><input value="" placeholder="任意" style="max-width:100%;"></div>
-
-      <div class="dv" style="margin:14px 0;border-top:1px solid #eee;"></div>
-
       <div class="fg">
         <label>所属店舗 <span class="req">✳</span></label>
-        <select id="emp-edit-store" style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;" onchange="storeChangeHighlight('emp-edit-store-alert','emp-edit-trans-cost','emp-edit-trans-unit',parseInt(this.getAttribute('data-orig')),this.selectedIndex)">
+        <select id="emp-edit-store" style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
           <option>渋谷店</option><option>新宿店</option><option>池袋店</option><option>北海道支店</option>
         </select>
+        <div class="hint">担当店舗間で異動できます</div>
       </div>
-
-      <div id="emp-edit-store-alert" class="al al-w" style="display:none;background:#fff8e1;border:1px solid #ffe082;border-radius:8px;padding:10px 14px;font-size:12px;align-items:flex-start;gap:8px;margin-bottom:12px;"><span>⚠️</span><div>所属店舗を変更する場合は、<strong>交通費（日額）</strong>を新しい店舗に合わせて更新してください。</div></div>
 
       <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:20px;">
         <button class="btn btn-s" onclick="closeEmpEdit()">キャンセル</button>
-        <button class="btn btn-p" onclick="closeEmpEdit()">保存</button>
+        <button class="btn btn-p" onclick="closeEmpEdit()">保存する</button>
       </div>
     </div>
   </div>
@@ -1604,7 +1173,8 @@ function empEdit(btn, status) {
   document.getElementById('emp-edit-name').value = name;
   document.getElementById('emp-edit-email').value = emailEl;
   document.getElementById('emp-edit-phone').value = (phone === '-') ? '' : phone;
-  document.getElementById('emp-edit-trans-cost').value = transCost;
+  document.getElementById('emp-edit-trans-cost').value = '¥' + transCost;
+  document.getElementById('emp-edit-code').value = '';
 
   // 雇用区分セレクト
   var typeSelect = document.getElementById('emp-edit-type');
@@ -1617,14 +1187,12 @@ function empEdit(btn, status) {
     if (unitSelect.options[i].text === transUnit) { unitSelect.selectedIndex = i; break; }
   }
   // 所属店舗セレクト
-  var storeSelect = document.getElementById('emp-edit-store');
   if (store) {
+    var storeSelect = document.getElementById('emp-edit-store');
     for (var i = 0; i < storeSelect.options.length; i++) {
       if (storeSelect.options[i].text === store) { storeSelect.selectedIndex = i; break; }
     }
   }
-  storeSelect.setAttribute('data-orig', storeSelect.selectedIndex);
-  storeChangeHighlight('emp-edit-store-alert','emp-edit-trans-cost','emp-edit-trans-unit', storeSelect.selectedIndex, storeSelect.selectedIndex);
 
   // ステータス別の表示制御
   var emailInput = document.getElementById('emp-edit-email');
@@ -1632,22 +1200,24 @@ function empEdit(btn, status) {
   var emailAlert = document.getElementById('emp-edit-email-alert');
   var titleEl = document.getElementById('emp-edit-title');
 
+  var statusSelect = document.getElementById('emp-edit-status');
   if (status === 'active') {
-    titleEl.innerHTML = '従業員を編集 <span style="font-size:11px;font-weight:400;color:#2ec4a5;margin-left:8px;">有効</span>';
+    titleEl.textContent = '従業員編集';
     emailInput.disabled = true;
     emailInput.style.background = '#f5f5f5';
     emailHint.textContent = '承諾済みのためメールアドレスは変更できません';
     emailHint.style.display = 'block';
     emailAlert.style.display = 'none';
+    statusSelect.selectedIndex = 0;
   } else {
     var statusLabel = (status === 'pending') ? '招待中' : '期限切れ';
-    var statusColor = (status === 'pending') ? '#f0960a' : '#c62828';
-    titleEl.innerHTML = '従業員を編集 <span style="font-size:11px;font-weight:400;color:' + statusColor + ';margin-left:8px;">' + statusLabel + '</span>';
+    titleEl.textContent = '従業員編集';
     emailInput.disabled = false;
     emailInput.style.background = '#fff';
     emailHint.textContent = '';
     emailHint.style.display = 'none';
     emailAlert.style.display = 'flex';
+    statusSelect.selectedIndex = 0;
   }
 
   var overlay = document.getElementById('emp-edit-overlay');
@@ -1656,25 +1226,6 @@ function empEdit(btn, status) {
 
 function closeEmpEdit() {
   document.getElementById('emp-edit-overlay').style.display = 'none';
-}
-
-/* 店舗変更時の交通費ハイライト */
-function storeChangeHighlight(alertId, costId, unitId, origIdx, currentIdx) {
-  var changed = currentIdx !== origIdx;
-  var alert = document.getElementById(alertId);
-  var cost = document.getElementById(costId);
-  var unit = document.getElementById(unitId);
-  if (alert) alert.style.display = changed ? 'flex' : 'none';
-  if (cost) {
-    cost.style.outline = changed ? '2px solid #c62828' : 'none';
-    cost.style.outlineOffset = changed ? '-1px' : '0';
-    cost.style.background = changed ? '#fff5f5' : '';
-  }
-  if (unit) {
-    unit.style.outline = changed ? '2px solid #c62828' : 'none';
-    unit.style.outlineOffset = changed ? '-1px' : '0';
-    unit.style.background = changed ? '#fff5f5' : '';
-  }
 }
 
 /* 従業員削除 */

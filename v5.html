@@ -730,45 +730,36 @@
       <div class="ph"><h2>従業員</h2></div>
       <div class="mo">
         <div class="modal">
-          <div class="mh"><h3>従業員を編集 <span style="font-size:11px;font-weight:400;color:#2ec4a5;margin-left:8px;">有効</span></h3><button class="mx" onclick="go('c1')">✕</button></div>
+          <div class="mh"><h3>従業員編集</h3><button class="mx" onclick="go('c1')">✕</button></div>
           <div class="mb">
-            <div class="fg"><label>名前 <span class="req">✳</span></label><input value="test" style="max-width:100%;"></div>
-            <div class="fg"><label>メールアドレス</label><input value="nishikata+test2@wshoulder.com" style="max-width:100%;" disabled><div class="hint">承諾済みのためメールアドレスは変更できません</div></div>
-            <div class="fg"><label>電話番号</label><input value="090-1234-1234" style="max-width:100%;"></div>
-
-            <div class="dv" style="margin:14px 0;"></div>
-
-            <div class="fg">
-              <label>雇用区分 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-                <option selected>業務委託</option>
-                <option>代表取締役</option>
-                <option>バイトさん</option>
-              </select>
+            <div style="display:flex;gap:12px;">
+              <div class="fg" style="flex:1;"><label>名前 <span class="req">✳</span></label><input value="test" style="max-width:100%;"></div>
+              <div class="fg" style="flex:1;"><label>電話番号 <span class="req">✳</span></label><input value="090-1234-1234" style="max-width:100%;"></div>
             </div>
             <div style="display:flex;gap:12px;">
-              <div class="fg" style="flex:1;"><label>交通費単位</label>
-                <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-                  <option selected>日額</option><option>月額</option>
-                </select>
-              </div>
-              <div class="fg" style="flex:1;"><label>交通費/単位</label><input value="1" style="max-width:100%;"></div>
+              <div class="fg" style="flex:1;"><label>メールアドレス <span class="req">✳</span></label><input value="nishikata+test2@wshoulder.com" style="max-width:100%;" disabled><div class="hint">承諾済みのためメールアドレスは変更できません</div></div>
+              <div class="fg" style="flex:1;"><label>従業員コード</label><input value="EMP-12345" style="max-width:100%;"></div>
             </div>
-            <div class="fg"><label>社員コード</label><input value="" placeholder="任意" style="max-width:100%;"></div>
-
-            <div class="dv" style="margin:14px 0;"></div>
-
+            <div style="display:flex;gap:12px;">
+              <div class="fg" style="flex:1;"><label>雇用区分 <span class="req">✳</span></label>
+                <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;"><option selected>業務委託</option><option>代表取締役</option><option>バイトさん</option><option>正社員</option></select>
+              </div>
+              <div class="fg" style="flex:1;"><label>ステータス <span class="req">✳</span></label>
+                <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;"><option selected>在籍中</option><option>休職中</option><option>退職済み</option></select>
+              </div>
+            </div>
+            <div style="display:flex;gap:12px;">
+              <div class="fg" style="flex:1;"><label>交通費単位 <span class="req">✳</span></label>
+                <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;"><option selected>日額</option><option>月額</option></select>
+              </div>
+              <div class="fg" style="flex:1;"><label>交通費/日 <span class="req">✳</span></label><input value="¥1" style="max-width:100%;"></div>
+            </div>
             <div class="fg">
               <label>所属店舗 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-                <option selected>渋谷店</option>
-                <option>新宿店</option>
-                <option>池袋店</option>
-                <option>北海道支店</option>
-              </select>
+              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;"><option selected>渋谷店</option><option>新宿店</option><option>池袋店</option><option>北海道支店</option></select>
+              <div class="hint">担当店舗間で異動できます</div>
             </div>
-
-            <div class="btn-grp"><button class="btn btn-s" onclick="go('c1')">キャンセル</button><button class="btn btn-p" onclick="go('c1')">保存</button></div>
+            <div class="btn-grp"><button class="btn btn-s" onclick="go('c1')">キャンセル</button><button class="btn btn-p" onclick="go('c1')">保存する</button></div>
           </div>
         </div>
       </div>
@@ -789,46 +780,37 @@
       <div class="ph"><h2>従業員</h2></div>
       <div class="mo">
         <div class="modal">
-          <div class="mh"><h3>従業員を編集 <span style="font-size:11px;font-weight:400;color:#f0960a;margin-left:8px;">招待中</span></h3><button class="mx" onclick="go('c1')">✕</button></div>
+          <div class="mh"><h3>従業員編集 <span style="font-size:11px;font-weight:400;color:#f0960a;margin-left:8px;">招待中</span></h3><button class="mx" onclick="go('c1')">✕</button></div>
           <div class="mb">
-            <div class="fg"><label>名前 <span class="req">✳</span></label><input value="佐々木" style="max-width:100%;"></div>
-            <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input value="sasaki.kiminori.7023@gmail.com" style="max-width:100%;"></div>
             <div class="al al-i" style="margin-bottom:12px;"><span>💡</span><div>メールアドレスを変更すると、古い招待リンクが無効になり、新しい招待メールが自動送信されます。</div></div>
-            <div class="fg"><label>電話番号</label><input value="" placeholder="任意" style="max-width:100%;"></div>
-
-            <div class="dv" style="margin:14px 0;"></div>
-
-            <div class="fg">
-              <label>雇用区分 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-                <option selected>業務委託</option>
-                <option>代表取締役</option>
-                <option>バイトさん</option>
-              </select>
+            <div style="display:flex;gap:12px;">
+              <div class="fg" style="flex:1;"><label>名前 <span class="req">✳</span></label><input value="佐々木" style="max-width:100%;"></div>
+              <div class="fg" style="flex:1;"><label>電話番号 <span class="req">✳</span></label><input value="" placeholder="090-0000-0000" style="max-width:100%;"></div>
             </div>
             <div style="display:flex;gap:12px;">
-              <div class="fg" style="flex:1;"><label>交通費単位</label>
-                <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-                  <option selected>日額</option><option>月額</option>
-                </select>
-              </div>
-              <div class="fg" style="flex:1;"><label>交通費/単位</label><input value="0" style="max-width:100%;"></div>
+              <div class="fg" style="flex:1;"><label>メールアドレス <span class="req">✳</span></label><input value="sasaki.kiminori.7023@gmail.com" style="max-width:100%;"></div>
+              <div class="fg" style="flex:1;"><label>従業員コード</label><input value="" placeholder="未入力の場合は自動生成されます" style="max-width:100%;"></div>
             </div>
-            <div class="fg"><label>社員コード</label><input value="" placeholder="任意" style="max-width:100%;"></div>
-
-            <div class="dv" style="margin:14px 0;"></div>
-
+            <div style="display:flex;gap:12px;">
+              <div class="fg" style="flex:1;"><label>雇用区分 <span class="req">✳</span></label>
+                <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;"><option selected>業務委託</option><option>代表取締役</option><option>バイトさん</option><option>正社員</option></select>
+              </div>
+              <div class="fg" style="flex:1;"><label>ステータス <span class="req">✳</span></label>
+                <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;"><option selected>在籍中</option><option>休職中</option><option>退職済み</option></select>
+              </div>
+            </div>
+            <div style="display:flex;gap:12px;">
+              <div class="fg" style="flex:1;"><label>交通費単位 <span class="req">✳</span></label>
+                <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;"><option selected>日額</option><option>月額</option></select>
+              </div>
+              <div class="fg" style="flex:1;"><label>交通費/日 <span class="req">✳</span></label><input value="¥0" style="max-width:100%;"></div>
+            </div>
             <div class="fg">
               <label>所属店舗 <span class="req">✳</span></label>
-              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-                <option>渋谷店</option>
-                <option>新宿店</option>
-                <option selected>池袋店</option>
-                <option>北海道支店</option>
-              </select>
+              <select style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;"><option>渋谷店</option><option>新宿店</option><option selected>池袋店</option><option>北海道支店</option></select>
+              <div class="hint">担当店舗間で異動できます</div>
             </div>
-
-            <div class="btn-grp"><button class="btn btn-s" onclick="go('c1')">キャンセル</button><button class="btn btn-p" onclick="go('c1')">保存</button></div>
+            <div class="btn-grp"><button class="btn btn-s" onclick="go('c1')">キャンセル</button><button class="btn btn-p" onclick="go('c1')">保存する</button></div>
           </div>
         </div>
       </div>
@@ -1092,47 +1074,56 @@
 
 <!-- 従業員編集モーダル（オーバーレイ） -->
 <div id="emp-edit-overlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:2000;justify-content:center;align-items:center;">
-  <div style="background:#fff;border-radius:12px;width:520px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+  <div style="background:#fff;border-radius:12px;width:620px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
     <div class="mh" style="display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid #eee;">
-      <h3 style="font-size:15px;" id="emp-edit-title">従業員を編集</h3>
+      <h3 style="font-size:15px;" id="emp-edit-title">従業員編集</h3>
       <button class="mx" onclick="closeEmpEdit()" style="background:none;border:none;font-size:18px;cursor:pointer;color:#999;">✕</button>
     </div>
     <div style="padding:20px;">
-      <div class="fg"><label>名前 <span class="req">✳</span></label><input id="emp-edit-name" value="" style="max-width:100%;"></div>
-      <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input id="emp-edit-email" value="" style="max-width:100%;"><div id="emp-edit-email-hint" class="hint"></div></div>
       <div id="emp-edit-email-alert" style="display:none;" class="al al-i"><span>💡</span><div>メールアドレスを変更すると、古い招待リンクが無効になり、新しい招待メールが自動送信されます。</div></div>
-      <div class="fg"><label>電話番号</label><input id="emp-edit-phone" value="" style="max-width:100%;"></div>
 
-      <div class="dv" style="margin:14px 0;border-top:1px solid #eee;"></div>
-
-      <div class="fg">
-        <label>雇用区分 <span class="req">✳</span></label>
-        <select id="emp-edit-type" style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-          <option>業務委託</option><option>代表取締役</option><option>バイトさん</option>
-        </select>
+      <div style="display:flex;gap:12px;">
+        <div class="fg" style="flex:1;"><label>名前 <span class="req">✳</span></label><input id="emp-edit-name" value="" style="max-width:100%;"></div>
+        <div class="fg" style="flex:1;"><label>電話番号 <span class="req">✳</span></label><input id="emp-edit-phone" value="" style="max-width:100%;"></div>
       </div>
       <div style="display:flex;gap:12px;">
-        <div class="fg" style="flex:1;"><label>交通費単位</label>
+        <div class="fg" style="flex:1;"><label>メールアドレス <span class="req">✳</span></label><input id="emp-edit-email" value="" style="max-width:100%;"><div id="emp-edit-email-hint" class="hint"></div></div>
+        <div class="fg" style="flex:1;"><label>従業員コード</label><input id="emp-edit-code" value="" placeholder="未入力の場合は自動生成されます" style="max-width:100%;"></div>
+      </div>
+      <div style="display:flex;gap:12px;">
+        <div class="fg" style="flex:1;">
+          <label>雇用区分 <span class="req">✳</span></label>
+          <select id="emp-edit-type" style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+            <option>業務委託</option><option>代表取締役</option><option>バイトさん</option><option>正社員</option>
+          </select>
+        </div>
+        <div class="fg" style="flex:1;">
+          <label>ステータス <span class="req">✳</span></label>
+          <select id="emp-edit-status" style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+            <option>在籍中</option><option>休職中</option><option>退職済み</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;">
+        <div class="fg" style="flex:1;">
+          <label>交通費単位 <span class="req">✳</span></label>
           <select id="emp-edit-trans-unit" style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
             <option>日額</option><option>月額</option>
           </select>
         </div>
-        <div class="fg" style="flex:1;"><label>交通費/単位</label><input id="emp-edit-trans-cost" value="" style="max-width:100%;"></div>
+        <div class="fg" style="flex:1;"><label>交通費/日 <span class="req">✳</span></label><input id="emp-edit-trans-cost" value="" style="max-width:100%;"></div>
       </div>
-      <div class="fg"><label>社員コード</label><input value="" placeholder="任意" style="max-width:100%;"></div>
-
-      <div class="dv" style="margin:14px 0;border-top:1px solid #eee;"></div>
-
       <div class="fg">
         <label>所属店舗 <span class="req">✳</span></label>
         <select id="emp-edit-store" style="width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
           <option>渋谷店</option><option>新宿店</option><option>池袋店</option><option>北海道支店</option>
         </select>
+        <div class="hint">担当店舗間で異動できます</div>
       </div>
 
       <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:20px;">
         <button class="btn btn-s" onclick="closeEmpEdit()">キャンセル</button>
-        <button class="btn btn-p" onclick="closeEmpEdit()">保存</button>
+        <button class="btn btn-p" onclick="closeEmpEdit()">保存する</button>
       </div>
     </div>
   </div>
@@ -1182,7 +1173,8 @@ function empEdit(btn, status) {
   document.getElementById('emp-edit-name').value = name;
   document.getElementById('emp-edit-email').value = emailEl;
   document.getElementById('emp-edit-phone').value = (phone === '-') ? '' : phone;
-  document.getElementById('emp-edit-trans-cost').value = transCost;
+  document.getElementById('emp-edit-trans-cost').value = '¥' + transCost;
+  document.getElementById('emp-edit-code').value = '';
 
   // 雇用区分セレクト
   var typeSelect = document.getElementById('emp-edit-type');
@@ -1208,22 +1200,24 @@ function empEdit(btn, status) {
   var emailAlert = document.getElementById('emp-edit-email-alert');
   var titleEl = document.getElementById('emp-edit-title');
 
+  var statusSelect = document.getElementById('emp-edit-status');
   if (status === 'active') {
-    titleEl.innerHTML = '従業員を編集 <span style="font-size:11px;font-weight:400;color:#2ec4a5;margin-left:8px;">有効</span>';
+    titleEl.textContent = '従業員編集';
     emailInput.disabled = true;
     emailInput.style.background = '#f5f5f5';
     emailHint.textContent = '承諾済みのためメールアドレスは変更できません';
     emailHint.style.display = 'block';
     emailAlert.style.display = 'none';
+    statusSelect.selectedIndex = 0;
   } else {
     var statusLabel = (status === 'pending') ? '招待中' : '期限切れ';
-    var statusColor = (status === 'pending') ? '#f0960a' : '#c62828';
-    titleEl.innerHTML = '従業員を編集 <span style="font-size:11px;font-weight:400;color:' + statusColor + ';margin-left:8px;">' + statusLabel + '</span>';
+    titleEl.textContent = '従業員編集';
     emailInput.disabled = false;
     emailInput.style.background = '#fff';
     emailHint.textContent = '';
     emailHint.style.display = 'none';
     emailAlert.style.display = 'flex';
+    statusSelect.selectedIndex = 0;
   }
 
   var overlay = document.getElementById('emp-edit-overlay');
