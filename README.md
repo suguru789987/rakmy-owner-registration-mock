@@ -5,6 +5,8 @@
 > **制作:** [@suguru789987](https://github.com/suguru789987) (PdM)
 > **担当範囲:** 権限階層3層設計 / 権限マトリクス / オーナー登録フロー / 管理者登録フロー / **従業員登録・編集・打刻画面** / UIロジック詳細 / CS申し送り / ヘルプページIA再設計 / FAQ整備
 > **ツール:** Claude Code / HTML / CSS / Markdown / TSV
+>
+> 🔗 **費用実績入力機能**は独立リポジトリに切り出し済: [expense-actual-registration](https://github.com/suguru789987/expense-actual-registration)
 
 ---
 
