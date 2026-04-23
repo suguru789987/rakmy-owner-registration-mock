@@ -38,6 +38,22 @@
 - 従業員登録モーダル(v1→v5で**登録モーダルと編集モーダルの統一デザイン化**を実施)
 - 交通費入力時の**赤枠ハイライトUX**(店舗変更時の入力忘れ防止)
 
+#### 🔴 従業員画面 ディープリンク(クリックで即該当画面)
+
+| 画面 | URL |
+|---|---|
+| 👤 従業員一覧(オーナー視点) | https://suguru789987.github.io/rakmy-owner-registration-mock/#c1 |
+| 👤 従業員一覧(管理者視点) | https://suguru789987.github.io/rakmy-owner-registration-mock/#c2 |
+| ✉️ 招待メール | https://suguru789987.github.io/rakmy-owner-registration-mock/#c4 |
+| 🔐 PW設定(招待から到達) | https://suguru789987.github.io/rakmy-owner-registration-mock/#c5 |
+| 🚪 ログイン画面 | https://suguru789987.github.io/rakmy-owner-registration-mock/#login |
+| ❌ 無効な招待リンク | https://suguru789987.github.io/rakmy-owner-registration-mock/#invite-invalid |
+| ✏️ 従業員編集(有効) | https://suguru789987.github.io/rakmy-owner-registration-mock/#c1e-active |
+| ⏳ 従業員編集(招待中) | https://suguru789987.github.io/rakmy-owner-registration-mock/#c1e-pending |
+| 🔁 PW再設定(Step1) | https://suguru789987.github.io/rakmy-owner-registration-mock/#e1 |
+| 🔁 PW再設定(認証) | https://suguru789987.github.io/rakmy-owner-registration-mock/#e2 |
+| 🔁 PW再設定(新PW) | https://suguru789987.github.io/rakmy-owner-registration-mock/#e3 |
+
 ---
 
 ## ハイライト
