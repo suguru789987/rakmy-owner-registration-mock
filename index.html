@@ -233,7 +233,15 @@
     .ow-step-action { flex-shrink: 0; }
     .ow-step-action .btn[disabled] { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
     .ow-step.is-locked { opacity: 0.55; }
-    .ow-step.is-done .ow-step-title { color: #888; }
+    .ow-step.is-done .ow-step-title { color: #555; }
+    /* 前提登録(依存)表示 - 常時可視 */
+    .ow-step-deps { font-size: 10px; color: #888; margin-top: 4px; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+    .ow-step-deps .deps-label { font-weight: 600; color: #666; }
+    .ow-step-deps .dep-chip { background: #f0faf7; color: #1a9e7e; padding: 1px 7px; border-radius: 10px; font-size: 9px; font-weight: 600; border: 1px solid #b2ebe0; }
+    .ow-step-deps .dep-none { color: #aaa; font-style: italic; }
+    /* 登録件数バッジ */
+    .ow-step-meta { font-size: 10px; color: #1a9e7e; margin-top: 3px; font-weight: 600; }
+    .ow-step-meta.empty { color: #aaa; font-weight: 500; }
     .ow-divider-arrow { display: flex; justify-content: center; padding: 2px 0; color: #d4e8e3; font-size: 11px; }
     .ow-state-toggle { display: flex; gap: 6px; margin-bottom: 14px; justify-content: center; }
     .ow-state-toggle .ftab { font-size: 10px; padding: 5px 12px; }
@@ -604,8 +612,8 @@
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc" style="background:#f8f9fa;">
-      <div class="ph"><h2>登録ガイド</h2></div>
-      <p style="font-size:11px;color:#666;margin-bottom:14px;max-width:760px;">タイムレコードのご利用にあたり、以下の必須項目を順番に登録してください。完了するとダッシュボード（打刻記録）が利用可能になります。</p>
+      <div class="ph"><h2 id="b0-page-title">登録ガイド</h2></div>
+      <p style="font-size:11px;color:#666;margin-bottom:14px;max-width:760px;" id="b0-page-sub">タイムレコードのご利用にあたり、以下の必須項目を順番に登録してください。完了するとダッシュボード（打刻記録）が利用可能になります。</p>
 
       <!-- デモ用: 進捗状態切替（モック確認用、本番では不要） -->
       <div class="ow-state-toggle">
@@ -620,8 +628,8 @@
       <div class="ow-card">
         <div class="ow-head">
           <div>
-            <h3>登録ガイド（必須）</h3>
-            <div style="font-size:11px;color:#888;margin-top:3px;">タイムレコードを利用開始するには、以下の順番で全項目の登録が必要です。</div>
+            <h3 id="b0-card-title">登録ガイド（必須）</h3>
+            <div style="font-size:11px;color:#888;margin-top:3px;" id="b0-card-sub">タイムレコードを利用開始するには、以下の順番で全項目の登録が必要です。</div>
           </div>
         </div>
 
@@ -659,7 +667,9 @@
           <div class="ow-step-num active">1</div>
           <div class="ow-step-body">
             <div class="ow-step-title">業態・ブランド登録 <span class="ow-badge now">進行中</span></div>
-            <div class="ow-step-desc">店舗の業態（飲食店・小売店など）と運営ブランド名を登録します。最初に必須です。</div>
+            <div class="ow-step-desc">店舗の業態（飲食店・小売店など）と運営ブランド名を登録します。</div>
+            <div class="ow-step-deps"><span class="deps-label">前提登録:</span><span class="dep-none">なし（独立して登録可能）</span></div>
+            <div class="ow-step-meta empty" id="b0-meta-1">登録済み: 0 件</div>
           </div>
           <div class="ow-step-action"><button class="btn btn-p btn-sm" id="b0-btn-1" onclick="b0Go(1)">登録する →</button></div>
         </div>
@@ -670,6 +680,8 @@
           <div class="ow-step-body">
             <div class="ow-step-title">店舗登録 <span class="ow-badge lock">🔒 ①完了後</span></div>
             <div class="ow-step-desc">店舗名・住所・営業時間等の店舗情報を登録します。複数店舗の登録も可能です。</div>
+            <div class="ow-step-deps"><span class="deps-label">前提登録:</span><span class="dep-chip">① 業態・ブランド</span></div>
+            <div class="ow-step-meta empty" id="b0-meta-2">登録済み: 0 件</div>
           </div>
           <div class="ow-step-action"><button class="btn btn-p btn-sm" id="b0-btn-2" disabled onclick="b0Go(2)">登録する →</button></div>
         </div>
@@ -680,6 +692,8 @@
           <div class="ow-step-body">
             <div class="ow-step-title">雇用区分登録 <span class="ow-badge lock">🔒 ②完了後</span></div>
             <div class="ow-step-desc">正社員・アルバイト・業務委託など、従業員の雇用区分を登録します。</div>
+            <div class="ow-step-deps"><span class="deps-label">前提登録:</span><span class="dep-none">なし（独立して登録可能）</span></div>
+            <div class="ow-step-meta empty" id="b0-meta-3">登録済み: 0 件</div>
           </div>
           <div class="ow-step-action"><button class="btn btn-p btn-sm" id="b0-btn-3" disabled onclick="b0Go(3)">登録する →</button></div>
         </div>
@@ -690,11 +704,13 @@
           <div class="ow-step-body">
             <div class="ow-step-title">従業員登録 <span class="ow-badge lock">🔒 ③完了後</span></div>
             <div class="ow-step-desc">店舗・雇用区分を割り当てて従業員を登録します。登録と同時に招待メールが自動送信されます。</div>
+            <div class="ow-step-deps"><span class="deps-label">前提登録:</span><span class="dep-chip">② 店舗</span><span class="dep-chip">③ 雇用区分</span></div>
+            <div class="ow-step-meta empty" id="b0-meta-4">登録済み: 0 件</div>
           </div>
           <div class="ow-step-action"><button class="btn btn-p btn-sm" id="b0-btn-4" disabled onclick="b0Go(4)">登録する →</button></div>
         </div>
 
-        <div class="al al-i" style="margin-top:18px;font-size:10px;"><span>💡</span><div>各ステップは前のステップ完了後にアクティブ化されます。完了後はこのガイドは非表示になり、通常の打刻記録一覧が表示されます。</div></div>
+        <div class="al al-i" style="margin-top:18px;font-size:10px;" id="b0-card-tip"><span>💡</span><div>各ステップは前のステップ完了後にアクティブ化されます。すべて登録完了後も、新規追加の際はこのガイドから前提登録を確認できます。</div></div>
       </div>
     </main>
   </div>
@@ -1674,14 +1690,29 @@ function b0SaveDone(n) {
 
 // ステップ名 (動的メッセージ用)
 var B0_STEP_NAMES = ['', '業態・ブランド登録', '店舗登録', '雇用区分登録', '従業員登録'];
-// 進捗状態に応じたサブメッセージ
+// 運用モード時のステップ短縮ラベル(CTA用)
+var B0_ADD_LABELS = ['', '+ ブランドを追加', '+ 店舗を追加', '+ 雇用区分を追加', '+ 従業員を追加'];
+// 進捗状態に応じたサブメッセージ(初期登録モード)
 var B0_STATUS_MSGS = [
   '📌 まずは「① 業態・ブランド登録」から始めましょう',
   '🚀 順調なスタート！次は「② 店舗登録」です',
   '💪 半分完了！次は「③ 雇用区分登録」です',
   '✨ あとひと息！次は「④ 従業員登録」です',
-  '🎉 すべての登録が完了しました！打刻記録をご利用いただけます'
+  '✓ 初期登録は完了しています。新規追加の際は、各項目の前提登録を確認のうえ追加してください'
 ];
+
+// 件数管理: sessionStorage 'b0Counts' に [n1, n2, n3, n4]
+function b0LoadCounts() {
+  try {
+    var raw = sessionStorage.getItem('b0Counts');
+    if (!raw) return [0, 0, 0, 0];
+    var arr = JSON.parse(raw);
+    return Array.isArray(arr) && arr.length === 4 ? arr : [0, 0, 0, 0];
+  } catch (e) { return [0, 0, 0, 0]; }
+}
+function b0SaveCounts(c) {
+  try { sessionStorage.setItem('b0Counts', JSON.stringify(c)); } catch (e) {}
+}
 
 function b0SetState(doneCount) {
   // 範囲ガード
@@ -1721,12 +1752,47 @@ function b0SetState(doneCount) {
     if (m <= doneCount) mk.classList.add('done');
     else if (m === doneCount + 1) mk.classList.add('now');
   }
-  // A案: 完了後はサイドバーから「登録ガイド」を非表示、業務メニューを通常表示に
-  var sbGuide = document.getElementById('b0-sb-guide');
-  var sbBizLabel = document.getElementById('b0-sb-biz-label');
   var bizComplete = (doneCount === 4);
-  if (sbGuide) sbGuide.style.display = bizComplete ? 'none' : '';
-  if (sbBizLabel) sbBizLabel.textContent = bizComplete ? '' : '業務メニュー（登録完了後に利用可）';
+
+  // 運用モード切替: タイトル/副題/CTA文言を変更（登録ガイドは運用後も常時表示=運用ガイドとして利用）
+  var pageTitle = document.getElementById('b0-page-title');
+  var pageSub = document.getElementById('b0-page-sub');
+  var cardTitle = document.getElementById('b0-card-title');
+  var cardSub = document.getElementById('b0-card-sub');
+  var cardTip = document.getElementById('b0-card-tip');
+  if (bizComplete) {
+    if (pageTitle) pageTitle.textContent = '登録ガイド（運用モード）';
+    if (pageSub) pageSub.textContent = '初期登録は完了しています。新規の店舗・雇用区分・従業員などを追加する際は、以下から前提登録を確認のうえ追加できます。';
+    if (cardTitle) cardTitle.textContent = '登録ガイド（運用モード）';
+    if (cardSub) cardSub.textContent = '各項目の「前提登録」を確認のうえ、新規追加してください。';
+    if (cardTip) cardTip.querySelector('div').innerHTML = '新規追加時は前提登録を満たしている必要があります。例: 新規従業員を追加するには、所属する店舗と雇用区分が事前に登録されている必要があります。';
+  } else {
+    if (pageTitle) pageTitle.textContent = '登録ガイド';
+    if (pageSub) pageSub.textContent = 'タイムレコードのご利用にあたり、以下の必須項目を順番に登録してください。完了するとダッシュボード（打刻記録）が利用可能になります。';
+    if (cardTitle) cardTitle.textContent = '登録ガイド（必須）';
+    if (cardSub) cardSub.textContent = 'タイムレコードを利用開始するには、以下の順番で全項目の登録が必要です。';
+    if (cardTip) cardTip.querySelector('div').innerHTML = '各ステップは前のステップ完了後にアクティブ化されます。すべて登録完了後も、新規追加の際はこのガイドから前提登録を確認できます。';
+  }
+
+  // 件数表示更新（前提登録の充足状況の可視化）
+  // デモトグルとの整合: doneCount分のステップは最低1件として補正
+  var counts = b0LoadCounts();
+  var dirty = false;
+  for (var nn = 0; nn < doneCount; nn++) {
+    if ((counts[nn] || 0) < 1) { counts[nn] = 1; dirty = true; }
+  }
+  if (dirty) b0SaveCounts(counts);
+  for (var k = 1; k <= 4; k++) {
+    var meta = document.getElementById('b0-meta-' + k);
+    if (!meta) continue;
+    var c = counts[k - 1];
+    meta.textContent = '登録済み: ' + c + ' 件';
+    meta.classList.toggle('empty', c === 0);
+  }
+
+  // サイドバー: 登録ガイド項目は常時表示。業務メニューは初期完了後にアクセス可能化
+  var sbBizLabel = document.getElementById('b0-sb-biz-label');
+  if (sbBizLabel) sbBizLabel.textContent = bizComplete ? '業務メニュー' : '業務メニュー（登録完了後に利用可）';
   for (var b = 1; b <= 5; b++) {
     var item = document.getElementById('b0-sb-biz-' + b);
     if (item) item.style.opacity = bizComplete ? '' : '0.5';
@@ -1742,7 +1808,13 @@ function b0SetState(doneCount) {
     num.classList.remove('todo','active','done','locked');
     badge.classList.remove('now','done','lock');
     btn.disabled = false;
-    if (s <= doneCount) {
+    if (bizComplete) {
+      // 運用モード: 全ステップ「✓ 追加可能」表示・「+ 〜を追加」CTAでアンロック
+      num.classList.add('done'); num.textContent = '✓';
+      badge.classList.add('done'); badge.textContent = '✓ 追加可能';
+      btn.textContent = B0_ADD_LABELS[s];
+      btn.classList.remove('btn-s'); btn.classList.add('btn-p');
+    } else if (s <= doneCount) {
       // 完了 → 再編集可
       num.classList.add('done'); num.textContent = '✓';
       badge.classList.add('done'); badge.textContent = '✓ 完了';
@@ -1772,19 +1844,24 @@ function b0Go(stepNum) {
   go('b-step' + stepNum);
 }
 
-// 登録画面 → B-0へ戻る（双方向: backward + 進捗更新）
+// 登録画面 → B-0へ戻る（双方向: backward + 進捗更新 + 件数インクリメント）
 function b0CompleteStep(stepNum) {
   var done = b0LoadDone();
-  // 既に完了済みステップの「再編集」の場合は進捗を増やさない
-  if (stepNum > done) {
-    // 順序ガード: 飛び級登録は禁止（通常UIではbtn disabledで阻止しているが念のため）
-    if (stepNum !== done + 1) {
-      alert('前のステップを先に完了してください（現在の次のステップ: ' + (done + 1) + '）');
-      return;
+  // 初期登録モード: 順序ガード（運用モード=既に4/4の場合は単純加算）
+  if (done < 4) {
+    if (stepNum > done) {
+      if (stepNum !== done + 1) {
+        alert('前のステップを先に完了してください（現在の次のステップ: ' + (done + 1) + '）');
+        return;
+      }
+      done = stepNum;
+      b0SaveDone(done);
     }
-    done = stepNum;
-    b0SaveDone(done);
   }
+  // 件数インクリメント（運用モードで「+追加」した場合も加算される）
+  var counts = b0LoadCounts();
+  counts[stepNum - 1] = (counts[stepNum - 1] || 0) + 1;
+  b0SaveCounts(counts);
   go('b0');
 }
 
