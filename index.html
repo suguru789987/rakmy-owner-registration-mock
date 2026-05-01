@@ -288,6 +288,7 @@
     <span class="nav-sep"></span>
     <span class="nav-flow">B 初期設定</span>
     <span class="nav-tab" onclick="go('b0')" id="nav-b0">セットアップガイド</span>
+    <span class="nav-tab" onclick="go('b0-empty')" id="nav-b0-empty">打刻記録(未セットアップ)</span>
     <span class="nav-sep"></span>
     <span class="nav-flow">C 従業員</span>
     <span class="nav-tab" onclick="go('c1')" id="nav-c1">オーナー視点</span>
@@ -556,17 +557,25 @@
   </div>
 </div>
 
-<!-- ===== B-0: ログイン直後 初期セットアップガイド（順序明示型ステッパー） ===== -->
+<!-- ===== B-0: 初期セットアップガイド（独立画面 / 打刻記録から分離） ===== -->
 <div class="page" id="page-b0">
   <div class="dash">
     <aside class="sb">
       <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#" class="act"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📥</span>エクスポート</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
+      <div class="sb-sec"><a href="#" class="act"><span class="ic">🚀</span>初期セットアップ</a></div>
+      <div class="sb-sec"><div class="sl">業務メニュー（セットアップ完了後に利用可）</div>
+        <a href="#" onclick="go('b0-empty')" style="opacity:0.5;"><span class="ic">⏱</span>打刻記録</a>
+        <a href="#" style="opacity:0.5;"><span class="ic">📊</span>勤務時間集計</a>
+        <a href="#" style="opacity:0.5;"><span class="ic">💰</span>給与</a>
+        <a href="#" style="opacity:0.5;"><span class="ic">📥</span>エクスポート</a>
+        <a href="#" style="opacity:0.5;"><span class="ic">📈</span>経営管理</a>
+      </div>
       <div class="sb-sec"><div class="sl">設定</div><a href="#"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a><a href="#"><span class="ic">🔗</span>外部連携</a></div>
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc" style="background:#f8f9fa;">
-      <div class="ph"><h2>打刻記録</h2></div>
+      <div class="ph"><h2>初期セットアップ</h2></div>
+      <p style="font-size:11px;color:#666;margin-bottom:14px;max-width:760px;">タイムレコードのご利用にあたり、以下の必須項目を順番に登録してください。完了するとダッシュボード（打刻記録）が利用可能になります。</p>
 
       <!-- デモ用: 進捗状態切替（モック確認用、本番では不要） -->
       <div class="ow-state-toggle">
@@ -575,13 +584,6 @@
         <span class="ftab" onclick="b0SetState(2)" id="b0-tab-2">②完了</span>
         <span class="ftab" onclick="b0SetState(3)" id="b0-tab-3">③完了</span>
         <span class="ftab" onclick="b0SetState(4)" id="b0-tab-4">全完了</span>
-      </div>
-
-      <!-- 打刻記録 空状態 -->
-      <div class="ow-empty">
-        <div class="ic">🔍</div>
-        <h3>打刻記録が見つかりません</h3>
-        <p>条件に一致する打刻記録は見つかりませんでした</p>
       </div>
 
       <!-- 順序明示型 セットアップウィザード -->
@@ -636,6 +638,38 @@
         </div>
 
         <div class="al al-i" style="margin-top:18px;font-size:10px;"><span>💡</span><div>各ステップは前のステップ完了後にアクティブ化されます。完了後はこのガイドは非表示になり、通常の打刻記録一覧が表示されます。</div></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ===== B-0-EMPTY: 打刻記録 空状態（セットアップガイドから分離） ===== -->
+<div class="page" id="page-b0-empty">
+  <div class="dash">
+    <aside class="sb">
+      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+      <div class="sb-sec"><a href="#" class="act"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📥</span>エクスポート</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
+      <div class="sb-sec"><div class="sl">設定</div><a href="#" onclick="go('c1')"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a><a href="#"><span class="ic">🔗</span>外部連携</a></div>
+      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
+    </aside>
+    <main class="mc">
+      <div class="ph"><h2>打刻記録</h2></div>
+
+      <!-- 初期セットアップ未完了時のバナー（セットアップ完了したら非表示） -->
+      <div class="al al-w" style="margin-bottom:16px;max-width:760px;align-items:center;">
+        <span style="font-size:18px;">⚠️</span>
+        <div style="flex:1;">
+          <strong>初期セットアップが未完了です。</strong><br>
+          打刻記録を表示するには、業態・ブランド / 店舗 / 雇用区分 / 従業員 の登録が必要です。
+        </div>
+        <button class="btn btn-p btn-sm" onclick="go('b0')" style="margin-left:10px;">セットアップを開く →</button>
+      </div>
+
+      <!-- 打刻記録 空状態（純粋に打刻記録の空状態のみ） -->
+      <div class="ow-empty" style="max-width:760px;margin:0 auto;">
+        <div class="ic">🔍</div>
+        <h3>打刻記録が見つかりません</h3>
+        <p>条件に一致する打刻記録は見つかりませんでした</p>
       </div>
     </main>
   </div>
