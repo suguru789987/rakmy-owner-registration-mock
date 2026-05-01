@@ -249,17 +249,16 @@
     .b-step-modal { background: #fff; border-radius: 12px; max-width: 540px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 16px 48px rgba(0,0,0,0.18); }
 
     /* 紐付き登録支援 (B-0-ADD): タスクセレクター + パターンカード */
-    .task-picker { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 18px; }
-    .task-card { background: #fff; border: 2px solid #e8e8e8; border-radius: 10px; padding: 14px 16px; cursor: pointer; transition: all 0.2s; text-align: left; }
-    .task-card:hover { border-color: #2ec4a5; box-shadow: 0 4px 12px rgba(46,196,165,0.08); }
-    .task-card.act { border-color: #2ec4a5; background: #f0faf7; box-shadow: 0 4px 12px rgba(46,196,165,0.12); }
-    .task-card .ic { font-size: 22px; margin-bottom: 6px; display: inline-block; }
-    .task-card .tname { font-size: 12px; font-weight: 700; margin-bottom: 3px; }
-    .task-card .tsub { font-size: 10px; color: #888; line-height: 1.5; }
-    .task-card .tcomplexity { font-size: 9px; padding: 2px 7px; border-radius: 10px; font-weight: 600; display: inline-block; margin-top: 6px; }
-    .task-card .tcomplexity.s1 { background: #e8f8f5; color: #1a9e7e; }
-    .task-card .tcomplexity.s2 { background: #fff3e0; color: #e67e22; }
-    .task-card .tcomplexity.s3 { background: #fce4ec; color: #c62828; }
+    .task-question { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: #333; }
+    .task-picker { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 22px; }
+    .task-card { background: #fff; border: 2px solid #e8e8e8; border-radius: 12px; padding: 18px 12px 14px; cursor: pointer; transition: all 0.2s; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; }
+    .task-card:hover { border-color: #2ec4a5; }
+    .task-card.act { border-color: #2ec4a5; background: #f0faf7; }
+    .task-card.act::after { content: '✓'; position: absolute; top: 8px; right: 8px; width: 20px; height: 20px; background: #2ec4a5; color: #fff; border-radius: 50%; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .task-card .ic { font-size: 30px; line-height: 1; }
+    .task-card .tname { font-size: 12px; font-weight: 700; }
+    .task-card .tcomplexity { font-size: 9px; color: #888; font-weight: 500; }
+    .task-card.act .tcomplexity { color: #1a9e7e; font-weight: 600; }
     .task-panel { display: none; }
     .task-panel.act { display: block; }
 
@@ -890,31 +889,28 @@
         やりたいタスクを選ぶと、必要な前提登録の充足状況と、典型的な組合せパターンが提示されます。
       </p>
 
-      <!-- タスクセレクター: 何を追加したいか -->
+      <!-- タスクセレクター: 何を追加したいか（簡単→複雑の順） -->
+      <div class="task-question">🎯 何を追加しますか？</div>
       <div class="task-picker">
-        <div class="task-card" data-task="emp" onclick="addSelectTask('emp')">
-          <div class="ic">👤</div>
-          <div class="tname">新しい従業員を追加</div>
-          <div class="tsub">採用・配属に伴う登録</div>
-          <div class="tcomplexity s3">紐付き 2件（店舗 + 雇用区分）</div>
-        </div>
-        <div class="task-card" data-task="store" onclick="addSelectTask('store')">
-          <div class="ic">🏠</div>
-          <div class="tname">新しい店舗を追加</div>
-          <div class="tsub">出店・新規拠点開設</div>
-          <div class="tcomplexity s2">紐付き 1件（ブランド）</div>
+        <div class="task-card" data-task="brand" onclick="addSelectTask('brand')">
+          <div class="ic">🏷</div>
+          <div class="tname">ブランド</div>
+          <div class="tcomplexity">前提なし</div>
         </div>
         <div class="task-card" data-task="emptype" onclick="addSelectTask('emptype')">
           <div class="ic">📋</div>
-          <div class="tname">新しい雇用区分を追加</div>
-          <div class="tsub">新雇用形態の運用</div>
-          <div class="tcomplexity s1">紐付き なし（独立）</div>
+          <div class="tname">雇用区分</div>
+          <div class="tcomplexity">前提なし</div>
         </div>
-        <div class="task-card" data-task="brand" onclick="addSelectTask('brand')">
-          <div class="ic">🏷</div>
-          <div class="tname">新しいブランドを追加</div>
-          <div class="tsub">新業態・新ブランド進出</div>
-          <div class="tcomplexity s1">紐付き なし（独立）</div>
+        <div class="task-card" data-task="store" onclick="addSelectTask('store')">
+          <div class="ic">🏠</div>
+          <div class="tname">店舗</div>
+          <div class="tcomplexity">前提: ブランド</div>
+        </div>
+        <div class="task-card" data-task="emp" onclick="addSelectTask('emp')">
+          <div class="ic">👤</div>
+          <div class="tname">従業員</div>
+          <div class="tcomplexity">前提: 店舗 + 雇用区分</div>
         </div>
       </div>
 
