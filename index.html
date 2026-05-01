@@ -591,13 +591,14 @@
   <div class="dash">
     <aside class="sb">
       <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#" class="act"><span class="ic">📋</span>登録ガイド</a></div>
-      <div class="sb-sec"><div class="sl">業務メニュー（登録完了後に利用可）</div>
-        <a href="#" onclick="go('b0-empty')" style="opacity:0.5;"><span class="ic">⏱</span>打刻記録</a>
-        <a href="#" style="opacity:0.5;"><span class="ic">📊</span>勤務時間集計</a>
-        <a href="#" style="opacity:0.5;"><span class="ic">💰</span>給与</a>
-        <a href="#" style="opacity:0.5;"><span class="ic">📥</span>エクスポート</a>
-        <a href="#" style="opacity:0.5;"><span class="ic">📈</span>経営管理</a>
+      <div class="sb-sec" id="b0-sb-guide"><a href="#" class="act"><span class="ic">📋</span>登録ガイド</a></div>
+      <div class="sb-sec">
+        <div class="sl" id="b0-sb-biz-label">業務メニュー（登録完了後に利用可）</div>
+        <a href="#" onclick="go('b0-empty')" id="b0-sb-biz-1" style="opacity:0.5;"><span class="ic">⏱</span>打刻記録</a>
+        <a href="#" id="b0-sb-biz-2" style="opacity:0.5;"><span class="ic">📊</span>勤務時間集計</a>
+        <a href="#" id="b0-sb-biz-3" style="opacity:0.5;"><span class="ic">💰</span>給与</a>
+        <a href="#" id="b0-sb-biz-4" style="opacity:0.5;"><span class="ic">📥</span>エクスポート</a>
+        <a href="#" id="b0-sb-biz-5" style="opacity:0.5;"><span class="ic">📈</span>経営管理</a>
       </div>
       <div class="sb-sec"><div class="sl">設定</div><a href="#"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a><a href="#"><span class="ic">🔗</span>外部連携</a></div>
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
@@ -1719,6 +1720,16 @@ function b0SetState(doneCount) {
     mk.classList.remove('done','now');
     if (m <= doneCount) mk.classList.add('done');
     else if (m === doneCount + 1) mk.classList.add('now');
+  }
+  // A案: 完了後はサイドバーから「登録ガイド」を非表示、業務メニューを通常表示に
+  var sbGuide = document.getElementById('b0-sb-guide');
+  var sbBizLabel = document.getElementById('b0-sb-biz-label');
+  var bizComplete = (doneCount === 4);
+  if (sbGuide) sbGuide.style.display = bizComplete ? 'none' : '';
+  if (sbBizLabel) sbBizLabel.textContent = bizComplete ? '' : '業務メニュー（登録完了後に利用可）';
+  for (var b = 1; b <= 5; b++) {
+    var item = document.getElementById('b0-sb-biz-' + b);
+    if (item) item.style.opacity = bizComplete ? '' : '0.5';
   }
   // 各ステップの見た目更新
   for (var s = 1; s <= 4; s++) {
