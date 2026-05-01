@@ -417,10 +417,6 @@
     <span class="nav-tab" onclick="go('store-settings')" id="nav-store-settings">店舗</span>
     <span class="nav-tab" onclick="go('emptype-settings')" id="nav-emptype-settings">雇用区分</span>
     <span class="nav-tab" onclick="go('emp-settings')" id="nav-emp-settings">従業員</span>
-    <span class="nav-tab" onclick="bOpenStep(1)" style="background:rgba(46,196,165,0.15);">[M] 業態</span>
-    <span class="nav-tab" onclick="bOpenStep(2)" style="background:rgba(46,196,165,0.15);">[M] 店舗</span>
-    <span class="nav-tab" onclick="bOpenStep(3)" style="background:rgba(46,196,165,0.15);">[M] 雇用区分</span>
-    <span class="nav-tab" onclick="bOpenStep(4)" style="background:rgba(46,196,165,0.15);">[M] 従業員</span>
     <span class="nav-sep"></span>
     <span class="nav-flow">C 従業員</span>
     <span class="nav-tab" onclick="go('c1')" id="nav-c1">オーナー視点</span>
@@ -707,6 +703,8 @@
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc" style="background:#f8f9fa;">
+      <!-- 完了済みガード(done=4時に表示) -->
+      <div id="b0-completed-banner"></div>
       <div class="ph"><h2 id="b0-page-title">登録ガイド</h2></div>
       <p style="font-size:11px;color:#666;margin-bottom:14px;max-width:760px;" id="b0-page-sub">タイムレコードのご利用にあたり、以下の必須項目を順番に登録してください。完了するとダッシュボード（打刻記録）が利用可能になります。</p>
 
@@ -1986,12 +1984,12 @@ function go(id) {
   if (id === 'd2') d2SwitchTab('new');
   // b0(登録ガイド)を開いた際は保存済み進捗を反映
   if (id === 'b0') b0SetState(b0LoadDone());
-  // 運用設定画面: 一覧サンプル更新のみ
+  // 運用設定画面: 初期登録未完了時は警告表示、完了後は通常の一覧表示
   var settingsMap = {'brand-settings':1,'store-settings':2,'emptype-settings':3,'emp-settings':4};
   if (settingsMap[id]) {
-    refreshSettingsList(settingsMap[id]);
+    refreshSettingsModeGuard(settingsMap[id]);
   }
-  // 初期登録ステップ画面: 件数更新+順序ガード警告
+  // 初期登録ステップ画面: 完了後は完了表示、未完了時は順序ガード+件数表示
   var setupMap = {'setup-brand':1,'setup-store':2,'setup-emptype':3,'setup-emp':4};
   if (setupMap[id]) {
     refreshSetupStep(setupMap[id]);
@@ -2096,6 +2094,20 @@ function b0SetState(doneCount) {
   var sbBizLabel = document.getElementById('b0-sb-biz-label');
   if (sbGuide) sbGuide.style.display = bizComplete ? 'none' : '';
   if (sbBizLabel) sbBizLabel.textContent = bizComplete ? '業務メニュー' : '業務メニュー（登録完了後に利用可）';
+
+  // 完了済み時の上部バナー: ガイドは初期登録専用なので運用案内に切替
+  var compBanner = document.getElementById('b0-completed-banner');
+  if (compBanner) {
+    compBanner.innerHTML = bizComplete ?
+      '<div class="al al-s" style="margin-bottom:14px;align-items:center;">' +
+      '<span style="font-size:18px;">🎉</span>' +
+      '<div style="flex:1;">' +
+      '<strong>初期登録は完了しています。</strong><br>' +
+      'このガイドは初期登録専用です。追加・編集は<strong>運用設定画面</strong>または<strong>打刻記録ダッシュボード</strong>からご利用ください。' +
+      '</div>' +
+      '<button class="btn btn-p btn-sm" onclick="go(\'b0-empty\')" style="margin-left:10px;">打刻記録を開く →</button>' +
+      '</div>' : '';
+  }
   for (var b = 1; b <= 5; b++) {
     var item = document.getElementById('b0-sb-biz-' + b);
     if (item) item.style.opacity = bizComplete ? '' : '0.5';
@@ -2193,19 +2205,34 @@ function bGotoSettingsAndOpenModal(stepNum) {
   setTimeout(function(){ bOpenStep(stepNum); }, 200);
 }
 
-// 初期登録ステップ画面: 件数表示更新 + 順序ガード警告
+// 初期登録ステップ画面: 件数表示更新 + 順序ガード警告 + 完了済みモード対応
 function refreshSetupStep(stepNum) {
   var counts = b0LoadCounts();
   var done = b0LoadDone();
+  var stepNames = ['', '業態・ブランド', '店舗', '雇用区分', '従業員'];
+  var warn = document.getElementById('setup-warn-' + stepNum);
+  var btn = document.getElementById('setup-btn-' + stepNum);
   // 件数
   var c = counts[stepNum - 1] || 0;
   var el = document.getElementById('setup-count-' + stepNum);
   if (el) el.textContent = c;
+  // 完了済み: 「初期登録完了」モード警告 + 運用設定画面へ誘導
+  if (done >= 4) {
+    if (warn) warn.innerHTML =
+      '<div class="al al-s" style="max-width:640px;margin:0 auto 14px;align-items:center;">' +
+      '<span style="font-size:16px;">✓</span>' +
+      '<div style="flex:1;">' +
+      '<strong>初期登録は完了しています。</strong><br>' +
+      stepNames[stepNum] + 'の追加・編集は<strong>運用設定画面</strong>からご利用ください。' +
+      '</div>' +
+      '<button class="btn btn-p btn-sm" onclick="go(\'' + SETTINGS_PAGES[stepNum] + '\')" style="margin-left:10px;">' + stepNames[stepNum] + '設定へ →</button>' +
+      '</div>';
+    if (btn) btn.disabled = true;
+    return;
+  }
   // 順序ガード警告(stepNum > done+1 の場合は前ステップを先に)
-  var warn = document.getElementById('setup-warn-' + stepNum);
   if (warn) {
     if (stepNum > done + 1) {
-      var stepNames = ['', '業態・ブランド', '店舗', '雇用区分', '従業員'];
       warn.innerHTML =
         '<div class="al al-w" style="max-width:640px;margin:0 auto 14px;align-items:center;">' +
         '<span style="font-size:16px;">⚠️</span>' +
@@ -2219,9 +2246,35 @@ function refreshSetupStep(stepNum) {
       warn.innerHTML = '';
     }
   }
-  // ボタンの活性化制御(順序違反なら無効)
-  var btn = document.getElementById('setup-btn-' + stepNum);
   if (btn) btn.disabled = (stepNum > done + 1);
+}
+
+// 運用設定画面: 初期登録未完了時のガード警告
+function refreshSettingsModeGuard(stepNum) {
+  refreshSettingsList(stepNum);
+  var done = b0LoadDone();
+  var pageIds = ['', 'page-brand-settings', 'page-store-settings', 'page-emptype-settings', 'page-emp-settings'];
+  var pageEl = document.getElementById(pageIds[stepNum]);
+  if (!pageEl) return;
+  var mainEl = pageEl.querySelector('main.mc');
+  if (!mainEl) return;
+  // 既存guardを削除
+  var existing = mainEl.querySelector('.settings-guard-banner');
+  if (existing) existing.remove();
+  // 初期登録未完了時のみ警告
+  if (done < 4) {
+    var banner = document.createElement('div');
+    banner.className = 'al al-w settings-guard-banner';
+    banner.style.cssText = 'margin-bottom:14px;align-items:center;';
+    banner.innerHTML =
+      '<span style="font-size:16px;">⚠️</span>' +
+      '<div style="flex:1;">' +
+      '<strong>初期登録が未完了です。</strong><br>' +
+      '運用設定画面は初期登録（4項目）の完了後にご利用ください。' +
+      '</div>' +
+      '<button class="btn btn-p btn-sm" onclick="go(\'b0\')" style="margin-left:10px;">登録ガイドへ →</button>';
+    mainEl.insertBefore(banner, mainEl.firstChild);
+  }
 }
 
 // (旧) 設定画面の初期セットアップバナーを更新 — 廃止予定
