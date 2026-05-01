@@ -2175,26 +2175,22 @@ function b0CompleteStep(stepNum) {
   var activePage = document.querySelector('.page.active');
   var pageId = activePage ? activePage.id : '';
 
-  // 設定画面の上で登録: 初期登録モードなら橋渡しモーダル、運用モードならトースト
+  // 設定画面の上で登録: 初期/運用問わず橋渡しモーダルで統一(CTA仕様統一)
   var settingsMap = {'page-brand-settings':1,'page-store-settings':2,'page-emptype-settings':3,'page-emp-settings':4};
   if (settingsMap[pageId]) {
     refreshSettingsModeGuard(settingsMap[pageId]);
-    if (b0LoadDone() < 4) {
-      bShowBridgeModal(stepNum);  // 初期登録モード: 中央橋渡しモーダルで次設定画面誘導
-    } else {
-      bShowToast(stepNum);  // 運用モード: 画面右上トーストで連鎖CTA
-    }
+    bShowBridgeModal(stepNum);
     return;
   }
-  // b0画面(登録ガイド)で登録した場合: ガイド更新 + 軽量通知
+  // b0画面(登録ガイド)で登録した場合: ガイド更新 + 橋渡しモーダル(統一)
   if (pageId === 'page-b0') {
     b0SetState(b0LoadDone());
     bPulseNextStep();
-    bShowToast(stepNum);
+    bShowBridgeModal(stepNum);
     return;
   }
-  // フォールバック: トースト
-  bShowToast(stepNum);
+  // フォールバック: 橋渡しモーダル
+  bShowBridgeModal(stepNum);
 }
 
 // 橋渡しモーダル: 登録完了直後にモーダル上で次の追加CTAを表示
