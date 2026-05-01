@@ -2217,19 +2217,19 @@ function bShowBridgeModal(stepNum) {
   if (stepNum === 1) {
     text = '新しい<strong>ブランド</strong>を登録しました。<br>続けて、このブランドの<strong>店舗</strong>も登録しますか？';
     actions = '<button class="btn btn-p" onclick="bBridgeProceed(2)">店舗の登録に進む →</button>' +
-              '<button class="btn btn-s" onclick="bBridgeDismiss()">あとで</button>';
+              '<button class="btn btn-s" onclick="bBridgeBackToGuide()">登録ガイドへ戻る</button>';
   } else if (stepNum === 2) {
     text = '新しい<strong>店舗</strong>を登録しました。<br>続けて、この店舗の<strong>従業員</strong>も登録しますか？';
     actions = '<button class="btn btn-p" onclick="bBridgeProceed(4)">従業員の登録に進む →</button>' +
-              '<button class="btn btn-s" onclick="bBridgeDismiss()">あとで</button>';
+              '<button class="btn btn-s" onclick="bBridgeBackToGuide()">登録ガイドへ戻る</button>';
   } else if (stepNum === 3) {
     text = '新しい<strong>雇用区分</strong>を登録しました。<br>続けて、この区分の<strong>従業員</strong>も登録しますか？';
     actions = '<button class="btn btn-p" onclick="bBridgeProceed(4)">従業員の登録に進む →</button>' +
-              '<button class="btn btn-s" onclick="bBridgeDismiss()">あとで</button>';
+              '<button class="btn btn-s" onclick="bBridgeBackToGuide()">登録ガイドへ戻る</button>';
   } else {
     text = '新しい<strong>従業員</strong>を登録しました。<br>招待メールは<strong>従業員一覧</strong>の「招待送信」ボタンから送信してください。';
     actions = '<button class="btn btn-p" onclick="bBridgeDismiss();go(\'c1\');">従業員一覧へ →</button>' +
-              '<button class="btn btn-s" onclick="bBridgeDismiss()">閉じる</button>';
+              '<button class="btn btn-s" onclick="bBridgeBackToGuide()">登録ガイドへ戻る</button>';
   }
   textEl.innerHTML = text;
   actEl.innerHTML = actions;
@@ -2242,6 +2242,10 @@ function bBridgeProceed(nextStep) {
 }
 function bBridgeDismiss() {
   document.getElementById('b-bridge-overlay').classList.remove('act');
+}
+function bBridgeBackToGuide() {
+  document.getElementById('b-bridge-overlay').classList.remove('act');
+  go('b0');
 }
 
 // 登録成功トースト: 文脈別の出し分け
@@ -2300,6 +2304,14 @@ function bShowToast(stepNum) {
   toast.classList.add('act');
   clearTimeout(window.bToastTimer);
   window.bToastTimer = setTimeout(function(){ toast.classList.remove('act'); }, duration);
+  // ホバー時タイマー一時停止、離れたら3秒タイマーで再開
+  toast.onmouseenter = function() {
+    clearTimeout(window.bToastTimer);
+  };
+  toast.onmouseleave = function() {
+    clearTimeout(window.bToastTimer);
+    window.bToastTimer = setTimeout(function(){ toast.classList.remove('act'); }, 3000);
+  };
 }
 
 // トーストCTA: 次のステップ画面へ遷移してモーダル展開
