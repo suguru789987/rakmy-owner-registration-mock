@@ -2205,18 +2205,18 @@ function bGotoSettingsAndOpenModal(stepNum) {
   setTimeout(function(){ bOpenStep(stepNum); }, 200);
 }
 
-// 初期登録ステップ画面: 件数表示更新 + 順序ガード警告 + 完了済みモード対応
+// 初期登録ステップ画面: 進行中バナー + 順序ガード警告 + 完了済みモード対応
 function refreshSetupStep(stepNum) {
   var counts = b0LoadCounts();
   var done = b0LoadDone();
   var stepNames = ['', '業態・ブランド', '店舗', '雇用区分', '従業員'];
   var warn = document.getElementById('setup-warn-' + stepNum);
   var btn = document.getElementById('setup-btn-' + stepNum);
-  // 件数
   var c = counts[stepNum - 1] || 0;
   var el = document.getElementById('setup-count-' + stepNum);
   if (el) el.textContent = c;
-  // 完了済み: 「初期登録完了」モード警告 + 運用設定画面へ誘導
+
+  // 完了済みモード: 運用設定画面へ誘導
   if (done >= 4) {
     if (warn) warn.innerHTML =
       '<div class="al al-s" style="max-width:640px;margin:0 auto 14px;align-items:center;">' +
@@ -2230,23 +2230,31 @@ function refreshSetupStep(stepNum) {
     if (btn) btn.disabled = true;
     return;
   }
-  // 順序ガード警告(stepNum > done+1 の場合は前ステップを先に)
-  if (warn) {
-    if (stepNum > done + 1) {
-      warn.innerHTML =
-        '<div class="al al-w" style="max-width:640px;margin:0 auto 14px;align-items:center;">' +
-        '<span style="font-size:16px;">⚠️</span>' +
-        '<div style="flex:1;">' +
-        '<strong>登録順序が違います。</strong><br>' +
-        '初期登録では順番通りの登録が必須です。今は<strong>「' + stepNames[done + 1] + '」</strong>を先に登録してください。' +
-        '</div>' +
-        '<button class="btn btn-p btn-sm" onclick="go(\'' + SETUP_PAGES[done + 1] + '\')" style="margin-left:10px;">' + stepNames[done + 1] + 'へ →</button>' +
-        '</div>';
-    } else {
-      warn.innerHTML = '';
-    }
+  // 順序違反: 警告 + 正しいステップへ誘導
+  if (stepNum > done + 1) {
+    if (warn) warn.innerHTML =
+      '<div class="al al-w" style="max-width:640px;margin:0 auto 14px;align-items:center;">' +
+      '<span style="font-size:16px;">⚠️</span>' +
+      '<div style="flex:1;">' +
+      '<strong>登録順序が違います。</strong><br>' +
+      '初期登録では順番通りの登録が必須です。今は<strong>「' + stepNames[done + 1] + '」</strong>を先に登録してください。' +
+      '</div>' +
+      '<button class="btn btn-p btn-sm" onclick="go(\'' + SETUP_PAGES[done + 1] + '\')" style="margin-left:10px;">' + stepNames[done + 1] + 'へ →</button>' +
+      '</div>';
+    if (btn) btn.disabled = true;
+    return;
   }
-  if (btn) btn.disabled = (stepNum > done + 1);
+  // 通常モード: 進行中バナー(スクショと同形式)
+  if (warn) warn.innerHTML =
+    '<div class="al al-i" style="max-width:640px;margin:0 auto 14px;align-items:center;">' +
+    '<span style="font-size:16px;">📋</span>' +
+    '<div style="flex:1;">' +
+    '<strong>初期セットアップ進行中（' + done + '/4 完了）</strong><br>' +
+    '今は<strong>「' + stepNames[stepNum] + '」</strong>を登録するステップです。「+ 登録する」ボタンから登録してください。' +
+    '</div>' +
+    '<button class="btn btn-s btn-sm" onclick="go(\'b0\')" style="margin-left:10px;">登録ガイドへ戻る</button>' +
+    '</div>';
+  if (btn) btn.disabled = false;
 }
 
 // 運用設定画面: 初期登録未完了時のガード警告
