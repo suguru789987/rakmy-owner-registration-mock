@@ -248,6 +248,18 @@
     .b-step-overlay.act { display: flex; }
     .b-step-modal { background: #fff; border-radius: 12px; max-width: 540px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 16px 48px rgba(0,0,0,0.18); }
 
+    /* 登録成功トースト(B-0へ戻った後に表示) */
+    .b-toast { position: fixed; top: 100px; right: 20px; z-index: 3000; background: #2ec4a5; color: white; padding: 14px 18px; border-radius: 10px; box-shadow: 0 8px 24px rgba(46,196,165,0.35); display: none; max-width: 360px; min-width: 280px; line-height: 1.6; }
+    .b-toast.act { display: block; animation: toastIn 0.35s ease; }
+    @keyframes toastIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+    .b-toast .ttitle { font-weight: 700; font-size: 13px; margin-bottom: 4px; }
+    .b-toast .tnext { font-size: 11px; opacity: 0.95; }
+    .b-toast .tclose { position: absolute; top: 6px; right: 8px; cursor: pointer; opacity: 0.7; font-size: 14px; background: none; border: none; color: #fff; }
+
+    /* B-0 進行中ステップのハイライト強化(戻ってきた時に視認しやすく) */
+    .ow-step.is-pulse .ow-step-num.active { animation: pulseRing 1.5s ease-out 2; }
+    @keyframes pulseRing { 0% { box-shadow: 0 0 0 4px rgba(46,196,165,0.15); } 50% { box-shadow: 0 0 0 12px rgba(46,196,165,0); } 100% { box-shadow: 0 0 0 4px rgba(46,196,165,0.15); } }
+
     /* 紐付き登録支援 (B-0-ADD): タスクセレクター + パターンカード */
     .task-question { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: #333; }
     .task-picker { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 22px; }
@@ -768,6 +780,13 @@
 
 
 <!-- ===== B-STEPモーダル群: 各登録モーダル（ページ遷移ではなくオーバーレイで開く） ===== -->
+
+<!-- 登録成功トースト(全画面共通) -->
+<div class="b-toast" id="b-toast">
+  <button class="tclose" onclick="document.getElementById('b-toast').classList.remove('act');">✕</button>
+  <div class="ttitle" id="b-toast-title">✓ 登録しました</div>
+  <div class="tnext" id="b-toast-next"></div>
+</div>
 
 <!-- ① 業態・ブランド登録モーダル -->
 <div class="b-step-overlay" id="b-step-modal-1">
@@ -1870,7 +1889,7 @@ function b0Go(stepNum) {
   bOpenStep(stepNum);
 }
 
-// モーダル登録ボタン → モーダル閉じる + 進捗+件数更新（ページ遷移なし）
+// モーダル登録ボタン → モーダル閉じる + 進捗+件数更新 + 戻り通知トースト
 function b0CompleteStep(stepNum) {
   var done = b0LoadDone();
   if (done < 4) {
@@ -1887,11 +1906,43 @@ function b0CompleteStep(stepNum) {
   counts[stepNum - 1] = (counts[stepNum - 1] || 0) + 1;
   b0SaveCounts(counts);
   bCloseStep();
-  // 現在B-0系画面が開いている場合は表示を即時更新
+  // B-0画面が開いている場合は即時更新 + 次ステップをパルス強調
   var activePage = document.querySelector('.page.active');
   if (activePage && activePage.id === 'page-b0') {
     b0SetState(b0LoadDone());
+    bPulseNextStep();
   }
+  // 戻り通知トースト表示
+  bShowToast(stepNum);
+}
+
+// 登録成功トースト表示(双方向遷移の戻り側フィードバック)
+function bShowToast(stepNum) {
+  var toast = document.getElementById('b-toast');
+  if (!toast) return;
+  var titleEl = document.getElementById('b-toast-title');
+  var nextEl = document.getElementById('b-toast-next');
+  var stepNames = ['', '業態・ブランド', '店舗', '雇用区分', '従業員'];
+  var done = b0LoadDone();
+  titleEl.textContent = '✓ ' + stepNames[stepNum] + 'を登録しました';
+  if (done < 4) {
+    nextEl.textContent = '次は「' + stepNames[done + 1] + '」を登録しましょう。登録ガイドからアクセスできます。';
+  } else {
+    nextEl.textContent = '🎉 すべての必須登録が完了しました。打刻記録をご利用いただけます。';
+  }
+  toast.classList.add('act');
+  clearTimeout(window.bToastTimer);
+  window.bToastTimer = setTimeout(function(){ toast.classList.remove('act'); }, 5000);
+}
+
+// 戻り後、次のステップカードをパルス強調
+function bPulseNextStep() {
+  var done = b0LoadDone();
+  if (done >= 4) return;
+  var nextStep = document.getElementById('b0-step-' + (done + 1));
+  if (!nextStep) return;
+  nextStep.classList.add('is-pulse');
+  setTimeout(function(){ nextStep.classList.remove('is-pulse'); }, 3500);
 }
 
 /* D-2: 管理者登録モーダル タブ切替 */
