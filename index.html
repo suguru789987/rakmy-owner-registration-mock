@@ -249,12 +249,15 @@
     .b-step-modal { background: #fff; border-radius: 12px; max-width: 540px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 16px 48px rgba(0,0,0,0.18); }
 
     /* 登録成功トースト(B-0へ戻った後に表示) */
-    .b-toast { position: fixed; top: 100px; right: 20px; z-index: 3000; background: #2ec4a5; color: white; padding: 14px 18px; border-radius: 10px; box-shadow: 0 8px 24px rgba(46,196,165,0.35); display: none; max-width: 360px; min-width: 280px; line-height: 1.6; }
+    .b-toast { position: fixed; top: 100px; right: 20px; z-index: 3000; background: #fff; color: #333; padding: 16px 18px; border-radius: 10px; box-shadow: 0 12px 36px rgba(0,0,0,0.18); border: 1px solid #b2ebe0; display: none; max-width: 380px; min-width: 320px; line-height: 1.6; }
     .b-toast.act { display: block; animation: toastIn 0.35s ease; }
     @keyframes toastIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
-    .b-toast .ttitle { font-weight: 700; font-size: 13px; margin-bottom: 4px; }
-    .b-toast .tnext { font-size: 11px; opacity: 0.95; }
-    .b-toast .tclose { position: absolute; top: 6px; right: 8px; cursor: pointer; opacity: 0.7; font-size: 14px; background: none; border: none; color: #fff; }
+    .b-toast .ttitle { font-weight: 700; font-size: 13px; margin-bottom: 4px; color: #1a9e7e; }
+    .b-toast .tnext { font-size: 11px; color: #555; margin-bottom: 12px; }
+    .b-toast .tclose { position: absolute; top: 6px; right: 8px; cursor: pointer; opacity: 0.5; font-size: 14px; background: none; border: none; color: #999; }
+    .b-toast .tclose:hover { opacity: 1; }
+    .b-toast .tactions { display: flex; flex-wrap: wrap; gap: 6px; }
+    .b-toast .tactions .btn { font-size: 11px; padding: 6px 12px; }
 
     /* B-0 進行中ステップのハイライト強化(戻ってきた時に視認しやすく) */
     .ow-step.is-pulse .ow-step-num.active { animation: pulseRing 1.5s ease-out 2; }
@@ -781,11 +784,12 @@
 
 <!-- ===== B-STEPモーダル群: 各登録モーダル（ページ遷移ではなくオーバーレイで開く） ===== -->
 
-<!-- 登録成功トースト(全画面共通) -->
+<!-- 登録成功トースト(全画面共通・アクションCTA付き) -->
 <div class="b-toast" id="b-toast">
-  <button class="tclose" onclick="document.getElementById('b-toast').classList.remove('act');">✕</button>
+  <button class="tclose" onclick="bDismissToast()">✕</button>
   <div class="ttitle" id="b-toast-title">✓ 登録しました</div>
   <div class="tnext" id="b-toast-next"></div>
+  <div class="tactions" id="b-toast-actions"></div>
 </div>
 
 <!-- ① 業態・ブランド登録モーダル -->
@@ -1916,23 +1920,66 @@ function b0CompleteStep(stepNum) {
   bShowToast(stepNum);
 }
 
-// 登録成功トースト表示(双方向遷移の戻り側フィードバック)
+// 登録成功トースト表示(双方向遷移の戻り側フィードバック + 次ステップCTA)
 function bShowToast(stepNum) {
   var toast = document.getElementById('b-toast');
   if (!toast) return;
   var titleEl = document.getElementById('b-toast-title');
   var nextEl = document.getElementById('b-toast-next');
+  var actionsEl = document.getElementById('b-toast-actions');
   var stepNames = ['', '業態・ブランド', '店舗', '雇用区分', '従業員'];
   var done = b0LoadDone();
+  var counts = b0LoadCounts();
   titleEl.textContent = '✓ ' + stepNames[stepNum] + 'を登録しました';
+
+  // 状態に応じてサブメッセージとCTAボタンを動的生成
+  var actions = '';
   if (done < 4) {
-    nextEl.textContent = '次は「' + stepNames[done + 1] + '」を登録しましょう。登録ガイドからアクセスできます。';
+    // 初期設定中: 次の必須ステップへ強誘導
+    nextEl.textContent = '進捗 ' + done + '/4 完了。続けて「' + stepNames[done + 1] + '」を登録しましょう。';
+    actions = '<button class="btn btn-p" onclick="bToastAction(' + (done + 1) + ')">続けて' + stepNames[done + 1] + 'を登録 →</button>' +
+              '<button class="btn btn-s" onclick="bDismissToast()">あとで</button>';
   } else {
+    // 全完了時: 打刻記録への導線
     nextEl.textContent = '🎉 すべての必須登録が完了しました。打刻記録をご利用いただけます。';
+    actions = '<button class="btn btn-p" onclick="bDismissToast();go(\'b0-empty\');">打刻記録を開く →</button>' +
+              '<button class="btn btn-s" onclick="bDismissToast()">閉じる</button>';
+    // 運用時の連鎖CTA（既に完了状態でさらに追加した場合の出店/採用フロー対応）
+    if (stepNum === 1) {
+      // ブランド追加直後 → 店舗追加CTA
+      actions = '<button class="btn btn-p" onclick="bToastAction(2)">続けて店舗を登録 →</button>' +
+                '<button class="btn btn-s" onclick="bDismissToast()">閉じる</button>';
+      nextEl.textContent = '新ブランドを登録しました。続けて店舗・従業員も追加できます。';
+    } else if (stepNum === 2) {
+      // 店舗追加直後 → 従業員追加CTA
+      actions = '<button class="btn btn-p" onclick="bToastAction(4)">この店舗の従業員を登録 →</button>' +
+                '<button class="btn btn-s" onclick="bDismissToast()">閉じる</button>';
+      nextEl.textContent = '新店舗を登録しました。続けて従業員も追加できます。';
+    } else if (stepNum === 3) {
+      // 雇用区分追加直後 → 従業員追加CTA
+      actions = '<button class="btn btn-p" onclick="bToastAction(4)">この区分の従業員を登録 →</button>' +
+                '<button class="btn btn-s" onclick="bDismissToast()">閉じる</button>';
+      nextEl.textContent = '新雇用区分を登録しました。続けてこの区分の従業員も追加できます。';
+    }
   }
+  actionsEl.innerHTML = actions;
   toast.classList.add('act');
   clearTimeout(window.bToastTimer);
-  window.bToastTimer = setTimeout(function(){ toast.classList.remove('act'); }, 5000);
+  // CTA付きなのでやや長め(8秒)に表示
+  window.bToastTimer = setTimeout(function(){ toast.classList.remove('act'); }, 8000);
+}
+
+// トーストCTA: 次のステップモーダルを開く
+function bToastAction(stepNum) {
+  bDismissToast();
+  bOpenStep(stepNum);
+}
+
+// トースト消去(共通)
+function bDismissToast() {
+  var toast = document.getElementById('b-toast');
+  if (toast) toast.classList.remove('act');
+  clearTimeout(window.bToastTimer);
 }
 
 // 戻り後、次のステップカードをパルス強調
