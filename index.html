@@ -288,6 +288,10 @@
     <span class="nav-sep"></span>
     <span class="nav-flow">B 初期設定</span>
     <span class="nav-tab" onclick="go('b0')" id="nav-b0">セットアップガイド</span>
+    <span class="nav-tab" onclick="go('b-step1')" id="nav-b-step1">①業態・ブランド</span>
+    <span class="nav-tab" onclick="go('b-step2')" id="nav-b-step2">②店舗</span>
+    <span class="nav-tab" onclick="go('b-step3')" id="nav-b-step3">③雇用区分</span>
+    <span class="nav-tab" onclick="go('b-step4')" id="nav-b-step4">④従業員</span>
     <span class="nav-tab" onclick="go('b0-empty')" id="nav-b0-empty">打刻記録(未セットアップ)</span>
     <span class="nav-sep"></span>
     <span class="nav-flow">C 従業員</span>
@@ -638,6 +642,140 @@
         </div>
 
         <div class="al al-i" style="margin-top:18px;font-size:10px;"><span>💡</span><div>各ステップは前のステップ完了後にアクティブ化されます。完了後はこのガイドは非表示になり、通常の打刻記録一覧が表示されます。</div></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ===== B-STEP共通: 各ステップの登録画面（登録後にB-0へ戻る） ===== -->
+
+<!-- B-STEP1: 業態・ブランド登録 -->
+<div class="page" id="page-b-step1">
+  <div class="dash">
+    <aside class="sb">
+      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">🚀</span>初期セットアップ</a></div>
+      <div class="sb-sec"><div class="sl">設定</div><a href="#"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#"><span class="ic">🏠</span>店舗情報</a><a href="#" class="act"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a></div>
+      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
+    </aside>
+    <main class="mc">
+      <div style="font-size:11px;color:#888;margin-bottom:6px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 初期セットアップに戻る</a></div>
+      <div class="ph"><h2>① 業態・ブランド登録</h2></div>
+      <p style="font-size:11px;color:#666;margin-bottom:18px;">店舗の業態と運営ブランド名を登録します。</p>
+
+      <div style="background:#fff;border:1px solid #e8e8e8;border-radius:10px;padding:22px 24px;max-width:560px;">
+        <div class="fg">
+          <label>業態 <span class="req">✳</span></label>
+          <select style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+            <option>飲食店</option><option>小売店</option><option>サービス業</option><option>その他</option>
+          </select>
+        </div>
+        <div class="fg"><label>ブランド名 <span class="req">✳</span></label><input value="" placeholder="例: ラクミー食堂" style="max-width:100%;"></div>
+        <div class="fg"><label>ブランドコード</label><input value="" placeholder="例: RKM" style="max-width:100%;"><div class="hint">3〜10文字の英数字。レポートでブランド識別に使用します。</div></div>
+        <div class="btn-grp"><button class="btn btn-s" onclick="go('b0')">キャンセル</button><button class="btn btn-p" onclick="b0CompleteStep(1)">登録してセットアップに戻る →</button></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- B-STEP2: 店舗登録 -->
+<div class="page" id="page-b-step2">
+  <div class="dash">
+    <aside class="sb">
+      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">🚀</span>初期セットアップ</a></div>
+      <div class="sb-sec"><div class="sl">設定</div><a href="#"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#" class="act"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a></div>
+      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
+    </aside>
+    <main class="mc">
+      <div style="font-size:11px;color:#888;margin-bottom:6px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 初期セットアップに戻る</a></div>
+      <div class="ph"><h2>② 店舗登録</h2></div>
+      <p style="font-size:11px;color:#666;margin-bottom:18px;">店舗情報を登録します。複数店舗ある場合は、まず1店舗目を登録してください（追加店舗は後から登録可）。</p>
+
+      <div style="background:#fff;border:1px solid #e8e8e8;border-radius:10px;padding:22px 24px;max-width:560px;">
+        <div class="fg"><label>店舗名 <span class="req">✳</span></label><input value="" placeholder="例: 渋谷店" style="max-width:100%;"></div>
+        <div class="fg">
+          <label>所属ブランド <span class="req">✳</span></label>
+          <select style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+            <option>ラクミー食堂（①で登録したブランド）</option>
+          </select>
+        </div>
+        <div class="fg"><label>住所 <span class="req">✳</span></label><input value="" placeholder="例: 東京都渋谷区..." style="max-width:100%;"></div>
+        <div class="fg"><label>営業時間 <span class="req">✳</span></label>
+          <div class="fr"><div class="fg"><input value="" placeholder="開店 例:11:00"></div><div class="fg"><input value="" placeholder="閉店 例:23:00"></div></div>
+        </div>
+        <div class="btn-grp"><button class="btn btn-s" onclick="go('b0')">キャンセル</button><button class="btn btn-p" onclick="b0CompleteStep(2)">登録してセットアップに戻る →</button></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- B-STEP3: 雇用区分登録 -->
+<div class="page" id="page-b-step3">
+  <div class="dash">
+    <aside class="sb">
+      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">🚀</span>初期セットアップ</a></div>
+      <div class="sb-sec"><div class="sl">設定</div><a href="#"><span class="ic">👤</span>従業員</a><a href="#" class="act"><span class="ic">📋</span>雇用区分</a><a href="#"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a></div>
+      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
+    </aside>
+    <main class="mc">
+      <div style="font-size:11px;color:#888;margin-bottom:6px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 初期セットアップに戻る</a></div>
+      <div class="ph"><h2>③ 雇用区分登録</h2></div>
+      <p style="font-size:11px;color:#666;margin-bottom:18px;">従業員の雇用区分を登録します。1件以上の登録が必須です（後から追加・編集可）。</p>
+
+      <div style="background:#fff;border:1px solid #e8e8e8;border-radius:10px;padding:22px 24px;max-width:560px;">
+        <div class="fg"><label>区分名 <span class="req">✳</span></label><input value="" placeholder="例: 正社員 / アルバイト / 業務委託" style="max-width:100%;"></div>
+        <div class="fg">
+          <label>種別 <span class="req">✳</span></label>
+          <select style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+            <option>正社員</option><option>契約社員</option><option>アルバイト</option><option>業務委託</option><option>その他</option>
+          </select>
+        </div>
+        <div class="fg"><label>時給単位 <span class="req">✳</span></label>
+          <select style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+            <option>時給</option><option>日給</option><option>月給</option>
+          </select>
+        </div>
+        <div class="btn-grp"><button class="btn btn-s" onclick="go('b0')">キャンセル</button><button class="btn btn-p" onclick="b0CompleteStep(3)">登録してセットアップに戻る →</button></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- B-STEP4: 従業員登録 -->
+<div class="page" id="page-b-step4">
+  <div class="dash">
+    <aside class="sb">
+      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">🚀</span>初期セットアップ</a></div>
+      <div class="sb-sec"><div class="sl">設定</div><a href="#" class="act"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a></div>
+      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
+    </aside>
+    <main class="mc">
+      <div style="font-size:11px;color:#888;margin-bottom:6px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 初期セットアップに戻る</a></div>
+      <div class="ph"><h2>④ 従業員登録</h2></div>
+      <p style="font-size:11px;color:#666;margin-bottom:18px;">従業員を登録します。登録と同時に従業員へ招待メール（C-4）が自動送信されます。</p>
+
+      <div style="background:#fff;border:1px solid #e8e8e8;border-radius:10px;padding:22px 24px;max-width:560px;">
+        <div class="fr">
+          <div class="fg"><label>名前 <span class="req">✳</span></label><input value="" placeholder="例: 吉田 七美" style="max-width:100%;"></div>
+          <div class="fg"><label>電話番号 <span class="req">✳</span></label><input value="" placeholder="例: 090-0000-0000" style="max-width:100%;"></div>
+        </div>
+        <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input type="email" value="" placeholder="例: yoshida@example.jp" style="max-width:100%;"><div class="hint">このアドレスに招待メール（72h有効）が送信されます。</div></div>
+        <div class="fr">
+          <div class="fg"><label>雇用区分 <span class="req">✳</span></label>
+            <select style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+              <option>（③で登録した区分から選択）</option>
+            </select>
+          </div>
+          <div class="fg"><label>所属店舗 <span class="req">✳</span></label>
+            <select style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+              <option>（②で登録した店舗から選択）</option>
+            </select>
+          </div>
+        </div>
+        <div class="btn-grp"><button class="btn btn-s" onclick="go('b0')">キャンセル</button><button class="btn btn-p" onclick="b0CompleteStep(4)">登録してセットアップに戻る →</button></div>
       </div>
     </main>
   </div>
@@ -1463,6 +1601,8 @@ function go(id) {
   if (t) t.classList.add('active');
   // d2(管理者登録)を開いた際は初期タブ「新規登録」にリセット
   if (id === 'd2') d2SwitchTab('new');
+  // b0(初期セットアップ)を開いた際は保存済み進捗を反映
+  if (id === 'b0') b0SetState(b0LoadDone());
   // URLハッシュ同期(ディープリンク対応)
   if (location.hash !== '#' + id) {
     history.replaceState(null, '', '#' + id);
@@ -1470,19 +1610,34 @@ function go(id) {
   window.scrollTo(0, 0);
 }
 
-/* B-0: 初期セットアップガイド 状態切替 */
+/* B-0: 初期セットアップガイド 状態管理（双方向遷移対応） */
+// セッション内で進捗を保持（リロード/タブ間でも共有）
+function b0LoadDone() {
+  try { return parseInt(sessionStorage.getItem('b0Done') || '0', 10) || 0; } catch (e) { return 0; }
+}
+function b0SaveDone(n) {
+  try { sessionStorage.setItem('b0Done', String(n)); } catch (e) {}
+}
+
 function b0SetState(doneCount) {
-  // タブ切替UI更新
+  // 範囲ガード
+  if (doneCount < 0) doneCount = 0;
+  if (doneCount > 4) doneCount = 4;
+  b0SaveDone(doneCount);
+  // デモ用 状態切替トグル更新
   for (var i = 0; i <= 4; i++) {
     var tab = document.getElementById('b0-tab-' + i);
     if (tab) tab.classList.toggle('act', i === doneCount);
   }
   // 進捗バー
-  document.getElementById('b0-done-count').textContent = doneCount;
-  document.getElementById('b0-progress-fill').style.width = (doneCount * 25) + '%';
-  // 各ステップ
+  var doneCountEl = document.getElementById('b0-done-count');
+  var fillEl = document.getElementById('b0-progress-fill');
+  if (doneCountEl) doneCountEl.textContent = doneCount;
+  if (fillEl) fillEl.style.width = (doneCount * 25) + '%';
+  // 各ステップの見た目更新
   for (var s = 1; s <= 4; s++) {
     var step = document.getElementById('b0-step-' + s);
+    if (!step) continue;
     var num = step.querySelector('.ow-step-num');
     var badge = step.querySelector('.ow-badge');
     var btn = document.getElementById('b0-btn-' + s);
@@ -1491,42 +1646,49 @@ function b0SetState(doneCount) {
     badge.classList.remove('now','done','lock');
     btn.disabled = false;
     if (s <= doneCount) {
-      // 完了
-      num.classList.add('done');
-      num.textContent = '✓';
-      badge.classList.add('done');
-      badge.textContent = '✓ 完了';
+      // 完了 → 再編集可
+      num.classList.add('done'); num.textContent = '✓';
+      badge.classList.add('done'); badge.textContent = '✓ 完了';
       btn.textContent = '再編集 →';
-      btn.classList.remove('btn-p');
-      btn.classList.add('btn-s');
+      btn.classList.remove('btn-p'); btn.classList.add('btn-s');
       step.classList.add('is-done');
     } else if (s === doneCount + 1) {
-      // 進行中
-      num.classList.add('active');
-      num.textContent = s;
-      badge.classList.add('now');
-      badge.textContent = '進行中';
+      // 進行中（次に登録すべきステップ）
+      num.classList.add('active'); num.textContent = s;
+      badge.classList.add('now'); badge.textContent = '進行中';
       btn.textContent = '登録する →';
-      btn.classList.remove('btn-s');
-      btn.classList.add('btn-p');
+      btn.classList.remove('btn-s'); btn.classList.add('btn-p');
     } else {
       // ロック
-      num.classList.add('locked');
-      num.textContent = s;
-      badge.classList.add('lock');
-      badge.textContent = '🔒 ' + (s - 1) + '完了後';
+      num.classList.add('locked'); num.textContent = s;
+      badge.classList.add('lock'); badge.textContent = '🔒 ' + (s - 1) + '完了後';
       btn.textContent = '登録する →';
-      btn.classList.remove('btn-s');
-      btn.classList.add('btn-p');
+      btn.classList.remove('btn-s'); btn.classList.add('btn-p');
       btn.disabled = true;
       step.classList.add('is-locked');
     }
   }
 }
+
+// B-0 → 各ステップ登録画面へ遷移（双方向: forward）
 function b0Go(stepNum) {
-  // モック上の遷移先(暫定): 1=業態(未実装), 2=店舗(未実装), 3=雇用区分(未実装), 4=従業員登録モーダル
-  if (stepNum === 4) { go('c1'); return; }
-  alert('ステップ' + stepNum + ' の登録画面は別途モック化予定です（業態・ブランド/店舗/雇用区分）');
+  go('b-step' + stepNum);
+}
+
+// 登録画面 → B-0へ戻る（双方向: backward + 進捗更新）
+function b0CompleteStep(stepNum) {
+  var done = b0LoadDone();
+  // 既に完了済みステップの「再編集」の場合は進捗を増やさない
+  if (stepNum > done) {
+    // 順序ガード: 飛び級登録は禁止（通常UIではbtn disabledで阻止しているが念のため）
+    if (stepNum !== done + 1) {
+      alert('前のステップを先に完了してください（現在の次のステップ: ' + (done + 1) + '）');
+      return;
+    }
+    done = stepNum;
+    b0SaveDone(done);
+  }
+  go('b0');
 }
 
 /* D-2: 管理者登録モーダル タブ切替 */
