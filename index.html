@@ -238,6 +238,31 @@
     .ow-state-toggle { display: flex; gap: 6px; margin-bottom: 14px; justify-content: center; }
     .ow-state-toggle .ftab { font-size: 10px; padding: 5px 12px; }
 
+    /* 進捗サマリパネル */
+    .ow-summary { display: flex; gap: 22px; align-items: center; background: linear-gradient(135deg, #f0faf7, #eef0ff); border: 1px solid #b2ebe0; border-radius: 12px; padding: 18px 22px; margin-bottom: 18px; }
+    .ow-ring-wrap { position: relative; width: 76px; height: 76px; flex-shrink: 0; }
+    .ow-ring { width: 76px; height: 76px; transform: rotate(-90deg); }
+    .ow-ring-percent { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; font-weight: 700; color: #1a9e7e; }
+    .ow-ring-percent .num { font-size: 18px; line-height: 1; }
+    .ow-ring-percent .pct { font-size: 9px; opacity: 0.7; }
+    .ow-summary-body { flex: 1; min-width: 0; }
+    .ow-summary-stats { display: flex; gap: 18px; align-items: baseline; margin-bottom: 6px; flex-wrap: wrap; }
+    .ow-summary-stats .stat { font-size: 11px; color: #555; }
+    .ow-summary-stats .stat strong { font-size: 16px; color: #1a9e7e; font-weight: 700; margin-right: 2px; }
+    .ow-summary-stats .stat .total { color: #888; font-size: 13px; }
+    .ow-summary-status { font-size: 12px; color: #1a9e7e; font-weight: 600; line-height: 1.5; }
+    .ow-summary-status.muted { color: #555; font-weight: 500; }
+    /* ステップマーカー: 進捗バー下の1〜4チップ */
+    .ow-step-markers { display: flex; gap: 0; margin-top: 8px; justify-content: space-between; }
+    .ow-step-marker { flex: 1; text-align: center; font-size: 9px; padding: 3px 4px; color: #aaa; border-top: 2px solid transparent; transition: all 0.2s; }
+    .ow-step-marker.done { color: #1a9e7e; border-top-color: #2ec4a5; font-weight: 700; }
+    .ow-step-marker.now { color: #1a9e7e; border-top-color: #2ec4a5; font-weight: 700; }
+    .ow-step-marker .nm { display: block; font-size: 8px; opacity: 0.7; margin-top: 1px; }
+    @media (max-width: 640px) {
+      .ow-summary { flex-direction: column; align-items: stretch; gap: 12px; }
+      .ow-ring-wrap { margin: 0 auto; }
+    }
+
     /* Modal slide tabs (登録方法切替) */
     .mtabs { display: flex; background: #f5f5f5; border-radius: 8px; padding: 3px; margin: 6px 0 16px; position: relative; gap: 0; }
     .mtab { flex: 1; text-align: center; padding: 8px 10px; font-size: 11px; font-weight: 600; color: #888; cursor: pointer; border-radius: 6px; transition: all 0.2s; user-select: none; }
@@ -286,8 +311,8 @@
     <span class="nav-tab" onclick="go('a3')" id="nav-a3">会社登録</span>
     <span class="nav-tab" onclick="go('a4')" id="nav-a4">完了</span>
     <span class="nav-sep"></span>
-    <span class="nav-flow">B 初期設定</span>
-    <span class="nav-tab" onclick="go('b0')" id="nav-b0">セットアップガイド</span>
+    <span class="nav-flow">B 登録ガイド</span>
+    <span class="nav-tab" onclick="go('b0')" id="nav-b0">登録ガイド</span>
     <span class="nav-tab" onclick="go('b-step1')" id="nav-b-step1">①業態・ブランド</span>
     <span class="nav-tab" onclick="go('b-step2')" id="nav-b-step2">②店舗</span>
     <span class="nav-tab" onclick="go('b-step3')" id="nav-b-step3">③雇用区分</span>
@@ -561,13 +586,13 @@
   </div>
 </div>
 
-<!-- ===== B-0: 初期セットアップガイド（独立画面 / 打刻記録から分離） ===== -->
+<!-- ===== B-0: 登録ガイド（独立画面 / 打刻記録から分離） ===== -->
 <div class="page" id="page-b0">
   <div class="dash">
     <aside class="sb">
       <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#" class="act"><span class="ic">🚀</span>初期セットアップ</a></div>
-      <div class="sb-sec"><div class="sl">業務メニュー（セットアップ完了後に利用可）</div>
+      <div class="sb-sec"><a href="#" class="act"><span class="ic">📋</span>登録ガイド</a></div>
+      <div class="sb-sec"><div class="sl">業務メニュー（登録完了後に利用可）</div>
         <a href="#" onclick="go('b0-empty')" style="opacity:0.5;"><span class="ic">⏱</span>打刻記録</a>
         <a href="#" style="opacity:0.5;"><span class="ic">📊</span>勤務時間集計</a>
         <a href="#" style="opacity:0.5;"><span class="ic">💰</span>給与</a>
@@ -578,7 +603,7 @@
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc" style="background:#f8f9fa;">
-      <div class="ph"><h2>初期セットアップ</h2></div>
+      <div class="ph"><h2>登録ガイド</h2></div>
       <p style="font-size:11px;color:#666;margin-bottom:14px;max-width:760px;">タイムレコードのご利用にあたり、以下の必須項目を順番に登録してください。完了するとダッシュボード（打刻記録）が利用可能になります。</p>
 
       <!-- デモ用: 進捗状態切替（モック確認用、本番では不要） -->
@@ -590,16 +615,43 @@
         <span class="ftab" onclick="b0SetState(4)" id="b0-tab-4">全完了</span>
       </div>
 
-      <!-- 順序明示型 セットアップウィザード -->
+      <!-- 順序明示型 登録ガイド ウィザード -->
       <div class="ow-card">
         <div class="ow-head">
           <div>
-            <h3>初期セットアップ（必須）</h3>
+            <h3>登録ガイド（必須）</h3>
             <div style="font-size:11px;color:#888;margin-top:3px;">タイムレコードを利用開始するには、以下の順番で全項目の登録が必要です。</div>
           </div>
-          <div class="ow-progress"><strong id="b0-done-count">0</strong> / 4 完了</div>
         </div>
-        <div class="ow-progress-bar"><div class="ow-progress-fill" id="b0-progress-fill" style="width:0%;"></div></div>
+
+        <!-- 進捗サマリ: 円形リング + 数値統計 + 動的ステータスメッセージ -->
+        <div class="ow-summary">
+          <div class="ow-ring-wrap">
+            <svg class="ow-ring" viewBox="0 0 64 64" width="76" height="76">
+              <circle cx="32" cy="32" r="28" fill="none" stroke="#e8e8e8" stroke-width="6"/>
+              <circle id="b0-ring-fill" cx="32" cy="32" r="28" fill="none" stroke="#2ec4a5" stroke-width="6"
+                      stroke-dasharray="175.93" stroke-dashoffset="175.93" stroke-linecap="round"
+                      style="transition: stroke-dashoffset 0.5s ease;"/>
+            </svg>
+            <div class="ow-ring-percent">
+              <span class="num" id="b0-ring-num">0</span><span class="pct">%</span>
+            </div>
+          </div>
+          <div class="ow-summary-body">
+            <div class="ow-summary-stats">
+              <div class="stat"><strong id="b0-done-count">0</strong><span class="total"> / 4</span> 完了</div>
+              <div class="stat">残り <strong id="b0-remaining">4</strong> 項目</div>
+            </div>
+            <div class="ow-summary-status" id="b0-status-msg">📌 まずは「① 業態・ブランド登録」から始めましょう</div>
+            <div class="ow-progress-bar" style="margin-top:10px;margin-bottom:0;"><div class="ow-progress-fill" id="b0-progress-fill" style="width:0%;"></div></div>
+            <div class="ow-step-markers">
+              <div class="ow-step-marker now" id="b0-mk-1">①<span class="nm">業態</span></div>
+              <div class="ow-step-marker" id="b0-mk-2">②<span class="nm">店舗</span></div>
+              <div class="ow-step-marker" id="b0-mk-3">③<span class="nm">区分</span></div>
+              <div class="ow-step-marker" id="b0-mk-4">④<span class="nm">従業員</span></div>
+            </div>
+          </div>
+        </div>
 
         <!-- ステップ1: 業態・ブランド登録 -->
         <div class="ow-step" id="b0-step-1" data-step="1">
@@ -654,12 +706,12 @@
   <div class="dash">
     <aside class="sb">
       <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">🚀</span>初期セットアップ</a></div>
+      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">📋</span>登録ガイド</a></div>
       <div class="sb-sec"><div class="sl">設定</div><a href="#"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#"><span class="ic">🏠</span>店舗情報</a><a href="#" class="act"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a></div>
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc">
-      <div style="font-size:11px;color:#888;margin-bottom:6px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 初期セットアップに戻る</a></div>
+      <div style="font-size:11px;color:#888;margin-bottom:6px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 登録ガイドに戻る</a></div>
       <div class="ph"><h2>① 業態・ブランド登録</h2></div>
       <p style="font-size:11px;color:#666;margin-bottom:18px;">店舗の業態と運営ブランド名を登録します。</p>
 
@@ -683,12 +735,12 @@
   <div class="dash">
     <aside class="sb">
       <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">🚀</span>初期セットアップ</a></div>
+      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">📋</span>登録ガイド</a></div>
       <div class="sb-sec"><div class="sl">設定</div><a href="#"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#" class="act"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a></div>
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc">
-      <div style="font-size:11px;color:#888;margin-bottom:6px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 初期セットアップに戻る</a></div>
+      <div style="font-size:11px;color:#888;margin-bottom:6px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 登録ガイドに戻る</a></div>
       <div class="ph"><h2>② 店舗登録</h2></div>
       <p style="font-size:11px;color:#666;margin-bottom:18px;">店舗情報を登録します。複数店舗ある場合は、まず1店舗目を登録してください（追加店舗は後から登録可）。</p>
 
@@ -715,12 +767,12 @@
   <div class="dash">
     <aside class="sb">
       <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">🚀</span>初期セットアップ</a></div>
+      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">📋</span>登録ガイド</a></div>
       <div class="sb-sec"><div class="sl">設定</div><a href="#"><span class="ic">👤</span>従業員</a><a href="#" class="act"><span class="ic">📋</span>雇用区分</a><a href="#"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a></div>
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc">
-      <div style="font-size:11px;color:#888;margin-bottom:6px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 初期セットアップに戻る</a></div>
+      <div style="font-size:11px;color:#888;margin-bottom:6px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 登録ガイドに戻る</a></div>
       <div class="ph"><h2>③ 雇用区分登録</h2></div>
       <p style="font-size:11px;color:#666;margin-bottom:18px;">従業員の雇用区分を登録します。1件以上の登録が必須です（後から追加・編集可）。</p>
 
@@ -748,12 +800,12 @@
   <div class="dash">
     <aside class="sb">
       <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">🚀</span>初期セットアップ</a></div>
+      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">📋</span>登録ガイド</a></div>
       <div class="sb-sec"><div class="sl">設定</div><a href="#" class="act"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a></div>
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc">
-      <div style="font-size:11px;color:#888;margin-bottom:6px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 初期セットアップに戻る</a></div>
+      <div style="font-size:11px;color:#888;margin-bottom:6px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 登録ガイドに戻る</a></div>
       <div class="ph"><h2>④ 従業員登録</h2></div>
       <p style="font-size:11px;color:#666;margin-bottom:18px;">従業員を登録します。登録と同時に従業員へ招待メール（C-4）が自動送信されます。</p>
 
@@ -793,11 +845,11 @@
     <main class="mc">
       <div class="ph"><h2>打刻記録</h2></div>
 
-      <!-- 初期セットアップ未完了時のバナー（セットアップ完了したら非表示） -->
+      <!-- 登録ガイド未完了時のバナー（登録完了したら非表示） -->
       <div class="al al-w" style="margin-bottom:16px;max-width:760px;align-items:center;">
         <span style="font-size:18px;">⚠️</span>
         <div style="flex:1;">
-          <strong>初期セットアップが未完了です。</strong><br>
+          <strong>登録ガイドが未完了です。</strong><br>
           打刻記録を表示するには、業態・ブランド / 店舗 / 雇用区分 / 従業員 の登録が必要です。
         </div>
         <button class="btn btn-p btn-sm" onclick="go('b0')" style="margin-left:10px;">セットアップを開く →</button>
@@ -1601,7 +1653,7 @@ function go(id) {
   if (t) t.classList.add('active');
   // d2(管理者登録)を開いた際は初期タブ「新規登録」にリセット
   if (id === 'd2') d2SwitchTab('new');
-  // b0(初期セットアップ)を開いた際は保存済み進捗を反映
+  // b0(登録ガイド)を開いた際は保存済み進捗を反映
   if (id === 'b0') b0SetState(b0LoadDone());
   // URLハッシュ同期(ディープリンク対応)
   if (location.hash !== '#' + id) {
@@ -1610,7 +1662,7 @@ function go(id) {
   window.scrollTo(0, 0);
 }
 
-/* B-0: 初期セットアップガイド 状態管理（双方向遷移対応） */
+/* B-0: 登録ガイド 状態管理（双方向遷移対応） */
 // セッション内で進捗を保持（リロード/タブ間でも共有）
 function b0LoadDone() {
   try { return parseInt(sessionStorage.getItem('b0Done') || '0', 10) || 0; } catch (e) { return 0; }
@@ -1618,6 +1670,17 @@ function b0LoadDone() {
 function b0SaveDone(n) {
   try { sessionStorage.setItem('b0Done', String(n)); } catch (e) {}
 }
+
+// ステップ名 (動的メッセージ用)
+var B0_STEP_NAMES = ['', '業態・ブランド登録', '店舗登録', '雇用区分登録', '従業員登録'];
+// 進捗状態に応じたサブメッセージ
+var B0_STATUS_MSGS = [
+  '📌 まずは「① 業態・ブランド登録」から始めましょう',
+  '🚀 順調なスタート！次は「② 店舗登録」です',
+  '💪 半分完了！次は「③ 雇用区分登録」です',
+  '✨ あとひと息！次は「④ 従業員登録」です',
+  '🎉 すべての登録が完了しました！打刻記録をご利用いただけます'
+];
 
 function b0SetState(doneCount) {
   // 範囲ガード
@@ -1629,11 +1692,34 @@ function b0SetState(doneCount) {
     var tab = document.getElementById('b0-tab-' + i);
     if (tab) tab.classList.toggle('act', i === doneCount);
   }
-  // 進捗バー
+  // 進捗バー / カウンタ / 残り / リング / パーセント
+  var pct = doneCount * 25;
   var doneCountEl = document.getElementById('b0-done-count');
+  var remainEl = document.getElementById('b0-remaining');
   var fillEl = document.getElementById('b0-progress-fill');
+  var ringEl = document.getElementById('b0-ring-fill');
+  var ringNumEl = document.getElementById('b0-ring-num');
+  var statusEl = document.getElementById('b0-status-msg');
   if (doneCountEl) doneCountEl.textContent = doneCount;
-  if (fillEl) fillEl.style.width = (doneCount * 25) + '%';
+  if (remainEl) remainEl.textContent = (4 - doneCount);
+  if (fillEl) fillEl.style.width = pct + '%';
+  if (ringNumEl) ringNumEl.textContent = pct;
+  if (ringEl) {
+    var circumference = 175.93; // 2 * π * 28
+    ringEl.setAttribute('stroke-dashoffset', String(circumference * (1 - doneCount / 4)));
+  }
+  if (statusEl) {
+    statusEl.textContent = B0_STATUS_MSGS[doneCount];
+    statusEl.classList.toggle('muted', doneCount === 4);
+  }
+  // ステップマーカー(①〜④)更新
+  for (var m = 1; m <= 4; m++) {
+    var mk = document.getElementById('b0-mk-' + m);
+    if (!mk) continue;
+    mk.classList.remove('done','now');
+    if (m <= doneCount) mk.classList.add('done');
+    else if (m === doneCount + 1) mk.classList.add('now');
+  }
   // 各ステップの見た目更新
   for (var s = 1; s <= 4; s++) {
     var step = document.getElementById('b0-step-' + s);
