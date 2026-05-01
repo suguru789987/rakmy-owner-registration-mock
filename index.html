@@ -259,6 +259,26 @@
     .b-toast .tactions { display: flex; flex-wrap: wrap; gap: 6px; }
     .b-toast .tactions .btn { font-size: 11px; padding: 6px 12px; }
 
+    /* 紐付き登録 橋渡しモーダル(モーダル上CTAパターン) */
+    .b-bridge-content { text-align: center; padding: 28px 24px 18px; }
+    .b-bridge-icon { width: 56px; height: 56px; border-radius: 50%; background: #e8f8f5; display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 14px; color: #1a9e7e; }
+    .b-bridge-content h3 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .b-bridge-content p { font-size: 12px; color: #555; line-height: 1.7; margin-bottom: 18px; }
+    .b-bridge-content p strong { color: #333; }
+    .b-bridge-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+
+    /* 初期登録後デモページ: 一覧テーブル簡易 */
+    .post-list { background: #fff; border-radius: 10px; padding: 18px 22px; border: 1px solid #e8e8e8; margin-bottom: 18px; }
+    .post-list .ph-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .post-list h4 { font-size: 13px; font-weight: 700; }
+    .post-list .pl-row { display: flex; padding: 8px 4px; border-top: 1px solid #f0f0f0; font-size: 11px; }
+    .post-list .pl-row:first-of-type { border-top: 1px solid #eee; }
+    .post-list .pl-row .nm { flex: 1; font-weight: 600; }
+    .post-list .pl-row .meta { color: #888; font-size: 10px; }
+
+    .pattern-toggle { display: flex; gap: 8px; margin-bottom: 14px; align-items: center; flex-wrap: wrap; }
+    .pattern-toggle .ftab { font-size: 10px; padding: 6px 14px; cursor: pointer; }
+
     /* B-0 進行中ステップのハイライト強化(戻ってきた時に視認しやすく) */
     .ow-step.is-pulse .ow-step-num.active { animation: pulseRing 1.5s ease-out 2; }
     @keyframes pulseRing { 0% { box-shadow: 0 0 0 4px rgba(46,196,165,0.15); } 50% { box-shadow: 0 0 0 12px rgba(46,196,165,0); } 100% { box-shadow: 0 0 0 4px rgba(46,196,165,0.15); } }
@@ -386,6 +406,7 @@
     <span class="nav-sep"></span>
     <span class="nav-flow">B 登録ガイド</span>
     <span class="nav-tab" onclick="go('b0')" id="nav-b0">登録ガイド(初期登録)</span>
+    <span class="nav-tab" onclick="go('b0-after')" id="nav-b0-after">登録ガイド(初期登録後)</span>
     <span class="nav-tab" onclick="bOpenStep(1)" style="background:rgba(46,196,165,0.15);">[M] 業態モーダル</span>
     <span class="nav-tab" onclick="bOpenStep(2)" style="background:rgba(46,196,165,0.15);">[M] 店舗モーダル</span>
     <span class="nav-tab" onclick="bOpenStep(3)" style="background:rgba(46,196,165,0.15);">[M] 雇用区分モーダル</span>
@@ -783,6 +804,77 @@
 
 
 <!-- ===== B-STEPモーダル群: 各登録モーダル（ページ遷移ではなくオーバーレイで開く） ===== -->
+
+<!-- ===== B-0-AFTER: 初期登録後の追加登録デモ（順番に縛られない運用シナリオ） ===== -->
+<div class="page" id="page-b0-after">
+  <div class="dash">
+    <aside class="sb">
+      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+      <div class="sb-sec"><a href="#"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📥</span>エクスポート</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
+      <div class="sb-sec"><div class="sl">設定</div><a href="#" class="act"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#"><span class="ic">👤</span>従業員</a><a href="#" onclick="go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a><a href="#"><span class="ic">🔗</span>外部連携</a></div>
+      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
+    </aside>
+    <main class="mc" style="background:#f8f9fa;">
+      <div class="ph"><h2>設定 - 店舗情報</h2></div>
+      <p style="font-size:11px;color:#666;margin-bottom:14px;max-width:760px;">
+        ※このページは<strong>初期登録完了後の運用シナリオ</strong>のデモです。順番に縛られず、必要な項目のみを追加するケース（新店舗オープン、新メンバー採用など）の挙動を確認できます。
+      </p>
+
+      <!-- パターン切替 -->
+      <div class="pattern-toggle">
+        <span style="font-size:11px;font-weight:600;color:#555;margin-right:6px;">紐付きCTA表示位置:</span>
+        <span class="ftab act" id="afterTab-bridge" onclick="bAfterSetMode('bridge')">モーダル上で確認（橋渡しモーダル）</span>
+        <span class="ftab" id="afterTab-toast" onclick="bAfterSetMode('toast')">画面右上にトースト</span>
+      </div>
+
+      <!-- 店舗一覧（既登録3件） -->
+      <div class="post-list">
+        <div class="ph-row">
+          <h4>🏠 店舗一覧（3件）</h4>
+          <button class="btn btn-p btn-sm" onclick="bAfterAdd(2)">+ 店舗を追加</button>
+        </div>
+        <div class="pl-row"><div class="nm">渋谷店</div><div class="meta">ラクミー食堂 / 11:00-23:00</div></div>
+        <div class="pl-row"><div class="nm">新宿店</div><div class="meta">ラクミー食堂 / 11:00-23:00</div></div>
+        <div class="pl-row"><div class="nm">池袋店</div><div class="meta">ラクミー食堂 / 11:00-22:00</div></div>
+      </div>
+
+      <!-- 雇用区分一覧（既登録4件） -->
+      <div class="post-list">
+        <div class="ph-row">
+          <h4>📋 雇用区分一覧（4件）</h4>
+          <button class="btn btn-p btn-sm" onclick="bAfterAdd(3)">+ 雇用区分を追加</button>
+        </div>
+        <div class="pl-row"><div class="nm">正社員</div><div class="meta">月給</div></div>
+        <div class="pl-row"><div class="nm">契約社員</div><div class="meta">月給</div></div>
+        <div class="pl-row"><div class="nm">アルバイト</div><div class="meta">時給</div></div>
+        <div class="pl-row"><div class="nm">業務委託</div><div class="meta">日給</div></div>
+      </div>
+
+      <!-- 業態・ブランド・従業員のクイック追加 -->
+      <div class="post-list">
+        <div class="ph-row"><h4>🏷 業態・ブランド（1件） / 👤 従業員（25件）</h4></div>
+        <div style="display:flex;gap:8px;padding:8px 4px;">
+          <button class="btn btn-s btn-sm" onclick="bAfterAdd(1)">+ ブランドを追加</button>
+          <button class="btn btn-s btn-sm" onclick="bAfterAdd(4)">+ 従業員を追加</button>
+        </div>
+      </div>
+
+      <div class="al al-i" style="margin-top:14px;font-size:10px;max-width:760px;"><span>💡</span><div>各「+ 追加」ボタンを押すとモーダルが開きます。登録完了後、選択中の「紐付きCTA表示位置」によってフィードバック方法が切り替わります。</div></div>
+    </main>
+  </div>
+</div>
+
+<!-- ===== 橋渡しモーダル: 登録完了後にモーダル上で次の追加を訴求するパターン ===== -->
+<div class="b-step-overlay" id="b-bridge-overlay">
+  <div class="b-step-modal" style="max-width:440px;">
+    <div class="b-bridge-content">
+      <div class="b-bridge-icon">✓</div>
+      <h3 id="b-bridge-title">登録しました</h3>
+      <p id="b-bridge-text">続けて関連項目も登録しますか？</p>
+      <div class="b-bridge-actions" id="b-bridge-actions"></div>
+    </div>
+  </div>
+</div>
 
 <!-- 登録成功トースト(全画面共通・アクションCTA付き) -->
 <div class="b-toast" id="b-toast">
@@ -1893,7 +1985,7 @@ function b0Go(stepNum) {
   bOpenStep(stepNum);
 }
 
-// モーダル登録ボタン → モーダル閉じる + 進捗+件数更新 + 戻り通知トースト
+// モーダル登録ボタン → モーダル閉じる + 進捗+件数更新 + 戻り通知
 function b0CompleteStep(stepNum) {
   var done = b0LoadDone();
   if (done < 4) {
@@ -1912,12 +2004,77 @@ function b0CompleteStep(stepNum) {
   bCloseStep();
   // B-0画面が開いている場合は即時更新 + 次ステップをパルス強調
   var activePage = document.querySelector('.page.active');
-  if (activePage && activePage.id === 'page-b0') {
+  var pageId = activePage ? activePage.id : '';
+  if (pageId === 'page-b0') {
     b0SetState(b0LoadDone());
     bPulseNextStep();
+    bShowToast(stepNum); // 初期登録モードは軽量通知
+    return;
   }
-  // 戻り通知トースト表示
+  // 初期登録後デモ(b0-after): 選択モードに応じて切替
+  if (pageId === 'page-b0-after') {
+    var mode = window.bAfterMode || 'bridge';
+    if (mode === 'bridge') {
+      bShowBridgeModal(stepNum);
+    } else {
+      bShowToast(stepNum);
+    }
+    return;
+  }
+  // それ以外(各種ページ): 既存トースト
   bShowToast(stepNum);
+}
+
+// 初期登録後デモ: パターン切替
+window.bAfterMode = 'bridge';
+function bAfterSetMode(mode) {
+  window.bAfterMode = mode;
+  var t1 = document.getElementById('afterTab-bridge');
+  var t2 = document.getElementById('afterTab-toast');
+  if (t1) t1.classList.toggle('act', mode === 'bridge');
+  if (t2) t2.classList.toggle('act', mode === 'toast');
+}
+
+// 初期登録後デモ: 「+ 追加」ボタンから対応モーダルを開く
+function bAfterAdd(stepNum) {
+  bOpenStep(stepNum);
+}
+
+// 橋渡しモーダル: 登録完了直後にモーダル上で次の追加CTAを表示
+function bShowBridgeModal(stepNum) {
+  var stepNames = ['', '業態・ブランド', '店舗', '雇用区分', '従業員'];
+  var titleEl = document.getElementById('b-bridge-title');
+  var textEl = document.getElementById('b-bridge-text');
+  var actEl = document.getElementById('b-bridge-actions');
+  titleEl.textContent = '✓ ' + stepNames[stepNum] + 'を登録しました';
+  var text = '';
+  var actions = '';
+  if (stepNum === 1) {
+    text = '新しい<strong>ブランド</strong>を登録しました。<br>続けて、このブランドの<strong>店舗</strong>も登録しますか？';
+    actions = '<button class="btn btn-p" onclick="bBridgeProceed(2)">店舗の登録に進む →</button>' +
+              '<button class="btn btn-s" onclick="bBridgeDismiss()">あとで</button>';
+  } else if (stepNum === 2) {
+    text = '新しい<strong>店舗</strong>を登録しました。<br>続けて、この店舗の<strong>従業員</strong>も登録しますか？';
+    actions = '<button class="btn btn-p" onclick="bBridgeProceed(4)">従業員の登録に進む →</button>' +
+              '<button class="btn btn-s" onclick="bBridgeDismiss()">あとで</button>';
+  } else if (stepNum === 3) {
+    text = '新しい<strong>雇用区分</strong>を登録しました。<br>続けて、この区分の<strong>従業員</strong>も登録しますか？';
+    actions = '<button class="btn btn-p" onclick="bBridgeProceed(4)">従業員の登録に進む →</button>' +
+              '<button class="btn btn-s" onclick="bBridgeDismiss()">あとで</button>';
+  } else {
+    text = '新しい<strong>従業員</strong>を登録しました。<br>招待メールを送信しています。';
+    actions = '<button class="btn btn-p" onclick="bBridgeDismiss()">完了</button>';
+  }
+  textEl.innerHTML = text;
+  actEl.innerHTML = actions;
+  document.getElementById('b-bridge-overlay').classList.add('act');
+}
+function bBridgeProceed(nextStep) {
+  document.getElementById('b-bridge-overlay').classList.remove('act');
+  bOpenStep(nextStep);
+}
+function bBridgeDismiss() {
+  document.getElementById('b-bridge-overlay').classList.remove('act');
 }
 
 // 登録成功トースト: 文脈別の出し分け
