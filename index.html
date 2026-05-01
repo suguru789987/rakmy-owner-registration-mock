@@ -1029,8 +1029,6 @@
   <div class="b-step-modal">
     <div class="mh"><h3>店舗を登録</h3><button class="mx" onclick="bCloseStep()">✕</button></div>
     <div class="mb" id="b-step-mb-2">
-      <!-- 前提充足チェックメッセージ(JSで動的生成) -->
-      <div id="b-step-warn-2"></div>
       <div class="fg"><label>店舗名 <span class="req">✳</span></label><input value="" placeholder="例: 渋谷店" style="max-width:100%;"></div>
       <div class="fg">
         <label>所属ブランド <span class="req">✳</span></label>
@@ -1075,8 +1073,6 @@
   <div class="b-step-modal">
     <div class="mh"><h3>従業員を登録</h3><button class="mx" onclick="bCloseStep()">✕</button></div>
     <div class="mb" id="b-step-mb-4">
-      <!-- 前提充足チェックメッセージ(JSで動的生成) -->
-      <div id="b-step-warn-4"></div>
       <div class="fr">
         <div class="fg"><label>名前 <span class="req">✳</span></label><input value="" placeholder="例: 吉田 七美" style="max-width:100%;"></div>
         <div class="fg"><label>電話番号 <span class="req">✳</span></label><input value="" placeholder="例: 090-0000-0000" style="max-width:100%;"></div>
@@ -2084,41 +2080,11 @@ function b0SetState(doneCount) {
   }
 }
 
-// B-STEPモーダル: 開閉
+// B-STEPモーダル: 開閉(モーダルは純粋な登録フォームのみ、警告類はCTAモーダル側で扱う)
 function bOpenStep(stepNum) {
   document.querySelectorAll('.b-step-overlay').forEach(function(o){ o.classList.remove('act'); });
-  bRefreshPrereq(stepNum);
   var ov = document.getElementById('b-step-modal-' + stepNum);
   if (ov) ov.classList.add('act');
-}
-
-// 前提充足チェック表示(分かりやすい言い回し)
-function bRefreshPrereq(stepNum) {
-  var counts = b0LoadCounts();
-  var warn = '';
-  // ② 店舗: ① ブランドが必要
-  if (stepNum === 2) {
-    if ((counts[0] || 0) < 1) {
-      warn = '<div class="al al-w" style="margin-bottom:14px;font-size:11px;align-items:center;"><span style="font-size:16px;">⚠️</span><div style="flex:1;"><strong>ブランドが未登録です。</strong><br>店舗を登録するには、先に「業態・ブランド」の登録が必要です。</div><button class="btn btn-p btn-sm" onclick="bOpenStep(1)" style="margin-left:10px;">ブランドを登録 →</button></div>';
-    }
-  }
-  // ④ 従業員: ② 店舗 + ③ 雇用区分
-  if (stepNum === 4) {
-    var ok2 = (counts[1] || 0) >= 1;
-    var ok3 = (counts[2] || 0) >= 1;
-    if (!ok2 || !ok3) {
-      var missing = [];
-      if (!ok2) missing.push('「店舗」');
-      if (!ok3) missing.push('「雇用区分」');
-      warn = '<div class="al al-w" style="margin-bottom:14px;font-size:11px;"><span style="font-size:16px;">⚠️</span><div style="flex:1;"><strong>' + missing.join('と') + 'が未登録です。</strong><br>従業員を登録するには、先に' + missing.join('と') + 'の登録が必要です。</div></div>';
-      warn += '<div style="display:flex;gap:8px;margin-bottom:14px;">';
-      if (!ok2) warn += '<button class="btn btn-p btn-sm" onclick="bOpenStep(2)">店舗を登録 →</button>';
-      if (!ok3) warn += '<button class="btn btn-p btn-sm" onclick="bOpenStep(3)">雇用区分を登録 →</button>';
-      warn += '</div>';
-    }
-  }
-  var box = document.getElementById('b-step-warn-' + stepNum);
-  if (box) box.innerHTML = warn;
 }
 function bCloseStep() {
   document.querySelectorAll('.b-step-overlay').forEach(function(o){ o.classList.remove('act'); });
