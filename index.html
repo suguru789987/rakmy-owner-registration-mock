@@ -204,6 +204,18 @@
     .ph h2 { margin-bottom: 0; }
     .acts { background: none; border: 1px solid #ddd; border-radius: 4px; padding: 3px 7px; cursor: pointer; font-size: 12px; color: #888; }
 
+    /* Modal slide tabs (登録方法切替) */
+    .mtabs { display: flex; background: #f5f5f5; border-radius: 8px; padding: 3px; margin: 6px 0 16px; position: relative; gap: 0; }
+    .mtab { flex: 1; text-align: center; padding: 8px 10px; font-size: 11px; font-weight: 600; color: #888; cursor: pointer; border-radius: 6px; transition: all 0.2s; user-select: none; }
+    .mtab:hover { color: #555; }
+    .mtab.act { background: #fff; color: #1a9e7e; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .mtab-panel { display: none; }
+    .mtab-panel.act { display: block; }
+    .emp-pick { background: #f8f9fa; border: 1px dashed #cfd5dc; border-radius: 7px; padding: 10px 12px; margin-bottom: 12px; font-size: 11px; color: #555; }
+    .emp-pick .il { display: inline-block; min-width: 64px; color: #999; }
+    .emp-pick .ev { color: #333; font-weight: 600; }
+    .ro-input { background: #f8f9fa !important; color: #555 !important; cursor: not-allowed; }
+
     /* Store filter tabs */
     .filter-tabs { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
     .ftab { padding: 6px 14px; font-size: 11px; font-weight: 600; border-radius: 20px; cursor: pointer; border: 1px solid #e8e8e8; background: #fff; color: #666; transition: all 0.2s; }
@@ -250,6 +262,7 @@
     <span class="nav-sep"></span>
     <span class="nav-flow">D 管理者</span>
     <span class="nav-tab" onclick="go('d1')" id="nav-d1">管理者一覧</span>
+    <span class="nav-tab" onclick="go('d2')" id="nav-d2">管理者登録</span>
     <span class="nav-tab" onclick="go('d1e')" id="nav-d1e">管理者編集</span>
     <span class="nav-sep"></span>
     <span class="nav-flow">E PW</span>
@@ -905,6 +918,97 @@
   </div>
 </div>
 
+<!-- ===== D-2: 管理者登録モーダル（タブ切替: 新規登録 / 従業員から選択） ===== -->
+<div class="page" id="page-d2">
+  <div class="dash">
+    <aside class="sb">
+      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+      <div class="sb-sec"><div class="sl">設定</div><a href="#" onclick="go('c1')"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">🏠</span>店舗情報</a><a href="#" class="act" onclick="go('d1')"><span class="ic">👥</span>管理者</a></div>
+      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
+    </aside>
+    <main class="mc">
+      <div class="ph"><h2>管理者一覧</h2></div>
+      <div class="mo">
+        <div class="modal">
+          <div class="mh"><h3>管理者を登録</h3><button class="mx" onclick="go('d1')">✕</button></div>
+          <div class="mb">
+
+            <!-- スライドタブ: 登録方法切替 -->
+            <div class="mtabs" id="d2-tabs">
+              <div class="mtab act" data-mtab="new" onclick="d2SwitchTab('new')">新規登録</div>
+              <div class="mtab" data-mtab="emp" onclick="d2SwitchTab('emp')">従業員から選択</div>
+            </div>
+
+            <!-- パネル1: 新規登録（従来仕様） -->
+            <div class="mtab-panel act" id="d2-panel-new">
+              <div class="al al-i" style="margin-bottom:14px;"><span>💡</span><div>従業員台帳には登録されていない方を、管理者として直接追加します。登録後、初期パスワードはオーナーが管理者へ口頭/チャット等で共有してください。</div></div>
+              <div class="fg"><label>名前 <span class="req">✳</span></label><input id="d2-new-name" value="" placeholder="例: 鈴木 花子" style="max-width:100%;"></div>
+              <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input id="d2-new-email" type="email" value="" placeholder="例: suzuki@example.jp" style="max-width:100%;"></div>
+
+              <div class="dv" style="margin:14px 0;"></div>
+
+              <div class="fg">
+                <label>担当店舗 <span class="req">✳</span></label>
+                <div class="store-chk-grid">
+                  <label class="store-chk"><input type="checkbox"> 渋谷店</label>
+                  <label class="store-chk"><input type="checkbox"> 新宿店</label>
+                  <label class="store-chk"><input type="checkbox"> 池袋店</label>
+                  <label class="store-chk"><input type="checkbox"> 北海道支店</label>
+                </div>
+                <div class="hint" style="margin-top:6px;">担当店舗の従業員管理・勤怠管理が可能になります</div>
+              </div>
+            </div>
+
+            <!-- パネル2: 従業員から選択 -->
+            <div class="mtab-panel" id="d2-panel-emp">
+              <div class="al al-i" style="margin-bottom:14px;"><span>💡</span><div>既に従業員台帳に登録済みの方を、管理者として追加します。氏名を選択するとメールアドレスが自動入力されます（従業員台帳の値を参照）。</div></div>
+
+              <div class="fg">
+                <label>従業員を選択 <span class="req">✳</span></label>
+                <select id="d2-emp-select" onchange="d2OnEmpSelect()" style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+                  <option value="">-- 従業員を選択してください --</option>
+                  <option value="emp-001" data-email="nishikata+test2@example.com" data-store="渋谷店" data-type="業務委託">test（業務委託 / 渋谷店）</option>
+                  <option value="emp-002" data-email="nishikata+test@wshoulder.com" data-store="渋谷店" data-type="代表取締役">TEST TARO（代表取締役 / 渋谷店）</option>
+                  <option value="emp-003" data-email="employee02@example.com" data-store="新宿店" data-type="バイトさん">岩田（バイトさん / 新宿店）</option>
+                  <option value="emp-004" data-email="employee03@example.com" data-store="池袋店" data-type="業務委託">佐々木（業務委託 / 池袋店）</option>
+                  <option value="emp-005" data-email="manager01@example.com" data-store="池袋店" data-type="業務委託">にしかた（業務委託 / 池袋店）</option>
+                  <option value="emp-006" data-email="takahashi@example.jp" data-store="渋谷店" data-type="バイトさん">高橋 三郎（バイトさん / 渋谷店）</option>
+                </select>
+                <div class="hint" style="margin-top:6px;">従業員一覧に登録済みのユーザーから選択できます</div>
+              </div>
+
+              <!-- 選択された従業員の情報サマリ -->
+              <div class="emp-pick" id="d2-emp-summary" style="display:none;">
+                <div class="ir"><span class="il">名前</span><span class="ev" id="d2-emp-name">-</span></div>
+                <div class="ir"><span class="il">雇用区分</span><span class="ev" id="d2-emp-type">-</span></div>
+                <div class="ir"><span class="il">所属店舗</span><span class="ev" id="d2-emp-store">-</span></div>
+              </div>
+
+              <div class="fg"><label>メールアドレス（従業員台帳より自動入力）</label><input id="d2-emp-email" class="ro-input" value="" readonly placeholder="従業員を選択すると自動入力されます" style="max-width:100%;"></div>
+
+              <div class="dv" style="margin:14px 0;"></div>
+
+              <div class="fg">
+                <label>担当店舗 <span class="req">✳</span></label>
+                <div class="store-chk-grid" id="d2-emp-stores">
+                  <label class="store-chk"><input type="checkbox"> 渋谷店</label>
+                  <label class="store-chk"><input type="checkbox"> 新宿店</label>
+                  <label class="store-chk"><input type="checkbox"> 池袋店</label>
+                  <label class="store-chk"><input type="checkbox"> 北海道支店</label>
+                </div>
+                <div class="hint" style="margin-top:6px;">所属店舗が初期選択されます。必要に応じて他店舗も追加可能です。</div>
+              </div>
+            </div>
+
+            <div class="al al-i"><span>💡</span><div>管理者がパスワードを忘れた場合は、ログイン画面の「パスワードを忘れた」から自分でリセットできます。</div></div>
+            <div class="btn-grp"><button class="btn btn-s" onclick="go('d1')">キャンセル</button><button class="btn btn-p" onclick="go('d1')">登録</button></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
 <!-- ===== D-1E: 管理者編集モーダル ===== -->
 <div class="page" id="page-d1e">
   <div class="dash">
@@ -1138,11 +1242,53 @@ function go(id) {
   target.classList.add('active');
   var t = document.getElementById('nav-' + id);
   if (t) t.classList.add('active');
+  // d2(管理者登録)を開いた際は初期タブ「新規登録」にリセット
+  if (id === 'd2') d2SwitchTab('new');
   // URLハッシュ同期(ディープリンク対応)
   if (location.hash !== '#' + id) {
     history.replaceState(null, '', '#' + id);
   }
   window.scrollTo(0, 0);
+}
+
+/* D-2: 管理者登録モーダル タブ切替 */
+function d2SwitchTab(which) {
+  document.querySelectorAll('#d2-tabs .mtab').forEach(function(el) {
+    el.classList.toggle('act', el.getAttribute('data-mtab') === which);
+  });
+  var pNew = document.getElementById('d2-panel-new');
+  var pEmp = document.getElementById('d2-panel-emp');
+  if (pNew) pNew.classList.toggle('act', which === 'new');
+  if (pEmp) pEmp.classList.toggle('act', which === 'emp');
+}
+
+/* D-2: 従業員選択時にメール/雇用区分/店舗を自動表示 */
+function d2OnEmpSelect() {
+  var sel = document.getElementById('d2-emp-select');
+  var opt = sel.options[sel.selectedIndex];
+  var summary = document.getElementById('d2-emp-summary');
+  var emailEl = document.getElementById('d2-emp-email');
+  if (!opt || !opt.value) {
+    summary.style.display = 'none';
+    emailEl.value = '';
+    // 担当店舗チェックを全解除
+    document.querySelectorAll('#d2-emp-stores input[type="checkbox"]').forEach(function(cb){ cb.checked = false; });
+    return;
+  }
+  var email = opt.getAttribute('data-email') || '';
+  var store = opt.getAttribute('data-store') || '';
+  var empType = opt.getAttribute('data-type') || '';
+  var name = opt.textContent.split('（')[0];
+  document.getElementById('d2-emp-name').textContent = name;
+  document.getElementById('d2-emp-type').textContent = empType;
+  document.getElementById('d2-emp-store').textContent = store;
+  summary.style.display = 'block';
+  emailEl.value = email;
+  // 所属店舗を初期選択
+  document.querySelectorAll('#d2-emp-stores .store-chk').forEach(function(label){
+    var cb = label.querySelector('input[type="checkbox"]');
+    cb.checked = (label.textContent.trim() === store);
+  });
 }
 // 起動時: URLハッシュがあれば該当画面へ
 window.addEventListener('DOMContentLoaded', function() {
