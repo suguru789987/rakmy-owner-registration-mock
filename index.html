@@ -320,7 +320,8 @@
     <span class="nav-tab" onclick="go('a4')" id="nav-a4">完了</span>
     <span class="nav-sep"></span>
     <span class="nav-flow">B 登録ガイド</span>
-    <span class="nav-tab" onclick="go('b0')" id="nav-b0">登録ガイド</span>
+    <span class="nav-tab" onclick="go('b0')" id="nav-b0">登録ガイド(初期登録)</span>
+    <span class="nav-tab" onclick="go('b0-ops')" id="nav-b0-ops">登録ガイド(運用モード)</span>
     <span class="nav-tab" onclick="go('b-step1')" id="nav-b-step1">①業態・ブランド</span>
     <span class="nav-tab" onclick="go('b-step2')" id="nav-b-step2">②店舗</span>
     <span class="nav-tab" onclick="go('b-step3')" id="nav-b-step3">③雇用区分</span>
@@ -712,6 +713,110 @@
 
         <div class="al al-i" style="margin-top:18px;font-size:10px;" id="b0-card-tip"><span>💡</span><div>各ステップは前のステップ完了後にアクティブ化されます。すべて登録完了後も、新規追加の際はこのガイドから前提登録を確認できます。</div></div>
       </div>
+    </main>
+  </div>
+</div>
+
+<!-- ===== B-0-OPS: 登録ガイド 運用モード専用ビュー（初期登録完了後の参照画面） ===== -->
+<div class="page" id="page-b0-ops">
+  <div class="dash">
+    <aside class="sb">
+      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+      <div class="sb-sec"><a href="#"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📥</span>エクスポート</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
+      <div class="sb-sec"><a href="#" class="act"><span class="ic">📋</span>登録ガイド</a></div>
+      <div class="sb-sec"><div class="sl">設定</div><a href="#"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a><a href="#"><span class="ic">🔗</span>外部連携</a></div>
+      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
+    </aside>
+    <main class="mc" style="background:#f8f9fa;">
+      <div class="ph"><h2>登録ガイド（運用モード）</h2></div>
+      <p style="font-size:11px;color:#666;margin-bottom:14px;max-width:760px;">初期登録は完了しています。新規の店舗・雇用区分・従業員などを追加する際は、以下から前提登録（紐付け先）を確認のうえ追加してください。</p>
+
+      <div class="ow-card">
+        <div class="ow-head">
+          <div>
+            <h3>新規追加ガイド</h3>
+            <div style="font-size:11px;color:#888;margin-top:3px;">各項目の「前提登録」を確認のうえ、新規追加してください。</div>
+          </div>
+        </div>
+
+        <!-- 完了サマリ -->
+        <div class="ow-summary">
+          <div class="ow-ring-wrap">
+            <svg class="ow-ring" viewBox="0 0 64 64" width="76" height="76">
+              <circle cx="32" cy="32" r="28" fill="none" stroke="#e8e8e8" stroke-width="6"/>
+              <circle cx="32" cy="32" r="28" fill="none" stroke="#2ec4a5" stroke-width="6"
+                      stroke-dasharray="175.93" stroke-dashoffset="0" stroke-linecap="round"/>
+            </svg>
+            <div class="ow-ring-percent"><span class="num">100</span><span class="pct">%</span></div>
+          </div>
+          <div class="ow-summary-body">
+            <div class="ow-summary-stats">
+              <div class="stat"><strong>4</strong><span class="total"> / 4</span> 完了</div>
+              <div class="stat" style="color:#1a9e7e;font-weight:600;">✓ 初期登録 完了済み</div>
+            </div>
+            <div class="ow-summary-status muted">✓ 必要な4項目はすべて登録済み。新規追加は下のカードから（前提登録の充足状況も併せてご確認ください）</div>
+            <div class="ow-progress-bar" style="margin-top:10px;margin-bottom:0;"><div class="ow-progress-fill" style="width:100%;"></div></div>
+            <div class="ow-step-markers">
+              <div class="ow-step-marker done">①<span class="nm">業態</span></div>
+              <div class="ow-step-marker done">②<span class="nm">店舗</span></div>
+              <div class="ow-step-marker done">③<span class="nm">区分</span></div>
+              <div class="ow-step-marker done">④<span class="nm">従業員</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ① 業態・ブランド -->
+        <div class="ow-step is-done" data-step="1">
+          <div class="ow-step-num done">✓</div>
+          <div class="ow-step-body">
+            <div class="ow-step-title">業態・ブランド <span class="ow-badge done">✓ 追加可能</span></div>
+            <div class="ow-step-desc">店舗の業態と運営ブランド名を追加できます。複数ブランド運営時は事業ブランドごとに登録します。</div>
+            <div class="ow-step-deps"><span class="deps-label">前提登録:</span><span class="dep-none">なし（独立して追加可能）</span></div>
+            <div class="ow-step-meta">登録済み: 1 件 ・ <span style="color:#888;font-weight:500;">サンプル: ラクミー食堂</span></div>
+          </div>
+          <div class="ow-step-action"><button class="btn btn-p btn-sm" onclick="b0Go(1)">+ ブランドを追加</button></div>
+        </div>
+
+        <!-- ② 店舗 -->
+        <div class="ow-step is-done" data-step="2">
+          <div class="ow-step-num done">✓</div>
+          <div class="ow-step-body">
+            <div class="ow-step-title">店舗 <span class="ow-badge done">✓ 追加可能</span></div>
+            <div class="ow-step-desc">新規店舗を追加します。所属ブランドへの紐付けが必須です。</div>
+            <div class="ow-step-deps"><span class="deps-label">前提登録:</span><span class="dep-chip">① 業態・ブランド</span></div>
+            <div class="ow-step-meta">登録済み: 3 件 ・ <span style="color:#888;font-weight:500;">サンプル: 渋谷店, 新宿店, 池袋店</span></div>
+          </div>
+          <div class="ow-step-action"><button class="btn btn-p btn-sm" onclick="b0Go(2)">+ 店舗を追加</button></div>
+        </div>
+
+        <!-- ③ 雇用区分 -->
+        <div class="ow-step is-done" data-step="3">
+          <div class="ow-step-num done">✓</div>
+          <div class="ow-step-body">
+            <div class="ow-step-title">雇用区分 <span class="ow-badge done">✓ 追加可能</span></div>
+            <div class="ow-step-desc">新しい雇用区分を追加します。区分の種別と時給単位を設定します。</div>
+            <div class="ow-step-deps"><span class="deps-label">前提登録:</span><span class="dep-none">なし（独立して追加可能）</span></div>
+            <div class="ow-step-meta">登録済み: 4 件 ・ <span style="color:#888;font-weight:500;">サンプル: 正社員, 契約社員, アルバイト, 業務委託</span></div>
+          </div>
+          <div class="ow-step-action"><button class="btn btn-p btn-sm" onclick="b0Go(3)">+ 雇用区分を追加</button></div>
+        </div>
+
+        <!-- ④ 従業員 -->
+        <div class="ow-step is-done" data-step="4">
+          <div class="ow-step-num done">✓</div>
+          <div class="ow-step-body">
+            <div class="ow-step-title">従業員 <span class="ow-badge done">✓ 追加可能</span></div>
+            <div class="ow-step-desc">新規従業員を追加します。所属店舗と雇用区分の両方への紐付けが必須です。登録と同時に招待メールが自動送信されます。</div>
+            <div class="ow-step-deps"><span class="deps-label">前提登録:</span><span class="dep-chip">② 店舗</span><span class="dep-chip">③ 雇用区分</span></div>
+            <div class="ow-step-meta">登録済み: 25 件 ・ <span style="color:#888;font-weight:500;">サンプル: 吉田 七美, 鈴木 太郎, 田中 花子, 他22名</span></div>
+          </div>
+          <div class="ow-step-action"><button class="btn btn-p btn-sm" onclick="b0Go(4)">+ 従業員を追加</button></div>
+        </div>
+
+        <div class="al al-i" style="margin-top:18px;font-size:10px;"><span>💡</span><div>新規追加時は前提登録を満たしている必要があります。例: 新規従業員を追加するには、所属する店舗と雇用区分が事前に登録されている必要があります。</div></div>
+      </div>
+
+      <div class="al al-s" style="margin-top:14px;font-size:10px;max-width:760px;"><span>✓</span><div>このガイドは初期登録完了後も常時利用できます。新メンバーが入った時、新店舗を出した時など、依存関係を確認したい時にご活用ください。</div></div>
     </main>
   </div>
 </div>
