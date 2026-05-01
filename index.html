@@ -371,8 +371,6 @@
     <span class="nav-sep"></span>
     <span class="nav-flow">B 登録ガイド</span>
     <span class="nav-tab" onclick="go('b0')" id="nav-b0">登録ガイド(初期登録)</span>
-    <span class="nav-tab" onclick="go('b0-ops')" id="nav-b0-ops">登録ガイド(運用モード)</span>
-    <span class="nav-tab" onclick="go('b0-add')" id="nav-b0-add">紐付き登録支援</span>
     <span class="nav-tab" onclick="bOpenStep(1)" style="background:rgba(46,196,165,0.15);">[M] 業態モーダル</span>
     <span class="nav-tab" onclick="bOpenStep(2)" style="background:rgba(46,196,165,0.15);">[M] 店舗モーダル</span>
     <span class="nav-tab" onclick="bOpenStep(3)" style="background:rgba(46,196,165,0.15);">[M] 雇用区分モーダル</span>
@@ -768,370 +766,6 @@
   </div>
 </div>
 
-<!-- ===== B-0-OPS: 登録ガイド 運用モード専用ビュー（初期登録完了後の参照画面） ===== -->
-<div class="page" id="page-b0-ops">
-  <div class="dash">
-    <aside class="sb">
-      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📥</span>エクスポート</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
-      <div class="sb-sec"><a href="#" class="act"><span class="ic">📋</span>登録ガイド</a></div>
-      <div class="sb-sec"><div class="sl">設定</div><a href="#"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a><a href="#"><span class="ic">🔗</span>外部連携</a></div>
-      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
-    </aside>
-    <main class="mc" style="background:#f8f9fa;">
-      <div class="ph"><h2>登録ガイド（運用モード）</h2></div>
-      <p style="font-size:11px;color:#666;margin-bottom:14px;max-width:760px;">初期登録は完了しています。新規の店舗・雇用区分・従業員などを追加する際は、以下から前提登録（紐付け先）を確認のうえ追加してください。</p>
-
-      <div class="ow-card">
-        <div class="ow-head">
-          <div>
-            <h3>新規追加ガイド</h3>
-            <div style="font-size:11px;color:#888;margin-top:3px;">各項目の「前提登録」を確認のうえ、新規追加してください。</div>
-          </div>
-        </div>
-
-        <!-- 完了サマリ -->
-        <div class="ow-summary">
-          <div class="ow-ring-wrap">
-            <svg class="ow-ring" viewBox="0 0 64 64" width="76" height="76">
-              <circle cx="32" cy="32" r="28" fill="none" stroke="#e8e8e8" stroke-width="6"/>
-              <circle cx="32" cy="32" r="28" fill="none" stroke="#2ec4a5" stroke-width="6"
-                      stroke-dasharray="175.93" stroke-dashoffset="0" stroke-linecap="round"/>
-            </svg>
-            <div class="ow-ring-percent"><span class="num">100</span><span class="pct">%</span></div>
-          </div>
-          <div class="ow-summary-body">
-            <div class="ow-summary-stats">
-              <div class="stat"><strong>4</strong><span class="total"> / 4</span> 完了</div>
-              <div class="stat" style="color:#1a9e7e;font-weight:600;">✓ 初期登録 完了済み</div>
-            </div>
-            <div class="ow-summary-status muted">✓ 必要な4項目はすべて登録済み。新規追加は下のカードから（前提登録の充足状況も併せてご確認ください）</div>
-            <div class="ow-progress-bar" style="margin-top:10px;margin-bottom:0;"><div class="ow-progress-fill" style="width:100%;"></div></div>
-            <div class="ow-step-markers">
-              <div class="ow-step-marker done">①<span class="nm">業態</span></div>
-              <div class="ow-step-marker done">②<span class="nm">店舗</span></div>
-              <div class="ow-step-marker done">③<span class="nm">区分</span></div>
-              <div class="ow-step-marker done">④<span class="nm">従業員</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ① 業態・ブランド -->
-        <div class="ow-step is-done" data-step="1">
-          <div class="ow-step-num done">✓</div>
-          <div class="ow-step-body">
-            <div class="ow-step-title">業態・ブランド <span class="ow-badge done">✓ 追加可能</span></div>
-            <div class="ow-step-desc">店舗の業態と運営ブランド名を追加できます。複数ブランド運営時は事業ブランドごとに登録します。</div>
-            <div class="ow-step-deps"><span class="deps-label">前提登録:</span><span class="dep-none">なし（独立して追加可能）</span></div>
-            <div class="ow-step-meta">登録済み: 1 件 ・ <span style="color:#888;font-weight:500;">サンプル: ラクミー食堂</span></div>
-          </div>
-          <div class="ow-step-action"><button class="btn btn-p btn-sm" onclick="b0Go(1)">+ ブランドを追加</button></div>
-        </div>
-
-        <!-- ② 店舗 -->
-        <div class="ow-step is-done" data-step="2">
-          <div class="ow-step-num done">✓</div>
-          <div class="ow-step-body">
-            <div class="ow-step-title">店舗 <span class="ow-badge done">✓ 追加可能</span></div>
-            <div class="ow-step-desc">新規店舗を追加します。所属ブランドへの紐付けが必須です。</div>
-            <div class="ow-step-deps"><span class="deps-label">前提登録:</span><span class="dep-chip">① 業態・ブランド</span></div>
-            <div class="ow-step-meta">登録済み: 3 件 ・ <span style="color:#888;font-weight:500;">サンプル: 渋谷店, 新宿店, 池袋店</span></div>
-          </div>
-          <div class="ow-step-action"><button class="btn btn-p btn-sm" onclick="b0Go(2)">+ 店舗を追加</button></div>
-        </div>
-
-        <!-- ③ 雇用区分 -->
-        <div class="ow-step is-done" data-step="3">
-          <div class="ow-step-num done">✓</div>
-          <div class="ow-step-body">
-            <div class="ow-step-title">雇用区分 <span class="ow-badge done">✓ 追加可能</span></div>
-            <div class="ow-step-desc">新しい雇用区分を追加します。区分の種別と時給単位を設定します。</div>
-            <div class="ow-step-deps"><span class="deps-label">前提登録:</span><span class="dep-none">なし（独立して追加可能）</span></div>
-            <div class="ow-step-meta">登録済み: 4 件 ・ <span style="color:#888;font-weight:500;">サンプル: 正社員, 契約社員, アルバイト, 業務委託</span></div>
-          </div>
-          <div class="ow-step-action"><button class="btn btn-p btn-sm" onclick="b0Go(3)">+ 雇用区分を追加</button></div>
-        </div>
-
-        <!-- ④ 従業員 -->
-        <div class="ow-step is-done" data-step="4">
-          <div class="ow-step-num done">✓</div>
-          <div class="ow-step-body">
-            <div class="ow-step-title">従業員 <span class="ow-badge done">✓ 追加可能</span></div>
-            <div class="ow-step-desc">新規従業員を追加します。所属店舗と雇用区分の両方への紐付けが必須です。登録と同時に招待メールが自動送信されます。</div>
-            <div class="ow-step-deps"><span class="deps-label">前提登録:</span><span class="dep-chip">② 店舗</span><span class="dep-chip">③ 雇用区分</span></div>
-            <div class="ow-step-meta">登録済み: 25 件 ・ <span style="color:#888;font-weight:500;">サンプル: 吉田 七美, 鈴木 太郎, 田中 花子, 他22名</span></div>
-          </div>
-          <div class="ow-step-action"><button class="btn btn-p btn-sm" onclick="b0Go(4)">+ 従業員を追加</button></div>
-        </div>
-
-        <div class="al al-i" style="margin-top:18px;font-size:10px;"><span>💡</span><div>新規追加時は前提登録を満たしている必要があります。例: 新規従業員を追加するには、所属する店舗と雇用区分が事前に登録されている必要があります。</div></div>
-      </div>
-
-      <div class="al al-s" style="margin-top:14px;font-size:10px;max-width:760px;"><span>✓</span><div>このガイドは初期登録完了後も常時利用できます。新メンバーが入った時、新店舗を出した時など、依存関係を確認したい時にご活用ください。</div></div>
-    </main>
-  </div>
-</div>
-
-<!-- ===== B-0-ADD: 紐付き登録支援ガイド（タスク起点・組合せパターン提示） ===== -->
-<div class="page" id="page-b0-add">
-  <div class="dash">
-    <aside class="sb">
-      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📥</span>エクスポート</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
-      <div class="sb-sec"><a href="#" class="act"><span class="ic">📋</span>登録ガイド</a></div>
-      <div class="sb-sec"><div class="sl">設定</div><a href="#"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a><a href="#"><span class="ic">🔗</span>外部連携</a></div>
-      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
-    </aside>
-    <main class="mc" style="background:#f8f9fa;">
-      <div class="ph"><h2>紐付き登録支援</h2></div>
-      <p style="font-size:11px;color:#666;margin-bottom:14px;max-width:760px;">
-        新しい店舗を出店する／新メンバーを採用する など、複数項目をまとめて登録する際の<strong>組合せパターン</strong>と<strong>必要な手順</strong>を支援します。
-        やりたいタスクを選ぶと、必要な前提登録の充足状況と、典型的な組合せパターンが提示されます。
-      </p>
-
-      <!-- タスクセレクター: 何を追加したいか（簡単→複雑の順） -->
-      <div class="task-question">🎯 何を追加しますか？</div>
-      <div class="task-picker">
-        <div class="task-card" data-task="brand" onclick="addSelectTask('brand')">
-          <div class="ic">🏷</div>
-          <div class="tname">ブランド</div>
-          <div class="tcomplexity">前提なし</div>
-        </div>
-        <div class="task-card" data-task="emptype" onclick="addSelectTask('emptype')">
-          <div class="ic">📋</div>
-          <div class="tname">雇用区分</div>
-          <div class="tcomplexity">前提なし</div>
-        </div>
-        <div class="task-card" data-task="store" onclick="addSelectTask('store')">
-          <div class="ic">🏠</div>
-          <div class="tname">店舗</div>
-          <div class="tcomplexity">前提: ブランド</div>
-        </div>
-        <div class="task-card" data-task="emp" onclick="addSelectTask('emp')">
-          <div class="ic">👤</div>
-          <div class="tname">従業員</div>
-          <div class="tcomplexity">前提: 店舗 + 雇用区分</div>
-        </div>
-      </div>
-
-      <!-- ===== タスクパネル: 従業員 ===== -->
-      <div class="task-panel" id="addp-emp">
-        <div class="ow-card">
-          <h3 style="font-size:14px;margin-bottom:4px;">👤 新しい従業員を追加するには</h3>
-          <p style="font-size:11px;color:#666;margin-bottom:14px;">従業員は<strong>所属する店舗</strong>と<strong>雇用区分</strong>の両方への紐付けが必須です。下記の充足状況を確認のうえ、組合せパターンから選んでください。</p>
-
-          <div class="prereq-status">
-            <h4>📌 必要な前提登録の充足状況</h4>
-            <div class="prereq-row ok"><span class="ic">✓</span><span class="nm">② 店舗</span><span class="ct">3件登録済み（渋谷店, 新宿店, 池袋店）</span></div>
-            <div class="prereq-row ok"><span class="ic">✓</span><span class="nm">③ 雇用区分</span><span class="ct">4件登録済み（正社員, 契約社員, アルバイト, 業務委託）</span></div>
-            <div style="font-size:10px;color:#1a9e7e;font-weight:600;margin-top:6px;">→ すべて充足。新規従業員を追加できます。</div>
-          </div>
-
-          <div class="combo-list">
-            <!-- パターンA: 既存店舗+既存雇用区分 -->
-            <div class="combo-card recommended">
-              <div class="chead">
-                <h5>パターンA: 既存店舗の従業員を追加（最も一般的）</h5>
-                <span class="clbl rec">⭐ 推奨</span>
-              </div>
-              <div class="csub">既に登録済みの店舗・雇用区分に紐付ける標準的な追加フロー。新メンバーがアサイン店舗に配属する場合。</div>
-              <ul class="combo-steps">
-                <li class="satisfied">店舗を準備（既存3件から選択）</li>
-                <li class="satisfied">雇用区分を準備（既存4件から選択）</li>
-                <li class="next">従業員を追加（招待メール自動送信）</li>
-              </ul>
-              <div class="cact"><button class="btn btn-p btn-sm" onclick="b0Go(4)">+ 従業員を追加 →</button></div>
-            </div>
-
-            <!-- パターンB: 新店舗 + 従業員 -->
-            <div class="combo-card">
-              <div class="chead">
-                <h5>パターンB: 新店舗 + その店舗の従業員を追加</h5>
-                <span class="clbl norm">出店オープン時</span>
-              </div>
-              <div class="csub">新規出店し、その店舗のスタッフを採用するパターン。店舗→従業員の順で登録します。</div>
-              <ul class="combo-steps">
-                <li class="satisfied">所属ブランドを準備（既存1件）</li>
-                <li class="next">新店舗を追加</li>
-                <li>その店舗の従業員を追加（複数人可）</li>
-              </ul>
-              <div class="cact"><button class="btn btn-p btn-sm" onclick="b0Go(2)">パターンBで進める →（① 新店舗から）</button></div>
-            </div>
-
-            <!-- パターンC: 新雇用区分 + 従業員 -->
-            <div class="combo-card">
-              <div class="chead">
-                <h5>パターンC: 新雇用区分 + その区分の従業員を追加</h5>
-                <span class="clbl norm">新雇用形態導入時</span>
-              </div>
-              <div class="csub">これまでなかった雇用区分（例: パートタイム新設、業務委託新設）を作り、該当区分のメンバーを追加するパターン。</div>
-              <ul class="combo-steps">
-                <li class="next">新雇用区分を追加</li>
-                <li>その区分の従業員を追加</li>
-              </ul>
-              <div class="cact"><button class="btn btn-p btn-sm" onclick="b0Go(3)">パターンCで進める →（① 新雇用区分から）</button></div>
-            </div>
-
-            <!-- パターンD: 完全新規(新店舗+新雇用区分+従業員) -->
-            <div class="combo-card">
-              <div class="chead">
-                <h5>パターンD: 新店舗 + 新雇用区分 + 従業員（フルセット）</h5>
-                <span class="clbl norm">新業態・新ブランド店オープン</span>
-              </div>
-              <div class="csub">新形態の店舗を新雇用区分の人員で運営する場合のフル登録。手順は ②→③→④ の順。</div>
-              <ul class="combo-steps">
-                <li class="satisfied">所属ブランドを準備（既存1件）</li>
-                <li class="next">新店舗を追加</li>
-                <li>新雇用区分を追加</li>
-                <li>従業員を追加</li>
-              </ul>
-              <div class="cact"><button class="btn btn-p btn-sm" onclick="b0Go(2)">パターンDで進める →（① 新店舗から）</button></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ===== タスクパネル: 店舗 ===== -->
-      <div class="task-panel" id="addp-store">
-        <div class="ow-card">
-          <h3 style="font-size:14px;margin-bottom:4px;">🏠 新しい店舗を追加するには</h3>
-          <p style="font-size:11px;color:#666;margin-bottom:14px;">店舗は<strong>所属ブランド</strong>への紐付けが必須です。出店時に従業員もまとめて登録する場合は、組合せパターンを参考にしてください。</p>
-
-          <div class="prereq-status">
-            <h4>📌 必要な前提登録の充足状況</h4>
-            <div class="prereq-row ok"><span class="ic">✓</span><span class="nm">① 業態・ブランド</span><span class="ct">1件登録済み（ラクミー食堂）</span></div>
-            <div style="font-size:10px;color:#1a9e7e;font-weight:600;margin-top:6px;">→ 充足。新規店舗を追加できます。</div>
-          </div>
-
-          <div class="combo-list">
-            <div class="combo-card recommended">
-              <div class="chead">
-                <h5>パターンA: 既存ブランドの新店舗を追加</h5>
-                <span class="clbl rec">⭐ 推奨</span>
-              </div>
-              <div class="csub">既に登録済みのブランドで新拠点を出店する標準パターン。</div>
-              <ul class="combo-steps">
-                <li class="satisfied">所属ブランドを準備（既存1件）</li>
-                <li class="next">新店舗を追加</li>
-              </ul>
-              <div class="cact"><button class="btn btn-p btn-sm" onclick="b0Go(2)">+ 店舗を追加 →</button></div>
-            </div>
-
-            <div class="combo-card">
-              <div class="chead">
-                <h5>パターンB: 新ブランド + 新店舗</h5>
-                <span class="clbl norm">新業態進出時</span>
-              </div>
-              <div class="csub">新しい業態・ブランドで新規出店する場合。ブランド→店舗の順で登録。</div>
-              <ul class="combo-steps">
-                <li class="next">新ブランドを追加</li>
-                <li>新店舗を追加</li>
-              </ul>
-              <div class="cact"><button class="btn btn-p btn-sm" onclick="b0Go(1)">パターンBで進める →（① 新ブランドから）</button></div>
-            </div>
-
-            <div class="combo-card">
-              <div class="chead">
-                <h5>パターンC: 新店舗 + 配属従業員もまとめて登録</h5>
-                <span class="clbl norm">オープン準備</span>
-              </div>
-              <div class="csub">出店と同時にスタッフを採用する場合。雇用区分の充足状況も併せてご確認ください。</div>
-              <ul class="combo-steps">
-                <li class="satisfied">所属ブランドを準備（既存1件）</li>
-                <li class="next">新店舗を追加</li>
-                <li>その店舗の従業員を追加（複数人可）</li>
-              </ul>
-              <div class="cact"><button class="btn btn-p btn-sm" onclick="b0Go(2)">パターンCで進める →（① 新店舗から）</button></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ===== タスクパネル: 雇用区分 ===== -->
-      <div class="task-panel" id="addp-emptype">
-        <div class="ow-card">
-          <h3 style="font-size:14px;margin-bottom:4px;">📋 新しい雇用区分を追加するには</h3>
-          <p style="font-size:11px;color:#666;margin-bottom:14px;">雇用区分は<strong>独立して追加可能</strong>です（前提登録なし）。区分追加と同時に該当区分の従業員を追加するパターンも紹介します。</p>
-
-          <div class="prereq-status">
-            <h4>📌 必要な前提登録の充足状況</h4>
-            <div class="prereq-row ok"><span class="ic">✓</span><span class="nm">なし（独立登録）</span><span class="ct">前提登録は不要</span></div>
-          </div>
-
-          <div class="combo-list">
-            <div class="combo-card recommended">
-              <div class="chead">
-                <h5>パターンA: 雇用区分のみ追加</h5>
-                <span class="clbl rec">⭐ 推奨</span>
-              </div>
-              <div class="csub">区分定義のみ追加する標準パターン。後から従業員に割り当てる場合。</div>
-              <ul class="combo-steps">
-                <li class="next">新雇用区分を追加</li>
-              </ul>
-              <div class="cact"><button class="btn btn-p btn-sm" onclick="b0Go(3)">+ 雇用区分を追加 →</button></div>
-            </div>
-
-            <div class="combo-card">
-              <div class="chead">
-                <h5>パターンB: 雇用区分 + 該当区分の従業員もまとめて登録</h5>
-                <span class="clbl norm">新雇用形態運用開始時</span>
-              </div>
-              <div class="csub">新雇用区分を作り、その区分のメンバーを追加するパターン。所属店舗の充足状況も併せてご確認ください。</div>
-              <ul class="combo-steps">
-                <li class="next">新雇用区分を追加</li>
-                <li>その区分の従業員を追加</li>
-              </ul>
-              <div class="cact"><button class="btn btn-p btn-sm" onclick="b0Go(3)">パターンBで進める →（① 新雇用区分から）</button></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ===== タスクパネル: ブランド ===== -->
-      <div class="task-panel" id="addp-brand">
-        <div class="ow-card">
-          <h3 style="font-size:14px;margin-bottom:4px;">🏷 新しいブランドを追加するには</h3>
-          <p style="font-size:11px;color:#666;margin-bottom:14px;">ブランドは<strong>独立して追加可能</strong>です。新業態進出時は店舗・従業員もセットで登録するパターンが一般的です。</p>
-
-          <div class="prereq-status">
-            <h4>📌 必要な前提登録の充足状況</h4>
-            <div class="prereq-row ok"><span class="ic">✓</span><span class="nm">なし（独立登録）</span><span class="ct">前提登録は不要</span></div>
-          </div>
-
-          <div class="combo-list">
-            <div class="combo-card recommended">
-              <div class="chead">
-                <h5>パターンA: ブランドのみ追加</h5>
-                <span class="clbl rec">⭐ 推奨</span>
-              </div>
-              <div class="csub">ブランド定義のみ追加する標準パターン。</div>
-              <ul class="combo-steps">
-                <li class="next">新ブランドを追加</li>
-              </ul>
-              <div class="cact"><button class="btn btn-p btn-sm" onclick="b0Go(1)">+ ブランドを追加 →</button></div>
-            </div>
-
-            <div class="combo-card">
-              <div class="chead">
-                <h5>パターンB: 新ブランド + 新店舗 + 配属従業員（フル）</h5>
-                <span class="clbl norm">新ブランド出店</span>
-              </div>
-              <div class="csub">新業態・新ブランドで新規出店し、スタッフも採用するパターン。手順は ①→②→④ の順。</div>
-              <ul class="combo-steps">
-                <li class="next">新ブランドを追加</li>
-                <li>新店舗を追加</li>
-                <li>従業員を追加</li>
-              </ul>
-              <div class="cact"><button class="btn btn-p btn-sm" onclick="b0Go(1)">パターンBで進める →（① 新ブランドから）</button></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="al al-i" style="margin-top:14px;font-size:10px;max-width:760px;"><span>💡</span><div>各パターンのボタンを押すと、最初の登録画面に遷移します。登録完了後はこのガイドに戻り、次の手順に進めます（双方向遷移）。</div></div>
-    </main>
-  </div>
-</div>
 
 <!-- ===== B-STEPモーダル群: 各登録モーダル（ページ遷移ではなくオーバーレイで開く） ===== -->
 
@@ -1158,15 +792,15 @@
 <div class="b-step-overlay" id="b-step-modal-2">
   <div class="b-step-modal">
     <div class="mh"><h3>店舗を登録</h3><button class="mx" onclick="bCloseStep()">✕</button></div>
-    <div class="mb">
-      <div class="al al-i" style="margin-bottom:14px;font-size:10px;"><span>💡</span><div>所属ブランドの選択が必須です。先にブランドを登録してから店舗を登録してください。</div></div>
+    <div class="mb" id="b-step-mb-2">
+      <!-- 前提充足チェックメッセージ(JSで動的生成) -->
+      <div id="b-step-warn-2"></div>
       <div class="fg"><label>店舗名 <span class="req">✳</span></label><input value="" placeholder="例: 渋谷店" style="max-width:100%;"></div>
       <div class="fg">
         <label>所属ブランド <span class="req">✳</span></label>
-        <select style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-          <option>ラクミー食堂（①で登録したブランドから選択）</option>
+        <select id="b-step-2-brand" style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+          <option>ラクミー食堂</option>
         </select>
-        <div class="hint">前提登録: ① 業態・ブランド</div>
       </div>
       <div class="fg"><label>住所 <span class="req">✳</span></label><input value="" placeholder="例: 東京都渋谷区..." style="max-width:100%;"></div>
       <div class="fg"><label>営業時間 <span class="req">✳</span></label>
@@ -1204,8 +838,9 @@
 <div class="b-step-overlay" id="b-step-modal-4">
   <div class="b-step-modal">
     <div class="mh"><h3>従業員を登録</h3><button class="mx" onclick="bCloseStep()">✕</button></div>
-    <div class="mb">
-      <div class="al al-i" style="margin-bottom:14px;font-size:10px;"><span>💡</span><div>所属店舗と雇用区分の両方への紐付けが必須です。登録と同時に招待メール（C-4）が自動送信されます。</div></div>
+    <div class="mb" id="b-step-mb-4">
+      <!-- 前提充足チェックメッセージ(JSで動的生成) -->
+      <div id="b-step-warn-4"></div>
       <div class="fr">
         <div class="fg"><label>名前 <span class="req">✳</span></label><input value="" placeholder="例: 吉田 七美" style="max-width:100%;"></div>
         <div class="fg"><label>電話番号 <span class="req">✳</span></label><input value="" placeholder="例: 090-0000-0000" style="max-width:100%;"></div>
@@ -1213,16 +848,14 @@
       <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input type="email" value="" placeholder="例: yoshida@example.jp" style="max-width:100%;"><div class="hint">このアドレスに招待メール（72h有効）が送信されます。</div></div>
       <div class="fr">
         <div class="fg"><label>雇用区分 <span class="req">✳</span></label>
-          <select style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-            <option>（③で登録した区分から選択）</option>
+          <select id="b-step-4-emptype" style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+            <option>正社員</option>
           </select>
-          <div class="hint">前提登録: ③ 雇用区分</div>
         </div>
         <div class="fg"><label>所属店舗 <span class="req">✳</span></label>
-          <select style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-            <option>（②で登録した店舗から選択）</option>
+          <select id="b-step-4-store" style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+            <option>渋谷店</option>
           </select>
-          <div class="hint">前提登録: ② 店舗</div>
         </div>
       </div>
       <div class="btn-grp"><button class="btn btn-s" onclick="bCloseStep()">キャンセル</button><button class="btn btn-p" onclick="b0CompleteStep(4)">登録</button></div>
@@ -2052,8 +1685,6 @@ function go(id) {
   if (id === 'd2') d2SwitchTab('new');
   // b0(登録ガイド)を開いた際は保存済み進捗を反映
   if (id === 'b0') b0SetState(b0LoadDone());
-  // b0-add(紐付き登録支援)を開いた際は初期タスクを「従業員」に
-  if (id === 'b0-add') addSelectTask('emp');
   // URLハッシュ同期(ディープリンク対応)
   if (location.hash !== '#' + id) {
     history.replaceState(null, '', '#' + id);
@@ -2072,8 +1703,6 @@ function b0SaveDone(n) {
 
 // ステップ名 (動的メッセージ用)
 var B0_STEP_NAMES = ['', '業態・ブランド登録', '店舗登録', '雇用区分登録', '従業員登録'];
-// 運用モード時のステップ短縮ラベル(CTA用)
-var B0_ADD_LABELS = ['', '+ ブランドを追加', '+ 店舗を追加', '+ 雇用区分を追加', '+ 従業員を追加'];
 // 進捗状態に応じたサブメッセージ(初期登録モード)
 var B0_STATUS_MSGS = [
   '📌 まずは「① 業態・ブランド登録」から始めましょう',
@@ -2136,28 +1765,7 @@ function b0SetState(doneCount) {
   }
   var bizComplete = (doneCount === 4);
 
-  // 運用モード切替: タイトル/副題/CTA文言を変更（登録ガイドは運用後も常時表示=運用ガイドとして利用）
-  var pageTitle = document.getElementById('b0-page-title');
-  var pageSub = document.getElementById('b0-page-sub');
-  var cardTitle = document.getElementById('b0-card-title');
-  var cardSub = document.getElementById('b0-card-sub');
-  var cardTip = document.getElementById('b0-card-tip');
-  if (bizComplete) {
-    if (pageTitle) pageTitle.textContent = '登録ガイド（運用モード）';
-    if (pageSub) pageSub.textContent = '初期登録は完了しています。新規の店舗・雇用区分・従業員などを追加する際は、以下から前提登録を確認のうえ追加できます。';
-    if (cardTitle) cardTitle.textContent = '登録ガイド（運用モード）';
-    if (cardSub) cardSub.textContent = '各項目の「前提登録」を確認のうえ、新規追加してください。';
-    if (cardTip) cardTip.querySelector('div').innerHTML = '新規追加時は前提登録を満たしている必要があります。例: 新規従業員を追加するには、所属する店舗と雇用区分が事前に登録されている必要があります。';
-  } else {
-    if (pageTitle) pageTitle.textContent = '登録ガイド';
-    if (pageSub) pageSub.textContent = 'タイムレコードのご利用にあたり、以下の必須項目を順番に登録してください。完了するとダッシュボード（打刻記録）が利用可能になります。';
-    if (cardTitle) cardTitle.textContent = '登録ガイド（必須）';
-    if (cardSub) cardSub.textContent = 'タイムレコードを利用開始するには、以下の順番で全項目の登録が必要です。';
-    if (cardTip) cardTip.querySelector('div').innerHTML = '各ステップは前のステップ完了後にアクティブ化されます。すべて登録完了後も、新規追加の際はこのガイドから前提登録を確認できます。';
-  }
-
-  // 件数表示更新（前提登録の充足状況の可視化）
-  // デモトグルとの整合: doneCount分のステップは最低1件として補正
+  // 件数表示更新（デモトグルとの整合: doneCount分のステップは最低1件として補正）
   var counts = b0LoadCounts();
   var dirty = false;
   for (var nn = 0; nn < doneCount; nn++) {
@@ -2172,8 +1780,10 @@ function b0SetState(doneCount) {
     meta.classList.toggle('empty', c === 0);
   }
 
-  // サイドバー: 登録ガイド項目は常時表示。業務メニューは初期完了後にアクセス可能化
+  // A案: 完了後はサイドバー「登録ガイド」を非表示、業務メニューを通常アクセス可能に
+  var sbGuide = document.getElementById('b0-sb-guide');
   var sbBizLabel = document.getElementById('b0-sb-biz-label');
+  if (sbGuide) sbGuide.style.display = bizComplete ? 'none' : '';
   if (sbBizLabel) sbBizLabel.textContent = bizComplete ? '業務メニュー' : '業務メニュー（登録完了後に利用可）';
   for (var b = 1; b <= 5; b++) {
     var item = document.getElementById('b0-sb-biz-' + b);
@@ -2190,13 +1800,7 @@ function b0SetState(doneCount) {
     num.classList.remove('todo','active','done','locked');
     badge.classList.remove('now','done','lock');
     btn.disabled = false;
-    if (bizComplete) {
-      // 運用モード: 全ステップ「✓ 追加可能」表示・「+ 〜を追加」CTAでアンロック
-      num.classList.add('done'); num.textContent = '✓';
-      badge.classList.add('done'); badge.textContent = '✓ 追加可能';
-      btn.textContent = B0_ADD_LABELS[s];
-      btn.classList.remove('btn-s'); btn.classList.add('btn-p');
-    } else if (s <= doneCount) {
+    if (s <= doneCount) {
       // 完了 → 再編集可
       num.classList.add('done'); num.textContent = '✓';
       badge.classList.add('done'); badge.textContent = '✓ 完了';
@@ -2224,8 +1828,38 @@ function b0SetState(doneCount) {
 // B-STEPモーダル: 開閉
 function bOpenStep(stepNum) {
   document.querySelectorAll('.b-step-overlay').forEach(function(o){ o.classList.remove('act'); });
+  bRefreshPrereq(stepNum);
   var ov = document.getElementById('b-step-modal-' + stepNum);
   if (ov) ov.classList.add('act');
+}
+
+// 前提充足チェック表示(分かりやすい言い回し)
+function bRefreshPrereq(stepNum) {
+  var counts = b0LoadCounts();
+  var warn = '';
+  // ② 店舗: ① ブランドが必要
+  if (stepNum === 2) {
+    if ((counts[0] || 0) < 1) {
+      warn = '<div class="al al-w" style="margin-bottom:14px;font-size:11px;align-items:center;"><span style="font-size:16px;">⚠️</span><div style="flex:1;"><strong>ブランドが未登録です。</strong><br>店舗を登録するには、先に「業態・ブランド」の登録が必要です。</div><button class="btn btn-p btn-sm" onclick="bOpenStep(1)" style="margin-left:10px;">ブランドを登録 →</button></div>';
+    }
+  }
+  // ④ 従業員: ② 店舗 + ③ 雇用区分
+  if (stepNum === 4) {
+    var ok2 = (counts[1] || 0) >= 1;
+    var ok3 = (counts[2] || 0) >= 1;
+    if (!ok2 || !ok3) {
+      var missing = [];
+      if (!ok2) missing.push('「店舗」');
+      if (!ok3) missing.push('「雇用区分」');
+      warn = '<div class="al al-w" style="margin-bottom:14px;font-size:11px;"><span style="font-size:16px;">⚠️</span><div style="flex:1;"><strong>' + missing.join('と') + 'が未登録です。</strong><br>従業員を登録するには、先に' + missing.join('と') + 'の登録が必要です。</div></div>';
+      warn += '<div style="display:flex;gap:8px;margin-bottom:14px;">';
+      if (!ok2) warn += '<button class="btn btn-p btn-sm" onclick="bOpenStep(2)">店舗を登録 →</button>';
+      if (!ok3) warn += '<button class="btn btn-p btn-sm" onclick="bOpenStep(3)">雇用区分を登録 →</button>';
+      warn += '</div>';
+    }
+  }
+  var box = document.getElementById('b-step-warn-' + stepNum);
+  if (box) box.innerHTML = warn;
 }
 function bCloseStep() {
   document.querySelectorAll('.b-step-overlay').forEach(function(o){ o.classList.remove('act'); });
@@ -2234,16 +1868,6 @@ function bCloseStep() {
 // B-0/B-0-OPS/B-0-ADD の各CTA → ステップモーダルを開く
 function b0Go(stepNum) {
   bOpenStep(stepNum);
-}
-
-/* B-0-ADD: 紐付き登録支援 タスク切替 */
-function addSelectTask(taskId) {
-  document.querySelectorAll('.task-card').forEach(function(c) {
-    c.classList.toggle('act', c.getAttribute('data-task') === taskId);
-  });
-  document.querySelectorAll('.task-panel').forEach(function(p) { p.classList.remove('act'); });
-  var panel = document.getElementById('addp-' + taskId);
-  if (panel) panel.classList.add('act');
 }
 
 // モーダル登録ボタン → モーダル閉じる + 進捗+件数更新（ページ遷移なし）
