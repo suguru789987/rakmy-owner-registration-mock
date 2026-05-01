@@ -263,6 +263,8 @@
     <span class="nav-flow">D 管理者</span>
     <span class="nav-tab" onclick="go('d1')" id="nav-d1">管理者一覧</span>
     <span class="nav-tab" onclick="go('d2')" id="nav-d2">管理者登録</span>
+    <span class="nav-tab" onclick="go('d3')" id="nav-d3">登録完了メール(新規)</span>
+    <span class="nav-tab" onclick="go('d4')" id="nav-d4">登録完了メール(昇格)</span>
     <span class="nav-tab" onclick="go('d1e')" id="nav-d1e">管理者編集</span>
     <span class="nav-sep"></span>
     <span class="nav-flow">E PW</span>
@@ -1006,6 +1008,67 @@
         </div>
       </div>
     </main>
+  </div>
+</div>
+
+<!-- ===== D-3: 管理者登録完了メール（新規パターン: D-2タブ1からの登録時に自動送信） ===== -->
+<div class="page" id="page-d3">
+  <div style="background:#f0f0f0; min-height:calc(100vh - 86px); padding:32px 16px;">
+    <div class="tc" style="margin-bottom:16px;"><span style="font-size:10px;color:#999;background:#fff;padding:4px 12px;border-radius:20px;">自動送信メール プレビュー（管理者登録 / 新規パターン）</span></div>
+    <div class="ep">
+      <div class="ep-hdr">
+        <strong>From:</strong> ラクミー タイムレコード &lt;noreply@timerecord.rakmy.jp&gt;<br>
+        <strong>To:</strong> suzuki@example.jp<br>
+        <strong>Subject:</strong> 【ラクミー タイムレコード】管理者アカウント登録のご案内
+      </div>
+      <div class="ep-body">
+        <div class="tc" style="margin-bottom:16px;"><span class="lb">ラクミー</span> <span style="font-weight:600;">タイムレコード</span></div>
+        <p>鈴木 花子 様</p><br>
+        <p><strong>株式会社サンプル</strong> の<strong>管理者</strong>として登録されました。<br>以下のボタンからパスワードを設定してログインしてください。</p>
+        <div class="tc" style="margin:18px 0;"><a href="#" class="ep-btn" onclick="event.preventDefault();go('e1')">パスワードを設定する</a></div>
+        <div style="background:#f8f9fa;border-radius:7px;padding:12px;font-size:11px;line-height:1.8;">
+          <strong>会社:</strong> 株式会社サンプル<br>
+          <strong>権限:</strong> 管理者<br>
+          <strong>担当店舗:</strong> 渋谷店<br>
+          <strong>有効期限:</strong> 72時間
+        </div>
+        <p style="font-size:11px;color:#555;margin-top:14px;line-height:1.7;">管理者は、担当店舗の従業員管理・勤怠管理・給与確認が可能です。<br>パスワード設定後、以下のURLからいつでもログインできます。</p>
+        <p style="font-size:11px;margin-top:8px;"><a href="#" style="color:#2ec4a5;" onclick="event.preventDefault();go('login')">https://timerecord.rakmy.jp/login</a></p>
+        <p style="font-size:10px;color:#999;margin-top:14px;">※ 心当たりのない場合は無視してください。<br>※ お問い合わせ: support@rakmy.jp</p>
+      </div>
+    </div>
+    <div class="tc" style="margin-top:14px;"><button class="btn btn-p" onclick="go('e1')">PW設定画面へ →</button></div>
+  </div>
+</div>
+
+<!-- ===== D-4: 管理者登録完了メール（昇格パターン: D-2タブ2 既存従業員から管理者登録時に自動送信） ===== -->
+<div class="page" id="page-d4">
+  <div style="background:#f0f0f0; min-height:calc(100vh - 86px); padding:32px 16px;">
+    <div class="tc" style="margin-bottom:16px;"><span style="font-size:10px;color:#999;background:#fff;padding:4px 12px;border-radius:20px;">自動送信メール プレビュー（管理者登録 / 既存従業員からの昇格パターン）</span></div>
+    <div class="ep">
+      <div class="ep-hdr">
+        <strong>From:</strong> ラクミー タイムレコード &lt;noreply@timerecord.rakmy.jp&gt;<br>
+        <strong>To:</strong> manager01@example.com<br>
+        <strong>Subject:</strong> 【ラクミー タイムレコード】管理者権限が付与されました
+      </div>
+      <div class="ep-body">
+        <div class="tc" style="margin-bottom:16px;"><span class="lb">ラクミー</span> <span style="font-weight:600;">タイムレコード</span></div>
+        <p>にしかた 様</p><br>
+        <p><strong>株式会社サンプル</strong> にて、あなたのアカウントに<strong>管理者権限</strong>が付与されました。</p>
+        <div style="background:#f8f9fa;border-radius:7px;padding:12px;font-size:11px;line-height:1.8;margin-top:14px;">
+          <strong>会社:</strong> 株式会社サンプル<br>
+          <strong>付与された権限:</strong> 管理者<br>
+          <strong>担当店舗:</strong> 池袋店<br>
+          <strong>付与日時:</strong> 2026-05-01 16:34
+        </div>
+        <p style="font-size:11px;color:#555;margin-top:14px;line-height:1.7;">これにより、担当店舗の従業員管理・勤怠管理・給与確認が可能になります。<br>パスワードは従業員アカウントのものをそのままご利用いただけます（再設定は不要です）。</p>
+        <div class="tc" style="margin:18px 0;"><a href="#" class="ep-btn" onclick="event.preventDefault();go('login')">ログインする</a></div>
+        <p style="font-size:11px;margin-top:8px;"><a href="#" style="color:#2ec4a5;" onclick="event.preventDefault();go('login')">https://timerecord.rakmy.jp/login</a></p>
+        <div class="al al-i" style="margin-top:14px;font-size:10px;"><span>💡</span><div>パスワードを忘れた場合は、ログイン画面の「パスワードを忘れた」から再設定できます。</div></div>
+        <p style="font-size:10px;color:#999;margin-top:14px;">※ 権限付与に心当たりがない場合は、所属会社のオーナーまでご連絡ください。<br>※ お問い合わせ: support@rakmy.jp</p>
+      </div>
+    </div>
+    <div class="tc" style="margin-top:14px;"><button class="btn btn-p" onclick="go('login')">ログイン画面へ →</button></div>
   </div>
 </div>
 
