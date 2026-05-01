@@ -1861,6 +1861,10 @@ function b0SetState(doneCount) {
   if (doneCount < 0) doneCount = 0;
   if (doneCount > 4) doneCount = 4;
   b0SaveDone(doneCount);
+  // デモトグル「未完了」へ戻した場合は件数もリセット(新規登録感の再現)
+  if (doneCount === 0) {
+    b0SaveCounts([0, 0, 0, 0]);
+  }
   // デモ用 状態切替トグル更新
   for (var i = 0; i <= 4; i++) {
     var tab = document.getElementById('b0-tab-' + i);
@@ -2013,12 +2017,13 @@ function bCloseStep() {
 // 設定画面マッピング(初期/運用 共通)
 var SETTINGS_PAGES = ['', 'brand-settings', 'store-settings', 'emptype-settings', 'emp-settings'];
 
-// b0登録ガイドからの遷移: 設定画面へ移動(初期/運用 共通の単一画面)
+// b0登録ガイドからの遷移: 設定画面へ移動 + 該当モーダルを自動展開(モーダル中心のフロー)
 function b0Go(stepNum) {
   go(SETTINGS_PAGES[stepNum]);
+  setTimeout(function(){ bOpenStep(stepNum); }, 200);
 }
 
-// 連鎖CTAでの遷移+モーダル展開
+// 連鎖CTAでの遷移+モーダル展開(b0Goと同じ挙動)
 function bGotoSettingsAndOpenModal(stepNum) {
   go(SETTINGS_PAGES[stepNum]);
   setTimeout(function(){ bOpenStep(stepNum); }, 200);
