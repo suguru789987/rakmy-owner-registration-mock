@@ -1920,7 +1920,10 @@ function b0CompleteStep(stepNum) {
   bShowToast(stepNum);
 }
 
-// 登録成功トースト表示(双方向遷移の戻り側フィードバック + 次ステップCTA)
+// 登録成功トースト: 文脈別の出し分け
+// - 初期登録中(b0画面 + done<4): 軽量な完了通知のみ(CTAなし、ガイド本体が次を示すため)
+// - 初期登録 完了直後(done==4 になった瞬間): 完了祝い+打刻記録誘導CTA
+// - 運用中(b0画面以外で追加 = 「初期登録後」のシナリオ): 連鎖CTA
 function bShowToast(stepNum) {
   var toast = document.getElementById('b-toast');
   if (!toast) return;
@@ -1929,44 +1932,49 @@ function bShowToast(stepNum) {
   var actionsEl = document.getElementById('b-toast-actions');
   var stepNames = ['', '業態・ブランド', '店舗', '雇用区分', '従業員'];
   var done = b0LoadDone();
-  var counts = b0LoadCounts();
-  titleEl.textContent = '✓ ' + stepNames[stepNum] + 'を登録しました';
+  var activePage = document.querySelector('.page.active');
+  var onB0 = activePage && activePage.id === 'page-b0';
 
-  // 状態に応じてサブメッセージとCTAボタンを動的生成
+  titleEl.textContent = '✓ ' + stepNames[stepNum] + 'を登録しました';
   var actions = '';
-  if (done < 4) {
-    // 初期設定中: 次の必須ステップへ強誘導
-    nextEl.textContent = '進捗 ' + done + '/4 完了。続けて「' + stepNames[done + 1] + '」を登録しましょう。';
-    actions = '<button class="btn btn-p" onclick="bToastAction(' + (done + 1) + ')">続けて' + stepNames[done + 1] + 'を登録 →</button>' +
-              '<button class="btn btn-s" onclick="bDismissToast()">あとで</button>';
-  } else {
-    // 全完了時: 打刻記録への導線
+  var duration = 5000;
+
+  if (onB0 && done < 4) {
+    // 【初期登録中】 b0ガイドが既に次ステップを案内しているのでCTA不要、軽量通知のみ
+    nextEl.textContent = '進捗 ' + done + '/4 完了';
+    actions = '';  // CTAボタンなし
+    duration = 3000;
+  } else if (done === 4 && stepNum === 4) {
+    // 【初期登録 完了直後】 全項目登録完了のお祝い + 打刻記録誘導
     nextEl.textContent = '🎉 すべての必須登録が完了しました。打刻記録をご利用いただけます。';
     actions = '<button class="btn btn-p" onclick="bDismissToast();go(\'b0-empty\');">打刻記録を開く →</button>' +
               '<button class="btn btn-s" onclick="bDismissToast()">閉じる</button>';
-    // 運用時の連鎖CTA（既に完了状態でさらに追加した場合の出店/採用フロー対応）
+    duration = 10000;
+  } else {
+    // 【運用中(初期登録後)】 連鎖CTA: 関連する次の追加を支援
     if (stepNum === 1) {
-      // ブランド追加直後 → 店舗追加CTA
+      nextEl.textContent = '新ブランドを登録しました。続けて店舗・従業員も追加できます。';
       actions = '<button class="btn btn-p" onclick="bToastAction(2)">続けて店舗を登録 →</button>' +
                 '<button class="btn btn-s" onclick="bDismissToast()">閉じる</button>';
-      nextEl.textContent = '新ブランドを登録しました。続けて店舗・従業員も追加できます。';
     } else if (stepNum === 2) {
-      // 店舗追加直後 → 従業員追加CTA
+      nextEl.textContent = '新店舗を登録しました。続けて従業員も追加できます。';
       actions = '<button class="btn btn-p" onclick="bToastAction(4)">この店舗の従業員を登録 →</button>' +
                 '<button class="btn btn-s" onclick="bDismissToast()">閉じる</button>';
-      nextEl.textContent = '新店舗を登録しました。続けて従業員も追加できます。';
     } else if (stepNum === 3) {
-      // 雇用区分追加直後 → 従業員追加CTA
+      nextEl.textContent = '新雇用区分を登録しました。続けてこの区分の従業員も追加できます。';
       actions = '<button class="btn btn-p" onclick="bToastAction(4)">この区分の従業員を登録 →</button>' +
                 '<button class="btn btn-s" onclick="bDismissToast()">閉じる</button>';
-      nextEl.textContent = '新雇用区分を登録しました。続けてこの区分の従業員も追加できます。';
+    } else {
+      // stepNum === 4(従業員追加直後・運用)
+      nextEl.textContent = '新しい従業員を登録しました。招待メールを送信しています。';
+      actions = '<button class="btn btn-s" onclick="bDismissToast()">閉じる</button>';
     }
+    duration = 8000;
   }
   actionsEl.innerHTML = actions;
   toast.classList.add('act');
   clearTimeout(window.bToastTimer);
-  // CTA付きなのでやや長め(8秒)に表示
-  window.bToastTimer = setTimeout(function(){ toast.classList.remove('act'); }, 8000);
+  window.bToastTimer = setTimeout(function(){ toast.classList.remove('act'); }, duration);
 }
 
 // トーストCTA: 次のステップモーダルを開く
