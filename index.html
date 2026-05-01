@@ -243,6 +243,11 @@
     .ow-step-meta { font-size: 10px; color: #1a9e7e; margin-top: 3px; font-weight: 600; }
     .ow-step-meta.empty { color: #aaa; font-weight: 500; }
 
+    /* B-STEPモーダル(業態/店舗/雇用区分/従業員 登録モーダル) */
+    .b-step-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
+    .b-step-overlay.act { display: flex; }
+    .b-step-modal { background: #fff; border-radius: 12px; max-width: 540px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 16px 48px rgba(0,0,0,0.18); }
+
     /* 紐付き登録支援 (B-0-ADD): タスクセレクター + パターンカード */
     .task-picker { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 18px; }
     .task-card { background: #fff; border: 2px solid #e8e8e8; border-radius: 10px; padding: 14px 16px; cursor: pointer; transition: all 0.2s; text-align: left; }
@@ -369,10 +374,10 @@
     <span class="nav-tab" onclick="go('b0')" id="nav-b0">登録ガイド(初期登録)</span>
     <span class="nav-tab" onclick="go('b0-ops')" id="nav-b0-ops">登録ガイド(運用モード)</span>
     <span class="nav-tab" onclick="go('b0-add')" id="nav-b0-add">紐付き登録支援</span>
-    <span class="nav-tab" onclick="go('b-step1')" id="nav-b-step1">①業態・ブランド</span>
-    <span class="nav-tab" onclick="go('b-step2')" id="nav-b-step2">②店舗</span>
-    <span class="nav-tab" onclick="go('b-step3')" id="nav-b-step3">③雇用区分</span>
-    <span class="nav-tab" onclick="go('b-step4')" id="nav-b-step4">④従業員</span>
+    <span class="nav-tab" onclick="bOpenStep(1)" style="background:rgba(46,196,165,0.15);">[M] 業態モーダル</span>
+    <span class="nav-tab" onclick="bOpenStep(2)" style="background:rgba(46,196,165,0.15);">[M] 店舗モーダル</span>
+    <span class="nav-tab" onclick="bOpenStep(3)" style="background:rgba(46,196,165,0.15);">[M] 雇用区分モーダル</span>
+    <span class="nav-tab" onclick="bOpenStep(4)" style="background:rgba(46,196,165,0.15);">[M] 従業員モーダル</span>
     <span class="nav-tab" onclick="go('b0-empty')" id="nav-b0-empty">打刻記録(未セットアップ)</span>
     <span class="nav-sep"></span>
     <span class="nav-flow">C 従業員</span>
@@ -1132,137 +1137,100 @@
   </div>
 </div>
 
-<!-- ===== B-STEP共通: 各ステップの登録画面（登録後にB-0へ戻る） ===== -->
+<!-- ===== B-STEPモーダル群: 各登録モーダル（ページ遷移ではなくオーバーレイで開く） ===== -->
 
-<!-- B-STEP1: 業態・ブランド登録 -->
-<div class="page" id="page-b-step1">
-  <div class="dash">
-    <aside class="sb">
-      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">📋</span>登録ガイド</a></div>
-      <div class="sb-sec"><div class="sl">設定</div><a href="#"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#"><span class="ic">🏠</span>店舗情報</a><a href="#" class="act"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a></div>
-      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
-    </aside>
-    <main class="mc">
-      <div style="font-size:11px;color:#888;margin-bottom:6px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 登録ガイドに戻る</a></div>
-      <div class="ph"><h2>① 業態・ブランド登録</h2></div>
-      <p style="font-size:11px;color:#666;margin-bottom:18px;">店舗の業態と運営ブランド名を登録します。</p>
-
-      <div style="background:#fff;border:1px solid #e8e8e8;border-radius:10px;padding:22px 24px;max-width:560px;">
-        <div class="fg">
-          <label>業態 <span class="req">✳</span></label>
-          <select style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-            <option>飲食店</option><option>小売店</option><option>サービス業</option><option>その他</option>
-          </select>
-        </div>
-        <div class="fg"><label>ブランド名 <span class="req">✳</span></label><input value="" placeholder="例: ラクミー食堂" style="max-width:100%;"></div>
-        <div class="fg"><label>ブランドコード</label><input value="" placeholder="例: RKM" style="max-width:100%;"><div class="hint">3〜10文字の英数字。レポートでブランド識別に使用します。</div></div>
-        <div class="btn-grp"><button class="btn btn-s" onclick="go('b0')">キャンセル</button><button class="btn btn-p" onclick="b0CompleteStep(1)">登録してセットアップに戻る →</button></div>
+<!-- ① 業態・ブランド登録モーダル -->
+<div class="b-step-overlay" id="b-step-modal-1">
+  <div class="b-step-modal">
+    <div class="mh"><h3>業態・ブランドを登録</h3><button class="mx" onclick="bCloseStep()">✕</button></div>
+    <div class="mb">
+      <div class="al al-i" style="margin-bottom:14px;font-size:10px;"><span>💡</span><div>店舗の業態と運営ブランド名を登録します。複数ブランド運営の場合は事業ブランドごとに登録してください。</div></div>
+      <div class="fg">
+        <label>業態 <span class="req">✳</span></label>
+        <select style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+          <option>飲食店</option><option>小売店</option><option>サービス業</option><option>その他</option>
+        </select>
       </div>
-    </main>
+      <div class="fg"><label>ブランド名 <span class="req">✳</span></label><input value="" placeholder="例: ラクミー食堂" style="max-width:100%;"></div>
+      <div class="fg"><label>ブランドコード</label><input value="" placeholder="例: RKM" style="max-width:100%;"><div class="hint">3〜10文字の英数字。レポートでブランド識別に使用します。</div></div>
+      <div class="btn-grp"><button class="btn btn-s" onclick="bCloseStep()">キャンセル</button><button class="btn btn-p" onclick="b0CompleteStep(1)">登録</button></div>
+    </div>
   </div>
 </div>
 
-<!-- B-STEP2: 店舗登録 -->
-<div class="page" id="page-b-step2">
-  <div class="dash">
-    <aside class="sb">
-      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">📋</span>登録ガイド</a></div>
-      <div class="sb-sec"><div class="sl">設定</div><a href="#"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#" class="act"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a></div>
-      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
-    </aside>
-    <main class="mc">
-      <div style="font-size:11px;color:#888;margin-bottom:6px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 登録ガイドに戻る</a></div>
-      <div class="ph"><h2>② 店舗登録</h2></div>
-      <p style="font-size:11px;color:#666;margin-bottom:18px;">店舗情報を登録します。複数店舗ある場合は、まず1店舗目を登録してください（追加店舗は後から登録可）。</p>
-
-      <div style="background:#fff;border:1px solid #e8e8e8;border-radius:10px;padding:22px 24px;max-width:560px;">
-        <div class="fg"><label>店舗名 <span class="req">✳</span></label><input value="" placeholder="例: 渋谷店" style="max-width:100%;"></div>
-        <div class="fg">
-          <label>所属ブランド <span class="req">✳</span></label>
-          <select style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-            <option>ラクミー食堂（①で登録したブランド）</option>
-          </select>
-        </div>
-        <div class="fg"><label>住所 <span class="req">✳</span></label><input value="" placeholder="例: 東京都渋谷区..." style="max-width:100%;"></div>
-        <div class="fg"><label>営業時間 <span class="req">✳</span></label>
-          <div class="fr"><div class="fg"><input value="" placeholder="開店 例:11:00"></div><div class="fg"><input value="" placeholder="閉店 例:23:00"></div></div>
-        </div>
-        <div class="btn-grp"><button class="btn btn-s" onclick="go('b0')">キャンセル</button><button class="btn btn-p" onclick="b0CompleteStep(2)">登録してセットアップに戻る →</button></div>
+<!-- ② 店舗登録モーダル -->
+<div class="b-step-overlay" id="b-step-modal-2">
+  <div class="b-step-modal">
+    <div class="mh"><h3>店舗を登録</h3><button class="mx" onclick="bCloseStep()">✕</button></div>
+    <div class="mb">
+      <div class="al al-i" style="margin-bottom:14px;font-size:10px;"><span>💡</span><div>所属ブランドの選択が必須です。先にブランドを登録してから店舗を登録してください。</div></div>
+      <div class="fg"><label>店舗名 <span class="req">✳</span></label><input value="" placeholder="例: 渋谷店" style="max-width:100%;"></div>
+      <div class="fg">
+        <label>所属ブランド <span class="req">✳</span></label>
+        <select style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+          <option>ラクミー食堂（①で登録したブランドから選択）</option>
+        </select>
+        <div class="hint">前提登録: ① 業態・ブランド</div>
       </div>
-    </main>
+      <div class="fg"><label>住所 <span class="req">✳</span></label><input value="" placeholder="例: 東京都渋谷区..." style="max-width:100%;"></div>
+      <div class="fg"><label>営業時間 <span class="req">✳</span></label>
+        <div class="fr"><div class="fg"><input value="" placeholder="開店 例:11:00"></div><div class="fg"><input value="" placeholder="閉店 例:23:00"></div></div>
+      </div>
+      <div class="btn-grp"><button class="btn btn-s" onclick="bCloseStep()">キャンセル</button><button class="btn btn-p" onclick="b0CompleteStep(2)">登録</button></div>
+    </div>
   </div>
 </div>
 
-<!-- B-STEP3: 雇用区分登録 -->
-<div class="page" id="page-b-step3">
-  <div class="dash">
-    <aside class="sb">
-      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">📋</span>登録ガイド</a></div>
-      <div class="sb-sec"><div class="sl">設定</div><a href="#"><span class="ic">👤</span>従業員</a><a href="#" class="act"><span class="ic">📋</span>雇用区分</a><a href="#"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a></div>
-      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
-    </aside>
-    <main class="mc">
-      <div style="font-size:11px;color:#888;margin-bottom:6px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 登録ガイドに戻る</a></div>
-      <div class="ph"><h2>③ 雇用区分登録</h2></div>
-      <p style="font-size:11px;color:#666;margin-bottom:18px;">従業員の雇用区分を登録します。1件以上の登録が必須です（後から追加・編集可）。</p>
-
-      <div style="background:#fff;border:1px solid #e8e8e8;border-radius:10px;padding:22px 24px;max-width:560px;">
-        <div class="fg"><label>区分名 <span class="req">✳</span></label><input value="" placeholder="例: 正社員 / アルバイト / 業務委託" style="max-width:100%;"></div>
-        <div class="fg">
-          <label>種別 <span class="req">✳</span></label>
-          <select style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-            <option>正社員</option><option>契約社員</option><option>アルバイト</option><option>業務委託</option><option>その他</option>
-          </select>
-        </div>
-        <div class="fg"><label>時給単位 <span class="req">✳</span></label>
-          <select style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-            <option>時給</option><option>日給</option><option>月給</option>
-          </select>
-        </div>
-        <div class="btn-grp"><button class="btn btn-s" onclick="go('b0')">キャンセル</button><button class="btn btn-p" onclick="b0CompleteStep(3)">登録してセットアップに戻る →</button></div>
+<!-- ③ 雇用区分登録モーダル -->
+<div class="b-step-overlay" id="b-step-modal-3">
+  <div class="b-step-modal">
+    <div class="mh"><h3>雇用区分を登録</h3><button class="mx" onclick="bCloseStep()">✕</button></div>
+    <div class="mb">
+      <div class="al al-i" style="margin-bottom:14px;font-size:10px;"><span>💡</span><div>従業員の雇用区分を登録します。前提登録なし、独立して追加可能です。</div></div>
+      <div class="fg"><label>区分名 <span class="req">✳</span></label><input value="" placeholder="例: 正社員 / アルバイト / 業務委託" style="max-width:100%;"></div>
+      <div class="fg">
+        <label>種別 <span class="req">✳</span></label>
+        <select style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+          <option>正社員</option><option>契約社員</option><option>アルバイト</option><option>業務委託</option><option>その他</option>
+        </select>
       </div>
-    </main>
+      <div class="fg"><label>時給単位 <span class="req">✳</span></label>
+        <select style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+          <option>時給</option><option>日給</option><option>月給</option>
+        </select>
+      </div>
+      <div class="btn-grp"><button class="btn btn-s" onclick="bCloseStep()">キャンセル</button><button class="btn btn-p" onclick="b0CompleteStep(3)">登録</button></div>
+    </div>
   </div>
 </div>
 
-<!-- B-STEP4: 従業員登録 -->
-<div class="page" id="page-b-step4">
-  <div class="dash">
-    <aside class="sb">
-      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">📋</span>登録ガイド</a></div>
-      <div class="sb-sec"><div class="sl">設定</div><a href="#" class="act"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a></div>
-      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
-    </aside>
-    <main class="mc">
-      <div style="font-size:11px;color:#888;margin-bottom:6px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 登録ガイドに戻る</a></div>
-      <div class="ph"><h2>④ 従業員登録</h2></div>
-      <p style="font-size:11px;color:#666;margin-bottom:18px;">従業員を登録します。登録と同時に従業員へ招待メール（C-4）が自動送信されます。</p>
-
-      <div style="background:#fff;border:1px solid #e8e8e8;border-radius:10px;padding:22px 24px;max-width:560px;">
-        <div class="fr">
-          <div class="fg"><label>名前 <span class="req">✳</span></label><input value="" placeholder="例: 吉田 七美" style="max-width:100%;"></div>
-          <div class="fg"><label>電話番号 <span class="req">✳</span></label><input value="" placeholder="例: 090-0000-0000" style="max-width:100%;"></div>
-        </div>
-        <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input type="email" value="" placeholder="例: yoshida@example.jp" style="max-width:100%;"><div class="hint">このアドレスに招待メール（72h有効）が送信されます。</div></div>
-        <div class="fr">
-          <div class="fg"><label>雇用区分 <span class="req">✳</span></label>
-            <select style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-              <option>（③で登録した区分から選択）</option>
-            </select>
-          </div>
-          <div class="fg"><label>所属店舗 <span class="req">✳</span></label>
-            <select style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-              <option>（②で登録した店舗から選択）</option>
-            </select>
-          </div>
-        </div>
-        <div class="btn-grp"><button class="btn btn-s" onclick="go('b0')">キャンセル</button><button class="btn btn-p" onclick="b0CompleteStep(4)">登録してセットアップに戻る →</button></div>
+<!-- ④ 従業員登録モーダル -->
+<div class="b-step-overlay" id="b-step-modal-4">
+  <div class="b-step-modal">
+    <div class="mh"><h3>従業員を登録</h3><button class="mx" onclick="bCloseStep()">✕</button></div>
+    <div class="mb">
+      <div class="al al-i" style="margin-bottom:14px;font-size:10px;"><span>💡</span><div>所属店舗と雇用区分の両方への紐付けが必須です。登録と同時に招待メール（C-4）が自動送信されます。</div></div>
+      <div class="fr">
+        <div class="fg"><label>名前 <span class="req">✳</span></label><input value="" placeholder="例: 吉田 七美" style="max-width:100%;"></div>
+        <div class="fg"><label>電話番号 <span class="req">✳</span></label><input value="" placeholder="例: 090-0000-0000" style="max-width:100%;"></div>
       </div>
-    </main>
+      <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input type="email" value="" placeholder="例: yoshida@example.jp" style="max-width:100%;"><div class="hint">このアドレスに招待メール（72h有効）が送信されます。</div></div>
+      <div class="fr">
+        <div class="fg"><label>雇用区分 <span class="req">✳</span></label>
+          <select style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+            <option>（③で登録した区分から選択）</option>
+          </select>
+          <div class="hint">前提登録: ③ 雇用区分</div>
+        </div>
+        <div class="fg"><label>所属店舗 <span class="req">✳</span></label>
+          <select style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+            <option>（②で登録した店舗から選択）</option>
+          </select>
+          <div class="hint">前提登録: ② 店舗</div>
+        </div>
+      </div>
+      <div class="btn-grp"><button class="btn btn-s" onclick="bCloseStep()">キャンセル</button><button class="btn btn-p" onclick="b0CompleteStep(4)">登録</button></div>
+    </div>
   </div>
 </div>
 
@@ -2257,9 +2225,19 @@ function b0SetState(doneCount) {
   }
 }
 
-// B-0 → 各ステップ登録画面へ遷移（双方向: forward）
+// B-STEPモーダル: 開閉
+function bOpenStep(stepNum) {
+  document.querySelectorAll('.b-step-overlay').forEach(function(o){ o.classList.remove('act'); });
+  var ov = document.getElementById('b-step-modal-' + stepNum);
+  if (ov) ov.classList.add('act');
+}
+function bCloseStep() {
+  document.querySelectorAll('.b-step-overlay').forEach(function(o){ o.classList.remove('act'); });
+}
+
+// B-0/B-0-OPS/B-0-ADD の各CTA → ステップモーダルを開く
 function b0Go(stepNum) {
-  go('b-step' + stepNum);
+  bOpenStep(stepNum);
 }
 
 /* B-0-ADD: 紐付き登録支援 タスク切替 */
@@ -2272,10 +2250,9 @@ function addSelectTask(taskId) {
   if (panel) panel.classList.add('act');
 }
 
-// 登録画面 → B-0へ戻る（双方向: backward + 進捗更新 + 件数インクリメント）
+// モーダル登録ボタン → モーダル閉じる + 進捗+件数更新（ページ遷移なし）
 function b0CompleteStep(stepNum) {
   var done = b0LoadDone();
-  // 初期登録モード: 順序ガード（運用モード=既に4/4の場合は単純加算）
   if (done < 4) {
     if (stepNum > done) {
       if (stepNum !== done + 1) {
@@ -2286,11 +2263,15 @@ function b0CompleteStep(stepNum) {
       b0SaveDone(done);
     }
   }
-  // 件数インクリメント（運用モードで「+追加」した場合も加算される）
   var counts = b0LoadCounts();
   counts[stepNum - 1] = (counts[stepNum - 1] || 0) + 1;
   b0SaveCounts(counts);
-  go('b0');
+  bCloseStep();
+  // 現在B-0系画面が開いている場合は表示を即時更新
+  var activePage = document.querySelector('.page.active');
+  if (activePage && activePage.id === 'page-b0') {
+    b0SetState(b0LoadDone());
+  }
 }
 
 /* D-2: 管理者登録モーダル タブ切替 */
