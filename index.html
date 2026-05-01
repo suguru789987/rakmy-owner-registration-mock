@@ -406,13 +406,9 @@
     <span class="nav-sep"></span>
     <span class="nav-flow">B 初期登録</span>
     <span class="nav-tab" onclick="go('b0')" id="nav-b0">登録ガイド</span>
-    <span class="nav-tab" onclick="go('setup-brand')" id="nav-setup-brand">①業態・ブランド</span>
-    <span class="nav-tab" onclick="go('setup-store')" id="nav-setup-store">②店舗</span>
-    <span class="nav-tab" onclick="go('setup-emptype')" id="nav-setup-emptype">③雇用区分</span>
-    <span class="nav-tab" onclick="go('setup-emp')" id="nav-setup-emp">④従業員</span>
     <span class="nav-tab" onclick="go('b0-empty')" id="nav-b0-empty">打刻記録(未セットアップ)</span>
     <span class="nav-sep"></span>
-    <span class="nav-flow">B' 運用設定</span>
+    <span class="nav-flow">B' 設定画面（初期/運用 共通）</span>
     <span class="nav-tab" onclick="go('brand-settings')" id="nav-brand-settings">業態・ブランド</span>
     <span class="nav-tab" onclick="go('store-settings')" id="nav-store-settings">店舗</span>
     <span class="nav-tab" onclick="go('emptype-settings')" id="nav-emptype-settings">雇用区分</span>
@@ -814,175 +810,6 @@
 
 <!-- ===== 各設定画面（業態・ブランド/店舗/雇用区分/従業員） ===== -->
 <!-- 共通: 初期セットアップ進行中の判定バナーをbanner-settings-Nに動的挿入 -->
-
-<!-- ===== 初期登録モード専用ステップ画面（4種・ウィザード形式）===== -->
-
-<!-- ① 業態・ブランド 初期登録 -->
-<div class="page" id="page-setup-brand">
-  <div class="dash">
-    <aside class="sb">
-      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">📋</span>登録ガイド</a></div>
-      <div class="sb-sec"><div class="sl">初期登録ステップ</div>
-        <a href="#" class="act"><span class="ic">①</span>業態・ブランド</a>
-        <a href="#" style="opacity:0.4;"><span class="ic">②</span>店舗</a>
-        <a href="#" style="opacity:0.4;"><span class="ic">③</span>雇用区分</a>
-        <a href="#" style="opacity:0.4;"><span class="ic">④</span>従業員</a>
-      </div>
-      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
-    </aside>
-    <main class="mc" style="background:#f8f9fa;">
-      <div style="font-size:11px;color:#888;margin-bottom:8px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 登録ガイドに戻る</a></div>
-
-      <div style="background:#fff;border:2px solid #2ec4a5;border-radius:12px;padding:28px 32px;max-width:640px;margin:0 auto;">
-        <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
-          <div style="width:48px;height:48px;border-radius:50%;background:#2ec4a5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;">①</div>
-          <div>
-            <div style="font-size:10px;color:#888;font-weight:600;letter-spacing:0.5px;">STEP 1 / 4 ・ 初期登録</div>
-            <h2 style="font-size:18px;margin:0;">業態・ブランドを登録</h2>
-          </div>
-        </div>
-
-        <p style="font-size:12px;color:#555;line-height:1.8;margin-bottom:18px;">店舗の業態（飲食店・小売店など）と運営ブランド名を登録します。<br>複数のブランドを運営している場合は、事業ブランドごとに登録してください。</p>
-
-        <div style="background:#f8f9fa;border-radius:8px;padding:12px 14px;font-size:11px;margin-bottom:18px;">
-          <strong>前提登録:</strong> なし（独立して登録可能）<br>
-          <strong>登録済み:</strong> <span id="setup-count-1">0</span> 件
-        </div>
-
-        <div style="text-align:center;">
-          <button class="btn btn-p btn-lg" onclick="bOpenStep(1)" style="max-width:340px;">+ ブランドを登録する</button>
-        </div>
-      </div>
-    </main>
-  </div>
-</div>
-
-<!-- ② 店舗 初期登録 -->
-<div class="page" id="page-setup-store">
-  <div class="dash">
-    <aside class="sb">
-      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">📋</span>登録ガイド</a></div>
-      <div class="sb-sec"><div class="sl">初期登録ステップ</div>
-        <a href="#" onclick="go('setup-brand')"><span class="ic">①</span>業態・ブランド ✓</a>
-        <a href="#" class="act"><span class="ic">②</span>店舗</a>
-        <a href="#" style="opacity:0.4;"><span class="ic">③</span>雇用区分</a>
-        <a href="#" style="opacity:0.4;"><span class="ic">④</span>従業員</a>
-      </div>
-      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
-    </aside>
-    <main class="mc" style="background:#f8f9fa;">
-      <div style="font-size:11px;color:#888;margin-bottom:8px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 登録ガイドに戻る</a></div>
-      <div id="setup-warn-2"></div>
-
-      <div style="background:#fff;border:2px solid #2ec4a5;border-radius:12px;padding:28px 32px;max-width:640px;margin:0 auto;">
-        <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
-          <div style="width:48px;height:48px;border-radius:50%;background:#2ec4a5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;">②</div>
-          <div>
-            <div style="font-size:10px;color:#888;font-weight:600;letter-spacing:0.5px;">STEP 2 / 4 ・ 初期登録</div>
-            <h2 style="font-size:18px;margin:0;">店舗を登録</h2>
-          </div>
-        </div>
-
-        <p style="font-size:12px;color:#555;line-height:1.8;margin-bottom:18px;">店舗名・住所・営業時間などの店舗情報を登録します。<br>複数店舗の登録も可能です（追加の店舗は運用後に「店舗設定」から登録できます）。</p>
-
-        <div style="background:#f8f9fa;border-radius:8px;padding:12px 14px;font-size:11px;margin-bottom:18px;">
-          <strong>前提登録:</strong> ① 業態・ブランド<br>
-          <strong>登録済み:</strong> <span id="setup-count-2">0</span> 件
-        </div>
-
-        <div style="text-align:center;">
-          <button class="btn btn-p btn-lg" id="setup-btn-2" onclick="bOpenStep(2)" style="max-width:340px;">+ 店舗を登録する</button>
-        </div>
-      </div>
-    </main>
-  </div>
-</div>
-
-<!-- ③ 雇用区分 初期登録 -->
-<div class="page" id="page-setup-emptype">
-  <div class="dash">
-    <aside class="sb">
-      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">📋</span>登録ガイド</a></div>
-      <div class="sb-sec"><div class="sl">初期登録ステップ</div>
-        <a href="#" onclick="go('setup-brand')"><span class="ic">①</span>業態・ブランド ✓</a>
-        <a href="#" onclick="go('setup-store')"><span class="ic">②</span>店舗 ✓</a>
-        <a href="#" class="act"><span class="ic">③</span>雇用区分</a>
-        <a href="#" style="opacity:0.4;"><span class="ic">④</span>従業員</a>
-      </div>
-      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
-    </aside>
-    <main class="mc" style="background:#f8f9fa;">
-      <div style="font-size:11px;color:#888;margin-bottom:8px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 登録ガイドに戻る</a></div>
-      <div id="setup-warn-3"></div>
-
-      <div style="background:#fff;border:2px solid #2ec4a5;border-radius:12px;padding:28px 32px;max-width:640px;margin:0 auto;">
-        <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
-          <div style="width:48px;height:48px;border-radius:50%;background:#2ec4a5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;">③</div>
-          <div>
-            <div style="font-size:10px;color:#888;font-weight:600;letter-spacing:0.5px;">STEP 3 / 4 ・ 初期登録</div>
-            <h2 style="font-size:18px;margin:0;">雇用区分を登録</h2>
-          </div>
-        </div>
-
-        <p style="font-size:12px;color:#555;line-height:1.8;margin-bottom:18px;">正社員・アルバイト・業務委託など、従業員の雇用区分を登録します。<br>1件以上の登録が必須です。後から追加・編集できます。</p>
-
-        <div style="background:#f8f9fa;border-radius:8px;padding:12px 14px;font-size:11px;margin-bottom:18px;">
-          <strong>前提登録:</strong> なし（独立して登録可能）<br>
-          <strong>登録済み:</strong> <span id="setup-count-3">0</span> 件
-        </div>
-
-        <div style="text-align:center;">
-          <button class="btn btn-p btn-lg" id="setup-btn-3" onclick="bOpenStep(3)" style="max-width:340px;">+ 雇用区分を登録する</button>
-        </div>
-      </div>
-    </main>
-  </div>
-</div>
-
-<!-- ④ 従業員 初期登録 -->
-<div class="page" id="page-setup-emp">
-  <div class="dash">
-    <aside class="sb">
-      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">📋</span>登録ガイド</a></div>
-      <div class="sb-sec"><div class="sl">初期登録ステップ</div>
-        <a href="#" onclick="go('setup-brand')"><span class="ic">①</span>業態・ブランド ✓</a>
-        <a href="#" onclick="go('setup-store')"><span class="ic">②</span>店舗 ✓</a>
-        <a href="#" onclick="go('setup-emptype')"><span class="ic">③</span>雇用区分 ✓</a>
-        <a href="#" class="act"><span class="ic">④</span>従業員</a>
-      </div>
-      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
-    </aside>
-    <main class="mc" style="background:#f8f9fa;">
-      <div style="font-size:11px;color:#888;margin-bottom:8px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 登録ガイドに戻る</a></div>
-      <div id="setup-warn-4"></div>
-
-      <div style="background:#fff;border:2px solid #2ec4a5;border-radius:12px;padding:28px 32px;max-width:640px;margin:0 auto;">
-        <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
-          <div style="width:48px;height:48px;border-radius:50%;background:#2ec4a5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;">④</div>
-          <div>
-            <div style="font-size:10px;color:#888;font-weight:600;letter-spacing:0.5px;">STEP 4 / 4 ・ 初期登録</div>
-            <h2 style="font-size:18px;margin:0;">従業員を登録</h2>
-          </div>
-        </div>
-
-        <p style="font-size:12px;color:#555;line-height:1.8;margin-bottom:18px;">店舗・雇用区分を割り当てて、従業員を登録します。<br>登録後、招待メールは「従業員一覧」の<strong>「招待送信」ボタン</strong>から送信してください。</p>
-
-        <div style="background:#f8f9fa;border-radius:8px;padding:12px 14px;font-size:11px;margin-bottom:18px;">
-          <strong>前提登録:</strong> ② 店舗 / ③ 雇用区分<br>
-          <strong>登録済み:</strong> <span id="setup-count-4">0</span> 件
-        </div>
-
-        <div style="text-align:center;">
-          <button class="btn btn-p btn-lg" id="setup-btn-4" onclick="bOpenStep(4)" style="max-width:340px;">+ 従業員を登録する</button>
-        </div>
-      </div>
-    </main>
-  </div>
-</div>
 
 <!-- 業態・ブランド設定 -->
 <div class="page" id="page-brand-settings">
@@ -1984,15 +1811,10 @@ function go(id) {
   if (id === 'd2') d2SwitchTab('new');
   // b0(登録ガイド)を開いた際は保存済み進捗を反映
   if (id === 'b0') b0SetState(b0LoadDone());
-  // 運用設定画面: 初期登録未完了時は警告表示、完了後は通常の一覧表示
+  // 設定画面: 初期/運用モードに応じてバナー切替
   var settingsMap = {'brand-settings':1,'store-settings':2,'emptype-settings':3,'emp-settings':4};
   if (settingsMap[id]) {
     refreshSettingsModeGuard(settingsMap[id]);
-  }
-  // 初期登録ステップ画面: 完了後は完了表示、未完了時は順序ガード+件数表示
-  var setupMap = {'setup-brand':1,'setup-store':2,'setup-emptype':3,'setup-emp':4};
-  if (setupMap[id]) {
-    refreshSetupStep(setupMap[id]);
   }
   // URLハッシュ同期(ディープリンク対応)
   if (location.hash !== '#' + id) {
@@ -2188,101 +2010,75 @@ function bCloseStep() {
   document.querySelectorAll('.b-step-overlay').forEach(function(o){ o.classList.remove('act'); });
 }
 
-// 初期登録ステップページ・運用設定ページのマッピング
-var SETUP_PAGES    = ['', 'setup-brand', 'setup-store', 'setup-emptype', 'setup-emp'];
+// 設定画面マッピング(初期/運用 共通)
 var SETTINGS_PAGES = ['', 'brand-settings', 'store-settings', 'emptype-settings', 'emp-settings'];
 
-// B-0登録ガイドからの遷移: 初期登録モード時はsetup-*へ、完了後は運用設定画面へ
+// b0登録ガイドからの遷移: 設定画面へ移動(初期/運用 共通の単一画面)
 function b0Go(stepNum) {
-  var done = b0LoadDone();
-  go(done < 4 ? SETUP_PAGES[stepNum] : SETTINGS_PAGES[stepNum]);
+  go(SETTINGS_PAGES[stepNum]);
 }
 
-// 連鎖CTAでの遷移+モーダル展開: 状態に応じてsetup-*/settings-*を選ぶ
+// 連鎖CTAでの遷移+モーダル展開
 function bGotoSettingsAndOpenModal(stepNum) {
-  var done = b0LoadDone();
-  go(done < 4 ? SETUP_PAGES[stepNum] : SETTINGS_PAGES[stepNum]);
+  go(SETTINGS_PAGES[stepNum]);
   setTimeout(function(){ bOpenStep(stepNum); }, 200);
 }
 
-// 初期登録ステップ画面: 進行中バナー + 順序ガード警告 + 完了済みモード対応
-function refreshSetupStep(stepNum) {
-  var counts = b0LoadCounts();
-  var done = b0LoadDone();
-  var stepNames = ['', '業態・ブランド', '店舗', '雇用区分', '従業員'];
-  var warn = document.getElementById('setup-warn-' + stepNum);
-  var btn = document.getElementById('setup-btn-' + stepNum);
-  var c = counts[stepNum - 1] || 0;
-  var el = document.getElementById('setup-count-' + stepNum);
-  if (el) el.textContent = c;
-
-  // 完了済みモード: 運用設定画面へ誘導
-  if (done >= 4) {
-    if (warn) warn.innerHTML =
-      '<div class="al al-s" style="max-width:640px;margin:0 auto 14px;align-items:center;">' +
-      '<span style="font-size:16px;">✓</span>' +
-      '<div style="flex:1;">' +
-      '<strong>初期登録は完了しています。</strong><br>' +
-      stepNames[stepNum] + 'の追加・編集は<strong>運用設定画面</strong>からご利用ください。' +
-      '</div>' +
-      '<button class="btn btn-p btn-sm" onclick="go(\'' + SETTINGS_PAGES[stepNum] + '\')" style="margin-left:10px;">' + stepNames[stepNum] + '設定へ →</button>' +
-      '</div>';
-    if (btn) btn.disabled = true;
-    return;
-  }
-  // 順序違反: 警告 + 正しいステップへ誘導
-  if (stepNum > done + 1) {
-    if (warn) warn.innerHTML =
-      '<div class="al al-w" style="max-width:640px;margin:0 auto 14px;align-items:center;">' +
-      '<span style="font-size:16px;">⚠️</span>' +
-      '<div style="flex:1;">' +
-      '<strong>登録順序が違います。</strong><br>' +
-      '初期登録では順番通りの登録が必須です。今は<strong>「' + stepNames[done + 1] + '」</strong>を先に登録してください。' +
-      '</div>' +
-      '<button class="btn btn-p btn-sm" onclick="go(\'' + SETUP_PAGES[done + 1] + '\')" style="margin-left:10px;">' + stepNames[done + 1] + 'へ →</button>' +
-      '</div>';
-    if (btn) btn.disabled = true;
-    return;
-  }
-  // 通常モード: 進行中バナー(スクショと同形式)
-  if (warn) warn.innerHTML =
-    '<div class="al al-i" style="max-width:640px;margin:0 auto 14px;align-items:center;">' +
-    '<span style="font-size:16px;">📋</span>' +
-    '<div style="flex:1;">' +
-    '<strong>初期セットアップ進行中（' + done + '/4 完了）</strong><br>' +
-    '今は<strong>「' + stepNames[stepNum] + '」</strong>を登録するステップです。「+ 登録する」ボタンから登録してください。' +
-    '</div>' +
-    '<button class="btn btn-s btn-sm" onclick="go(\'b0\')" style="margin-left:10px;">登録ガイドへ戻る</button>' +
-    '</div>';
-  if (btn) btn.disabled = false;
-}
-
-// 運用設定画面: 初期登録未完了時のガード警告
+// 設定画面: 初期登録モードと運用モードに応じてバナー切替 + 一覧更新
 function refreshSettingsModeGuard(stepNum) {
   refreshSettingsList(stepNum);
   var done = b0LoadDone();
+  var counts = b0LoadCounts();
+  var stepNames = ['', '業態・ブランド', '店舗', '雇用区分', '従業員'];
   var pageIds = ['', 'page-brand-settings', 'page-store-settings', 'page-emptype-settings', 'page-emp-settings'];
   var pageEl = document.getElementById(pageIds[stepNum]);
   if (!pageEl) return;
   var mainEl = pageEl.querySelector('main.mc');
   if (!mainEl) return;
-  // 既存guardを削除
-  var existing = mainEl.querySelector('.settings-guard-banner');
+  // 既存バナーを削除
+  var existing = mainEl.querySelector('.settings-mode-banner');
   if (existing) existing.remove();
-  // 初期登録未完了時のみ警告
-  if (done < 4) {
-    var banner = document.createElement('div');
-    banner.className = 'al al-w settings-guard-banner';
-    banner.style.cssText = 'margin-bottom:14px;align-items:center;';
+  // 運用モード(done=4): バナーなし
+  if (done >= 4) return;
+  // 初期登録モード: 状況別バナー
+  var banner = document.createElement('div');
+  banner.className = 'settings-mode-banner';
+  banner.style.cssText = 'margin-bottom:14px;';
+  if (stepNum === done + 1) {
+    // 正しいステップ: 進行中バナー(スクショ準拠)
     banner.innerHTML =
+      '<div class="al al-i" style="align-items:center;">' +
+      '<span style="font-size:16px;">📋</span>' +
+      '<div style="flex:1;">' +
+      '<strong>初期セットアップ進行中（' + done + '/4 完了）</strong><br>' +
+      '今は<strong>「' + stepNames[stepNum] + '」</strong>を登録するステップです。「+ 追加」ボタンから登録してください。' +
+      '</div>' +
+      '<button class="btn btn-s btn-sm" onclick="go(\'b0\')" style="margin-left:10px;">登録ガイドへ戻る</button>' +
+      '</div>';
+  } else if (stepNum > done + 1) {
+    // 順序違反: 警告
+    banner.innerHTML =
+      '<div class="al al-w" style="align-items:center;">' +
       '<span style="font-size:16px;">⚠️</span>' +
       '<div style="flex:1;">' +
-      '<strong>初期登録が未完了です。</strong><br>' +
-      '運用設定画面は初期登録（4項目）の完了後にご利用ください。' +
+      '<strong>登録順序が違います。</strong><br>' +
+      '初期登録では順番通りの登録が必須です。今は<strong>「' + stepNames[done + 1] + '」</strong>を先に登録してください。' +
       '</div>' +
-      '<button class="btn btn-p btn-sm" onclick="go(\'b0\')" style="margin-left:10px;">登録ガイドへ →</button>';
-    mainEl.insertBefore(banner, mainEl.firstChild);
+      '<button class="btn btn-p btn-sm" onclick="go(\'' + SETTINGS_PAGES[done + 1] + '\')" style="margin-left:10px;">' + stepNames[done + 1] + 'へ →</button>' +
+      '</div>';
+  } else {
+    // 完了済みステップ(再編集可、進行中バナーで案内)
+    banner.innerHTML =
+      '<div class="al al-i" style="align-items:center;">' +
+      '<span style="font-size:16px;">✓</span>' +
+      '<div style="flex:1;">' +
+      '<strong>このステップは登録済みです。</strong><br>' +
+      stepNames[stepNum] + 'の追加・編集が可能です。次のステップは<strong>「' + stepNames[done + 1] + '」</strong>です。' +
+      '</div>' +
+      '<button class="btn btn-s btn-sm" onclick="go(\'b0\')" style="margin-left:10px;">登録ガイドへ戻る</button>' +
+      '</div>';
   }
+  mainEl.insertBefore(banner, mainEl.firstChild);
 }
 
 // (旧) 設定画面の初期セットアップバナーを更新 — 廃止予定
@@ -2379,18 +2175,15 @@ function b0CompleteStep(stepNum) {
   var activePage = document.querySelector('.page.active');
   var pageId = activePage ? activePage.id : '';
 
-  // 初期登録ステップ画面(setup-*)の上で登録: 件数更新 + 橋渡しモーダルで次画面誘導
-  var setupMap = {'page-setup-brand':1,'page-setup-store':2,'page-setup-emptype':3,'page-setup-emp':4};
-  if (setupMap[pageId]) {
-    refreshSetupStep(setupMap[pageId]);
-    bShowBridgeModal(stepNum);
-    return;
-  }
-  // 運用設定画面で登録: 一覧再描画 + トーストCTA
+  // 設定画面の上で登録: 初期登録モードなら橋渡しモーダル、運用モードならトースト
   var settingsMap = {'page-brand-settings':1,'page-store-settings':2,'page-emptype-settings':3,'page-emp-settings':4};
   if (settingsMap[pageId]) {
-    refreshSettingsList(settingsMap[pageId]);
-    bShowToast(stepNum);
+    refreshSettingsModeGuard(settingsMap[pageId]);
+    if (b0LoadDone() < 4) {
+      bShowBridgeModal(stepNum);  // 初期登録モード: 中央橋渡しモーダルで次設定画面誘導
+    } else {
+      bShowToast(stepNum);  // 運用モード: 画面右上トーストで連鎖CTA
+    }
     return;
   }
   // b0画面(登録ガイド)で登録した場合: ガイド更新 + 軽量通知
