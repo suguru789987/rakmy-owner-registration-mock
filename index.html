@@ -410,7 +410,6 @@
     <span class="nav-tab" onclick="go('store-settings')" id="nav-store-settings">店舗設定</span>
     <span class="nav-tab" onclick="go('emptype-settings')" id="nav-emptype-settings">雇用区分設定</span>
     <span class="nav-tab" onclick="go('emp-settings')" id="nav-emp-settings">従業員設定</span>
-    <span class="nav-tab" onclick="go('b0-after')" id="nav-b0-after">登録ガイド(初期登録後)</span>
     <span class="nav-tab" onclick="bOpenStep(1)" style="background:rgba(46,196,165,0.15);">[M] 業態モーダル</span>
     <span class="nav-tab" onclick="bOpenStep(2)" style="background:rgba(46,196,165,0.15);">[M] 店舗モーダル</span>
     <span class="nav-tab" onclick="bOpenStep(3)" style="background:rgba(46,196,165,0.15);">[M] 雇用区分モーダル</span>
@@ -881,66 +880,6 @@
   </div>
 </div>
 
-<!-- ===== B-0-AFTER: 初期登録後の追加登録デモ（順番に縛られない運用シナリオ） ===== -->
-<div class="page" id="page-b0-after">
-  <div class="dash">
-    <aside class="sb">
-      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📥</span>エクスポート</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
-      <div class="sb-sec"><div class="sl">設定</div><a href="#" class="act"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#"><span class="ic">👤</span>従業員</a><a href="#" onclick="go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a><a href="#"><span class="ic">🔗</span>外部連携</a></div>
-      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
-    </aside>
-    <main class="mc" style="background:#f8f9fa;">
-      <div class="ph"><h2>設定 - 店舗情報</h2></div>
-      <p style="font-size:11px;color:#666;margin-bottom:14px;max-width:760px;">
-        ※このページは<strong>初期登録完了後の運用シナリオ</strong>のデモです。順番に縛られず、必要な項目のみを追加するケース（新店舗オープン、新メンバー採用など）の挙動を確認できます。
-      </p>
-
-      <!-- パターン切替 -->
-      <div class="pattern-toggle">
-        <span style="font-size:11px;font-weight:600;color:#555;margin-right:6px;">紐付きCTA表示位置:</span>
-        <span class="ftab act" id="afterTab-bridge" onclick="bAfterSetMode('bridge')">モーダル上で確認（橋渡しモーダル）</span>
-        <span class="ftab" id="afterTab-toast" onclick="bAfterSetMode('toast')">画面右上にトースト</span>
-      </div>
-
-      <!-- 店舗一覧（既登録3件） -->
-      <div class="post-list">
-        <div class="ph-row">
-          <h4>🏠 店舗一覧（3件）</h4>
-          <button class="btn btn-p btn-sm" onclick="bAfterAdd(2)">+ 店舗を追加</button>
-        </div>
-        <div class="pl-row"><div class="nm">渋谷店</div><div class="meta">ラクミー食堂 / 11:00-23:00</div></div>
-        <div class="pl-row"><div class="nm">新宿店</div><div class="meta">ラクミー食堂 / 11:00-23:00</div></div>
-        <div class="pl-row"><div class="nm">池袋店</div><div class="meta">ラクミー食堂 / 11:00-22:00</div></div>
-      </div>
-
-      <!-- 雇用区分一覧（既登録4件） -->
-      <div class="post-list">
-        <div class="ph-row">
-          <h4>📋 雇用区分一覧（4件）</h4>
-          <button class="btn btn-p btn-sm" onclick="bAfterAdd(3)">+ 雇用区分を追加</button>
-        </div>
-        <div class="pl-row"><div class="nm">正社員</div><div class="meta">月給</div></div>
-        <div class="pl-row"><div class="nm">契約社員</div><div class="meta">月給</div></div>
-        <div class="pl-row"><div class="nm">アルバイト</div><div class="meta">時給</div></div>
-        <div class="pl-row"><div class="nm">業務委託</div><div class="meta">日給</div></div>
-      </div>
-
-      <!-- 業態・ブランド・従業員のクイック追加 -->
-      <div class="post-list">
-        <div class="ph-row"><h4>🏷 業態・ブランド（1件） / 👤 従業員（25件）</h4></div>
-        <div style="display:flex;gap:8px;padding:8px 4px;">
-          <button class="btn btn-s btn-sm" onclick="bAfterAdd(1)">+ ブランドを追加</button>
-          <button class="btn btn-s btn-sm" onclick="bAfterAdd(4)">+ 従業員を追加</button>
-        </div>
-      </div>
-
-      <div class="al al-i" style="margin-top:14px;font-size:10px;max-width:760px;"><span>💡</span><div>各「+ 追加」ボタンを押すとモーダルが開きます。登録完了後、選択中の「紐付きCTA表示位置」によってフィードバック方法が切り替わります。</div></div>
-    </main>
-  </div>
-</div>
-
-<!-- ===== 橋渡しモーダル: 登録完了後にモーダル上で次の追加を訴求するパターン ===== -->
 <div class="b-step-overlay" id="b-bridge-overlay">
   <div class="b-step-modal" style="max-width:440px;">
     <div class="b-bridge-content">
@@ -2191,30 +2130,8 @@ function b0CompleteStep(stepNum) {
     bShowToast(stepNum);
     return;
   }
-  // b0-after画面: 選択モードに応じて
-  if (pageId === 'page-b0-after') {
-    var mode = window.bAfterMode || 'bridge';
-    if (mode === 'bridge') bShowBridgeModal(stepNum);
-    else bShowToast(stepNum);
-    return;
-  }
   // フォールバック: トースト
   bShowToast(stepNum);
-}
-
-// 初期登録後デモ: パターン切替
-window.bAfterMode = 'bridge';
-function bAfterSetMode(mode) {
-  window.bAfterMode = mode;
-  var t1 = document.getElementById('afterTab-bridge');
-  var t2 = document.getElementById('afterTab-toast');
-  if (t1) t1.classList.toggle('act', mode === 'bridge');
-  if (t2) t2.classList.toggle('act', mode === 'toast');
-}
-
-// 初期登録後デモ: 「+ 追加」ボタンから対応モーダルを開く
-function bAfterAdd(stepNum) {
-  bOpenStep(stepNum);
 }
 
 // 橋渡しモーダル: 登録完了直後にモーダル上で次の追加CTAを表示
