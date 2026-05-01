@@ -494,7 +494,7 @@
       <thead><tr><th>項目</th><th>仕様</th></tr></thead>
       <tbody>
         <tr><td>認証基盤</td><td><strong>Clerk</strong> — サインアップ・ログイン・PW管理・セッション管理はClerkが担当</td></tr>
-        <tr><td>従業員登録</td><td>登録と同時に招待メールを自動送信。従業員が自分でPW設定。</td></tr>
+        <tr><td>従業員登録</td><td>登録後、従業員一覧の「招待送信」ボタンから招待メールを送信。従業員が自分でPW設定。</td></tr>
         <tr><td>管理者登録</td><td>オーナーが直接登録（Clerk API経由でユーザー作成、初期PW設定 → 口頭等で共有）</td></tr>
         <tr><td>従業員一覧 ステータス列</td><td>招待ステータスを表示（下記「ステータスバッジ仕様」参照）</td></tr>
         <tr><td>従業員一覧 PW操作列</td><td>ステータス列の右に配置。状態に応じてボタンが変わる（下記参照）</td></tr>
@@ -960,7 +960,7 @@
         <div class="fg"><label>名前 <span class="req">✳</span></label><input value="" placeholder="例: 吉田 七美" style="max-width:100%;"></div>
         <div class="fg"><label>電話番号 <span class="req">✳</span></label><input value="" placeholder="例: 090-0000-0000" style="max-width:100%;"></div>
       </div>
-      <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input type="email" value="" placeholder="例: yoshida@example.jp" style="max-width:100%;"><div class="hint">このアドレスに招待メール（72h有効）が送信されます。</div></div>
+      <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input type="email" value="" placeholder="例: yoshida@example.jp" style="max-width:100%;"><div class="hint">登録後、従業員一覧の「招待送信」ボタンを押すと、このアドレスに招待メール（72h有効）が送信されます。</div></div>
       <div class="fr">
         <div class="fg"><label>雇用区分 <span class="req">✳</span></label>
           <select id="b-step-4-emptype" style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
@@ -1327,7 +1327,7 @@
 <!-- ===== C-4: 招待メール（自動送信プレビュー） ===== -->
 <div class="page" id="page-c4">
   <div style="background:#f0f0f0; min-height:calc(100vh - 86px); padding:32px 16px;">
-    <div class="tc" style="margin-bottom:16px;"><span style="font-size:10px;color:#999;background:#fff;padding:4px 12px;border-radius:20px;">自動送信メール プレビュー（従業員登録時に自動送信）</span></div>
+    <div class="tc" style="margin-bottom:16px;"><span style="font-size:10px;color:#999;background:#fff;padding:4px 12px;border-radius:20px;">招待メール プレビュー（従業員一覧の「招待送信」ボタンから送信）</span></div>
     <div class="ep">
       <div class="ep-hdr"><strong>From:</strong> ラクミー タイムレコード &lt;noreply@timerecord.rakmy.jp&gt;<br><strong>To:</strong> yoshida@example.jp<br><strong>Subject:</strong> 【ラクミー タイムレコード】アカウント設定のご案内</div>
       <div class="ep-body">
@@ -2062,8 +2062,9 @@ function bShowBridgeModal(stepNum) {
     actions = '<button class="btn btn-p" onclick="bBridgeProceed(4)">従業員の登録に進む →</button>' +
               '<button class="btn btn-s" onclick="bBridgeDismiss()">あとで</button>';
   } else {
-    text = '新しい<strong>従業員</strong>を登録しました。<br>招待メールを送信しています。';
-    actions = '<button class="btn btn-p" onclick="bBridgeDismiss()">完了</button>';
+    text = '新しい<strong>従業員</strong>を登録しました。<br>招待メールは<strong>従業員一覧</strong>の「招待送信」ボタンから送信してください。';
+    actions = '<button class="btn btn-p" onclick="bBridgeDismiss();go(\'c1\');">従業員一覧へ →</button>' +
+              '<button class="btn btn-s" onclick="bBridgeDismiss()">閉じる</button>';
   }
   textEl.innerHTML = text;
   actEl.innerHTML = actions;
@@ -2123,8 +2124,9 @@ function bShowToast(stepNum) {
                 '<button class="btn btn-s" onclick="bDismissToast()">閉じる</button>';
     } else {
       // stepNum === 4(従業員追加直後・運用)
-      nextEl.textContent = '新しい従業員を登録しました。招待メールを送信しています。';
-      actions = '<button class="btn btn-s" onclick="bDismissToast()">閉じる</button>';
+      nextEl.textContent = '新しい従業員を登録しました。招待メールは「従業員一覧」の招待送信ボタンから送信してください。';
+      actions = '<button class="btn btn-p" onclick="bDismissToast();go(\'c1\');">従業員一覧へ →</button>' +
+                '<button class="btn btn-s" onclick="bDismissToast()">閉じる</button>';
     }
     duration = 8000;
   }
