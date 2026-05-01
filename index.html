@@ -406,6 +406,10 @@
     <span class="nav-sep"></span>
     <span class="nav-flow">B 登録ガイド</span>
     <span class="nav-tab" onclick="go('b0')" id="nav-b0">登録ガイド(初期登録)</span>
+    <span class="nav-tab" onclick="go('brand-settings')" id="nav-brand-settings">業態・ブランド設定</span>
+    <span class="nav-tab" onclick="go('store-settings')" id="nav-store-settings">店舗設定</span>
+    <span class="nav-tab" onclick="go('emptype-settings')" id="nav-emptype-settings">雇用区分設定</span>
+    <span class="nav-tab" onclick="go('emp-settings')" id="nav-emp-settings">従業員設定</span>
     <span class="nav-tab" onclick="go('b0-after')" id="nav-b0-after">登録ガイド(初期登録後)</span>
     <span class="nav-tab" onclick="bOpenStep(1)" style="background:rgba(46,196,165,0.15);">[M] 業態モーダル</span>
     <span class="nav-tab" onclick="bOpenStep(2)" style="background:rgba(46,196,165,0.15);">[M] 店舗モーダル</span>
@@ -804,6 +808,78 @@
 
 
 <!-- ===== B-STEPモーダル群: 各登録モーダル（ページ遷移ではなくオーバーレイで開く） ===== -->
+
+<!-- ===== 各設定画面（業態・ブランド/店舗/雇用区分/従業員） ===== -->
+<!-- 共通: 初期セットアップ進行中の判定バナーをbanner-settings-Nに動的挿入 -->
+
+<!-- 業態・ブランド設定 -->
+<div class="page" id="page-brand-settings">
+  <div class="dash">
+    <aside class="sb">
+      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+      <div class="sb-sec"><a href="#"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📥</span>エクスポート</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
+      <div class="sb-sec"><div class="sl">設定</div><a href="#" onclick="go('emp-settings')"><span class="ic">👤</span>従業員</a><a href="#" onclick="go('emptype-settings')"><span class="ic">📋</span>雇用区分</a><a href="#" onclick="go('store-settings')"><span class="ic">🏠</span>店舗情報</a><a href="#" class="act"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a></div>
+      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
+    </aside>
+    <main class="mc" style="background:#f8f9fa;">
+      <div id="setup-banner-1"></div>
+      <div class="ph"><h2>業態・ブランド</h2><button class="btn btn-p" onclick="bOpenStep(1)">+ ブランドを追加</button></div>
+      <div class="post-list" id="list-brand"></div>
+    </main>
+  </div>
+</div>
+
+<!-- 店舗設定 -->
+<div class="page" id="page-store-settings">
+  <div class="dash">
+    <aside class="sb">
+      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+      <div class="sb-sec"><a href="#"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📥</span>エクスポート</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
+      <div class="sb-sec"><div class="sl">設定</div><a href="#" onclick="go('emp-settings')"><span class="ic">👤</span>従業員</a><a href="#" onclick="go('emptype-settings')"><span class="ic">📋</span>雇用区分</a><a href="#" class="act"><span class="ic">🏠</span>店舗情報</a><a href="#" onclick="go('brand-settings')"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a></div>
+      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
+    </aside>
+    <main class="mc" style="background:#f8f9fa;">
+      <div id="setup-banner-2"></div>
+      <div class="ph"><h2>店舗情報</h2><button class="btn btn-p" id="btn-add-store" onclick="bOpenStep(2)">+ 店舗を追加</button></div>
+      <div class="post-list" id="list-store"></div>
+    </main>
+  </div>
+</div>
+
+<!-- 雇用区分設定 -->
+<div class="page" id="page-emptype-settings">
+  <div class="dash">
+    <aside class="sb">
+      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+      <div class="sb-sec"><a href="#"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📥</span>エクスポート</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
+      <div class="sb-sec"><div class="sl">設定</div><a href="#" onclick="go('emp-settings')"><span class="ic">👤</span>従業員</a><a href="#" class="act"><span class="ic">📋</span>雇用区分</a><a href="#" onclick="go('store-settings')"><span class="ic">🏠</span>店舗情報</a><a href="#" onclick="go('brand-settings')"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a></div>
+      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
+    </aside>
+    <main class="mc" style="background:#f8f9fa;">
+      <div id="setup-banner-3"></div>
+      <div class="ph"><h2>雇用区分</h2><button class="btn btn-p" onclick="bOpenStep(3)">+ 雇用区分を追加</button></div>
+      <div class="post-list" id="list-emptype"></div>
+    </main>
+  </div>
+</div>
+
+<!-- 従業員設定 -->
+<div class="page" id="page-emp-settings">
+  <div class="dash">
+    <aside class="sb">
+      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+      <div class="sb-sec"><a href="#"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📥</span>エクスポート</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
+      <div class="sb-sec"><div class="sl">設定</div><a href="#" class="act"><span class="ic">👤</span>従業員</a><a href="#" onclick="go('emptype-settings')"><span class="ic">📋</span>雇用区分</a><a href="#" onclick="go('store-settings')"><span class="ic">🏠</span>店舗情報</a><a href="#" onclick="go('brand-settings')"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a></div>
+      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
+    </aside>
+    <main class="mc" style="background:#f8f9fa;">
+      <div id="setup-banner-4"></div>
+      <div class="ph"><h2>従業員</h2><button class="btn btn-p" onclick="bOpenStep(4)">+ 従業員を追加</button></div>
+      <div class="post-list" id="list-emp"></div>
+      <div style="margin-top:10px;font-size:11px;color:#888;">※ 招待中ステータスの従業員は「招待送信」ボタンから招待メールを送信できます（既存機能）</div>
+    </main>
+  </div>
+</div>
 
 <!-- ===== B-0-AFTER: 初期登録後の追加登録デモ（順番に縛られない運用シナリオ） ===== -->
 <div class="page" id="page-b0-after">
@@ -1800,6 +1876,12 @@ function go(id) {
   if (id === 'd2') d2SwitchTab('new');
   // b0(登録ガイド)を開いた際は保存済み進捗を反映
   if (id === 'b0') b0SetState(b0LoadDone());
+  // 各設定画面に遷移時、初期セットアップバナー&一覧を更新
+  var settingsMap = {'brand-settings':1,'store-settings':2,'emptype-settings':3,'emp-settings':4};
+  if (settingsMap[id]) {
+    refreshSetupBanner(settingsMap[id]);
+    refreshSettingsList(settingsMap[id]);
+  }
   // URLハッシュ同期(ディープリンク対応)
   if (location.hash !== '#' + id) {
     history.replaceState(null, '', '#' + id);
@@ -1980,9 +2062,92 @@ function bCloseStep() {
   document.querySelectorAll('.b-step-overlay').forEach(function(o){ o.classList.remove('act'); });
 }
 
-// B-0/B-0-OPS/B-0-ADD の各CTA → ステップモーダルを開く
+// 設定画面マッピング
+var SETTINGS_PAGES = ['', 'brand-settings', 'store-settings', 'emptype-settings', 'emp-settings'];
+
+// B-0登録ガイドからの遷移: 該当設定画面へ移動(モーダルは開かない、本番仕様準拠)
 function b0Go(stepNum) {
-  bOpenStep(stepNum);
+  go(SETTINGS_PAGES[stepNum]);
+}
+
+// 各設定画面に遷移してから自動でモーダルを開く(連鎖CTA用)
+function bGotoSettingsAndOpenModal(stepNum) {
+  go(SETTINGS_PAGES[stepNum]);
+  setTimeout(function(){ bOpenStep(stepNum); }, 200);
+}
+
+// 設定画面の初期セットアップバナーを更新(順序強制)
+function refreshSetupBanner(stepNum) {
+  var banner = document.getElementById('setup-banner-' + stepNum);
+  if (!banner) return;
+  var done = b0LoadDone();
+  var stepNames = ['', '業態・ブランド', '店舗', '雇用区分', '従業員'];
+
+  if (done >= 4) {
+    // 初期登録完了済みなら通常モード(バナー非表示)
+    banner.innerHTML = '';
+    return;
+  }
+  var currentStep = done + 1;
+  if (stepNum === currentStep) {
+    // 正しい順番: 進捗+このステップであることを案内
+    banner.innerHTML =
+      '<div class="al al-i" style="margin-bottom:14px;align-items:center;">' +
+      '<span style="font-size:16px;">📋</span>' +
+      '<div style="flex:1;">' +
+      '<strong>初期セットアップ進行中（' + done + '/4 完了）</strong><br>' +
+      '今は<strong>「' + stepNames[stepNum] + '」</strong>を登録するステップです。「+ 追加」ボタンから登録してください。' +
+      '</div>' +
+      '<button class="btn btn-s btn-sm" onclick="go(\'b0\')" style="margin-left:10px;">登録ガイドへ戻る</button>' +
+      '</div>';
+  } else {
+    // 順序が違う: 強い警告 + 正しいステップへ誘導
+    banner.innerHTML =
+      '<div class="al al-w" style="margin-bottom:14px;align-items:center;">' +
+      '<span style="font-size:16px;">⚠️</span>' +
+      '<div style="flex:1;">' +
+      '<strong>登録順序が違います。</strong><br>' +
+      '初期セットアップでは順番通りの登録が必要です。今は<strong>「' + stepNames[currentStep] + '」</strong>を先に登録してください。' +
+      '</div>' +
+      '<button class="btn btn-p btn-sm" onclick="go(\'' + SETTINGS_PAGES[currentStep] + '\')" style="margin-left:10px;">' + stepNames[currentStep] + '画面へ →</button>' +
+      '</div>';
+  }
+}
+
+// 設定画面に遷移時、一覧サンプルデータも件数に応じて表示
+function refreshSettingsList(stepNum) {
+  var counts = b0LoadCounts();
+  var c = counts[stepNum - 1] || 0;
+  var listEl, html = '';
+  if (stepNum === 1) {
+    listEl = document.getElementById('list-brand');
+    if (c === 0) html = '<div style="padding:24px;text-align:center;color:#999;font-size:11px;">登録されていません。「+ ブランドを追加」から登録してください。</div>';
+    else html = '<div class="pl-row"><div class="nm">ラクミー食堂</div><div class="meta">飲食店 / RKM</div></div>';
+  } else if (stepNum === 2) {
+    listEl = document.getElementById('list-store');
+    if (c === 0) html = '<div style="padding:24px;text-align:center;color:#999;font-size:11px;">登録されていません。「+ 店舗を追加」から登録してください。</div>';
+    else html =
+      '<div class="pl-row"><div class="nm">渋谷店</div><div class="meta">ラクミー食堂 / 11:00-23:00</div></div>' +
+      '<div class="pl-row"><div class="nm">新宿店</div><div class="meta">ラクミー食堂 / 11:00-23:00</div></div>' +
+      '<div class="pl-row"><div class="nm">池袋店</div><div class="meta">ラクミー食堂 / 11:00-22:00</div></div>';
+  } else if (stepNum === 3) {
+    listEl = document.getElementById('list-emptype');
+    if (c === 0) html = '<div style="padding:24px;text-align:center;color:#999;font-size:11px;">登録されていません。「+ 雇用区分を追加」から登録してください。</div>';
+    else html =
+      '<div class="pl-row"><div class="nm">正社員</div><div class="meta">月給</div></div>' +
+      '<div class="pl-row"><div class="nm">契約社員</div><div class="meta">月給</div></div>' +
+      '<div class="pl-row"><div class="nm">アルバイト</div><div class="meta">時給</div></div>' +
+      '<div class="pl-row"><div class="nm">業務委託</div><div class="meta">日給</div></div>';
+  } else if (stepNum === 4) {
+    listEl = document.getElementById('list-emp');
+    if (c === 0) html = '<div style="padding:24px;text-align:center;color:#999;font-size:11px;">登録されていません。「+ 従業員を追加」から登録してください。</div>';
+    else html =
+      '<div class="pl-row"><div class="nm">吉田 七美</div><div class="meta">渋谷店 / 正社員 / <span style="color:#f0960a;">招待中</span></div></div>' +
+      '<div class="pl-row"><div class="nm">鈴木 太郎</div><div class="meta">新宿店 / アルバイト / <span style="color:#1a9e7e;">有効</span></div></div>' +
+      '<div class="pl-row"><div class="nm">田中 花子</div><div class="meta">池袋店 / 契約社員 / <span style="color:#1a9e7e;">有効</span></div></div>' +
+      '<div style="padding:8px 4px;color:#888;font-size:11px;text-align:center;">他 ' + Math.max(0, c - 3) + ' 名</div>';
+  }
+  if (listEl) listEl.innerHTML = html;
 }
 
 // モーダル登録ボタン → モーダル閉じる + 進捗+件数更新 + 戻り通知
@@ -2002,26 +2167,38 @@ function b0CompleteStep(stepNum) {
   counts[stepNum - 1] = (counts[stepNum - 1] || 0) + 1;
   b0SaveCounts(counts);
   bCloseStep();
-  // B-0画面が開いている場合は即時更新 + 次ステップをパルス強調
   var activePage = document.querySelector('.page.active');
   var pageId = activePage ? activePage.id : '';
-  if (pageId === 'page-b0') {
-    b0SetState(b0LoadDone());
-    bPulseNextStep();
-    bShowToast(stepNum); // 初期登録モードは軽量通知
-    return;
-  }
-  // 初期登録後デモ(b0-after): 選択モードに応じて切替
-  if (pageId === 'page-b0-after') {
-    var mode = window.bAfterMode || 'bridge';
-    if (mode === 'bridge') {
+
+  // 各設定画面の上で登録した場合: バナー&一覧再描画 + 適切なフィードバック
+  var settingsMap = {'page-brand-settings':1,'page-store-settings':2,'page-emptype-settings':3,'page-emp-settings':4};
+  if (settingsMap[pageId]) {
+    refreshSetupBanner(settingsMap[pageId]);
+    refreshSettingsList(settingsMap[pageId]);
+    // 初期セットアップ中: 橋渡しモーダルで次画面誘導(過不足ない順序登録支援)
+    if (b0LoadDone() < 4) {
       bShowBridgeModal(stepNum);
     } else {
+      // 完了後の運用追加: トーストで連鎖CTA
       bShowToast(stepNum);
     }
     return;
   }
-  // それ以外(各種ページ): 既存トースト
+  // b0画面(登録ガイド)で登録した場合: ガイド更新 + 軽量通知
+  if (pageId === 'page-b0') {
+    b0SetState(b0LoadDone());
+    bPulseNextStep();
+    bShowToast(stepNum);
+    return;
+  }
+  // b0-after画面: 選択モードに応じて
+  if (pageId === 'page-b0-after') {
+    var mode = window.bAfterMode || 'bridge';
+    if (mode === 'bridge') bShowBridgeModal(stepNum);
+    else bShowToast(stepNum);
+    return;
+  }
+  // フォールバック: トースト
   bShowToast(stepNum);
 }
 
@@ -2072,7 +2249,8 @@ function bShowBridgeModal(stepNum) {
 }
 function bBridgeProceed(nextStep) {
   document.getElementById('b-bridge-overlay').classList.remove('act');
-  bOpenStep(nextStep);
+  // 該当設定画面へ遷移 → 200ms後にモーダル展開
+  bGotoSettingsAndOpenModal(nextStep);
 }
 function bBridgeDismiss() {
   document.getElementById('b-bridge-overlay').classList.remove('act');
@@ -2136,10 +2314,10 @@ function bShowToast(stepNum) {
   window.bToastTimer = setTimeout(function(){ toast.classList.remove('act'); }, duration);
 }
 
-// トーストCTA: 次のステップモーダルを開く
+// トーストCTA: 次のステップ画面へ遷移してモーダル展開
 function bToastAction(stepNum) {
   bDismissToast();
-  bOpenStep(stepNum);
+  bGotoSettingsAndOpenModal(stepNum);
 }
 
 // トースト消去(共通)
