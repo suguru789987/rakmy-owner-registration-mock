@@ -2180,22 +2180,29 @@ function b0CompleteStep(stepNum) {
   var activePage = document.querySelector('.page.active');
   var pageId = activePage ? activePage.id : '';
 
-  // 設定画面の上で登録: 初期/運用問わず橋渡しモーダルで統一(CTA仕様統一)
+  // 設定画面の上で登録:
+  //   初期登録モード(done<4) → CTAモーダル(中央・順序必須・強誘導)
+  //   運用モード(done=4)     → トースト(右上・順序任意・紐付き示唆)
   var settingsMap = {'page-brand-settings':1,'page-store-settings':2,'page-emptype-settings':3,'page-emp-settings':4};
   if (settingsMap[pageId]) {
     refreshSettingsModeGuard(settingsMap[pageId]);
-    bShowBridgeModal(stepNum);
+    if (b0LoadDone() < 4) {
+      bShowBridgeModal(stepNum);  // 初期登録: 順序必須なので強誘導モーダル
+    } else {
+      bShowToast(stepNum);        // 運用: 順序任意なので軽量トースト
+    }
     return;
   }
-  // b0画面(登録ガイド)で登録した場合: ガイド更新 + 橋渡しモーダル(統一)
+  // b0画面(登録ガイド)で登録した場合: 初期モード固定 → CTAモーダル
   if (pageId === 'page-b0') {
     b0SetState(b0LoadDone());
     bPulseNextStep();
     bShowBridgeModal(stepNum);
     return;
   }
-  // フォールバック: 橋渡しモーダル
-  bShowBridgeModal(stepNum);
+  // フォールバック: モード判定で出し分け
+  if (b0LoadDone() < 4) bShowBridgeModal(stepNum);
+  else bShowToast(stepNum);
 }
 
 // 橋渡しモーダル: 登録完了直後にモーダル上で次の追加CTAを表示
