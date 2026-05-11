@@ -859,20 +859,19 @@
           </div>
         </div>
 
-        <!-- ステップ別インポート: 外部連携版（Step 1のみテンプレート補完） -->
+        <!-- ステップ別インポート: 外部連携版（事前準備 + Step 2-4 が外部連携） -->
         <div class="istep-list" id="istep-list-external" style="display:none;">
           <div class="istep-list-title">🔄 外部勤怠サービスからインポート（ガイド順）</div>
-          <div style="font-size:10px;color:#888;margin-bottom:8px;">※ 「インポート画面を開く ↗」を押すと方式選択をスキップして該当画面に直接遷移します（method=&step= パラメータで指定）。</div>
-          <div class="istep-row" data-istep="1">
-            <div class="istep-num active">1</div>
-            <div class="istep-body">
-              <div class="istep-name">業態・ブランドをインポート <span class="badge now">進行中・テンプレ補完</span></div>
-              <div class="istep-desc">⚠️ 外部勤怠サービスにブランド情報がないため、Step ①のみテンプレート方式で取り込みます。業態 / ブランド名 / ブランドコード</div>
-            </div>
-            <div class="istep-actions">
-              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/?method=template&step=brand" target="_blank" rel="noopener" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く ↗</a>
-            </div>
+          <div style="font-size:10px;color:#888;margin-bottom:8px;">※ 「インポート画面を開く ↗」を押すと方式選択をスキップして外部連携の該当画面に直接遷移します。</div>
+
+          <!-- 事前準備セクション: ブランドはテンプレ別途取込 -->
+          <div style="background:#fff7e8;border:1px dashed #e67e22;border-radius:8px;padding:12px 14px;margin-bottom:14px;">
+            <div style="font-size:11px;font-weight:700;color:#e67e22;margin-bottom:4px;">⚠️ 事前準備（① 業態・ブランド）</div>
+            <div style="font-size:10px;color:#666;line-height:1.6;margin-bottom:8px;">外部勤怠サービス（KoT / ジョブカン）にはブランド情報が存在しないため、Step ① 業態・ブランドは<strong>別途テンプレート方式で取り込み</strong>が必要です。先に下記から取り込んでください。</div>
+            <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/?method=template&step=brand" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">業態・ブランドをテンプレで取込 ↗</a>
+            <span id="iext-pre-status" style="font-size:10px;color:#aaa;margin-left:10px;">（未完了）</span>
           </div>
+
           <div class="istep-row is-locked" data-istep="2">
             <div class="istep-num locked">2</div>
             <div class="istep-body">
@@ -2250,17 +2249,6 @@ function bRefreshImportSteps() {
       row.classList.remove('is-locked');
       num.classList.remove('active', 'done', 'locked');
       if (badge) badge.classList.remove('now', 'done', 'lock', 'warn');
-      // 外部連携 + step1 はテンプレート補完で進行
-      if (mode === 'external' && step === 1) {
-        if (done >= 1) {
-          num.classList.add('done'); num.textContent = '✓';
-          if (badge) { badge.classList.add('done'); badge.textContent = '✓ 完了（テンプレ）'; }
-        } else {
-          num.classList.add('active'); num.textContent = '1';
-          if (badge) { badge.classList.add('now'); badge.textContent = '進行中・テンプレ補完'; }
-        }
-        return;
-      }
       if (step <= done) {
         num.classList.add('done'); num.textContent = '✓';
         if (badge) { badge.classList.add('done'); badge.textContent = '✓ 完了'; }
@@ -2274,6 +2262,17 @@ function bRefreshImportSteps() {
       }
     });
   });
+  // 外部連携モードの事前準備(ブランド)ステータスを反映
+  var preStatus = document.getElementById('iext-pre-status');
+  if (preStatus) {
+    if (done >= 1) {
+      preStatus.textContent = '（✓ 完了）';
+      preStatus.style.color = '#1a9e7e';
+    } else {
+      preStatus.textContent = '（未完了）';
+      preStatus.style.color = '#aaa';
+    }
+  }
 }
 
 function b0SetState(doneCount) {
