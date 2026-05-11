@@ -798,8 +798,11 @@
         <h3>📥 CSVインポートで一括登録</h3>
         <p class="sub">タイムレコードの「インポート」機能で、4項目（業態・ブランド／店舗／雇用区分／従業員）を一括登録できます。<br><strong>新規登録時はガイド順（① → ② → ③ → ④）で1ステップずつインポートしてください。</strong></p>
 
-        <!-- Step 0.5: インポート方式選択(ピル型) -->
-        <div style="font-size:11px;font-weight:700;margin-bottom:8px;">📌 まずはインポート方式を選択（Step 0.5）</div>
+        <!-- Step 1: インポート方式選択(ピル型) -->
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+          <div style="width:28px;height:28px;border-radius:50%;background:#2ec4a5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;">1</div>
+          <div style="font-size:12px;font-weight:700;">Step 1: まずはインポート方式を選択してください</div>
+        </div>
         <div class="imethod-pills">
           <div class="imethod-pill act" id="imp-method-template" onclick="bSetImportMethod('template')">📋 テンプレートで取り込み</div>
           <div class="imethod-pill" id="imp-method-external" onclick="bSetImportMethod('external')">🔄 外部勤怠サービスから取り込み</div>
@@ -813,9 +816,9 @@
           <div class="istep-list-title">📋 テンプレートインポート（ガイド順）</div>
           <div style="font-size:10px;color:#888;margin-bottom:8px;">※ 各エンティティ独立のテンプレートをガイド順に取り込みます。</div>
           <div class="istep-row" data-istep="1">
-            <div class="istep-num active">1</div>
+            <div class="istep-num active">2</div>
             <div class="istep-body">
-              <div class="istep-name">業態・ブランドをインポート <span class="badge now">進行中</span></div>
+              <div class="istep-name">Step 2: 業態・ブランドをインポート <span class="badge now">進行中</span></div>
               <div class="istep-desc">業態 / ブランド名 / ブランドコード</div>
             </div>
             <div class="istep-actions">
@@ -823,19 +826,19 @@
             </div>
           </div>
           <div class="istep-row is-locked" data-istep="2">
-            <div class="istep-num locked">2</div>
+            <div class="istep-num locked">3</div>
             <div class="istep-body">
-              <div class="istep-name">店舗をインポート <span class="badge lock">🔒 ①完了後</span></div>
-              <div class="istep-desc">店舗名 / 所属ブランド / 住所 / 営業時間 ・ 前提: ① 業態・ブランド</div>
+              <div class="istep-name">Step 3: 店舗をインポート <span class="badge lock">🔒 Step 2完了後</span></div>
+              <div class="istep-desc">店舗名 / 所属ブランド / 住所 / 営業時間 ・ 前提: 業態・ブランド</div>
             </div>
             <div class="istep-actions">
               <a href="#setup-import-2" onclick="event.preventDefault();go('setup-import-2')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く →</a>
             </div>
           </div>
           <div class="istep-row is-locked" data-istep="3">
-            <div class="istep-num locked">3</div>
+            <div class="istep-num locked">4</div>
             <div class="istep-body">
-              <div class="istep-name">雇用区分をインポート <span class="badge lock">🔒 ②完了後</span></div>
+              <div class="istep-name">Step 4: 雇用区分をインポート <span class="badge lock">🔒 Step 3完了後</span></div>
               <div class="istep-desc">区分名 / 種別 / 時給単位</div>
             </div>
             <div class="istep-actions">
@@ -843,10 +846,10 @@
             </div>
           </div>
           <div class="istep-row is-locked" data-istep="4">
-            <div class="istep-num locked">4</div>
+            <div class="istep-num locked">5</div>
             <div class="istep-body">
-              <div class="istep-name">従業員をインポート <span class="badge lock">🔒 ③完了後</span></div>
-              <div class="istep-desc">名前 / 電話 / メール / 雇用区分 / 所属店舗 ・ 前提: ② 店舗 + ③ 雇用区分</div>
+              <div class="istep-name">Step 5: 従業員をインポート <span class="badge lock">🔒 Step 4完了後</span></div>
+              <div class="istep-desc">名前 / 電話 / メール / 雇用区分 / 所属店舗 ・ 前提: 店舗 + 雇用区分</div>
             </div>
             <div class="istep-actions">
               <a href="#setup-import-4" onclick="event.preventDefault();go('setup-import-4')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く →</a>
@@ -860,11 +863,11 @@
           <div class="istep-list-title">🔄 外部勤怠サービスからインポート（ガイド順）</div>
           <div style="font-size:10px;color:#888;margin-bottom:14px;">※ 業態・ブランドのみテンプレート取込。店舗・雇用区分・従業員は外部勤怠サービスの画面で一括取り込みします。</div>
 
-          <!-- Step 1: 業態・ブランドをテンプレで取り込み -->
+          <!-- Step 2: 業態・ブランドをテンプレで取り込み -->
           <div class="istep-row" data-istep="ext-1" style="border-top:none;">
-            <div class="istep-num active" style="width:36px;height:36px;font-size:15px;">1</div>
+            <div class="istep-num active" style="width:36px;height:36px;font-size:15px;">2</div>
             <div class="istep-body">
-              <div class="istep-name" style="font-size:13px;">Step 1: 業態・ブランドをテンプレで取り込み <span class="badge now" id="iext-step1-badge">進行中</span></div>
+              <div class="istep-name" style="font-size:13px;">Step 2: 業態・ブランドをテンプレで取り込み <span class="badge now" id="iext-step1-badge">進行中</span></div>
               <div class="istep-desc">外部勤怠サービスにブランド情報がないため、テンプレート方式で取込（業態 / ブランド名 / ブランドコード）</div>
             </div>
             <div class="istep-actions">
@@ -872,11 +875,11 @@
             </div>
           </div>
 
-          <!-- Step 2: 外部連携インポート画面を開く -->
+          <!-- Step 3: 外部連携インポート画面を開く -->
           <div class="istep-row is-locked" data-istep="ext-2">
-            <div class="istep-num locked" id="iext-step2-num" style="width:36px;height:36px;font-size:15px;">2</div>
+            <div class="istep-num locked" id="iext-step2-num" style="width:36px;height:36px;font-size:15px;">3</div>
             <div class="istep-body">
-              <div class="istep-name" style="font-size:13px;">Step 2: 外部連携インポート画面を開く <span class="badge lock" id="iext-step2-badge">🔒 Step 1完了後</span></div>
+              <div class="istep-name" style="font-size:13px;">Step 3: 外部連携インポート画面を開く <span class="badge lock" id="iext-step2-badge">🔒 Step 2完了後</span></div>
               <div class="istep-desc">店舗・雇用区分・従業員 を外部勤怠サービスのCSVから一括取込。<br>連携元（KoT / ジョブカン / その他）選択 → データソース選択 → アップロード → マッピング → 確認 → 完了 の順で実施。</div>
             </div>
             <div class="istep-actions">
@@ -2499,16 +2502,17 @@ function bRefreshImportSteps() {
         num.classList.add('done'); num.textContent = '✓';
         if (badge) { badge.classList.add('done'); badge.textContent = '✓ 完了'; }
       } else if (step === done + 1) {
-        num.classList.add('active'); num.textContent = step;
+        // 表示は内部値+1 (Step 1 = 方式選択 のため)
+        num.classList.add('active'); num.textContent = step + 1;
         if (badge) { badge.classList.add('now'); badge.textContent = '進行中'; }
       } else {
-        num.classList.add('locked'); num.textContent = step;
-        if (badge) { badge.classList.add('lock'); badge.textContent = '🔒 ' + (step - 1) + '完了後'; }
+        num.classList.add('locked'); num.textContent = step + 1;
+        if (badge) { badge.classList.add('lock'); badge.textContent = '🔒 Step ' + step + '完了後'; }
         row.classList.add('is-locked');
       }
     });
   }
-  // 外部連携モードのStep ①(業態テンプレ)/ ②(外部画面)状態反映
+  // 外部連携モードのStep ②(業態テンプレ)/ ③(外部画面)状態反映
   var extList = document.getElementById('istep-list-external');
   if (extList) {
     var row1 = extList.querySelector('[data-istep="ext-1"]');
@@ -2522,7 +2526,7 @@ function bRefreshImportSteps() {
         if (b1) { b1.classList.remove('now'); b1.classList.add('done'); b1.textContent = '✓ 完了'; }
       } else {
         row1.classList.remove('is-locked');
-        if (num1) { num1.classList.remove('done','locked'); num1.classList.add('active'); num1.textContent = '1'; }
+        if (num1) { num1.classList.remove('done','locked'); num1.classList.add('active'); num1.textContent = '2'; }
         if (b1) { b1.classList.remove('done'); b1.classList.add('now'); b1.textContent = '進行中'; }
       }
     }
@@ -2532,13 +2536,13 @@ function bRefreshImportSteps() {
       var btn2 = document.getElementById('iext-step2-btn');
       if (done >= 1) {
         row2.classList.remove('is-locked');
-        if (num2) { num2.classList.remove('locked'); num2.classList.add('active'); num2.textContent = '2'; }
+        if (num2) { num2.classList.remove('locked'); num2.classList.add('active'); num2.textContent = '3'; }
         if (b2) { b2.classList.remove('lock'); b2.classList.add('now'); b2.textContent = '進行中'; }
         if (btn2) { btn2.style.pointerEvents = ''; btn2.style.opacity = ''; }
       } else {
         row2.classList.add('is-locked');
-        if (num2) { num2.classList.remove('active','done'); num2.classList.add('locked'); num2.textContent = '2'; }
-        if (b2) { b2.classList.remove('now','done'); b2.classList.add('lock'); b2.textContent = '🔒 Step 1完了後'; }
+        if (num2) { num2.classList.remove('active','done'); num2.classList.add('locked'); num2.textContent = '3'; }
+        if (b2) { b2.classList.remove('now','done'); b2.classList.add('lock'); b2.textContent = '🔒 Step 2完了後'; }
       }
     }
   }
