@@ -462,10 +462,10 @@
     <span class="nav-tab" onclick="go('setup-store')" id="nav-setup-store">②店舗</span>
     <span class="nav-tab" onclick="go('setup-emptype')" id="nav-setup-emptype">③雇用区分</span>
     <span class="nav-tab" onclick="go('setup-emp')" id="nav-setup-emp">④従業員</span>
-    <span class="nav-tab" onclick="go('setup-import-1')" id="nav-setup-import-1">📥①</span>
-    <span class="nav-tab" onclick="go('setup-import-2')" id="nav-setup-import-2">📥②</span>
-    <span class="nav-tab" onclick="go('setup-import-3')" id="nav-setup-import-3">📥③</span>
-    <span class="nav-tab" onclick="go('setup-import-4')" id="nav-setup-import-4">📥④</span>
+    <span class="nav-tab" onclick="go('setup-import-1')" id="nav-setup-import-1">📥①業態</span>
+    <span class="nav-tab" onclick="go('setup-import-2')" id="nav-setup-import-2">📥②店舗</span>
+    <span class="nav-tab" onclick="go('setup-import-3')" id="nav-setup-import-3">📥③雇用区分</span>
+    <span class="nav-tab" onclick="go('setup-import-4')" id="nav-setup-import-4">📥④従業員</span>
     <span class="nav-tab" onclick="go('b0-empty')" id="nav-b0-empty">打刻記録(未セットアップ)</span>
     <span class="nav-sep"></span>
     <span class="nav-flow">B' 運用登録（設定画面）</span>
@@ -808,10 +808,10 @@
           <strong>テンプレートで取り込み</strong>: ラクミー専用テンプレートにデータを入力してインポート。初期セットアップに最適。<span class="tag">推奨</span>
         </div>
 
-        <!-- ステップ別インポート: テンプレート版 -->
+        <!-- ステップ別インポート: テンプレート版（エンティティ別4ステップ） -->
         <div class="istep-list" id="istep-list-template">
           <div class="istep-list-title">📋 テンプレートインポート（ガイド順）</div>
-          <div style="font-size:10px;color:#888;margin-bottom:8px;">※ 「インポート画面を開く ↗」を押すと方式選択をスキップして該当ステップのアップロード画面に直接遷移します（method=&step= パラメータで指定）。</div>
+          <div style="font-size:10px;color:#888;margin-bottom:8px;">※ 各エンティティ独立のテンプレートをガイド順に取り込みます。</div>
           <div class="istep-row" data-istep="1">
             <div class="istep-num active">1</div>
             <div class="istep-body">
@@ -854,12 +854,12 @@
           </div>
         </div>
 
-        <!-- ステップ別インポート: 外部連携版（事前準備 + Step 2-4 が外部連携） -->
+        <!-- ステップ別インポート: 外部連携版（事前準備 + 3ステップ ②③④） -->
         <div class="istep-list" id="istep-list-external" style="display:none;">
           <div class="istep-list-title">🔄 外部勤怠サービスからインポート（ガイド順）</div>
-          <div style="font-size:10px;color:#888;margin-bottom:8px;">※ 「インポート画面を開く ↗」を押すと方式選択をスキップして外部連携の該当画面に直接遷移します。</div>
+          <div style="font-size:10px;color:#888;margin-bottom:8px;">※ 業態・ブランドはテンプレ補完。店舗・雇用区分・従業員は外部CSVから列マッピングで取込。</div>
 
-          <!-- 事前準備セクション: ブランドはテンプレ別途取込 -->
+          <!-- 事前準備セクション: 業態・ブランドはテンプレ別途取込 -->
           <div style="background:#fff7e8;border:1px dashed #e67e22;border-radius:8px;padding:12px 14px;margin-bottom:14px;">
             <div style="font-size:11px;font-weight:700;color:#e67e22;margin-bottom:4px;">⚠️ 事前準備（① 業態・ブランド）</div>
             <div style="font-size:10px;color:#666;line-height:1.6;margin-bottom:8px;">外部勤怠サービス（KoT / ジョブカン）にはブランド情報が存在しないため、Step ① 業態・ブランドは<strong>別途テンプレート方式で取り込み</strong>が必要です。先に下記から取り込んでください。</div>
@@ -881,7 +881,7 @@
             <div class="istep-num locked">3</div>
             <div class="istep-body">
               <div class="istep-name">雇用区分をインポート <span class="badge lock">🔒 ②完了後</span></div>
-              <div class="istep-desc">KoT スタッフ区分 ／ ジョブカン 雇用区分 を取込</div>
+              <div class="istep-desc">KoT スタッフ区分 ／ ジョブカン 雇用区分 を列マッピングで取込</div>
             </div>
             <div class="istep-actions">
               <a href="#setup-import-3" onclick="event.preventDefault();go('setup-import-3')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く →</a>
@@ -891,7 +891,7 @@
             <div class="istep-num locked">4</div>
             <div class="istep-body">
               <div class="istep-name">従業員をインポート <span class="badge lock">🔒 ③完了後</span></div>
-              <div class="istep-desc">KoT 従業員データ ／ ジョブカン 従業員データ を取込</div>
+              <div class="istep-desc">KoT 従業員データ ／ ジョブカン 従業員データ を列マッピングで取込</div>
             </div>
             <div class="istep-actions">
               <a href="#setup-import-4" onclick="event.preventDefault();go('setup-import-4')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く →</a>
