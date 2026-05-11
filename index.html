@@ -907,6 +907,8 @@
 
         <div class="al al-w" style="margin-top:14px;font-size:10px;"><span>⚠️</span><div>依存関係エラー（例: 店舗データで存在しないブランド名を指定）はインポート画面で事前検証されます。各ステップは前のステップ完了後にアンロックされます。</div></div>
 
+        <div class="al al-i" style="margin-top:8px;font-size:10px;"><span>💡</span><div><strong>2つの起点で挙動が異なります:</strong><br>・<strong>新規登録ガイド（このページ）</strong>からは <code>?method=...&step=...</code> 付きで遷移し、本番では方式選択画面をスキップして該当ステップの画面に直接遷移します。<br>・<strong>運用設定画面（業態・ブランド設定/店舗設定 等）</strong>からはクエリパラメータなしで遷移し、方式選択画面を表示します（更新シナリオでは方式を都度選びたいため）。</div></div>
+
         <!-- 【デモ用】静的モック⇄動的モックの連携を擬似再現 -->
         <div style="margin-top:18px;padding:14px 16px;background:#fff3e0;border:1px dashed #e67e22;border-radius:8px;">
           <div style="font-size:11px;font-weight:700;color:#e67e22;margin-bottom:8px;">🛠 デモ用（モック連携シミュレーション）</div>
@@ -1136,7 +1138,7 @@
     </aside>
     <main class="mc" style="background:#f8f9fa;">
       <div class="ph"><h2>業態・ブランド</h2><div style="display:flex;gap:8px;"><a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">📥 CSVインポート ↗</a><button class="btn btn-p" onclick="bOpenStep(1)">+ ブランドを追加</button></div></div>
-      <div style="font-size:10px;color:#888;margin-bottom:10px;">💡 「📥 CSVインポート」を押すと、別タブで <strong>タイムレコード インポート画面</strong> が開きます。本番では取込完了後この一覧に反映されます（モックでは別途、b0 のシミュレートボタンで挙動確認可）。</div>
+      <div style="font-size:10px;color:#888;margin-bottom:10px;">💡 「📥 CSVインポート」を押すと、別タブで <strong>タイムレコード インポート画面</strong> が開きます（方式選択画面から：テンプレ / 外部連携を都度選択）。本番では取込完了後この一覧に反映されます。</div>
       <div class="post-list" id="list-brand"></div>
     </main>
   </div>
