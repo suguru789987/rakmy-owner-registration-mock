@@ -782,6 +782,19 @@
         </div>
 
         <div class="al al-w" style="margin-top:14px;font-size:10px;"><span>⚠️</span><div>依存関係エラー（例: 店舗データで存在しないブランド名を指定）はインポート画面で事前検証されます。</div></div>
+
+        <!-- 【デモ用】静的モック⇄動的モックの連携を擬似再現 -->
+        <div style="margin-top:18px;padding:14px 16px;background:#fff3e0;border:1px dashed #e67e22;border-radius:8px;">
+          <div style="font-size:11px;font-weight:700;color:#e67e22;margin-bottom:8px;">🛠 デモ用（モック連携シミュレーション）</div>
+          <div style="font-size:10px;color:#666;line-height:1.7;margin-bottom:10px;">本モックは静的のため、別タブのインポート画面の完了結果は自動反映されません。<br>下記ボタンで <strong>インポート完了をシミュレート</strong> し、登録ガイドの進捗が更新される挙動を確認できます。</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn btn-s btn-sm" onclick="bSimulateImport(1)">① 業態・ブランド完了</button>
+            <button class="btn btn-s btn-sm" onclick="bSimulateImport(2)">② 店舗完了</button>
+            <button class="btn btn-s btn-sm" onclick="bSimulateImport(3)">③ 雇用区分完了</button>
+            <button class="btn btn-s btn-sm" onclick="bSimulateImport(4)">④ 全項目完了</button>
+          </div>
+          <div style="font-size:9px;color:#888;margin-top:8px;">※ 本番では「インポート完了Webhook / ジョブ完了通知」などのバックエンド連携で自動反映されます。</div>
+        </div>
       </div>
 
       <!-- 順序明示型 登録ガイド ウィザード (manual mode時のみ表示) -->
@@ -999,6 +1012,7 @@
     </aside>
     <main class="mc" style="background:#f8f9fa;">
       <div class="ph"><h2>業態・ブランド</h2><div style="display:flex;gap:8px;"><a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">📥 CSVインポート ↗</a><button class="btn btn-p" onclick="bOpenStep(1)">+ ブランドを追加</button></div></div>
+      <div style="font-size:10px;color:#888;margin-bottom:10px;">💡 「📥 CSVインポート」を押すと、別タブで <strong>タイムレコード インポート画面</strong> が開きます。本番では取込完了後この一覧に反映されます（モックでは別途、b0 のシミュレートボタンで挙動確認可）。</div>
       <div class="post-list" id="list-brand"></div>
     </main>
   </div>
@@ -1015,6 +1029,7 @@
     </aside>
     <main class="mc" style="background:#f8f9fa;">
       <div class="ph"><h2>店舗情報</h2><div style="display:flex;gap:8px;"><a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">📥 CSVインポート ↗</a><button class="btn btn-p" id="btn-add-store" onclick="bOpenStep(2)">+ 店舗を追加</button></div></div>
+      <div style="font-size:10px;color:#888;margin-bottom:10px;">💡 「📥 CSVインポート」を押すと、別タブで <strong>タイムレコード インポート画面</strong> が開きます。本番では取込完了後この一覧に反映されます。</div>
       <div class="post-list" id="list-store"></div>
     </main>
   </div>
@@ -1031,6 +1046,7 @@
     </aside>
     <main class="mc" style="background:#f8f9fa;">
       <div class="ph"><h2>雇用区分</h2><div style="display:flex;gap:8px;"><a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">📥 CSVインポート ↗</a><button class="btn btn-p" onclick="bOpenStep(3)">+ 雇用区分を追加</button></div></div>
+      <div style="font-size:10px;color:#888;margin-bottom:10px;">💡 「📥 CSVインポート」を押すと、別タブで <strong>タイムレコード インポート画面</strong> が開きます。本番では取込完了後この一覧に反映されます。</div>
       <div class="post-list" id="list-emptype"></div>
     </main>
   </div>
@@ -1047,6 +1063,7 @@
     </aside>
     <main class="mc" style="background:#f8f9fa;">
       <div class="ph"><h2>従業員</h2><div style="display:flex;gap:8px;"><a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">📥 CSVインポート ↗</a><button class="btn btn-p" onclick="bOpenStep(4)">+ 従業員を追加</button></div></div>
+      <div style="font-size:10px;color:#888;margin-bottom:10px;">💡 「📥 CSVインポート」を押すと、別タブで <strong>タイムレコード インポート画面</strong> が開きます。本番では取込完了後この一覧に反映されます。</div>
       <div class="post-list" id="list-emp"></div>
       <div style="margin-top:10px;font-size:11px;color:#888;">※ 招待中ステータスの従業員は「招待送信」ボタンから招待メールを送信できます（既存機能）</div>
     </main>
@@ -2050,6 +2067,23 @@ function b0SetMethod(m) {
   if (cardImport) cardImport.classList.toggle('act', m === 'import');
   if (wizard) wizard.style.display = (m === 'manual') ? '' : 'none';
   if (importPanel) importPanel.classList.toggle('act', m === 'import');
+}
+
+/* デモ用: インポート完了をシミュレート(静的モック⇄動的モックの連携擬似再現) */
+function bSimulateImport(uptoStep) {
+  if (uptoStep < 1 || uptoStep > 4) return;
+  // 該当ステップまで進捗を更新 + 各件数を1件に補正
+  b0SaveDone(uptoStep);
+  var counts = b0LoadCounts();
+  for (var i = 0; i < uptoStep; i++) {
+    if ((counts[i] || 0) < 1) counts[i] = 1;
+  }
+  b0SaveCounts(counts);
+  // 設定画面に戻ったとき(または既にb0にいるとき)に反映するため、画面を再描画
+  b0SetState(uptoStep);
+  // 完了通知
+  var msgs = ['', '① 業態・ブランド', '① 〜 ② 店舗', '① 〜 ③ 雇用区分', '① 〜 ④ 従業員（全項目）'];
+  alert('✓ インポート完了シミュレート: ' + msgs[uptoStep] + ' まで完了\n登録ガイドの進捗バー/ステップ状態が更新されました。');
 }
 
 function b0SetState(doneCount) {
