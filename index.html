@@ -807,7 +807,7 @@
           <div class="imethod-card" id="imp-method-external" onclick="bSetImportMethod('external')">
             <div class="im-ic">🔄</div>
             <div class="im-name">外部勤怠サービスから取り込み</div>
-            <div class="im-desc">KoT・ジョブカンのCSVを列マッピングしてインポート。既存環境からの移行向け。</div>
+            <div class="im-desc">Step ②〜④をKoT・ジョブカンのCSVから列マッピング。Step ①は外部にブランド情報がないためテンプレートで補完取込。</div>
             <div class="im-tag gray">KoT / ジョブカン</div>
           </div>
         </div>
@@ -861,17 +861,18 @@
           </div>
         </div>
 
-        <!-- ステップ別インポート: 外部連携版 -->
+        <!-- ステップ別インポート: 外部連携版（Step 1のみテンプレート補完） -->
         <div class="istep-list" id="istep-list-external" style="display:none;">
           <div class="istep-list-title">🔄 外部勤怠サービスからインポート（ガイド順）</div>
           <div class="istep-row" data-istep="1">
             <div class="istep-num active">1</div>
             <div class="istep-body">
-              <div class="istep-name">業態・ブランドをインポート <span class="badge warn">外部連携不可</span></div>
-              <div class="istep-desc">外部勤怠サービスにはブランド情報がないため、テンプレート方式での取込を推奨します。</div>
+              <div class="istep-name">業態・ブランドをインポート <span class="badge now">進行中・テンプレ補完</span></div>
+              <div class="istep-desc">⚠️ 外部勤怠サービスにブランド情報がないため、Step ①のみテンプレート方式で取り込みます。テンプレート: 業態 / ブランド名 / ブランドコード</div>
             </div>
             <div class="istep-actions">
-              <button class="btn btn-s btn-sm" onclick="bSetImportMethod('template')">テンプレートに切替</button>
+              <button class="btn btn-s btn-sm" onclick="alert('① 業態・ブランド テンプレートをダウンロード（モック）')">① テンプレートDL</button>
+              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/" target="_blank" rel="noopener" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く ↗</a>
             </div>
           </div>
           <div class="istep-row is-locked" data-istep="2">
@@ -2250,11 +2251,17 @@ function bRefreshImportSteps() {
       row.classList.remove('is-locked');
       num.classList.remove('active', 'done', 'locked');
       if (badge) badge.classList.remove('now', 'done', 'lock', 'warn');
-      // 外部連携 + step1 は外部連携不可
+      // 外部連携 + step1 はテンプレート補完で進行
       if (mode === 'external' && step === 1) {
-        num.classList.add(done >= 1 ? 'done' : 'active');
-        if (badge) { badge.classList.add('warn'); badge.textContent = '外部連携不可'; }
-        return; // ボタンは固定(テンプレートに切替)
+        if (done >= 1) {
+          num.classList.add('done'); num.textContent = '✓';
+          if (badge) { badge.classList.add('done'); badge.textContent = '✓ 完了（テンプレ）'; }
+        } else {
+          num.classList.add('active'); num.textContent = '1';
+          if (badge) { badge.classList.add('now'); badge.textContent = '進行中・テンプレ補完'; }
+        }
+        btns.forEach(function(b) { b.disabled = false; b.style.opacity = ''; });
+        return;
       }
       if (step <= done) {
         num.classList.add('done'); num.textContent = '✓';
