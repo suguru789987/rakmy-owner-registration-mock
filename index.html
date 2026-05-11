@@ -778,15 +778,15 @@
         <h4>📌 まずは登録方法を選択してください（Step 0）</h4>
         <div class="sub">必要な4項目（業態・ブランド／店舗／雇用区分／従業員）の登録方法を選びます。</div>
         <div class="method-options">
-          <div class="method-card act" id="method-card-manual" onclick="b0SetMethod('manual')">
+          <div class="method-card" id="method-card-manual" onclick="b0SetMethod('manual')">
             <div class="mc-ic">✏️</div>
-            <div class="mc-name">設定画面で1件ずつ登録 <span class="mc-rec">推奨</span></div>
+            <div class="mc-name">設定画面で1件ずつ登録</div>
             <div class="mc-desc">ガイドに従って各設定画面で1件ずつ手動登録。少量・初回向け。</div>
             <div class="mc-meta">所要時間の目安: 約5〜10分</div>
           </div>
-          <div class="method-card" id="method-card-import" onclick="b0SetMethod('import')">
+          <div class="method-card act" id="method-card-import" onclick="b0SetMethod('import')">
             <div class="mc-ic">📥</div>
-            <div class="mc-name">CSVで一括インポート</div>
+            <div class="mc-name">CSVで一括インポート <span class="mc-rec">推奨</span></div>
             <div class="mc-desc">CSVテンプレートをDLし、4項目すべてを一括登録。多店舗・大量導入向け。</div>
             <div class="mc-meta">所要時間の目安: 約3〜5分（データ準備時間別）</div>
           </div>
@@ -2367,15 +2367,15 @@ function b0SaveCounts(c) {
   try { sessionStorage.setItem('b0Counts', JSON.stringify(c)); } catch (e) {}
 }
 
-// 登録方法選択(Step 0): 'manual' (設定画面登録) / 'import' (CSV一括) / default='manual'
+// 登録方法選択(Step 0): 'manual' (設定画面登録) / 'import' (CSV一括/推奨) / default='import'
 function b0LoadMethod() {
-  try { return sessionStorage.getItem('b0Method') || 'manual'; } catch (e) { return 'manual'; }
+  try { return sessionStorage.getItem('b0Method') || 'import'; } catch (e) { return 'import'; }
 }
 function b0SaveMethod(m) {
   try { sessionStorage.setItem('b0Method', m); } catch (e) {}
 }
 function b0SetMethod(m) {
-  if (m !== 'manual' && m !== 'import') m = 'manual';
+  if (m !== 'manual' && m !== 'import') m = 'import';
   b0SaveMethod(m);
   var cardManual = document.getElementById('method-card-manual');
   var cardImport = document.getElementById('method-card-import');
