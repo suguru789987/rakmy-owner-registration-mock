@@ -798,6 +798,22 @@
         <h3>📥 CSVインポートで一括登録</h3>
         <p class="sub">タイムレコードの「インポート」機能で、4項目（業態・ブランド／店舗／雇用区分／従業員）を一括登録できます。<br><strong>新規登録時はガイド順（① → ② → ③ → ④）で1ステップずつインポートしてください。</strong></p>
 
+        <!-- 全完了バナー(done=4のとき表示) -->
+        <div id="b0-import-complete-banner" style="display:none;margin:14px 0 18px;padding:20px 22px;background:linear-gradient(135deg,#e8f9f4 0%,#d9f3eb 100%);border:2px solid #2ec4a5;border-radius:12px;box-shadow:0 2px 8px rgba(46,196,165,0.15);">
+          <div style="display:flex;align-items:flex-start;gap:14px;">
+            <div style="font-size:36px;line-height:1;">🎉</div>
+            <div style="flex:1;">
+              <div style="font-size:15px;font-weight:800;color:#0e9077;margin-bottom:4px;">初期登録 完了！</div>
+              <div style="font-size:11px;color:#2a5d52;line-height:1.6;margin-bottom:10px;">業態・ブランド ／ 店舗 ／ 雇用区分 ／ 従業員 の <strong>必須4項目</strong> すべての登録が完了しました。<br>これでタイムレコードの運用を開始できます。<strong>管理者の追加（任意）</strong>はいつでも実施可能です。</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+                <a href="#b0-empty" onclick="event.preventDefault();go('b0-empty')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">⏱ 打刻記録を開く →</a>
+                <a href="#d1" onclick="event.preventDefault();go('d1')" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">⭐ 管理者を追加（任意）</a>
+                <span style="font-size:10px;color:#888;margin-left:6px;">※ 登録ガイドはこの後も <strong>運用更新</strong> モードとしてご利用いただけます</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Step 1: インポート方式選択(ピル型) -->
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
           <div style="width:28px;height:28px;border-radius:50%;background:#2ec4a5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;">1</div>
@@ -930,6 +946,22 @@
           <div>
             <h3 id="b0-card-title">登録ガイド（必須）</h3>
             <div style="font-size:11px;color:#888;margin-top:3px;" id="b0-card-sub">タイムレコードを利用開始するには、以下の順番で全項目の登録が必要です。</div>
+          </div>
+        </div>
+
+        <!-- 全完了バナー(done=4のとき表示) -->
+        <div id="b0-manual-complete-banner" style="display:none;margin:14px 0 18px;padding:20px 22px;background:linear-gradient(135deg,#e8f9f4 0%,#d9f3eb 100%);border:2px solid #2ec4a5;border-radius:12px;box-shadow:0 2px 8px rgba(46,196,165,0.15);">
+          <div style="display:flex;align-items:flex-start;gap:14px;">
+            <div style="font-size:36px;line-height:1;">🎉</div>
+            <div style="flex:1;">
+              <div style="font-size:15px;font-weight:800;color:#0e9077;margin-bottom:4px;">初期登録 完了！</div>
+              <div style="font-size:11px;color:#2a5d52;line-height:1.6;margin-bottom:10px;">業態・ブランド ／ 店舗 ／ 雇用区分 ／ 従業員 の <strong>必須4項目</strong> すべての登録が完了しました。<br>これでタイムレコードの運用を開始できます。<strong>管理者の追加（任意）</strong>はいつでも実施可能です。</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+                <a href="#b0-empty" onclick="event.preventDefault();go('b0-empty')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">⏱ 打刻記録を開く →</a>
+                <a href="#d1" onclick="event.preventDefault();go('d1')" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">⭐ 管理者を追加（任意）</a>
+                <span style="font-size:10px;color:#888;margin-left:6px;">※ 登録ガイドはこの後も <strong>運用更新</strong> モードとしてご利用いただけます</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -2411,7 +2443,7 @@ function bSetupImportComplete(stepNum) {
     }
   }
   // 全完了
-  alert('🎉 すべてのインポートが完了しました！登録ガイドに戻ります。');
+  alert('🎉 すべてのインポートが完了しました！\n登録ガイドに戻り、完了サマリをご確認ください。');
   go('b0');
 }
 
@@ -2591,6 +2623,12 @@ function b0SetState(doneCount) {
     else if (m === doneCount + 1) mk.classList.add('now');
   }
   var bizComplete = (doneCount === 4);
+
+  // 全完了バナー（manual / import 両モード）表示切替
+  var impCompBn = document.getElementById('b0-import-complete-banner');
+  var manCompBn = document.getElementById('b0-manual-complete-banner');
+  if (impCompBn) impCompBn.style.display = bizComplete ? '' : 'none';
+  if (manCompBn) manCompBn.style.display = bizComplete ? '' : 'none';
 
   // 件数表示更新（デモトグルとの整合: doneCount分のステップは最低1件として補正）
   var counts = b0LoadCounts();
