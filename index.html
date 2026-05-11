@@ -464,6 +464,10 @@
     <span class="nav-tab" onclick="go('setup-store')" id="nav-setup-store">②店舗</span>
     <span class="nav-tab" onclick="go('setup-emptype')" id="nav-setup-emptype">③雇用区分</span>
     <span class="nav-tab" onclick="go('setup-emp')" id="nav-setup-emp">④従業員</span>
+    <span class="nav-tab" onclick="go('setup-import-1')" id="nav-setup-import-1">📥①</span>
+    <span class="nav-tab" onclick="go('setup-import-2')" id="nav-setup-import-2">📥②</span>
+    <span class="nav-tab" onclick="go('setup-import-3')" id="nav-setup-import-3">📥③</span>
+    <span class="nav-tab" onclick="go('setup-import-4')" id="nav-setup-import-4">📥④</span>
     <span class="nav-tab" onclick="go('b0-empty')" id="nav-b0-empty">打刻記録(未セットアップ)</span>
     <span class="nav-sep"></span>
     <span class="nav-flow">B' 運用登録（設定画面）</span>
@@ -824,7 +828,7 @@
               <div class="istep-desc">業態 / ブランド名 / ブランドコード</div>
             </div>
             <div class="istep-actions">
-              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/?method=template&step=brand" target="_blank" rel="noopener" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く ↗</a>
+              <a href="#setup-import-1" onclick="event.preventDefault();go('setup-import-1')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く →</a>
             </div>
           </div>
           <div class="istep-row is-locked" data-istep="2">
@@ -834,7 +838,7 @@
               <div class="istep-desc">店舗名 / 所属ブランド / 住所 / 営業時間 ・ 前提: ① 業態・ブランド</div>
             </div>
             <div class="istep-actions">
-              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/?method=template&step=store" target="_blank" rel="noopener" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く ↗</a>
+              <a href="#setup-import-2" onclick="event.preventDefault();go('setup-import-2')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く →</a>
             </div>
           </div>
           <div class="istep-row is-locked" data-istep="3">
@@ -844,7 +848,7 @@
               <div class="istep-desc">区分名 / 種別 / 時給単位</div>
             </div>
             <div class="istep-actions">
-              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/?method=template&step=emptype" target="_blank" rel="noopener" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く ↗</a>
+              <a href="#setup-import-3" onclick="event.preventDefault();go('setup-import-3')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く →</a>
             </div>
           </div>
           <div class="istep-row is-locked" data-istep="4">
@@ -854,7 +858,7 @@
               <div class="istep-desc">名前 / 電話 / メール / 雇用区分 / 所属店舗 ・ 前提: ② 店舗 + ③ 雇用区分</div>
             </div>
             <div class="istep-actions">
-              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/?method=template&step=emp" target="_blank" rel="noopener" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く ↗</a>
+              <a href="#setup-import-4" onclick="event.preventDefault();go('setup-import-4')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く →</a>
             </div>
           </div>
         </div>
@@ -868,7 +872,7 @@
           <div style="background:#fff7e8;border:1px dashed #e67e22;border-radius:8px;padding:12px 14px;margin-bottom:14px;">
             <div style="font-size:11px;font-weight:700;color:#e67e22;margin-bottom:4px;">⚠️ 事前準備（① 業態・ブランド）</div>
             <div style="font-size:10px;color:#666;line-height:1.6;margin-bottom:8px;">外部勤怠サービス（KoT / ジョブカン）にはブランド情報が存在しないため、Step ① 業態・ブランドは<strong>別途テンプレート方式で取り込み</strong>が必要です。先に下記から取り込んでください。</div>
-            <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/?method=template&step=brand" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">業態・ブランドをテンプレで取込 ↗</a>
+            <a href="#setup-import-1" onclick="event.preventDefault();go('setup-import-1')" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">業態・ブランドをテンプレで取込 →</a>
             <span id="iext-pre-status" style="font-size:10px;color:#aaa;margin-left:10px;">（未完了）</span>
           </div>
 
@@ -879,7 +883,7 @@
               <div class="istep-desc">KoT 店舗マスタ ／ ジョブカン 拠点情報 を列マッピングで取込</div>
             </div>
             <div class="istep-actions">
-              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/?method=external&step=store" target="_blank" rel="noopener" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く ↗</a>
+              <a href="#setup-import-2" onclick="event.preventDefault();go('setup-import-2')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く →</a>
             </div>
           </div>
           <div class="istep-row is-locked" data-istep="3">
@@ -889,7 +893,7 @@
               <div class="istep-desc">KoT スタッフ区分 ／ ジョブカン 雇用区分 を取込</div>
             </div>
             <div class="istep-actions">
-              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/?method=external&step=emptype" target="_blank" rel="noopener" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く ↗</a>
+              <a href="#setup-import-3" onclick="event.preventDefault();go('setup-import-3')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く →</a>
             </div>
           </div>
           <div class="istep-row is-locked" data-istep="4">
@@ -899,7 +903,7 @@
               <div class="istep-desc">KoT 従業員データ ／ ジョブカン 従業員データ を取込</div>
             </div>
             <div class="istep-actions">
-              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/?method=external&step=emp" target="_blank" rel="noopener" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く ↗</a>
+              <a href="#setup-import-4" onclick="event.preventDefault();go('setup-import-4')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く →</a>
             </div>
           </div>
         </div>
@@ -1121,6 +1125,190 @@
         <h2 style="font-size:20px;margin-bottom:10px;">従業員を登録</h2>
         <p style="font-size:12px;color:#666;line-height:1.8;margin-bottom:24px;">店舗・雇用区分を割り当てて、従業員を登録します。<br>招待メールは登録後、従業員一覧の「招待送信」ボタンから送信できます。</p>
         <button class="btn btn-p btn-lg" onclick="bOpenStep(4)" style="max-width:300px;">+ 従業員を登録する</button>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ===== 新規登録ガイド専用 インポート画面 (運用更新用とは分離) ===== -->
+<!-- 注意: 既存インポートモック(rakmy-timerecord-import-spec) は運用更新専用。
+     ガイド経由の新規登録は下記の専用ページを使用する。 -->
+
+<!-- ① 業態・ブランド インポート -->
+<div class="page" id="page-setup-import-1">
+  <div class="dash">
+    <aside class="sb">
+      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">📋</span>登録ガイド</a></div>
+      <div class="sb-sec"><div class="sl">新規登録 インポート</div>
+        <a href="#" class="act"><span class="ic">📥①</span>業態・ブランド</a>
+        <a href="#" style="opacity:0.4;"><span class="ic">📥②</span>店舗</a>
+        <a href="#" style="opacity:0.4;"><span class="ic">📥③</span>雇用区分</a>
+        <a href="#" style="opacity:0.4;"><span class="ic">📥④</span>従業員</a>
+      </div>
+      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
+    </aside>
+    <main class="mc" style="background:#f8f9fa;">
+      <div id="setup-import-banner-1"></div>
+      <div style="font-size:11px;color:#888;margin-bottom:8px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 登録ガイドへ戻る</a></div>
+
+      <div style="background:#fff;border:2px solid #2ec4a5;border-radius:12px;padding:28px;max-width:640px;margin:0 auto;">
+        <span style="display:inline-block;font-size:10px;font-weight:700;color:#1a9e7e;background:#e8f8f5;padding:4px 12px;border-radius:20px;letter-spacing:1px;margin-bottom:12px;">STEP 1 / 4 ・ 新規登録インポート</span>
+        <h2 style="font-size:18px;margin-bottom:8px;">業態・ブランドをインポート</h2>
+        <p style="font-size:12px;color:#666;line-height:1.7;margin-bottom:16px;" id="setup-import-desc-1">テンプレートをダウンロードしてデータを記入し、アップロードしてください。</p>
+
+        <div style="background:#f8f9fa;border-radius:8px;padding:14px;margin-bottom:16px;font-size:11px;line-height:1.7;">
+          <strong>業態・ブランド テンプレート</strong><br>
+          列: 業態 / ブランド名 / ブランドコード<br>
+          <button class="btn btn-s btn-sm" style="margin-top:8px;" onclick="alert('テンプレートをダウンロード（モック）')">⬇ テンプレートDL</button>
+        </div>
+
+        <div style="border:2px dashed #b2ebe0;border-radius:10px;padding:24px;text-align:center;background:#f8fcfb;margin-bottom:16px;">
+          <div style="font-size:24px;color:#2ec4a5;margin-bottom:8px;">📁</div>
+          <p style="font-size:11px;color:#666;margin-bottom:10px;">ファイルをドラッグ&ドロップ または<br>ボタンから選択</p>
+          <button class="btn btn-p btn-sm" onclick="alert('ファイルを選択（モック）')">ファイルを選択</button>
+          <div style="font-size:9px;color:#999;margin-top:6px;">TSV / CSV（最大10MB）</div>
+        </div>
+
+        <div class="btn-grp">
+          <button class="btn btn-s" onclick="go('b0')">キャンセル</button>
+          <button class="btn btn-p" onclick="bSetupImportComplete(1)">インポート実行 →</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ② 店舗 インポート -->
+<div class="page" id="page-setup-import-2">
+  <div class="dash">
+    <aside class="sb">
+      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">📋</span>登録ガイド</a></div>
+      <div class="sb-sec"><div class="sl">新規登録 インポート</div>
+        <a href="#" onclick="go('setup-import-1')"><span class="ic">📥①</span>業態・ブランド ✓</a>
+        <a href="#" class="act"><span class="ic">📥②</span>店舗</a>
+        <a href="#" style="opacity:0.4;"><span class="ic">📥③</span>雇用区分</a>
+        <a href="#" style="opacity:0.4;"><span class="ic">📥④</span>従業員</a>
+      </div>
+      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
+    </aside>
+    <main class="mc" style="background:#f8f9fa;">
+      <div id="setup-import-banner-2"></div>
+      <div style="font-size:11px;color:#888;margin-bottom:8px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 登録ガイドへ戻る</a></div>
+
+      <div style="background:#fff;border:2px solid #2ec4a5;border-radius:12px;padding:28px;max-width:640px;margin:0 auto;">
+        <span style="display:inline-block;font-size:10px;font-weight:700;color:#1a9e7e;background:#e8f8f5;padding:4px 12px;border-radius:20px;letter-spacing:1px;margin-bottom:12px;">STEP 2 / 4 ・ 新規登録インポート</span>
+        <h2 style="font-size:18px;margin-bottom:8px;" id="setup-import-title-2">店舗をインポート</h2>
+        <p style="font-size:12px;color:#666;line-height:1.7;margin-bottom:16px;" id="setup-import-desc-2">テンプレートをダウンロードしてデータを記入し、アップロードしてください。</p>
+
+        <div style="background:#f8f9fa;border-radius:8px;padding:14px;margin-bottom:16px;font-size:11px;line-height:1.7;" id="setup-import-tpl-info-2">
+          <strong>店舗 テンプレート</strong><br>
+          列: 店舗名 / 所属ブランド / 住所 / 営業時間
+          <button class="btn btn-s btn-sm" style="margin-top:8px;display:block;" onclick="alert('テンプレートをダウンロード（モック）')">⬇ テンプレートDL</button>
+        </div>
+
+        <div style="border:2px dashed #b2ebe0;border-radius:10px;padding:24px;text-align:center;background:#f8fcfb;margin-bottom:16px;">
+          <div style="font-size:24px;color:#2ec4a5;margin-bottom:8px;">📁</div>
+          <p style="font-size:11px;color:#666;margin-bottom:10px;">ファイルをドラッグ&ドロップ または<br>ボタンから選択</p>
+          <button class="btn btn-p btn-sm" onclick="alert('ファイルを選択（モック）')">ファイルを選択</button>
+          <div style="font-size:9px;color:#999;margin-top:6px;">TSV / CSV（最大10MB）</div>
+        </div>
+
+        <div class="btn-grp">
+          <button class="btn btn-s" onclick="go('b0')">キャンセル</button>
+          <button class="btn btn-p" onclick="bSetupImportComplete(2)">インポート実行 →</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ③ 雇用区分 インポート -->
+<div class="page" id="page-setup-import-3">
+  <div class="dash">
+    <aside class="sb">
+      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">📋</span>登録ガイド</a></div>
+      <div class="sb-sec"><div class="sl">新規登録 インポート</div>
+        <a href="#" onclick="go('setup-import-1')"><span class="ic">📥①</span>業態・ブランド ✓</a>
+        <a href="#" onclick="go('setup-import-2')"><span class="ic">📥②</span>店舗 ✓</a>
+        <a href="#" class="act"><span class="ic">📥③</span>雇用区分</a>
+        <a href="#" style="opacity:0.4;"><span class="ic">📥④</span>従業員</a>
+      </div>
+      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
+    </aside>
+    <main class="mc" style="background:#f8f9fa;">
+      <div id="setup-import-banner-3"></div>
+      <div style="font-size:11px;color:#888;margin-bottom:8px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 登録ガイドへ戻る</a></div>
+
+      <div style="background:#fff;border:2px solid #2ec4a5;border-radius:12px;padding:28px;max-width:640px;margin:0 auto;">
+        <span style="display:inline-block;font-size:10px;font-weight:700;color:#1a9e7e;background:#e8f8f5;padding:4px 12px;border-radius:20px;letter-spacing:1px;margin-bottom:12px;">STEP 3 / 4 ・ 新規登録インポート</span>
+        <h2 style="font-size:18px;margin-bottom:8px;" id="setup-import-title-3">雇用区分をインポート</h2>
+        <p style="font-size:12px;color:#666;line-height:1.7;margin-bottom:16px;" id="setup-import-desc-3">テンプレートをダウンロードしてデータを記入し、アップロードしてください。</p>
+
+        <div style="background:#f8f9fa;border-radius:8px;padding:14px;margin-bottom:16px;font-size:11px;line-height:1.7;" id="setup-import-tpl-info-3">
+          <strong>雇用区分 テンプレート</strong><br>
+          列: 区分名 / 種別 / 時給単位
+          <button class="btn btn-s btn-sm" style="margin-top:8px;display:block;" onclick="alert('テンプレートをダウンロード（モック）')">⬇ テンプレートDL</button>
+        </div>
+
+        <div style="border:2px dashed #b2ebe0;border-radius:10px;padding:24px;text-align:center;background:#f8fcfb;margin-bottom:16px;">
+          <div style="font-size:24px;color:#2ec4a5;margin-bottom:8px;">📁</div>
+          <p style="font-size:11px;color:#666;margin-bottom:10px;">ファイルをドラッグ&ドロップ または<br>ボタンから選択</p>
+          <button class="btn btn-p btn-sm" onclick="alert('ファイルを選択（モック）')">ファイルを選択</button>
+          <div style="font-size:9px;color:#999;margin-top:6px;">TSV / CSV（最大10MB）</div>
+        </div>
+
+        <div class="btn-grp">
+          <button class="btn btn-s" onclick="go('b0')">キャンセル</button>
+          <button class="btn btn-p" onclick="bSetupImportComplete(3)">インポート実行 →</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ④ 従業員 インポート -->
+<div class="page" id="page-setup-import-4">
+  <div class="dash">
+    <aside class="sb">
+      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">📋</span>登録ガイド</a></div>
+      <div class="sb-sec"><div class="sl">新規登録 インポート</div>
+        <a href="#" onclick="go('setup-import-1')"><span class="ic">📥①</span>業態・ブランド ✓</a>
+        <a href="#" onclick="go('setup-import-2')"><span class="ic">📥②</span>店舗 ✓</a>
+        <a href="#" onclick="go('setup-import-3')"><span class="ic">📥③</span>雇用区分 ✓</a>
+        <a href="#" class="act"><span class="ic">📥④</span>従業員</a>
+      </div>
+      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
+    </aside>
+    <main class="mc" style="background:#f8f9fa;">
+      <div id="setup-import-banner-4"></div>
+      <div style="font-size:11px;color:#888;margin-bottom:8px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 登録ガイドへ戻る</a></div>
+
+      <div style="background:#fff;border:2px solid #2ec4a5;border-radius:12px;padding:28px;max-width:640px;margin:0 auto;">
+        <span style="display:inline-block;font-size:10px;font-weight:700;color:#1a9e7e;background:#e8f8f5;padding:4px 12px;border-radius:20px;letter-spacing:1px;margin-bottom:12px;">STEP 4 / 4 ・ 新規登録インポート</span>
+        <h2 style="font-size:18px;margin-bottom:8px;" id="setup-import-title-4">従業員をインポート</h2>
+        <p style="font-size:12px;color:#666;line-height:1.7;margin-bottom:16px;" id="setup-import-desc-4">テンプレートをダウンロードしてデータを記入し、アップロードしてください。</p>
+
+        <div style="background:#f8f9fa;border-radius:8px;padding:14px;margin-bottom:16px;font-size:11px;line-height:1.7;" id="setup-import-tpl-info-4">
+          <strong>従業員 テンプレート</strong><br>
+          列: 名前 / 電話 / メール / 雇用区分 / 所属店舗
+          <button class="btn btn-s btn-sm" style="margin-top:8px;display:block;" onclick="alert('テンプレートをダウンロード（モック）')">⬇ テンプレートDL</button>
+        </div>
+
+        <div style="border:2px dashed #b2ebe0;border-radius:10px;padding:24px;text-align:center;background:#f8fcfb;margin-bottom:16px;">
+          <div style="font-size:24px;color:#2ec4a5;margin-bottom:8px;">📁</div>
+          <p style="font-size:11px;color:#666;margin-bottom:10px;">ファイルをドラッグ&ドロップ または<br>ボタンから選択</p>
+          <button class="btn btn-p btn-sm" onclick="alert('ファイルを選択（モック）')">ファイルを選択</button>
+          <div style="font-size:9px;color:#999;margin-top:6px;">TSV / CSV（最大10MB）</div>
+        </div>
+
+        <div class="btn-grp">
+          <button class="btn btn-s" onclick="go('b0')">キャンセル</button>
+          <button class="btn btn-p" onclick="bSetupImportComplete(4)">インポート実行 →</button>
+        </div>
       </div>
     </main>
   </div>
@@ -2135,6 +2323,11 @@ function go(id) {
   if (settingsMap[id]) {
     refreshSettingsModeGuard(settingsMap[id]);
   }
+  // 新規登録インポート画面: モード別バナーを反映
+  var setupImportMap = {'setup-import-1':1,'setup-import-2':2,'setup-import-3':3,'setup-import-4':4};
+  if (setupImportMap[id]) {
+    bRefreshSetupImportBanner(setupImportMap[id]);
+  }
   // URLハッシュ同期(ディープリンク対応)
   if (location.hash !== '#' + id) {
     history.replaceState(null, '', '#' + id);
@@ -2193,6 +2386,56 @@ function b0SetMethod(m) {
   if (cardImport) cardImport.classList.toggle('act', m === 'import');
   if (wizard) wizard.style.display = (m === 'manual') ? '' : 'none';
   if (importPanel) importPanel.classList.toggle('act', m === 'import');
+}
+
+/* 新規登録用インポート画面: 完了処理 */
+function bSetupImportComplete(stepNum) {
+  var done = b0LoadDone();
+  if (stepNum > done) {
+    if (stepNum !== done + 1) {
+      alert('前のステップを先に完了してください（現在の次のステップ: Step ' + (done + 1) + '）');
+      return;
+    }
+    b0SaveDone(stepNum);
+  }
+  var counts = b0LoadCounts();
+  counts[stepNum - 1] = (counts[stepNum - 1] || 0) + 1;
+  b0SaveCounts(counts);
+  // 完了後、次のステップへ遷移 or 全完了でb0へ
+  var newDone = b0LoadDone();
+  if (newDone < 4) {
+    var nextStep = stepNum + 1;
+    if (nextStep <= 4) {
+      go('setup-import-' + nextStep);
+      alert('✓ インポート完了。次のステップへ進みます。');
+      return;
+    }
+  }
+  // 全完了
+  alert('🎉 すべてのインポートが完了しました！登録ガイドに戻ります。');
+  go('b0');
+}
+
+/* 新規登録用インポート画面: モードに応じてバナー表示(テンプレ/外部連携) */
+function bRefreshSetupImportBanner(stepNum) {
+  var method = bLoadImportMethod();
+  var banner = document.getElementById('setup-import-banner-' + stepNum);
+  if (!banner) return;
+  var methodLabel = method === 'external' ? '外部勤怠サービスから取り込み' : 'テンプレートで取り込み';
+  var note = '';
+  if (method === 'external' && stepNum === 1) {
+    note = '<br>⚠️ 業態・ブランドは外部勤怠サービスに情報がないため、テンプレート方式で取り込みます。';
+  } else if (method === 'external') {
+    note = '<br>📌 KoT / ジョブカン などのCSVを列マッピングして取り込みます。';
+  }
+  banner.innerHTML =
+    '<div class="al al-i" style="margin-bottom:14px;align-items:center;">' +
+    '<span style="font-size:16px;">📋</span>' +
+    '<div style="flex:1;font-size:11px;">' +
+    '<strong>新規登録 ・ Step ' + ['','①','②','③','④'][stepNum] + '</strong> ・ <strong>' + methodLabel + '</strong>' +
+    note +
+    '</div>' +
+    '</div>';
 }
 
 /* デモ用: インポート完了をシミュレート(静的モック⇄動的モックの連携擬似再現) */
