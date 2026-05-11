@@ -796,46 +796,42 @@
       <!-- インポートパネル(method=importの時のみ表示) -->
       <div class="import-panel" id="b0-import-panel">
         <h3>📥 CSVインポートで一括登録</h3>
-        <p class="sub">タイムレコードの「インポート」機能で、4項目（業態・ブランド／店舗／雇用区分／従業員）を一括登録できます。<br><strong>新規登録時はガイド順（① → ② → ③ → ④）で1ステップずつインポートしてください。</strong></p>
 
         <!-- 全完了バナー(done=4のとき表示) -->
-        <div id="b0-import-complete-banner" style="display:none;margin:14px 0 18px;padding:20px 22px;background:linear-gradient(135deg,#e8f9f4 0%,#d9f3eb 100%);border:2px solid #2ec4a5;border-radius:12px;box-shadow:0 2px 8px rgba(46,196,165,0.15);">
-          <div style="display:flex;align-items:flex-start;gap:14px;">
-            <div style="font-size:36px;line-height:1;">🎉</div>
+        <div id="b0-import-complete-banner" style="display:none;margin:12px 0 16px;padding:14px 18px;background:linear-gradient(135deg,#e8f9f4 0%,#d9f3eb 100%);border:2px solid #2ec4a5;border-radius:10px;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div style="font-size:28px;line-height:1;">🎉</div>
             <div style="flex:1;">
-              <div style="font-size:15px;font-weight:800;color:#0e9077;margin-bottom:4px;">初期登録 完了！</div>
-              <div style="font-size:11px;color:#2a5d52;line-height:1.6;margin-bottom:10px;">業態・ブランド ／ 店舗 ／ 雇用区分 ／ 従業員 の <strong>必須4項目</strong> すべての登録が完了しました。<br>これでタイムレコードの運用を開始できます。<strong>管理者の追加（任意）</strong>はいつでも実施可能です。</div>
-              <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+              <div style="font-size:14px;font-weight:800;color:#0e9077;margin-bottom:6px;">初期登録 完了！</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
                 <a href="#b0-empty" onclick="event.preventDefault();go('b0-empty')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">⏱ 打刻記録を開く →</a>
-                <a href="#d1" onclick="event.preventDefault();go('d1')" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">⭐ 管理者を追加（任意）</a>
-                <span style="font-size:10px;color:#888;margin-left:6px;">※ 登録ガイドはこの後も <strong>運用更新</strong> モードとしてご利用いただけます</span>
+                <a href="#d1" onclick="event.preventDefault();go('d1')" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">⭐ 管理者を追加(任意)</a>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Step 1: インポート方式選択(ピル型) -->
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-          <div style="width:28px;height:28px;border-radius:50%;background:#2ec4a5;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;">1</div>
-          <div style="font-size:12px;font-weight:700;">Step 1: まずはインポート方式を選択してください</div>
-        </div>
-        <div class="imethod-pills">
-          <div class="imethod-pill act" id="imp-method-template" onclick="bSetImportMethod('template')">📋 テンプレートで取り込み</div>
-          <div class="imethod-pill" id="imp-method-external" onclick="bSetImportMethod('external')">🔄 外部勤怠サービスから取り込み</div>
-        </div>
-        <div class="imethod-desc" id="imethod-desc">
-          <strong>テンプレートで取り込み</strong>: ラクミー専用テンプレートにデータを入力してインポート。初期セットアップに最適。<span class="tag">推奨</span>
+        <!-- ガイドリスト(Step 1 = 方式選択を含む) -->
+        <div class="istep-list">
+          <div class="istep-list-title">📋 インポートガイド</div>
+          <div class="istep-row" data-istep="0" style="border-top:none;">
+            <div class="istep-num active">1</div>
+            <div class="istep-body">
+              <div class="istep-name">Step 1: インポート方式を選択 <span class="badge now">進行中</span></div>
+              <div class="imethod-pills" style="margin-top:8px;">
+                <div class="imethod-pill act" id="imp-method-template" onclick="bSetImportMethod('template')">📋 テンプレートで取り込み <span class="tag" style="margin-left:6px;">推奨</span></div>
+                <div class="imethod-pill" id="imp-method-external" onclick="bSetImportMethod('external')">🔄 外部勤怠サービスから取り込み</div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <!-- ステップ別インポート: テンプレート版（エンティティ別4ステップ） -->
-        <div class="istep-list" id="istep-list-template">
-          <div class="istep-list-title">📋 テンプレートインポート（ガイド順）</div>
-          <div style="font-size:10px;color:#888;margin-bottom:8px;">※ 各エンティティ独立のテンプレートをガイド順に取り込みます。</div>
-          <div class="istep-row" data-istep="1">
+        <!-- テンプレートモード Step 2-5 -->
+        <div class="istep-list" id="istep-list-template" style="margin-top:8px;">
+          <div class="istep-row" data-istep="1" style="border-top:none;">
             <div class="istep-num active">2</div>
             <div class="istep-body">
-              <div class="istep-name">Step 2: 業態・ブランドをインポート <span class="badge now">進行中</span></div>
-              <div class="istep-desc">業態 / ブランド名 / ブランドコード</div>
+              <div class="istep-name">Step 2: 業態・ブランド <span class="badge now">進行中</span></div>
             </div>
             <div class="istep-actions">
               <a href="#setup-import-1" onclick="event.preventDefault();go('setup-import-1')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く →</a>
@@ -844,8 +840,7 @@
           <div class="istep-row is-locked" data-istep="2">
             <div class="istep-num locked">3</div>
             <div class="istep-body">
-              <div class="istep-name">Step 3: 店舗をインポート <span class="badge lock">🔒 Step 2完了後</span></div>
-              <div class="istep-desc">店舗名 / 所属ブランド / 住所 / 営業時間 ・ 前提: 業態・ブランド</div>
+              <div class="istep-name">Step 3: 店舗 <span class="badge lock">🔒 Step 2完了後</span></div>
             </div>
             <div class="istep-actions">
               <a href="#setup-import-2" onclick="event.preventDefault();go('setup-import-2')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く →</a>
@@ -854,8 +849,7 @@
           <div class="istep-row is-locked" data-istep="3">
             <div class="istep-num locked">4</div>
             <div class="istep-body">
-              <div class="istep-name">Step 4: 雇用区分をインポート <span class="badge lock">🔒 Step 3完了後</span></div>
-              <div class="istep-desc">区分名 / 種別 / 時給単位</div>
+              <div class="istep-name">Step 4: 雇用区分 <span class="badge lock">🔒 Step 3完了後</span></div>
             </div>
             <div class="istep-actions">
               <a href="#setup-import-3" onclick="event.preventDefault();go('setup-import-3')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く →</a>
@@ -864,79 +858,58 @@
           <div class="istep-row is-locked" data-istep="4">
             <div class="istep-num locked">5</div>
             <div class="istep-body">
-              <div class="istep-name">Step 5: 従業員をインポート <span class="badge lock">🔒 Step 4完了後</span></div>
-              <div class="istep-desc">名前 / 電話 / メール / 雇用区分 / 所属店舗 ・ 前提: 店舗 + 雇用区分</div>
+              <div class="istep-name">Step 5: 従業員 <span class="badge lock">🔒 Step 4完了後</span></div>
             </div>
             <div class="istep-actions">
               <a href="#setup-import-4" onclick="event.preventDefault();go('setup-import-4')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く →</a>
             </div>
           </div>
-
         </div>
 
-        <!-- ステップ別インポート: 外部連携版（Step1 業態テンプレ + Step2 外部画面 + 推奨 管理者） -->
-        <div class="istep-list" id="istep-list-external" style="display:none;">
-          <div class="istep-list-title">🔄 外部勤怠サービスからインポート（ガイド順）</div>
-          <div style="font-size:10px;color:#888;margin-bottom:14px;">※ 業態・ブランドのみテンプレート取込。店舗・雇用区分・従業員は外部勤怠サービスの画面で一括取り込みします。</div>
-
-          <!-- Step 2: 業態・ブランドをテンプレで取り込み -->
+        <!-- 外部連携モード Step 2-3 -->
+        <div class="istep-list" id="istep-list-external" style="display:none;margin-top:8px;">
           <div class="istep-row" data-istep="ext-1" style="border-top:none;">
             <div class="istep-num active" style="width:36px;height:36px;font-size:15px;">2</div>
             <div class="istep-body">
-              <div class="istep-name" style="font-size:13px;">Step 2: 業態・ブランドをテンプレで取り込み <span class="badge now" id="iext-step1-badge">進行中</span></div>
-              <div class="istep-desc">外部勤怠サービスにブランド情報がないため、テンプレート方式で取込（業態 / ブランド名 / ブランドコード）</div>
+              <div class="istep-name" style="font-size:13px;">Step 2: 業態・ブランド(テンプレ補完) <span class="badge now" id="iext-step1-badge">進行中</span></div>
+              <div class="istep-desc" style="font-size:10px;color:#888;">※ 外部にブランド情報がないためテンプレで補完</div>
             </div>
             <div class="istep-actions">
               <a href="#setup-import-1" onclick="event.preventDefault();go('setup-import-1')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">テンプレで取込 →</a>
             </div>
           </div>
-
-          <!-- Step 3: 外部連携インポート画面を開く -->
           <div class="istep-row is-locked" data-istep="ext-2">
             <div class="istep-num locked" id="iext-step2-num" style="width:36px;height:36px;font-size:15px;">3</div>
             <div class="istep-body">
-              <div class="istep-name" style="font-size:13px;">Step 3: 外部連携インポート画面を開く <span class="badge lock" id="iext-step2-badge">🔒 Step 2完了後</span></div>
-              <div class="istep-desc">店舗・雇用区分・従業員 を外部勤怠サービスのCSVから一括取込。<br>連携元（KoT / ジョブカン / その他）選択 → データソース選択 → アップロード → マッピング → 確認 → 完了 の順で実施。</div>
+              <div class="istep-name" style="font-size:13px;">Step 3: 店舗・雇用区分・従業員(外部一括) <span class="badge lock" id="iext-step2-badge">🔒 Step 2完了後</span></div>
             </div>
             <div class="istep-actions">
-              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/#saas-setup" target="_blank" rel="noopener" class="btn btn-p btn-sm" id="iext-step2-btn" style="text-decoration:none;display:inline-flex;align-items:center;">外部連携インポート画面を開く ↗</a>
+              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/#saas-setup" target="_blank" rel="noopener" class="btn btn-p btn-sm" id="iext-step2-btn" style="text-decoration:none;display:inline-flex;align-items:center;">外部連携画面を開く ↗</a>
             </div>
           </div>
-
         </div>
 
-        <!-- 必須Step群と共通の後追加項目セクション(両モード共通の単一エリア) -->
-        <div style="height:1px;background:repeating-linear-gradient(90deg,#ddd,#ddd 5px,transparent 5px,transparent 10px);margin:20px 0 14px;"></div>
-        <div style="background:#f8f5fc;border:1px dashed #b39ddb;border-radius:8px;padding:14px 16px;">
-          <div style="font-size:12px;font-weight:700;color:#7b1fa2;margin-bottom:8px;">📌 後追加項目（推奨）</div>
-          <div style="display:flex;gap:12px;align-items:flex-start;">
+        <!-- 後追加項目 -->
+        <div style="height:1px;background:repeating-linear-gradient(90deg,#ddd,#ddd 5px,transparent 5px,transparent 10px);margin:18px 0 12px;"></div>
+        <div style="background:#f8f5fc;border:1px dashed #b39ddb;border-radius:8px;padding:12px 16px;">
+          <div style="font-size:12px;font-weight:700;color:#7b1fa2;margin-bottom:8px;">📌 後追加項目</div>
+          <div style="display:flex;gap:12px;align-items:center;">
             <div style="width:32px;height:32px;border-radius:50%;background:#e8d5f2;color:#7b1fa2;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;">⭐</div>
-            <div style="flex:1;">
-              <div style="font-size:12px;font-weight:700;margin-bottom:3px;">管理者をテンプレで取り込み <span style="font-size:9px;padding:1px 7px;background:#f3e5f5;color:#7b1fa2;border-radius:10px;font-weight:600;margin-left:6px;">任意</span></div>
-              <div style="font-size:10px;color:#666;line-height:1.6;margin-bottom:8px;">
-                管理者はテンプレート方式でのみ取り込み可能です（外部勤怠サービス対象外）。<br>
-                新規登録時は任意。複数店舗運営の場合は事前登録を推奨。後から運用画面（D-1 管理者一覧）からの追加も可能です。
-              </div>
-              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/#tpl-setup" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">管理者をテンプレで取込 ↗</a>
-              <span style="font-size:9px;color:#999;margin-left:8px;">※ 後からでもOK</span>
-            </div>
+            <div style="flex:1;font-size:12px;font-weight:700;">管理者をテンプレで取り込み <span style="font-size:9px;padding:1px 7px;background:#f3e5f5;color:#7b1fa2;border-radius:10px;font-weight:600;margin-left:6px;">任意</span></div>
+            <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/#tpl-setup" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">取込 ↗</a>
           </div>
         </div>
 
-        <div class="al al-w" style="margin-top:14px;font-size:10px;"><span>⚠️</span><div>依存関係エラー（例: 店舗データで存在しないブランド名を指定）はインポート画面で事前検証されます。各ステップは前のステップ完了後にアンロックされます。</div></div>
 
-
-        <!-- 【デモ用】静的モック⇄動的モックの連携を擬似再現 -->
-        <div style="margin-top:18px;padding:14px 16px;background:#fff3e0;border:1px dashed #e67e22;border-radius:8px;">
-          <div style="font-size:11px;font-weight:700;color:#e67e22;margin-bottom:8px;">🛠 デモ用（モック連携シミュレーション）</div>
-          <div style="font-size:10px;color:#666;line-height:1.7;margin-bottom:10px;">本モックは静的のため、別タブのインポート画面の完了結果は自動反映されません。<br>下記ボタンで <strong>インポート完了をシミュレート</strong> し、ステップアンロック挙動を確認できます。</div>
+        <!-- デモ用シミュレーション -->
+        <div style="margin-top:14px;padding:10px 14px;background:#fff3e0;border:1px dashed #e67e22;border-radius:8px;">
+          <div style="font-size:11px;font-weight:700;color:#e67e22;margin-bottom:6px;">🛠 デモ用シミュレーション</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
             <button class="btn btn-s btn-sm" onclick="bSimulateImport(1)">① 業態・ブランド完了</button>
             <button class="btn btn-s btn-sm" onclick="bSimulateImport(2)">② 店舗完了</button>
             <button class="btn btn-s btn-sm" onclick="bSimulateImport(3)">③ 雇用区分完了</button>
             <button class="btn btn-s btn-sm" onclick="bSimulateImport(4)">④ 全項目完了</button>
           </div>
-          <div style="font-size:9px;color:#888;margin-top:8px;">※ 本番では「インポート完了Webhook / ジョブ完了通知」などのバックエンド連携で自動反映されます。</div>
         </div>
       </div>
 
@@ -950,16 +923,14 @@
         </div>
 
         <!-- 全完了バナー(done=4のとき表示) -->
-        <div id="b0-manual-complete-banner" style="display:none;margin:14px 0 18px;padding:20px 22px;background:linear-gradient(135deg,#e8f9f4 0%,#d9f3eb 100%);border:2px solid #2ec4a5;border-radius:12px;box-shadow:0 2px 8px rgba(46,196,165,0.15);">
-          <div style="display:flex;align-items:flex-start;gap:14px;">
-            <div style="font-size:36px;line-height:1;">🎉</div>
+        <div id="b0-manual-complete-banner" style="display:none;margin:12px 0 16px;padding:14px 18px;background:linear-gradient(135deg,#e8f9f4 0%,#d9f3eb 100%);border:2px solid #2ec4a5;border-radius:10px;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div style="font-size:28px;line-height:1;">🎉</div>
             <div style="flex:1;">
-              <div style="font-size:15px;font-weight:800;color:#0e9077;margin-bottom:4px;">初期登録 完了！</div>
-              <div style="font-size:11px;color:#2a5d52;line-height:1.6;margin-bottom:10px;">業態・ブランド ／ 店舗 ／ 雇用区分 ／ 従業員 の <strong>必須4項目</strong> すべての登録が完了しました。<br>これでタイムレコードの運用を開始できます。<strong>管理者の追加（任意）</strong>はいつでも実施可能です。</div>
-              <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+              <div style="font-size:14px;font-weight:800;color:#0e9077;margin-bottom:6px;">初期登録 完了！</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
                 <a href="#b0-empty" onclick="event.preventDefault();go('b0-empty')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">⏱ 打刻記録を開く →</a>
-                <a href="#d1" onclick="event.preventDefault();go('d1')" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">⭐ 管理者を追加（任意）</a>
-                <span style="font-size:10px;color:#888;margin-left:6px;">※ 登録ガイドはこの後も <strong>運用更新</strong> モードとしてご利用いただけます</span>
+                <a href="#d1" onclick="event.preventDefault();go('d1')" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">⭐ 管理者を追加(任意)</a>
               </div>
             </div>
           </div>
@@ -2502,24 +2473,24 @@ function bSetImportMethod(m) {
   var pillE = document.getElementById('imp-method-external');
   var listT = document.getElementById('istep-list-template');
   var listE = document.getElementById('istep-list-external');
-  var desc = document.getElementById('imethod-desc');
   if (pillT) pillT.classList.toggle('act', m === 'template');
   if (pillE) pillE.classList.toggle('act', m === 'external');
   if (listT) listT.style.display = (m === 'template') ? '' : 'none';
   if (listE) listE.style.display = (m === 'external') ? '' : 'none';
-  if (desc) {
-    if (m === 'template') {
-      desc.innerHTML = '<strong>テンプレートで取り込み</strong>: ラクミー専用テンプレートにデータを入力してインポート。初期セットアップに最適。<span class="tag">推奨</span>';
-    } else {
-      desc.innerHTML = '<strong>外部勤怠サービスから取り込み</strong>: Step ②〜④をKoT・ジョブカンのCSVから列マッピング。Step ①は外部にブランド情報がないためテンプレートで補完取込。<span class="tag gray">KoT / ジョブカン</span>';
-    }
-  }
   bRefreshImportSteps();
 }
 
 /* インポートステップのアンロック状態を反映(done基準) ※テンプレ版1〜4ステップ(管理者は別枠で扱う) */
 function bRefreshImportSteps() {
   var done = b0LoadDone();
+  // Step 1 (方式選択) は常に「✓ 選択済」表示
+  var step1Row = document.querySelector('.istep-row[data-istep="0"]');
+  if (step1Row) {
+    var n1 = step1Row.querySelector('.istep-num');
+    var b1 = step1Row.querySelector('.badge');
+    if (n1) { n1.classList.remove('active','locked'); n1.classList.add('done'); n1.textContent = '✓'; }
+    if (b1) { b1.classList.remove('now','lock','warn'); b1.classList.add('done'); b1.textContent = '✓ 選択済'; }
+  }
   var list = document.getElementById('istep-list-template');
   if (list) {
     var rows = list.querySelectorAll('.istep-row');
