@@ -855,16 +855,6 @@
 
         </div>
 
-        <!-- 必須4ステップとは分離: 後から追加できる項目(管理者) -->
-        <div style="background:#f8f5fc;border:1px dashed #b39ddb;border-radius:8px;padding:12px 14px;margin-top:14px;">
-          <div style="font-size:11px;font-weight:700;color:#7b1fa2;margin-bottom:4px;">💡 後から追加できる項目（任意）</div>
-          <div style="font-size:10px;color:#666;line-height:1.6;margin-bottom:8px;">
-            <strong>管理者</strong>は必須登録ではありません。新規登録時はオーナー1人で開始でき、運用開始後に管理者画面（D-1）から個別追加または CSV インポートで一括登録できます。
-          </div>
-          <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/#tpl" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">管理者をテンプレで取込 ↗</a>
-          <span style="font-size:9px;color:#999;margin-left:8px;">※ 後からでもOK</span>
-        </div>
-
         <!-- ステップ別インポート: 外部連携版（Step1 業態テンプレ + Step2 外部画面 + 推奨 管理者） -->
         <div class="istep-list" id="istep-list-external" style="display:none;">
           <div class="istep-list-title">🔄 外部勤怠サービスからインポート（ガイド順）</div>
@@ -894,23 +884,22 @@
             </div>
           </div>
 
-          <!-- 必須Step終了の視覚区切り -->
-          <div style="height:1px;background:repeating-linear-gradient(90deg,#ddd,#ddd 5px,transparent 5px,transparent 10px);margin:20px 0 16px;"></div>
+        </div>
 
-          <!-- 後追加項目（推奨）: 管理者をテンプレで取り込み -->
-          <div style="background:#f8f5fc;border:1px dashed #b39ddb;border-radius:8px;padding:14px 16px;">
-            <div style="font-size:12px;font-weight:700;color:#7b1fa2;margin-bottom:8px;">📌 後追加項目（推奨）</div>
-            <div style="display:flex;gap:12px;align-items:flex-start;">
-              <div style="width:32px;height:32px;border-radius:50%;background:#e8d5f2;color:#7b1fa2;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;">⭐</div>
-              <div style="flex:1;">
-                <div style="font-size:12px;font-weight:700;margin-bottom:3px;">管理者をテンプレで取り込み <span style="font-size:9px;padding:1px 7px;background:#f3e5f5;color:#7b1fa2;border-radius:10px;font-weight:600;margin-left:6px;">任意</span></div>
-                <div style="font-size:10px;color:#666;line-height:1.6;margin-bottom:8px;">
-                  管理者は外部勤怠サービスに概念がないため、<strong>テンプレート方式</strong>で取り込みます。<br>
-                  複数店舗運営の場合は事前登録を推奨。後から運用画面（D-1 管理者一覧）からの追加も可能です。
-                </div>
-                <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/#tpl" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">管理者をテンプレで取込 ↗</a>
-                <span style="font-size:9px;color:#999;margin-left:8px;">※ 後からでもOK</span>
+        <!-- 必須Step群と共通の後追加項目セクション(両モード共通の単一エリア) -->
+        <div style="height:1px;background:repeating-linear-gradient(90deg,#ddd,#ddd 5px,transparent 5px,transparent 10px);margin:20px 0 14px;"></div>
+        <div style="background:#f8f5fc;border:1px dashed #b39ddb;border-radius:8px;padding:14px 16px;">
+          <div style="font-size:12px;font-weight:700;color:#7b1fa2;margin-bottom:8px;">📌 後追加項目（推奨）</div>
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:32px;height:32px;border-radius:50%;background:#e8d5f2;color:#7b1fa2;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;">⭐</div>
+            <div style="flex:1;">
+              <div style="font-size:12px;font-weight:700;margin-bottom:3px;">管理者をテンプレで取り込み <span style="font-size:9px;padding:1px 7px;background:#f3e5f5;color:#7b1fa2;border-radius:10px;font-weight:600;margin-left:6px;">任意</span></div>
+              <div style="font-size:10px;color:#666;line-height:1.6;margin-bottom:8px;">
+                管理者はテンプレート方式でのみ取り込み可能です（外部勤怠サービス対象外）。<br>
+                新規登録時は任意。複数店舗運営の場合は事前登録を推奨。後から運用画面（D-1 管理者一覧）からの追加も可能です。
               </div>
+              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/#tpl" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">管理者をテンプレで取込 ↗</a>
+              <span style="font-size:9px;color:#999;margin-left:8px;">※ 後からでもOK</span>
             </div>
           </div>
         </div>
