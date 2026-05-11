@@ -854,48 +854,35 @@
           </div>
         </div>
 
-        <!-- ステップ別インポート: 外部連携版（事前準備 + 3ステップ ②③④） -->
+        <!-- ステップ別インポート: 外部連携版（事前準備 + 外部画面に直接遷移） -->
         <div class="istep-list" id="istep-list-external" style="display:none;">
-          <div class="istep-list-title">🔄 外部勤怠サービスからインポート（ガイド順）</div>
-          <div style="font-size:10px;color:#888;margin-bottom:8px;">※ 業態・ブランドはテンプレ補完。店舗・雇用区分・従業員は外部CSVから列マッピングで取込。</div>
+          <div class="istep-list-title">🔄 外部勤怠サービスからインポート</div>
+          <div style="font-size:10px;color:#888;margin-bottom:8px;">※ 外部連携モードでは、インポート機能の <strong>外部勤怠サービスから取り込み画面</strong> の操作順序（連携元選択 → データソース選択 → アップロード → マッピング → 確認 → 完了）に従って取り込みます。</div>
 
           <!-- 事前準備セクション: 業態・ブランドはテンプレ別途取込 -->
           <div style="background:#fff7e8;border:1px dashed #e67e22;border-radius:8px;padding:12px 14px;margin-bottom:14px;">
-            <div style="font-size:11px;font-weight:700;color:#e67e22;margin-bottom:4px;">⚠️ 事前準備（① 業態・ブランド）</div>
-            <div style="font-size:10px;color:#666;line-height:1.6;margin-bottom:8px;">外部勤怠サービス（KoT / ジョブカン）にはブランド情報が存在しないため、Step ① 業態・ブランドは<strong>別途テンプレート方式で取り込み</strong>が必要です。先に下記から取り込んでください。</div>
+            <div style="font-size:11px;font-weight:700;color:#e67e22;margin-bottom:4px;">⚠️ 事前準備（業態・ブランド）</div>
+            <div style="font-size:10px;color:#666;line-height:1.6;margin-bottom:8px;">外部勤怠サービス（KoT / ジョブカン）にはブランド情報が存在しないため、業態・ブランドは<strong>別途テンプレート方式で取り込み</strong>が必要です。先に下記から取り込んでください。</div>
             <a href="#setup-import-1" onclick="event.preventDefault();go('setup-import-1')" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">業態・ブランドをテンプレで取込 →</a>
             <span id="iext-pre-status" style="font-size:10px;color:#aaa;margin-left:10px;">（未完了）</span>
           </div>
 
-          <div class="istep-row is-locked" data-istep="2">
-            <div class="istep-num locked">2</div>
-            <div class="istep-body">
-              <div class="istep-name">店舗をインポート <span class="badge lock">🔒 ①完了後</span></div>
-              <div class="istep-desc">KoT 店舗マスタ ／ ジョブカン 拠点情報 を列マッピングで取込</div>
-            </div>
-            <div class="istep-actions">
-              <a href="#setup-import-2" onclick="event.preventDefault();go('setup-import-2')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く →</a>
-            </div>
+          <!-- 外部連携インポート: 単一エントリーポイント -->
+          <div style="background:#fff;border:2px solid #2ec4a5;border-radius:10px;padding:18px;text-align:center;">
+            <div style="font-size:13px;font-weight:700;margin-bottom:6px;">🔄 外部勤怠サービスからインポート</div>
+            <div style="font-size:11px;color:#666;line-height:1.7;margin-bottom:14px;">店舗・雇用区分・従業員 を <strong>外部勤怠サービス（KoT / ジョブカン）</strong> のCSVから一括取り込みします。<br>列マッピング画面で 外部列 → ラクミー項目 を紐付けてください。</div>
+            <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/#saas" target="_blank" rel="noopener" class="btn btn-p btn-lg" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;max-width:340px;">外部連携インポート画面を開く ↗</a>
+            <div style="font-size:9px;color:#999;margin-top:8px;">別タブで外部連携インポート画面が開きます。完了後はこのタブに戻れます。</div>
           </div>
-          <div class="istep-row is-locked" data-istep="3">
-            <div class="istep-num locked">3</div>
-            <div class="istep-body">
-              <div class="istep-name">雇用区分をインポート <span class="badge lock">🔒 ②完了後</span></div>
-              <div class="istep-desc">KoT スタッフ区分 ／ ジョブカン 雇用区分 を列マッピングで取込</div>
-            </div>
-            <div class="istep-actions">
-              <a href="#setup-import-3" onclick="event.preventDefault();go('setup-import-3')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く →</a>
-            </div>
-          </div>
-          <div class="istep-row is-locked" data-istep="4">
-            <div class="istep-num locked">4</div>
-            <div class="istep-body">
-              <div class="istep-name">従業員をインポート <span class="badge lock">🔒 ③完了後</span></div>
-              <div class="istep-desc">KoT 従業員データ ／ ジョブカン 従業員データ を列マッピングで取込</div>
-            </div>
-            <div class="istep-actions">
-              <a href="#setup-import-4" onclick="event.preventDefault();go('setup-import-4')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く →</a>
-            </div>
+
+          <div style="margin-top:14px;font-size:11px;color:#555;line-height:1.7;">
+            <strong>📋 外部連携インポート画面での操作順序:</strong><br>
+            <span style="display:inline-block;padding-left:14px;">1. 連携元サービス選択（KoT / ジョブカン / その他）</span><br>
+            <span style="display:inline-block;padding-left:14px;">2. 取り込むデータソース選択（従業員データ / 従業員一覧エクスポート 等）</span><br>
+            <span style="display:inline-block;padding-left:14px;">3. ファイルアップロード</span><br>
+            <span style="display:inline-block;padding-left:14px;">4. 列マッピング（外部列 → 店舗 / 雇用区分 / 従業員）</span><br>
+            <span style="display:inline-block;padding-left:14px;">5. プレビュー・確認</span><br>
+            <span style="display:inline-block;padding-left:14px;">6. 取り込み完了</span>
           </div>
         </div>
 
@@ -2477,12 +2464,11 @@ function bSetImportMethod(m) {
   bRefreshImportSteps();
 }
 
-/* インポートステップのアンロック状態を反映(done基準) */
+/* インポートステップのアンロック状態を反映(done基準) ※テンプレ版のみ4ステップ管理 */
 function bRefreshImportSteps() {
   var done = b0LoadDone();
-  ['template', 'external'].forEach(function(mode) {
-    var list = document.getElementById('istep-list-' + mode);
-    if (!list) return;
+  var list = document.getElementById('istep-list-template');
+  if (list) {
     var rows = list.querySelectorAll('.istep-row');
     rows.forEach(function(row) {
       var step = parseInt(row.getAttribute('data-istep'), 10);
@@ -2503,8 +2489,8 @@ function bRefreshImportSteps() {
         row.classList.add('is-locked');
       }
     });
-  });
-  // 外部連携モードの事前準備(ブランド)ステータスを反映
+  }
+  // 外部連携モードの事前準備(業態・ブランド)ステータスを反映
   var preStatus = document.getElementById('iext-pre-status');
   if (preStatus) {
     if (done >= 1) {
