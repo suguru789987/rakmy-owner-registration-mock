@@ -256,6 +256,7 @@
     .istep-desc { font-size: 10px; color: #888; margin-top: 3px; }
     .istep-actions { display: flex; gap: 6px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
     .istep-row.is-locked { opacity: 0.55; }
+    .istep-row.is-locked .btn { pointer-events: none; opacity: 0.5; }
 
     /* Onboarding setup wizard (B-0 ログイン直後ガイド) */
     .ow-empty { background: #fff; border-radius: 12px; padding: 36px 24px 24px; text-align: center; border: 1px solid #e8e8e8; margin-bottom: 18px; }
@@ -815,7 +816,7 @@
         <!-- ステップ別インポート: テンプレート版 -->
         <div class="istep-list" id="istep-list-template">
           <div class="istep-list-title">📋 テンプレートインポート（ガイド順）</div>
-          <div style="font-size:10px;color:#888;margin-bottom:8px;">※ 各ステップの「インポート画面を開く ↗」から、テンプレートDLとアップロードを順番に実施します。</div>
+          <div style="font-size:10px;color:#888;margin-bottom:8px;">※ 「インポート画面を開く ↗」を押すと方式選択をスキップして該当ステップのアップロード画面に直接遷移します（method=&step= パラメータで指定）。</div>
           <div class="istep-row" data-istep="1">
             <div class="istep-num active">1</div>
             <div class="istep-body">
@@ -823,7 +824,7 @@
               <div class="istep-desc">業態 / ブランド名 / ブランドコード</div>
             </div>
             <div class="istep-actions">
-              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/" target="_blank" rel="noopener" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く ↗</a>
+              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/?method=template&step=brand" target="_blank" rel="noopener" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く ↗</a>
             </div>
           </div>
           <div class="istep-row is-locked" data-istep="2">
@@ -833,7 +834,7 @@
               <div class="istep-desc">店舗名 / 所属ブランド / 住所 / 営業時間 ・ 前提: ① 業態・ブランド</div>
             </div>
             <div class="istep-actions">
-              <button class="btn btn-p btn-sm" disabled style="opacity:0.4;">インポート画面を開く ↗</button>
+              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/?method=template&step=store" target="_blank" rel="noopener" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く ↗</a>
             </div>
           </div>
           <div class="istep-row is-locked" data-istep="3">
@@ -843,7 +844,7 @@
               <div class="istep-desc">区分名 / 種別 / 時給単位</div>
             </div>
             <div class="istep-actions">
-              <button class="btn btn-p btn-sm" disabled style="opacity:0.4;">インポート画面を開く ↗</button>
+              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/?method=template&step=emptype" target="_blank" rel="noopener" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く ↗</a>
             </div>
           </div>
           <div class="istep-row is-locked" data-istep="4">
@@ -853,7 +854,7 @@
               <div class="istep-desc">名前 / 電話 / メール / 雇用区分 / 所属店舗 ・ 前提: ② 店舗 + ③ 雇用区分</div>
             </div>
             <div class="istep-actions">
-              <button class="btn btn-p btn-sm" disabled style="opacity:0.4;">インポート画面を開く ↗</button>
+              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/?method=template&step=emp" target="_blank" rel="noopener" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く ↗</a>
             </div>
           </div>
         </div>
@@ -861,6 +862,7 @@
         <!-- ステップ別インポート: 外部連携版（Step 1のみテンプレート補完） -->
         <div class="istep-list" id="istep-list-external" style="display:none;">
           <div class="istep-list-title">🔄 外部勤怠サービスからインポート（ガイド順）</div>
+          <div style="font-size:10px;color:#888;margin-bottom:8px;">※ 「インポート画面を開く ↗」を押すと方式選択をスキップして該当画面に直接遷移します（method=&step= パラメータで指定）。</div>
           <div class="istep-row" data-istep="1">
             <div class="istep-num active">1</div>
             <div class="istep-body">
@@ -868,7 +870,7 @@
               <div class="istep-desc">⚠️ 外部勤怠サービスにブランド情報がないため、Step ①のみテンプレート方式で取り込みます。業態 / ブランド名 / ブランドコード</div>
             </div>
             <div class="istep-actions">
-              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/" target="_blank" rel="noopener" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く ↗</a>
+              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/?method=template&step=brand" target="_blank" rel="noopener" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く ↗</a>
             </div>
           </div>
           <div class="istep-row is-locked" data-istep="2">
@@ -878,7 +880,7 @@
               <div class="istep-desc">KoT 店舗マスタ ／ ジョブカン 拠点情報 を列マッピングで取込</div>
             </div>
             <div class="istep-actions">
-              <button class="btn btn-p btn-sm" disabled style="opacity:0.4;">インポート画面を開く ↗</button>
+              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/?method=external&step=store" target="_blank" rel="noopener" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く ↗</a>
             </div>
           </div>
           <div class="istep-row is-locked" data-istep="3">
@@ -888,7 +890,7 @@
               <div class="istep-desc">KoT スタッフ区分 ／ ジョブカン 雇用区分 を取込</div>
             </div>
             <div class="istep-actions">
-              <button class="btn btn-p btn-sm" disabled style="opacity:0.4;">インポート画面を開く ↗</button>
+              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/?method=external&step=emptype" target="_blank" rel="noopener" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く ↗</a>
             </div>
           </div>
           <div class="istep-row is-locked" data-istep="4">
@@ -898,7 +900,7 @@
               <div class="istep-desc">KoT 従業員データ ／ ジョブカン 従業員データ を取込</div>
             </div>
             <div class="istep-actions">
-              <button class="btn btn-p btn-sm" disabled style="opacity:0.4;">インポート画面を開く ↗</button>
+              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/?method=external&step=emp" target="_blank" rel="noopener" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く ↗</a>
             </div>
           </div>
         </div>
@@ -2243,7 +2245,6 @@ function bRefreshImportSteps() {
       var step = parseInt(row.getAttribute('data-istep'), 10);
       var num = row.querySelector('.istep-num');
       var badge = row.querySelector('.badge');
-      var btns = row.querySelectorAll('button, a.btn');
       row.classList.remove('is-locked');
       num.classList.remove('active', 'done', 'locked');
       if (badge) badge.classList.remove('now', 'done', 'lock', 'warn');
@@ -2256,21 +2257,17 @@ function bRefreshImportSteps() {
           num.classList.add('active'); num.textContent = '1';
           if (badge) { badge.classList.add('now'); badge.textContent = '進行中・テンプレ補完'; }
         }
-        btns.forEach(function(b) { b.disabled = false; b.style.opacity = ''; });
         return;
       }
       if (step <= done) {
         num.classList.add('done'); num.textContent = '✓';
         if (badge) { badge.classList.add('done'); badge.textContent = '✓ 完了'; }
-        btns.forEach(function(b) { b.disabled = false; b.style.opacity = ''; });
       } else if (step === done + 1) {
         num.classList.add('active'); num.textContent = step;
         if (badge) { badge.classList.add('now'); badge.textContent = '進行中'; }
-        btns.forEach(function(b) { b.disabled = false; b.style.opacity = ''; });
       } else {
         num.classList.add('locked'); num.textContent = step;
         if (badge) { badge.classList.add('lock'); badge.textContent = '🔒 ' + (step - 1) + '完了後'; }
-        btns.forEach(function(b) { b.disabled = true; b.style.opacity = '0.4'; });
         row.classList.add('is-locked');
       }
     });
