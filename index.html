@@ -771,48 +771,17 @@
       <!-- インポートパネル(method=importの時のみ表示) -->
       <div class="import-panel" id="b0-import-panel">
         <h3>📥 CSVインポートで一括登録</h3>
-        <p class="sub">4項目（業態・ブランド／店舗／雇用区分／従業員）すべてを1度のアップロードで登録できます。<br>各項目のCSVテンプレートをダウンロードし、データを記入してアップロードしてください。</p>
+        <p class="sub">タイムレコードの「インポート」機能で、4項目（業態・ブランド／店舗／雇用区分／従業員）を一括登録できます。<br><strong>新規登録時は、ガイド順（① 業態・ブランド → ② 店舗 → ③ 雇用区分 → ④ 従業員）でテンプレートをご活用ください。</strong></p>
 
-        <div class="import-row">
-          <div class="ir-num">①</div>
-          <div class="ir-body">
-            <div class="ir-name">業態・ブランド</div>
-            <div class="ir-desc">業態 / ブランド名 / ブランドコード</div>
-          </div>
-          <div class="ir-actions"><button class="btn btn-s btn-sm" onclick="alert('CSVテンプレートをダウンロード（モック）')">テンプレートDL</button></div>
-        </div>
-        <div class="import-row">
-          <div class="ir-num">②</div>
-          <div class="ir-body">
-            <div class="ir-name">店舗</div>
-            <div class="ir-desc">店舗名 / 所属ブランド / 住所 / 営業時間</div>
-          </div>
-          <div class="ir-actions"><button class="btn btn-s btn-sm" onclick="alert('CSVテンプレートをダウンロード（モック）')">テンプレートDL</button></div>
-        </div>
-        <div class="import-row">
-          <div class="ir-num">③</div>
-          <div class="ir-body">
-            <div class="ir-name">雇用区分</div>
-            <div class="ir-desc">区分名 / 種別 / 時給単位</div>
-          </div>
-          <div class="ir-actions"><button class="btn btn-s btn-sm" onclick="alert('CSVテンプレートをダウンロード（モック）')">テンプレートDL</button></div>
-        </div>
-        <div class="import-row">
-          <div class="ir-num">④</div>
-          <div class="ir-body">
-            <div class="ir-name">従業員</div>
-            <div class="ir-desc">名前 / 電話 / メール / 雇用区分 / 所属店舗</div>
-          </div>
-          <div class="ir-actions"><button class="btn btn-s btn-sm" onclick="alert('CSVテンプレートをダウンロード（モック）')">テンプレートDL</button></div>
-        </div>
+        <div class="al al-i" style="margin-bottom:14px;font-size:11px;"><span>💡</span><div>インポート画面では以下の2方式が選べます。<br>・<strong>テンプレートで取り込み</strong>: ラクミー専用テンプレートにデータ入力（初期セットアップに最適）<br>・<strong>外部勤怠サービスから取り込み</strong>: KoT・ジョブカンのCSVを列マッピングしてインポート</div></div>
 
         <div class="import-upload-area">
-          <div class="icon">📁</div>
-          <p><strong>4項目のCSVをまとめてアップロード</strong><br>または各項目を個別アップロード</p>
-          <button class="btn btn-p btn-lg" style="max-width:280px;" onclick="alert('インポート処理を開始（モック）→ 完了後に登録ガイドへ自動戻り')">+ CSVファイルを選択</button>
+          <div class="icon">📥</div>
+          <p><strong>インポート機能を開く</strong><br>別タブで「タイムレコード インポート画面」を開きます。<br>完了後はこのタブに戻って進捗を確認できます。</p>
+          <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/" target="_blank" rel="noopener" class="btn btn-p btn-lg" style="max-width:320px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;">インポート画面を開く ↗</a>
         </div>
 
-        <div class="al al-i" style="margin-top:14px;font-size:10px;"><span>💡</span><div>依存関係エラーが含まれる場合（例: 店舗データで存在しないブランド名を指定）、該当行を提示してインポート前に修正できます。</div></div>
+        <div class="al al-w" style="margin-top:14px;font-size:10px;"><span>⚠️</span><div>依存関係エラー（例: 店舗データで存在しないブランド名を指定）はインポート画面で事前検証されます。</div></div>
       </div>
 
       <!-- 順序明示型 登録ガイド ウィザード (manual mode時のみ表示) -->
@@ -1029,7 +998,7 @@
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc" style="background:#f8f9fa;">
-      <div class="ph"><h2>業態・ブランド</h2><button class="btn btn-p" onclick="bOpenStep(1)">+ ブランドを追加</button></div>
+      <div class="ph"><h2>業態・ブランド</h2><div style="display:flex;gap:8px;"><a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">📥 CSVインポート ↗</a><button class="btn btn-p" onclick="bOpenStep(1)">+ ブランドを追加</button></div></div>
       <div class="post-list" id="list-brand"></div>
     </main>
   </div>
@@ -1045,7 +1014,7 @@
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc" style="background:#f8f9fa;">
-      <div class="ph"><h2>店舗情報</h2><button class="btn btn-p" id="btn-add-store" onclick="bOpenStep(2)">+ 店舗を追加</button></div>
+      <div class="ph"><h2>店舗情報</h2><div style="display:flex;gap:8px;"><a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">📥 CSVインポート ↗</a><button class="btn btn-p" id="btn-add-store" onclick="bOpenStep(2)">+ 店舗を追加</button></div></div>
       <div class="post-list" id="list-store"></div>
     </main>
   </div>
@@ -1061,7 +1030,7 @@
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc" style="background:#f8f9fa;">
-      <div class="ph"><h2>雇用区分</h2><button class="btn btn-p" onclick="bOpenStep(3)">+ 雇用区分を追加</button></div>
+      <div class="ph"><h2>雇用区分</h2><div style="display:flex;gap:8px;"><a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">📥 CSVインポート ↗</a><button class="btn btn-p" onclick="bOpenStep(3)">+ 雇用区分を追加</button></div></div>
       <div class="post-list" id="list-emptype"></div>
     </main>
   </div>
@@ -1077,7 +1046,7 @@
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc" style="background:#f8f9fa;">
-      <div class="ph"><h2>従業員</h2><button class="btn btn-p" onclick="bOpenStep(4)">+ 従業員を追加</button></div>
+      <div class="ph"><h2>従業員</h2><div style="display:flex;gap:8px;"><a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">📥 CSVインポート ↗</a><button class="btn btn-p" onclick="bOpenStep(4)">+ 従業員を追加</button></div></div>
       <div class="post-list" id="list-emp"></div>
       <div style="margin-top:10px;font-size:11px;color:#888;">※ 招待中ステータスの従業員は「招待送信」ボタンから招待メールを送信できます（既存機能）</div>
     </main>
