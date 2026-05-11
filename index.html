@@ -865,42 +865,44 @@
           <span style="font-size:9px;color:#999;margin-left:8px;">※ 後からでもOK</span>
         </div>
 
-        <!-- ステップ別インポート: 外部連携版（事前準備 + 外部画面に直接遷移） -->
+        <!-- ステップ別インポート: 外部連携版（Step1 業態テンプレ + Step2 外部画面 + 推奨 管理者） -->
         <div class="istep-list" id="istep-list-external" style="display:none;">
           <div class="istep-list-title">🔄 外部勤怠サービスからインポート</div>
-          <div style="font-size:10px;color:#888;margin-bottom:8px;">※ 外部連携モードでは、インポート機能の <strong>外部勤怠サービスから取り込み画面</strong> の操作順序（連携元選択 → データソース選択 → アップロード → マッピング → 確認 → 完了）に従って取り込みます。</div>
+          <div style="font-size:10px;color:#888;margin-bottom:12px;">※ 外部連携モードでは、業態・ブランドのみテンプレート取込が必要です。店舗・雇用区分・従業員は外部勤怠サービスの画面で一括取り込みします。</div>
 
-          <!-- 事前準備セクション: 業態・ブランドはテンプレ別途取込 -->
-          <div style="background:#fff7e8;border:1px dashed #e67e22;border-radius:8px;padding:12px 14px;margin-bottom:14px;">
-            <div style="font-size:11px;font-weight:700;color:#e67e22;margin-bottom:4px;">⚠️ 事前準備（業態・ブランド）</div>
-            <div style="font-size:10px;color:#666;line-height:1.6;margin-bottom:8px;">外部勤怠サービス（KoT / ジョブカン）にはブランド情報が存在しないため、業態・ブランドは<strong>別途テンプレート方式で取り込み</strong>が必要です。先に下記から取り込んでください。</div>
-            <a href="#setup-import-1" onclick="event.preventDefault();go('setup-import-1')" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">業態・ブランドをテンプレで取込 →</a>
-            <span id="iext-pre-status" style="font-size:10px;color:#aaa;margin-left:10px;">（未完了）</span>
+          <!-- Step 1: 業態・ブランド取り込み(テンプレ) -->
+          <div class="istep-row" data-istep="ext-1">
+            <div class="istep-num active">1</div>
+            <div class="istep-body">
+              <div class="istep-name">業態・ブランド取り込み <span class="badge now" id="iext-step1-badge">進行中・テンプレ</span></div>
+              <div class="istep-desc">外部勤怠サービスにブランド情報がないため、テンプレート方式で取込（業態 / ブランド名 / ブランドコード）</div>
+            </div>
+            <div class="istep-actions">
+              <a href="#setup-import-1" onclick="event.preventDefault();go('setup-import-1')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">テンプレで取込 →</a>
+            </div>
           </div>
 
-          <!-- 外部連携インポート: 単一エントリーポイント -->
-          <div style="background:#fff;border:2px solid #2ec4a5;border-radius:10px;padding:18px;text-align:center;">
-            <div style="font-size:13px;font-weight:700;margin-bottom:6px;">🔄 外部勤怠サービスからインポート</div>
-            <div style="font-size:11px;color:#666;line-height:1.7;margin-bottom:14px;">店舗・雇用区分・従業員 を <strong>外部勤怠サービス（KoT / ジョブカン）</strong> のCSVから一括取り込みします。<br>列マッピング画面で 外部列 → ラクミー項目 を紐付けてください。</div>
-            <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/#saas" target="_blank" rel="noopener" class="btn btn-p btn-lg" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;max-width:340px;">外部連携インポート画面を開く ↗</a>
-            <div style="font-size:9px;color:#999;margin-top:8px;">別タブで外部連携インポート画面が開きます。完了後はこのタブに戻れます。</div>
+          <!-- Step 2: 外部勤怠インポート画面へ -->
+          <div class="istep-row is-locked" data-istep="ext-2">
+            <div class="istep-num locked" id="iext-step2-num">2</div>
+            <div class="istep-body">
+              <div class="istep-name">外部勤怠インポート画面へ <span class="badge lock" id="iext-step2-badge">🔒 ①完了後</span></div>
+              <div class="istep-desc">店舗・雇用区分・従業員 を外部勤怠サービスのCSVから一括取込。連携元（KoT / ジョブカン / その他）選択 → データソース選択 → アップロード → マッピング → 確認 → 完了 の順で実施。</div>
+            </div>
+            <div class="istep-actions">
+              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/#saas" target="_blank" rel="noopener" class="btn btn-p btn-sm" id="iext-step2-btn" style="text-decoration:none;display:inline-flex;align-items:center;">外部連携インポート画面を開く ↗</a>
+            </div>
           </div>
 
-          <div style="margin-top:14px;font-size:11px;color:#555;line-height:1.7;">
-            <strong>📋 外部連携インポート画面での操作順序:</strong><br>
-            <span style="display:inline-block;padding-left:14px;">1. 連携元サービス選択（KoT / ジョブカン / その他）</span><br>
-            <span style="display:inline-block;padding-left:14px;">2. 取り込むデータソース選択（従業員データ / 従業員一覧エクスポート 等）</span><br>
-            <span style="display:inline-block;padding-left:14px;">3. ファイルアップロード</span><br>
-            <span style="display:inline-block;padding-left:14px;">4. 列マッピング（外部列 → 店舗 / 雇用区分 / 従業員）</span><br>
-            <span style="display:inline-block;padding-left:14px;">5. プレビュー・確認</span><br>
-            <span style="display:inline-block;padding-left:14px;">6. 取り込み完了</span>
-          </div>
-
-          <!-- 任意: 管理者(外部連携対象外、テンプレ別途) -->
-          <div style="margin-top:14px;background:#f3e5f5;border:1px dashed #7b1fa2;border-radius:8px;padding:12px 14px;">
-            <div style="font-size:11px;font-weight:700;color:#7b1fa2;margin-bottom:4px;">📌 任意（⑤ 管理者）</div>
-            <div style="font-size:10px;color:#666;line-height:1.6;margin-bottom:8px;">管理者は外部勤怠サービスに概念がないため、テンプレート方式でのみ取り込み可能です。<br>新規登録時は任意、運用開始後の追加も可能。</div>
+          <!-- 推奨: 管理者取り込み(任意、外部連携対象外なのでテンプレ別途) -->
+          <div style="background:#f8f5fc;border:1px dashed #b39ddb;border-radius:8px;padding:12px 14px;margin-top:14px;">
+            <div style="font-size:11px;font-weight:700;color:#7b1fa2;margin-bottom:4px;">⭐ 推奨（管理者）</div>
+            <div style="font-size:10px;color:#666;line-height:1.6;margin-bottom:8px;">
+              管理者は外部勤怠サービスに概念がないため、<strong>テンプレート方式</strong>で取り込みます。<br>
+              新規登録時は任意ですが、複数店舗運営の場合は <strong>事前登録を推奨</strong>します。後から運用画面（D-1）からの追加も可能。
+            </div>
             <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/#tpl" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">管理者をテンプレで取込 ↗</a>
+            <span style="font-size:9px;color:#999;margin-left:8px;">※ 後からでもOK</span>
           </div>
         </div>
 
@@ -2508,15 +2510,38 @@ function bRefreshImportSteps() {
       }
     });
   }
-  // 外部連携モードの事前準備(業態・ブランド)ステータスを反映
-  var preStatus = document.getElementById('iext-pre-status');
-  if (preStatus) {
-    if (done >= 1) {
-      preStatus.textContent = '（✓ 完了）';
-      preStatus.style.color = '#1a9e7e';
-    } else {
-      preStatus.textContent = '（未完了）';
-      preStatus.style.color = '#aaa';
+  // 外部連携モードのStep ①(業態テンプレ)/ ②(外部画面)状態反映
+  var extList = document.getElementById('istep-list-external');
+  if (extList) {
+    var row1 = extList.querySelector('[data-istep="ext-1"]');
+    var row2 = extList.querySelector('[data-istep="ext-2"]');
+    if (row1) {
+      var num1 = row1.querySelector('.istep-num');
+      var b1 = document.getElementById('iext-step1-badge');
+      if (done >= 1) {
+        row1.classList.remove('is-locked');
+        if (num1) { num1.classList.remove('active','locked'); num1.classList.add('done'); num1.textContent = '✓'; }
+        if (b1) { b1.classList.remove('now'); b1.classList.add('done'); b1.textContent = '✓ 完了'; }
+      } else {
+        row1.classList.remove('is-locked');
+        if (num1) { num1.classList.remove('done','locked'); num1.classList.add('active'); num1.textContent = '1'; }
+        if (b1) { b1.classList.remove('done'); b1.classList.add('now'); b1.textContent = '進行中・テンプレ'; }
+      }
+    }
+    if (row2) {
+      var num2 = row2.querySelector('.istep-num');
+      var b2 = document.getElementById('iext-step2-badge');
+      var btn2 = document.getElementById('iext-step2-btn');
+      if (done >= 1) {
+        row2.classList.remove('is-locked');
+        if (num2) { num2.classList.remove('locked'); num2.classList.add('active'); num2.textContent = '2'; }
+        if (b2) { b2.classList.remove('lock'); b2.classList.add('now'); b2.textContent = '進行中'; }
+        if (btn2) { btn2.style.pointerEvents = ''; btn2.style.opacity = ''; }
+      } else {
+        row2.classList.add('is-locked');
+        if (num2) { num2.classList.remove('active','done'); num2.classList.add('locked'); num2.textContent = '2'; }
+        if (b2) { b2.classList.remove('now','done'); b2.classList.add('lock'); b2.textContent = '🔒 ①完了後'; }
+      }
     }
   }
 }
@@ -3106,3 +3131,4 @@ function showConfirm(btn) {
 </script>
 </body>
 </html>
+
