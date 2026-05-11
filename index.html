@@ -906,35 +906,6 @@
           </div>
         </div>
 
-        <!-- 進捗サマリ: 円形リング + 数値統計 + 動的ステータスメッセージ -->
-        <div class="ow-summary">
-          <div class="ow-ring-wrap">
-            <svg class="ow-ring" viewBox="0 0 64 64" width="76" height="76">
-              <circle cx="32" cy="32" r="28" fill="none" stroke="#e8e8e8" stroke-width="6"/>
-              <circle id="b0-ring-fill" cx="32" cy="32" r="28" fill="none" stroke="#2ec4a5" stroke-width="6"
-                      stroke-dasharray="175.93" stroke-dashoffset="175.93" stroke-linecap="round"
-                      style="transition: stroke-dashoffset 0.5s ease;"/>
-            </svg>
-            <div class="ow-ring-percent">
-              <span class="num" id="b0-ring-num">0</span><span class="pct">%</span>
-            </div>
-          </div>
-          <div class="ow-summary-body">
-            <div class="ow-summary-stats">
-              <div class="stat"><strong id="b0-done-count">0</strong><span class="total"> / 4</span> 完了</div>
-              <div class="stat">残り <strong id="b0-remaining">4</strong> 項目</div>
-            </div>
-            <div class="ow-summary-status" id="b0-status-msg">📌 まずは「① 業態・ブランド登録」から始めましょう</div>
-            <div class="ow-progress-bar" style="margin-top:10px;margin-bottom:0;"><div class="ow-progress-fill" id="b0-progress-fill" style="width:0%;"></div></div>
-            <div class="ow-step-markers">
-              <div class="ow-step-marker now" id="b0-mk-1">①<span class="nm">業態</span></div>
-              <div class="ow-step-marker" id="b0-mk-2">②<span class="nm">店舗</span></div>
-              <div class="ow-step-marker" id="b0-mk-3">③<span class="nm">区分</span></div>
-              <div class="ow-step-marker" id="b0-mk-4">④<span class="nm">従業員</span></div>
-            </div>
-          </div>
-        </div>
-
         <!-- ステップ1: 業態・ブランド登録 -->
         <div class="ow-step" id="b0-step-1" data-step="1">
           <div class="ow-step-num active">1</div>
