@@ -2596,38 +2596,41 @@ function refreshSetupBanner(stepNum) {
   }
 }
 
-// 設定画面に遷移時、一覧サンプルデータも件数に応じて表示
+// 設定画面に遷移時、運用画面では常にデモデータを表示(設定前モードは別途エンプティビュー)
 function refreshSettingsList(stepNum) {
-  var counts = b0LoadCounts();
-  var c = counts[stepNum - 1] || 0;
   var listEl, html = '';
   if (stepNum === 1) {
     listEl = document.getElementById('list-brand');
-    if (c === 0) html = '<div style="padding:24px;text-align:center;color:#999;font-size:11px;">登録されていません。「+ ブランドを追加」から登録してください。</div>';
-    else html = '<div class="pl-row"><div class="nm">ラクミー食堂</div><div class="meta">飲食店 / RKM</div></div>';
+    html =
+      '<div class="pl-row"><div class="nm">ラクミー食堂</div><div class="meta">飲食店 / RKM</div></div>' +
+      '<div class="pl-row"><div class="nm">ラクミーカフェ</div><div class="meta">カフェ / RKC</div></div>' +
+      '<div class="pl-row"><div class="nm">ラクミーバル</div><div class="meta">居酒屋・バー / RKB</div></div>';
   } else if (stepNum === 2) {
     listEl = document.getElementById('list-store');
-    if (c === 0) html = '<div style="padding:24px;text-align:center;color:#999;font-size:11px;">登録されていません。「+ 店舗を追加」から登録してください。</div>';
-    else html =
-      '<div class="pl-row"><div class="nm">渋谷店</div><div class="meta">ラクミー食堂 / 11:00-23:00</div></div>' +
-      '<div class="pl-row"><div class="nm">新宿店</div><div class="meta">ラクミー食堂 / 11:00-23:00</div></div>' +
-      '<div class="pl-row"><div class="nm">池袋店</div><div class="meta">ラクミー食堂 / 11:00-22:00</div></div>';
+    html =
+      '<div class="pl-row"><div class="nm">渋谷店</div><div class="meta">ラクミー食堂 / 渋谷区道玄坂 / 11:00-23:00</div></div>' +
+      '<div class="pl-row"><div class="nm">新宿店</div><div class="meta">ラクミー食堂 / 新宿区西新宿 / 11:00-23:00</div></div>' +
+      '<div class="pl-row"><div class="nm">池袋店</div><div class="meta">ラクミー食堂 / 豊島区池袋 / 11:00-22:00</div></div>' +
+      '<div class="pl-row"><div class="nm">表参道店</div><div class="meta">ラクミーカフェ / 港区南青山 / 8:00-21:00</div></div>' +
+      '<div class="pl-row"><div class="nm">六本木店</div><div class="meta">ラクミーバル / 港区六本木 / 17:00-翌2:00</div></div>';
   } else if (stepNum === 3) {
     listEl = document.getElementById('list-emptype');
-    if (c === 0) html = '<div style="padding:24px;text-align:center;color:#999;font-size:11px;">登録されていません。「+ 雇用区分を追加」から登録してください。</div>';
-    else html =
-      '<div class="pl-row"><div class="nm">正社員</div><div class="meta">月給</div></div>' +
-      '<div class="pl-row"><div class="nm">契約社員</div><div class="meta">月給</div></div>' +
-      '<div class="pl-row"><div class="nm">アルバイト</div><div class="meta">時給</div></div>' +
-      '<div class="pl-row"><div class="nm">業務委託</div><div class="meta">日給</div></div>';
+    html =
+      '<div class="pl-row"><div class="nm">正社員</div><div class="meta">月給 ・ ¥250,000〜</div></div>' +
+      '<div class="pl-row"><div class="nm">契約社員</div><div class="meta">月給 ・ ¥200,000〜</div></div>' +
+      '<div class="pl-row"><div class="nm">アルバイト</div><div class="meta">時給 ・ ¥1,200〜</div></div>' +
+      '<div class="pl-row"><div class="nm">業務委託</div><div class="meta">日給 ・ ¥10,000〜</div></div>';
   } else if (stepNum === 4) {
     listEl = document.getElementById('list-emp');
-    if (c === 0) html = '<div style="padding:24px;text-align:center;color:#999;font-size:11px;">登録されていません。「+ 従業員を追加」から登録してください。</div>';
-    else html =
+    html =
       '<div class="pl-row"><div class="nm">吉田 七美</div><div class="meta">渋谷店 / 正社員 / <span style="color:#f0960a;">招待中</span></div></div>' +
       '<div class="pl-row"><div class="nm">鈴木 太郎</div><div class="meta">新宿店 / アルバイト / <span style="color:#1a9e7e;">有効</span></div></div>' +
       '<div class="pl-row"><div class="nm">田中 花子</div><div class="meta">池袋店 / 契約社員 / <span style="color:#1a9e7e;">有効</span></div></div>' +
-      '<div style="padding:8px 4px;color:#888;font-size:11px;text-align:center;">他 ' + Math.max(0, c - 3) + ' 名</div>';
+      '<div class="pl-row"><div class="nm">山田 健一</div><div class="meta">表参道店 / 正社員 / <span style="color:#1a9e7e;">有効</span></div></div>' +
+      '<div class="pl-row"><div class="nm">佐藤 美咲</div><div class="meta">六本木店 / アルバイト / <span style="color:#1a9e7e;">有効</span></div></div>' +
+      '<div class="pl-row"><div class="nm">高橋 直樹</div><div class="meta">渋谷店 / 業務委託 / <span style="color:#1a9e7e;">有効</span></div></div>' +
+      '<div class="pl-row"><div class="nm">伊藤 由佳</div><div class="meta">新宿店 / アルバイト / <span style="color:#1a9e7e;">有効</span></div></div>' +
+      '<div style="padding:8px 4px;color:#888;font-size:11px;text-align:center;">他 12 名</div>';
   }
   if (listEl) listEl.innerHTML = html;
 }
