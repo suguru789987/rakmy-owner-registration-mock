@@ -1206,14 +1206,14 @@
     <main class="mc">
       <div class="ph"><h2>打刻記録</h2></div>
 
-      <!-- 登録ガイド未完了時のバナー（登録完了したら非表示） -->
-      <div class="al al-w" style="margin-bottom:16px;max-width:760px;align-items:center;">
-        <span style="font-size:18px;">⚠️</span>
-        <div style="flex:1;">
-          <strong>登録ガイドが未完了です。</strong><br>
+      <!-- 登録ガイド 未完了時/中断時のバナー(done基準で動的更新) -->
+      <div id="b0-resume-banner" class="al al-w" style="margin-bottom:16px;max-width:760px;align-items:center;">
+        <span style="font-size:18px;" id="b0-resume-icon">⚠️</span>
+        <div style="flex:1;" id="b0-resume-msg">
+          <strong>初期登録が未完了です。</strong><br>
           打刻記録を表示するには、業態・ブランド / 店舗 / 雇用区分 / 従業員 の登録が必要です。
         </div>
-        <button class="btn btn-p btn-sm" onclick="go('b0')" style="margin-left:10px;">セットアップを開く →</button>
+        <button class="btn btn-p btn-sm" id="b0-resume-btn" onclick="go('b0')" style="margin-left:10px;">セットアップを開く →</button>
       </div>
 
       <!-- 打刻記録 空状態（純粋に打刻記録の空状態のみ） -->
@@ -2026,6 +2026,10 @@ function go(id) {
   if (settingsMap[id]) {
     refreshSettingsModeGuard(settingsMap[id]);
   }
+  // 打刻記録(b0-empty)の中断再開バナーを更新
+  if (id === 'b0-empty') {
+    refreshB0ResumeBanner();
+  }
   // URLハッシュ同期(ディープリンク対応)
   if (location.hash !== '#' + id) {
     history.replaceState(null, '', '#' + id);
@@ -2304,6 +2308,37 @@ function bGotoSettingsAndOpenModal(stepNum) {
 }
 
 // 運用設定画面: 一覧更新のみ(初期モードバナーは廃止、設定画面は運用専用)
+/* 打刻記録(b0-empty)の中断再開バナー: done状態で動的更新 */
+function refreshB0ResumeBanner() {
+  var banner = document.getElementById('b0-resume-banner');
+  var icon = document.getElementById('b0-resume-icon');
+  var msg = document.getElementById('b0-resume-msg');
+  var btn = document.getElementById('b0-resume-btn');
+  if (!banner || !msg || !btn) return;
+  var done = b0LoadDone();
+  var stepNames = ['', '業態・ブランド', '店舗', '雇用区分', '従業員'];
+  var stepNums = ['', '①', '②', '③', '④'];
+  if (done >= 4) {
+    // 完了済み → バナー非表示
+    banner.style.display = 'none';
+    return;
+  }
+  banner.style.display = '';
+  if (done === 0) {
+    // 未着手 → セットアップ開始案内
+    if (icon) icon.textContent = '⚠️';
+    msg.innerHTML = '<strong>初期登録が未完了です。</strong><br>打刻記録を表示するには、業態・ブランド / 店舗 / 雇用区分 / 従業員 の登録が必要です。';
+    btn.textContent = 'セットアップを開く →';
+  } else {
+    // 中断状態(0<done<4) → 進捗+続きから再開案内
+    if (icon) icon.textContent = '🔄';
+    var nextNum = stepNums[done + 1];
+    var nextName = stepNames[done + 1];
+    msg.innerHTML = '<strong>前回の続きから再開できます。</strong><br>進捗 <strong>' + done + '/4 完了</strong> ・ 次は <strong>' + nextNum + ' ' + nextName + '</strong>';
+    btn.textContent = '続きから再開する →';
+  }
+}
+
 function refreshSettingsModeGuard(stepNum) {
   refreshSettingsList(stepNum);
   var pageIds = ['', 'page-brand-settings', 'page-store-settings', 'page-emptype-settings', 'page-emp-settings'];
