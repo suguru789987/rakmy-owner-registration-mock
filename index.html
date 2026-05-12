@@ -2978,9 +2978,86 @@ function d2OnEmpSelect() {
 }
 // 起動時: URLハッシュがあれば該当画面へ
 window.addEventListener('DOMContentLoaded', function() {
+  initSettingModeToggles();
   var h = (location.hash || '').replace('#', '');
   if (h && document.getElementById('page-' + h)) go(h);
 });
+
+/* デモ用: 設定画面の 設定前(empty) ↔ 設定後(filled) 切替 */
+var SETTING_PAGES = [
+  { id: 'brand-settings',   listSel: '#list-brand',     label: 'ブランド',   addText: '+ ブランドを追加' },
+  { id: 'store-settings',   listSel: '#list-store',     label: '店舗',      addText: '+ 店舗を追加' },
+  { id: 'emptype-settings', listSel: '#list-emptype',   label: '雇用区分',   addText: '+ 雇用区分を追加' },
+  { id: 'emp-settings',     listSel: '#list-emp',       label: '従業員',    addText: '+ 従業員を追加' },
+  { id: 'd1',               listSel: '.dt',             label: '管理者',    addText: '+ 管理者を登録' }
+];
+
+function initSettingModeToggles() {
+  SETTING_PAGES.forEach(function(p) {
+    var page = document.getElementById('page-' + p.id);
+    if (!page) return;
+    var ph = page.querySelector('.ph');
+    if (!ph) return;
+    // トグル追加(既に追加済みならスキップ)
+    if (!ph.querySelector('.setting-mode-block')) {
+      var toggle = document.createElement('div');
+      toggle.className = 'setting-mode-block';
+      toggle.style.cssText = 'display:flex;align-items:center;gap:6px;font-size:10px;background:#fff3e0;border:1px dashed #e67e22;border-radius:8px;padding:5px 9px;margin-left:8px;';
+      toggle.innerHTML = '<span style="color:#e67e22;font-weight:700;">🛠 デモ用</span>' +
+        '<button class="setting-mode-toggle" data-pageid="' + p.id + '" data-mode="empty" onclick="switchSettingMode(\'' + p.id + '\',\'empty\')" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">設定前</button>' +
+        '<button class="setting-mode-toggle" data-pageid="' + p.id + '" data-mode="filled" onclick="switchSettingMode(\'' + p.id + '\',\'filled\')" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">設定後</button>';
+      ph.appendChild(toggle);
+    }
+    // エンプティビュー追加(リストの兄弟として並置、display で切替)
+    var list = page.querySelector(p.listSel);
+    if (list && !document.getElementById('empty-' + p.id)) {
+      var empty = document.createElement('div');
+      empty.id = 'empty-' + p.id;
+      empty.style.cssText = 'display:none;background:#fff;border:1px dashed #ddd;border-radius:8px;padding:48px 24px;text-align:center;color:#888;';
+      empty.innerHTML = '<div style="font-size:36px;margin-bottom:12px;">📭</div>' +
+        '<div style="font-size:14px;font-weight:600;color:#555;margin-bottom:6px;">まだ' + p.label + 'が登録されていません</div>' +
+        '<div style="font-size:11px;line-height:1.7;">「' + p.addText + '」または「📥 CSVインポート」から登録できます。</div>';
+      list.parentNode.insertBefore(empty, list);
+    }
+    // 初期モード適用
+    applySettingMode(p.id, loadSettingMode(p.id));
+  });
+}
+
+function loadSettingMode(pageId) {
+  try { return sessionStorage.getItem('settingMode_' + pageId) || 'filled'; } catch (e) { return 'filled'; }
+}
+
+function switchSettingMode(pageId, mode) {
+  if (mode !== 'empty' && mode !== 'filled') mode = 'filled';
+  try { sessionStorage.setItem('settingMode_' + pageId, mode); } catch (e) {}
+  applySettingMode(pageId, mode);
+}
+
+function applySettingMode(pageId, mode) {
+  var pInfo = null;
+  SETTING_PAGES.forEach(function(p) { if (p.id === pageId) pInfo = p; });
+  if (!pInfo) return;
+  var page = document.getElementById('page-' + pageId);
+  if (!page) return;
+  var list = page.querySelector(pInfo.listSel);
+  var empty = document.getElementById('empty-' + pageId);
+  if (mode === 'empty') {
+    if (list) list.style.display = 'none';
+    if (empty) empty.style.display = '';
+  } else {
+    if (list) list.style.display = '';
+    if (empty) empty.style.display = 'none';
+  }
+  // トグルActive表示
+  document.querySelectorAll('.setting-mode-toggle[data-pageid="' + pageId + '"]').forEach(function(btn) {
+    var isActive = btn.getAttribute('data-mode') === mode;
+    btn.style.background = isActive ? '#2ec4a0' : '#fff';
+    btn.style.color = isActive ? '#fff' : '#555';
+    btn.style.borderColor = isActive ? '#2ec4a0' : '#ccc';
+    btn.style.fontWeight = isActive ? '700' : '400';
+  });
+}
 // ブラウザ戻る/進む対応
 window.addEventListener('hashchange', function() {
   var h = (location.hash || '').replace('#', '');
