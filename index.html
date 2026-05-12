@@ -758,15 +758,11 @@
       <p style="font-size:11px;color:#666;margin-bottom:14px;max-width:760px;" id="b0-page-sub">タイムレコードのご利用にあたり、以下の必須項目を順番に登録してください。完了するとダッシュボード（打刻記録）が利用可能になります。</p>
 
       <!-- 進捗バナー(未完了時表示): 完了/未完了を明示 -->
-      <div id="b0-progress-banner" style="display:none;background:#fef9e7;border:1px solid #f0d68a;border-radius:8px;padding:14px 18px;max-width:760px;margin-bottom:16px;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-          <span style="font-size:18px;">⚠️</span>
-          <div style="flex:1;">
-            <strong>初期セットアップが未完了です（<span id="b0-progress-count">0</span>/4）</strong>
-            <div style="font-size:11px;color:#7a5800;margin-top:2px;" id="b0-progress-hint">次のステップ: ① 業態・ブランド</div>
-          </div>
+      <div id="b0-progress-banner" style="display:none;max-width:760px;margin-bottom:16px;">
+        <div id="b0-progress-text" style="display:flex;align-items:center;gap:10px;font-size:12px;color:#666;margin-bottom:6px;"></div>
+        <div style="height:8px;background:#eee;border-radius:4px;overflow:hidden;max-width:760px;">
+          <div id="b0-progress-fill" style="height:100%;background:#2ec4a5;width:0%;transition:width 0.4s;"></div>
         </div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;" id="b0-progress-chips"></div>
       </div>
 
       <!-- 完了サマリビュー(done=4のとき表示) -->
@@ -2370,9 +2366,8 @@ function bGotoSettingsAndOpenModal(stepNum) {
 /* b0 進捗バナー: 完了/未完了を明示(チップ4個 + アラート) */
 function refreshB0ProgressBanner() {
   var banner = document.getElementById('b0-progress-banner');
-  var countEl = document.getElementById('b0-progress-count');
-  var hintEl = document.getElementById('b0-progress-hint');
-  var chipsEl = document.getElementById('b0-progress-chips');
+  var textEl = document.getElementById('b0-progress-text');
+  var fillEl = document.getElementById('b0-progress-fill');
   if (!banner) return;
   var done = b0LoadDone();
   if (done >= 4) {
@@ -2380,35 +2375,17 @@ function refreshB0ProgressBanner() {
     return;
   }
   banner.style.display = '';
-  if (countEl) countEl.textContent = done;
   var stepDefs = [
     { num: '①', name: '業態・ブランド' },
     { num: '②', name: '店舗' },
     { num: '③', name: '雇用区分' },
     { num: '④', name: '従業員' }
   ];
-  if (hintEl) {
+  var pct = (done / 4) * 100;
+  if (fillEl) fillEl.style.width = pct + '%';
+  if (textEl) {
     var nd = stepDefs[done];
-    hintEl.textContent = '次のステップ: ' + nd.num + ' ' + nd.name + '(残り ' + (4 - done) + ' 項目)';
-  }
-  if (chipsEl) {
-    var html = '';
-    for (var i = 0; i < 4; i++) {
-      var step = i + 1;
-      var st;
-      if (step <= done) {
-        st = { ic: '✓', color: '#0e9077', bg: '#e8f9f4', border: '#b2ebe0' };
-      } else if (step === done + 1) {
-        st = { ic: '⏳', color: '#0e9077', bg: '#fff', border: '#2ec4a5' };
-      } else {
-        st = { ic: '🔒', color: '#999', bg: '#fafafa', border: '#e8e8e8' };
-      }
-      html += '<div style="display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:6px;border:1px solid ' + st.border + ';background:' + st.bg + ';font-size:11px;color:' + st.color + ';font-weight:600;">' +
-        st.ic + ' ' + stepDefs[i].num + ' ' + stepDefs[i].name;
-      if (step === done + 1) html += '<span style="font-size:9px;background:#2ec4a5;color:#fff;padding:1px 6px;border-radius:8px;font-weight:700;margin-left:2px;">次</span>';
-      html += '</div>';
-    }
-    chipsEl.innerHTML = html;
+    textEl.innerHTML = '📊 取り込み進捗 <strong style="color:#0e9077;">' + done + '/4 完了</strong> ・ 次は <strong style="color:#0e9077;">' + nd.num + ' ' + nd.name + '</strong> から(残り <strong>' + (4 - done) + '</strong> 項目)';
   }
 }
 
