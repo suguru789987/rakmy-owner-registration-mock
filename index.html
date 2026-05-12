@@ -2124,8 +2124,14 @@ function b0SetMethod(m) {
   var importPanel = document.getElementById('b0-import-panel');
   if (cardManual) cardManual.classList.toggle('act', m === 'manual');
   if (cardImport) cardImport.classList.toggle('act', m === 'import');
-  if (wizard) wizard.style.display = (m === 'manual') ? '' : 'none';
-  if (importPanel) importPanel.classList.toggle('act', m === 'import');
+  // 完了時(done=4)の表示制御は b0SetState 側が優先。完了前のみここで表示切替
+  if (b0LoadDone() < 4) {
+    if (wizard) wizard.style.display = (m === 'manual') ? '' : 'none';
+    if (importPanel) {
+      importPanel.classList.toggle('act', m === 'import');
+      importPanel.style.display = (m === 'import') ? 'block' : 'none';
+    }
+  }
 }
 
 /* デモ用: インポート完了をシミュレート(静的モック⇄動的モックの連携擬似再現) */
@@ -2237,9 +2243,9 @@ function b0SetState(doneCount) {
   } else {
     if (completionView) completionView.style.display = 'none';
     if (methodPicker) methodPicker.style.display = '';
-    // import-panel/wizard の表示は b0SetMethod が制御するので、ここでは未完了状態に戻すだけ
+    // import-panel/wizardの表示はb0SetMethodに完全委譲(完了前のみ動作)
     var m = b0LoadMethod();
-    if (importPanel) importPanel.style.display = (m === 'import') ? '' : 'none';
+    if (importPanel) importPanel.style.display = (m === 'import') ? 'block' : 'none';
     if (wizardCard) wizardCard.style.display = (m === 'manual') ? '' : 'none';
   }
 
