@@ -2544,10 +2544,10 @@ function b0Go(stepNum) {
   setTimeout(function(){ bOpenStep(stepNum); }, 200);
 }
 
-// 連鎖CTAでの遷移+モーダル展開: 同じく初期/運用で分岐
+// トースト連鎖CTAでの遷移+モーダル展開: 必ず運用設定画面(*-settings)へ
+// (トースト発火自体が運用更新モードの所作。新規登録モードは bShowBridgeModal で別系統)
 function bGotoSettingsAndOpenModal(stepNum) {
-  var done = b0LoadDone();
-  go(done < 4 ? SETUP_PAGES[stepNum] : SETTINGS_PAGES[stepNum]);
+  go(SETTINGS_PAGES[stepNum]);
   setTimeout(function(){ bOpenStep(stepNum); }, 200);
 }
 
@@ -2673,11 +2673,16 @@ function b0CompleteStep(stepNum) {
     bShowToast(stepNum);
     return;
   }
-  // b0画面(登録ガイド)で登録した場合: 初期モード扱い → CTAモーダル
+  // b0画面(登録ガイド)で登録した場合: done基準で分岐
+  // done<4(新規登録進行中) → モーダル / done>=4(完了後の運用フェーズ) → トースト
   if (pageId === 'page-b0') {
     b0SetState(b0LoadDone());
     bPulseNextStep();
-    bShowBridgeModal(stepNum);
+    if (b0LoadDone() < 4) {
+      bShowBridgeModal(stepNum);
+    } else {
+      bShowToast(stepNum);
+    }
     return;
   }
   // フォールバック
