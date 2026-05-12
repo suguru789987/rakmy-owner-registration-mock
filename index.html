@@ -2773,6 +2773,12 @@ function d2OnEmpSelect() {
 }
 // 起動時: URLハッシュがあれば該当画面へ
 window.addEventListener('DOMContentLoaded', function() {
+  // モック: 毎回未完了状態で起動(完了状態だと操作できない画面があるため)
+  try {
+    sessionStorage.removeItem('b0Done');
+    sessionStorage.removeItem('b0Counts');
+    sessionStorage.removeItem('b0EmptyMode');
+  } catch (e) {}
   initSettingModeToggles();
   var h = (location.hash || '').replace('#', '');
   if (h && document.getElementById('page-' + h)) go(h);
