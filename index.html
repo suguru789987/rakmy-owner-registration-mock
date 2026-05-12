@@ -810,35 +810,37 @@
         <div class="istep-list">
           <div class="istep-list-title">📋 インポートガイド</div>
 
-          <!-- テンプレートモード Step 1-4 (集約CTA + 進捗表示のみ) -->
+          <!-- テンプレートモード: コンパクト進捗ビュー -->
           <div id="istep-list-template">
-            <!-- 集約CTA: テンプレ取り込み画面でStep 1→2→3→4を順次アップロード -->
-            <div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
+            <!-- 集約CTA -->
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;">
+              <div style="font-size:11px;color:#666;">画面1つで Step 1→2→3→4 を順番に取り込めます。</div>
               <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/#tpl-setup" target="_blank" rel="noopener" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">📥 テンプレ取り込み画面を開く ↗</a>
             </div>
-            <div style="font-size:10px;color:#888;margin-bottom:8px;">※ 画面1つでStep 1→2→3→4を順番に取り込めます。下の進捗で完了状況を確認。</div>
-            <div class="istep-row" data-istep="1" style="border-top:none;">
-              <div class="istep-num active">1</div>
-              <div class="istep-body">
-                <div class="istep-name">Step 1: 業態・ブランド <span class="badge now">進行中</span></div>
+            <!-- 進捗バー + 完了数 -->
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+              <div style="flex:1;height:6px;background:#eee;border-radius:3px;overflow:hidden;">
+                <div id="tpl-progress-fill" style="height:100%;background:#2ec4a5;width:0%;transition:width 0.4s;"></div>
               </div>
+              <div style="font-size:11px;font-weight:700;color:#1a9e7e;white-space:nowrap;"><span id="tpl-progress-done">0</span>/4 完了</div>
             </div>
-            <div class="istep-row is-locked" data-istep="2">
-              <div class="istep-num locked">2</div>
-              <div class="istep-body">
-                <div class="istep-name">Step 2: 店舗 <span class="badge lock">🔒 Step 1完了後</span></div>
+            <!-- 4項目の状態チップ(横並び) -->
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <div class="tpl-chip" data-tpl-chip="1" style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:6px;border:1px solid #e8e8e8;background:#fff;font-size:11px;">
+                <span class="tpl-chip-ic" style="font-size:11px;">⏳</span>
+                <span style="font-weight:600;">業態・ブランド</span>
               </div>
-            </div>
-            <div class="istep-row is-locked" data-istep="3">
-              <div class="istep-num locked">3</div>
-              <div class="istep-body">
-                <div class="istep-name">Step 3: 雇用区分 <span class="badge lock">🔒 Step 2完了後</span></div>
+              <div class="tpl-chip" data-tpl-chip="2" style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:6px;border:1px solid #e8e8e8;background:#fff;font-size:11px;">
+                <span class="tpl-chip-ic" style="font-size:11px;">🔒</span>
+                <span style="font-weight:600;">店舗</span>
               </div>
-            </div>
-            <div class="istep-row is-locked" data-istep="4">
-              <div class="istep-num locked">4</div>
-              <div class="istep-body">
-                <div class="istep-name">Step 4: 従業員 <span class="badge lock">🔒 Step 3完了後</span></div>
+              <div class="tpl-chip" data-tpl-chip="3" style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:6px;border:1px solid #e8e8e8;background:#fff;font-size:11px;">
+                <span class="tpl-chip-ic" style="font-size:11px;">🔒</span>
+                <span style="font-weight:600;">雇用区分</span>
+              </div>
+              <div class="tpl-chip" data-tpl-chip="4" style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:6px;border:1px solid #e8e8e8;background:#fff;font-size:11px;">
+                <span class="tpl-chip-ic" style="font-size:11px;">🔒</span>
+                <span style="font-weight:600;">従業員</span>
               </div>
             </div>
           </div>
@@ -2419,30 +2421,31 @@ function bSetImportMethod(m) {
 /* インポートステップのアンロック状態を反映(done基準) ※Step 1-4=エンティティ, 方式選択は分岐(別枠) */
 function bRefreshImportSteps() {
   var done = b0LoadDone();
-  // テンプレ Step 1-4
-  var list = document.getElementById('istep-list-template');
-  if (list) {
-    var rows = list.querySelectorAll('.istep-row');
-    rows.forEach(function(row) {
-      var step = parseInt(row.getAttribute('data-istep'), 10);
-      var num = row.querySelector('.istep-num');
-      var badge = row.querySelector('.badge');
-      row.classList.remove('is-locked');
-      num.classList.remove('active', 'done', 'locked');
-      if (badge) badge.classList.remove('now', 'done', 'lock', 'warn');
-      if (step <= done) {
-        num.classList.add('done'); num.textContent = '✓';
-        if (badge) { badge.classList.add('done'); badge.textContent = '✓ 完了'; }
-      } else if (step === done + 1) {
-        num.classList.add('active'); num.textContent = step;
-        if (badge) { badge.classList.add('now'); badge.textContent = '進行中'; }
-      } else {
-        num.classList.add('locked'); num.textContent = step;
-        if (badge) { badge.classList.add('lock'); badge.textContent = '🔒 Step ' + (step - 1) + '完了後'; }
-        row.classList.add('is-locked');
-      }
-    });
-  }
+  // テンプレ Step 1-4: コンパクト進捗ビュー(チップ + 進捗バー)
+  var fill = document.getElementById('tpl-progress-fill');
+  var doneEl = document.getElementById('tpl-progress-done');
+  if (fill) fill.style.width = (done * 25) + '%';
+  if (doneEl) doneEl.textContent = done;
+  document.querySelectorAll('.tpl-chip').forEach(function(chip) {
+    var step = parseInt(chip.getAttribute('data-tpl-chip'), 10);
+    var ic = chip.querySelector('.tpl-chip-ic');
+    if (step <= done) {
+      chip.style.borderColor = '#b2ebe0';
+      chip.style.background = '#f0faf7';
+      chip.style.color = '#0e9077';
+      if (ic) ic.textContent = '✓';
+    } else if (step === done + 1) {
+      chip.style.borderColor = '#1a9e7e';
+      chip.style.background = '#e8f9f4';
+      chip.style.color = '#0e9077';
+      if (ic) ic.textContent = '⏳';
+    } else {
+      chip.style.borderColor = '#e8e8e8';
+      chip.style.background = '#fafafa';
+      chip.style.color = '#999';
+      if (ic) ic.textContent = '🔒';
+    }
+  });
   // 外部連携 Step 1 (業態テンプレ補完) / Step 2 (外部一括)
   var extList = document.getElementById('istep-list-external');
   if (extList) {
