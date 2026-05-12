@@ -2659,32 +2659,36 @@ function b0CompleteStep(stepNum) {
   var activePage = document.querySelector('.page.active');
   var pageId = activePage ? activePage.id : '';
 
-  // 新規登録ページ(setup-*) → CTAモーダル（順序必須・強誘導）
   var setupMap = {'page-setup-brand':1,'page-setup-store':2,'page-setup-emptype':3,'page-setup-emp':4};
-  if (setupMap[pageId]) {
-    bShowBridgeModal(stepNum);
-    return;
-  }
-  // 運用設定画面(*-settings) → CTAトースト（順序任意・紐付き示唆）
   var settingsMap = {'page-brand-settings':1,'page-store-settings':2,'page-emptype-settings':3,'page-emp-settings':4};
+
+  // ★ 運用設定画面(*-settings) → 必ずCTAトースト(運用更新の所作・モーダル/ガイド遷移なし)
   if (settingsMap[pageId]) {
     refreshSettingsModeGuard(settingsMap[pageId]);
     bShowToast(stepNum);
     return;
   }
-  // b0画面(登録ガイド)で登録した場合: done基準で分岐
-  // done<4(新規登録進行中) → モーダル / done>=4(完了後の運用フェーズ) → トースト
+  // ★ done=4完了後はどこから登録してもトースト(運用更新扱い・防御的)
+  if (b0LoadDone() >= 4) {
+    if (pageId === 'page-b0') {
+      b0SetState(b0LoadDone());
+      bPulseNextStep();
+    }
+    bShowToast(stepNum);
+    return;
+  }
+  // ★ 新規登録進行中(done<4)のsetup-* / b0画面 → CTAモーダル(強誘導)
+  if (setupMap[pageId]) {
+    bShowBridgeModal(stepNum);
+    return;
+  }
   if (pageId === 'page-b0') {
     b0SetState(b0LoadDone());
     bPulseNextStep();
-    if (b0LoadDone() < 4) {
-      bShowBridgeModal(stepNum);
-    } else {
-      bShowToast(stepNum);
-    }
+    bShowBridgeModal(stepNum);
     return;
   }
-  // フォールバック
+  // フォールバック(安全側でトースト)
   bShowToast(stepNum);
 }
 
