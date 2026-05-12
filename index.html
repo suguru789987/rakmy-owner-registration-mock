@@ -2404,49 +2404,18 @@ function refreshB0ResumeBanner() {
   var btn = document.getElementById('b0-resume-btn');
   if (!banner || !msg || !btn) return;
   var done = b0LoadDone();
-  var stepDefs = [
-    { num: '①', name: '業態・ブランド' },
-    { num: '②', name: '店舗' },
-    { num: '③', name: '雇用区分' },
-    { num: '④', name: '従業員' }
-  ];
   if (done >= 4) {
     banner.style.display = 'none';
     return;
   }
   banner.style.display = '';
-  // 各Step進捗チップを動的生成(完了✓ / 進行中⏳ / 未着手🔒)
-  var chipsHtml = '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">';
-  for (var i = 0; i < 4; i++) {
-    var step = i + 1;
-    var st;
-    if (step <= done) {
-      st = { ic: '✓', color: '#0e9077', bg: '#e8f9f4', border: '#b2ebe0' };
-    } else if (step === done + 1) {
-      st = { ic: '⏳', color: '#0e9077', bg: '#fff', border: '#2ec4a5' };
-    } else {
-      st = { ic: '🔒', color: '#999', bg: '#fafafa', border: '#e8e8e8' };
-    }
-    chipsHtml += '<div style="display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:6px;border:1px solid ' + st.border + ';background:' + st.bg + ';font-size:11px;color:' + st.color + ';">' +
-      '<span>' + st.ic + '</span>' +
-      '<span style="font-weight:600;">' + stepDefs[i].num + ' ' + stepDefs[i].name + '</span>' +
-      (step === done + 1 ? '<span style="font-size:9px;background:#2ec4a5;color:#fff;padding:1px 6px;border-radius:8px;font-weight:700;margin-left:2px;">次はここから</span>' : '') +
-      '</div>';
-  }
-  chipsHtml += '</div>';
-
   if (done === 0) {
     if (icon) icon.textContent = '⚠️';
-    msg.innerHTML = '<strong>初期セットアップが未完了です（0/4）</strong><br>' +
-      '<span style="font-size:11px;color:#666;">タイムレコード利用には以下4項目の登録が必要です。</span>' +
-      chipsHtml;
+    msg.innerHTML = '<strong>初期セットアップが未完了です（0/4）</strong>';
     btn.textContent = 'セットアップを開く →';
   } else {
     if (icon) icon.textContent = '🔄';
-    var nextDef = stepDefs[done];
-    msg.innerHTML = '<strong>前回の続きから再開できます（' + done + '/4 完了）</strong><br>' +
-      '<span style="font-size:11px;color:#666;">残り <strong style="color:#0e9077;">' + (4 - done) + '項目</strong> ・ 次は <strong style="color:#0e9077;">' + nextDef.num + ' ' + nextDef.name + '</strong>から</span>' +
-      chipsHtml;
+    msg.innerHTML = '<strong>前回の続きから再開できます（' + done + '/4 完了）</strong>';
     btn.textContent = '続きから再開する →';
   }
 }
