@@ -866,24 +866,28 @@
             </div>
           </div>
 
-          <!-- 外部連携モード Step 1-2 -->
+          <!-- 外部連携モード: コンパクト進捗ビュー -->
           <div id="istep-list-external" style="display:none;">
-            <div class="istep-row" data-istep="ext-1" style="border-top:none;">
-              <div class="istep-num active">1</div>
-              <div class="istep-body">
-                <div class="istep-name">Step 1: 業態・ブランド(テンプレ補完) <span class="badge now" id="iext-step1-badge">進行中</span></div>
-              </div>
-              <div class="istep-actions">
-                <a href="#setup-import-1" onclick="event.preventDefault();go('setup-import-1')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">テンプレで取込 →</a>
-              </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;">
+              <div style="font-size:11px;color:#666;">外部連携画面でアップロード作業を行います。</div>
+              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/#saas-setup" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">↗ もう一度開く</a>
             </div>
-            <div class="istep-row is-locked" data-istep="ext-2">
-              <div class="istep-num locked" id="iext-step2-num">2</div>
-              <div class="istep-body">
-                <div class="istep-name">Step 2: 店舗・雇用区分・従業員(外部一括) <span class="badge lock" id="iext-step2-badge">🔒 Step 1完了後</span></div>
+            <!-- 進捗バー + 完了数 -->
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+              <div style="flex:1;height:6px;background:#eee;border-radius:3px;overflow:hidden;">
+                <div id="ext-progress-fill" style="height:100%;background:#2ec4a5;width:0%;transition:width 0.4s;"></div>
               </div>
-              <div class="istep-actions">
-                <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/#saas-setup" target="_blank" rel="noopener" class="btn btn-p btn-sm" id="iext-step2-btn" style="text-decoration:none;display:inline-flex;align-items:center;">外部連携画面を開く ↗</a>
+              <div style="font-size:11px;font-weight:700;color:#1a9e7e;white-space:nowrap;"><span id="ext-progress-done">0</span>/2 完了</div>
+            </div>
+            <!-- 2項目の状態チップ(横並び) -->
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <div class="ext-chip" data-ext-chip="1" style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:6px;border:1px solid #e8e8e8;background:#fff;font-size:11px;">
+                <span class="ext-chip-ic" style="font-size:11px;">⏳</span>
+                <span style="font-weight:600;">業態・ブランド(テンプレ)</span>
+              </div>
+              <div class="ext-chip" data-ext-chip="2" style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:6px;border:1px solid #e8e8e8;background:#fff;font-size:11px;">
+                <span class="ext-chip-ic" style="font-size:11px;">🔒</span>
+                <span style="font-weight:600;">店舗・雇用区分・従業員(外部一括)</span>
               </div>
             </div>
           </div>
@@ -2474,40 +2478,36 @@ function bRefreshImportSteps() {
       if (ic) ic.textContent = '🔒';
     }
   });
-  // 外部連携 Step 1 (業態テンプレ補完) / Step 2 (外部一括)
-  var extList = document.getElementById('istep-list-external');
-  if (extList) {
-    var row1 = extList.querySelector('[data-istep="ext-1"]');
-    var row2 = extList.querySelector('[data-istep="ext-2"]');
-    if (row1) {
-      var num1 = row1.querySelector('.istep-num');
-      var b1ex = document.getElementById('iext-step1-badge');
-      if (done >= 1) {
-        row1.classList.remove('is-locked');
-        if (num1) { num1.classList.remove('active','locked'); num1.classList.add('done'); num1.textContent = '✓'; }
-        if (b1ex) { b1ex.classList.remove('now','lock'); b1ex.classList.add('done'); b1ex.textContent = '✓ 完了'; }
-      } else {
-        row1.classList.remove('is-locked');
-        if (num1) { num1.classList.remove('done','locked'); num1.classList.add('active'); num1.textContent = '1'; }
-        if (b1ex) { b1ex.classList.remove('done','lock'); b1ex.classList.add('now'); b1ex.textContent = '進行中'; }
-      }
+  // 外部連携モード: チップ進捗ビュー
+  // Step 1 = 業態テンプレ補完 (done >= 1 で完了)
+  // Step 2 = 店舗・雇用区分・従業員 外部一括 (done = 4 で完了)
+  var extDone = (done >= 1 ? 1 : 0) + (done >= 4 ? 1 : 0);
+  var extFill = document.getElementById('ext-progress-fill');
+  var extDoneEl = document.getElementById('ext-progress-done');
+  if (extFill) extFill.style.width = (extDone * 50) + '%';
+  if (extDoneEl) extDoneEl.textContent = extDone;
+  document.querySelectorAll('.ext-chip').forEach(function(chip) {
+    var step = parseInt(chip.getAttribute('data-ext-chip'), 10);
+    var ic = chip.querySelector('.ext-chip-ic');
+    var isDone = (step === 1 && done >= 1) || (step === 2 && done >= 4);
+    var isActive = !isDone && ((step === 1 && done === 0) || (step === 2 && done >= 1 && done < 4));
+    if (isDone) {
+      chip.style.borderColor = '#b2ebe0';
+      chip.style.background = '#f0faf7';
+      chip.style.color = '#0e9077';
+      if (ic) ic.textContent = '✓';
+    } else if (isActive) {
+      chip.style.borderColor = '#1a9e7e';
+      chip.style.background = '#e8f9f4';
+      chip.style.color = '#0e9077';
+      if (ic) ic.textContent = '⏳';
+    } else {
+      chip.style.borderColor = '#e8e8e8';
+      chip.style.background = '#fafafa';
+      chip.style.color = '#999';
+      if (ic) ic.textContent = '🔒';
     }
-    if (row2) {
-      var num2 = row2.querySelector('.istep-num');
-      var b2ex = document.getElementById('iext-step2-badge');
-      var btn2 = document.getElementById('iext-step2-btn');
-      if (done >= 1) {
-        row2.classList.remove('is-locked');
-        if (num2) { num2.classList.remove('locked','done'); num2.classList.add('active'); num2.textContent = '2'; }
-        if (b2ex) { b2ex.classList.remove('lock','done'); b2ex.classList.add('now'); b2ex.textContent = '進行中'; }
-        if (btn2) { btn2.style.pointerEvents = ''; btn2.style.opacity = ''; }
-      } else {
-        row2.classList.add('is-locked');
-        if (num2) { num2.classList.remove('active','done'); num2.classList.add('locked'); num2.textContent = '2'; }
-        if (b2ex) { b2ex.classList.remove('now','done'); b2ex.classList.add('lock'); b2ex.textContent = '🔒 Step 1完了後'; }
-      }
-    }
-  }
+  });
 }
 
 function b0SetState(doneCount) {
