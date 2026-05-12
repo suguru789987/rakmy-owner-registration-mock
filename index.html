@@ -757,6 +757,18 @@
       <div class="ph"><h2 id="b0-page-title">初期セットアップ</h2></div>
       <p style="font-size:11px;color:#666;margin-bottom:14px;max-width:760px;" id="b0-page-sub">タイムレコードのご利用にあたり、以下の必須項目を順番に登録してください。完了するとダッシュボード（打刻記録）が利用可能になります。</p>
 
+      <!-- 進捗バナー(未完了時表示): 完了/未完了を明示 -->
+      <div id="b0-progress-banner" style="display:none;background:#fef9e7;border:1px solid #f0d68a;border-radius:8px;padding:14px 18px;max-width:760px;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <span style="font-size:18px;">⚠️</span>
+          <div style="flex:1;">
+            <strong>初期セットアップが未完了です（<span id="b0-progress-count">0</span>/4）</strong>
+            <div style="font-size:11px;color:#7a5800;margin-top:2px;" id="b0-progress-hint">次のステップ: ① 業態・ブランド</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;" id="b0-progress-chips"></div>
+      </div>
+
       <!-- 完了サマリビュー(done=4のとき表示) -->
       <div id="b0-completion-view" style="display:none;max-width:760px;margin-bottom:18px;">
         <div style="background:linear-gradient(135deg,#e8f9f4 0%,#d9f3eb 100%);border:1px solid #2ec4a5;border-radius:12px;padding:20px 24px;">
@@ -2230,6 +2242,9 @@ function b0SetState(doneCount) {
   }
   var bizComplete = (doneCount === 4);
 
+  // 進捗バナー(完了/未完了の明示UI)を更新
+  refreshB0ProgressBanner();
+
   // 完了サマリビュー表示制御: done=4ならガイド本体を隠し完了サマリのみ表示
   var completionView = document.getElementById('b0-completion-view');
   var methodPicker = document.getElementById('b0-method-picker');
@@ -2352,6 +2367,51 @@ function bGotoSettingsAndOpenModal(stepNum) {
 }
 
 // 運用設定画面: 一覧更新のみ(初期モードバナーは廃止、設定画面は運用専用)
+/* b0 進捗バナー: 完了/未完了を明示(チップ4個 + アラート) */
+function refreshB0ProgressBanner() {
+  var banner = document.getElementById('b0-progress-banner');
+  var countEl = document.getElementById('b0-progress-count');
+  var hintEl = document.getElementById('b0-progress-hint');
+  var chipsEl = document.getElementById('b0-progress-chips');
+  if (!banner) return;
+  var done = b0LoadDone();
+  if (done >= 4) {
+    banner.style.display = 'none';
+    return;
+  }
+  banner.style.display = '';
+  if (countEl) countEl.textContent = done;
+  var stepDefs = [
+    { num: '①', name: '業態・ブランド' },
+    { num: '②', name: '店舗' },
+    { num: '③', name: '雇用区分' },
+    { num: '④', name: '従業員' }
+  ];
+  if (hintEl) {
+    var nd = stepDefs[done];
+    hintEl.textContent = '次のステップ: ' + nd.num + ' ' + nd.name + '(残り ' + (4 - done) + ' 項目)';
+  }
+  if (chipsEl) {
+    var html = '';
+    for (var i = 0; i < 4; i++) {
+      var step = i + 1;
+      var st;
+      if (step <= done) {
+        st = { ic: '✓', color: '#0e9077', bg: '#e8f9f4', border: '#b2ebe0' };
+      } else if (step === done + 1) {
+        st = { ic: '⏳', color: '#0e9077', bg: '#fff', border: '#2ec4a5' };
+      } else {
+        st = { ic: '🔒', color: '#999', bg: '#fafafa', border: '#e8e8e8' };
+      }
+      html += '<div style="display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:6px;border:1px solid ' + st.border + ';background:' + st.bg + ';font-size:11px;color:' + st.color + ';font-weight:600;">' +
+        st.ic + ' ' + stepDefs[i].num + ' ' + stepDefs[i].name;
+      if (step === done + 1) html += '<span style="font-size:9px;background:#2ec4a5;color:#fff;padding:1px 6px;border-radius:8px;font-weight:700;margin-left:2px;">次</span>';
+      html += '</div>';
+    }
+    chipsEl.innerHTML = html;
+  }
+}
+
 /* 打刻記録(b0-empty)モード切替: アラート時(未完了) / 通常時(完了済データ表示) */
 function switchB0EmptyMode(mode) {
   if (mode !== 'alert' && mode !== 'normal') mode = 'alert';
