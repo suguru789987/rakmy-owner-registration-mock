@@ -2594,17 +2594,17 @@ function b0SetState(doneCount) {
   if (sbGuide) sbGuide.style.display = bizComplete ? 'none' : '';
   if (sbBizLabel) sbBizLabel.textContent = bizComplete ? '業務メニュー' : '業務メニュー（登録完了後に利用可）';
 
-  // 完了済み時の上部バナー: ガイドは初期登録専用なので運用案内に切替
+  // 完了時に「以下の必須項目を順番に登録してください」のキャプションを非表示
+  var pageSub = document.getElementById('b0-page-sub');
+  if (pageSub) pageSub.style.display = bizComplete ? 'none' : '';
+
+  // 完了済み時の上部バナー: 完了サマリビューと重複するためコンパクト化(CTA撤去)
   var compBanner = document.getElementById('b0-completed-banner');
   if (compBanner) {
     compBanner.innerHTML = bizComplete ?
-      '<div class="al al-s" style="margin-bottom:14px;align-items:center;">' +
-      '<span style="font-size:18px;">🎉</span>' +
-      '<div style="flex:1;">' +
-      '<strong>初期登録は完了しています。</strong><br>' +
-      'このガイドは初期登録専用です。追加・編集は<strong>運用設定画面</strong>または<strong>打刻記録ダッシュボード</strong>からご利用ください。' +
-      '</div>' +
-      '<button class="btn btn-p btn-sm" onclick="go(\'b0-empty\')" style="margin-left:10px;">打刻記録を開く →</button>' +
+      '<div class="al al-s" style="margin-bottom:14px;align-items:center;font-size:12px;">' +
+      '<span style="font-size:16px;">🎉</span>' +
+      '<div style="flex:1;"><strong>初期登録は完了しています。</strong> 下の運用導線からご利用ください。</div>' +
       '</div>' : '';
   }
   for (var b = 1; b <= 5; b++) {
