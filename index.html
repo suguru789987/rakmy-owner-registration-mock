@@ -226,10 +226,10 @@
     .import-panel .sub { font-size: 11px; color: #666; margin-bottom: 18px; line-height: 1.7; }
 
     /* インポート方式選択(分岐枠・Step番号外): ピル型(セグメンテッドコントロール) */
-    .imethod-pills { display: inline-flex; background: #f5f5f5; border-radius: 10px; padding: 4px; margin-bottom: 4px; gap: 2px; }
-    .imethod-pill { padding: 8px 18px; font-size: 11px; font-weight: 600; cursor: pointer; border-radius: 7px; transition: all 0.2s; color: #888; user-select: none; display: inline-flex; align-items: center; gap: 6px; }
-    .imethod-pill:hover { color: #555; }
-    .imethod-pill.act { background: #fff; color: #1a9e7e; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .imethod-pills { display: flex; gap: 8px; margin-bottom: 4px; flex-wrap: wrap; }
+    .imethod-pill { padding: 10px 16px; font-size: 12px; font-weight: 600; cursor: pointer; border-radius: 8px; transition: all 0.15s; color: #444; user-select: none; display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 1px solid #ddd; }
+    .imethod-pill:hover { border-color: #888; }
+    .imethod-pill.act { border-color: #2ec4a0; background: #f7fdfb; color: #0e9077; }
     .imethod-desc { font-size: 11px; color: #555; margin: 6px 0 14px; line-height: 1.6; padding-left: 4px; }
     .imethod-desc strong { color: #1a9e7e; }
     .imethod-desc .tag { display: inline-block; font-size: 9px; padding: 1px 6px; background: #e8f8f5; color: #1a9e7e; border-radius: 10px; font-weight: 600; margin-left: 6px; }
@@ -819,10 +819,10 @@
         <div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:8px;padding:12px 14px;margin-bottom:14px;">
           <div style="font-size:11px;font-weight:700;color:#555;margin-bottom:8px;">まずは方式を選択</div>
           <div class="imethod-pills">
-            <div class="imethod-pill act" id="imp-method-template" onclick="bSetImportMethod('template', true)">📋 テンプレートで取り込み <span class="tag" style="margin-left:6px;">推奨</span></div>
+            <div class="imethod-pill" id="imp-method-template" onclick="bSetImportMethod('template', true)">📋 テンプレートで取り込み</div>
             <div class="imethod-pill" id="imp-method-external" onclick="bSetImportMethod('external', true)">🔄 外部勤怠サービスから取り込み</div>
           </div>
-          <div style="font-size:10px;color:#666;margin-top:6px;">※ 選択するとインポート画面が <strong>新しいタブ</strong> で開きます。</div>
+          <div style="font-size:10px;color:#888;margin-top:8px;">※ 選択するとインポート画面が新しいタブで開きます。初回は <strong>テンプレートで取り込み</strong> をおすすめします。</div>
         </div>
 
         <!-- インポートガイド(チップ進捗)はピル選択即遷移のため撤去。
