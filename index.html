@@ -818,11 +818,21 @@
         <!-- 方式選択(分岐) -->
         <div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:8px;padding:12px 14px;margin-bottom:14px;">
           <div style="font-size:11px;font-weight:700;color:#555;margin-bottom:8px;">まずは方式を選択</div>
-          <div class="imethod-pills">
-            <div class="imethod-pill" id="imp-method-template" onclick="bSetImportMethod('template', true)">📋 テンプレートで取り込み</div>
-            <div class="imethod-pill" id="imp-method-external" onclick="bSetImportMethod('external', true)">🔄 外部勤怠サービスから取り込み</div>
+          <div class="method-options">
+            <div class="method-card act imethod-pill" id="imp-method-template" onclick="bSetImportMethod('template', true)">
+              <div class="mc-ic">📋</div>
+              <div class="mc-name">テンプレートで取り込み</div>
+              <div class="mc-desc">ラクミー専用テンプレートにデータを入力してインポート。初回セットアップに最適。</div>
+              <div class="mc-meta">所要時間の目安: 約3〜5分</div>
+            </div>
+            <div class="method-card imethod-pill" id="imp-method-external" onclick="bSetImportMethod('external', true)">
+              <div class="mc-ic">🔄</div>
+              <div class="mc-name">外部勤怠サービスから取り込み</div>
+              <div class="mc-desc">KoT・ジョブカン等のCSVを列マッピングしてインポート。既存サービスから移行する場合に。</div>
+              <div class="mc-meta">所要時間の目安: 約5〜10分</div>
+            </div>
           </div>
-          <div style="font-size:10px;color:#888;margin-top:8px;">※ 選択するとインポート画面が新しいタブで開きます。初回は <strong>テンプレートで取り込み</strong> をおすすめします。</div>
+          <div style="font-size:10px;color:#888;margin-top:10px;">※ 選択するとインポート画面が新しいタブで開きます。</div>
         </div>
 
         <!-- インポートガイド(チップ進捗)はピル選択即遷移のため撤去。
