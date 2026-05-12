@@ -457,7 +457,7 @@
     <span class="nav-tab" onclick="go('a4')" id="nav-a4">完了</span>
     <span class="nav-sep"></span>
     <span class="nav-flow" style="color:#0e9077;">🆕 B 新規登録（初回セットアップ・モーダル）</span>
-    <span class="nav-tab" onclick="go('b0')" id="nav-b0">登録ガイド</span>
+    <span class="nav-tab" onclick="go('b0')" id="nav-b0">初期セットアップ</span>
     <span class="nav-tab" onclick="go('setup-brand')" id="nav-setup-brand">[初回]①業態</span>
     <span class="nav-tab" onclick="go('setup-store')" id="nav-setup-store">[初回]②店舗</span>
     <span class="nav-tab" onclick="go('setup-emptype')" id="nav-setup-emptype">[初回]③雇用区分</span>
@@ -734,12 +734,12 @@
   </div>
 </div>
 
-<!-- ===== B-0: 登録ガイド（独立画面 / 打刻記録から分離） ===== -->
+<!-- ===== B-0: 初期セットアップ（独立画面 / 打刻記録から分離） ===== -->
 <div class="page" id="page-b0">
   <div class="dash">
     <aside class="sb">
       <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec" id="b0-sb-guide"><a href="#" class="act"><span class="ic">📋</span>登録ガイド</a></div>
+      <div class="sb-sec" id="b0-sb-guide"><a href="#" class="act"><span class="ic">📋</span>初期セットアップ</a></div>
       <div class="sb-sec">
         <div class="sl" id="b0-sb-biz-label">業務メニュー（登録完了後に利用可）</div>
         <a href="#" onclick="event.preventDefault();go('b0-empty')" id="b0-sb-biz-1" style="opacity:0.5;"><span class="ic">⏱</span>打刻記録</a>
@@ -754,7 +754,7 @@
     <main class="mc" style="background:#f8f9fa;">
       <!-- 完了済みガード(done=4時に表示) -->
       <div id="b0-completed-banner"></div>
-      <div class="ph"><h2 id="b0-page-title">登録ガイド</h2></div>
+      <div class="ph"><h2 id="b0-page-title">初期セットアップ</h2></div>
       <p style="font-size:11px;color:#666;margin-bottom:14px;max-width:760px;" id="b0-page-sub">タイムレコードのご利用にあたり、以下の必須項目を順番に登録してください。完了するとダッシュボード（打刻記録）が利用可能になります。</p>
 
       <!-- 完了サマリビュー(done=4のとき表示) -->
@@ -836,11 +836,11 @@
         </div>
       </div>
 
-      <!-- 順序明示型 登録ガイド ウィザード (manual mode時のみ表示) -->
+      <!-- 順序明示型 初期セットアップ ウィザード (manual mode時のみ表示) -->
       <div class="ow-card" id="b0-wizard-card">
         <div class="ow-head">
           <div>
-            <h3 id="b0-card-title">登録ガイド（必須）</h3>
+            <h3 id="b0-card-title">初期セットアップ（必須）</h3>
             <div style="font-size:11px;color:#888;margin-top:3px;" id="b0-card-sub">タイムレコードを利用開始するには、以下の順番で全項目の登録が必要です。</div>
           </div>
         </div>
@@ -912,7 +912,7 @@
   <div class="dash">
     <aside class="sb">
       <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">📋</span>登録ガイド</a></div>
+      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">📋</span>初期セットアップ</a></div>
       <div class="sb-sec"><div class="sl">初期登録ステップ</div>
         <a href="#" class="act"><span class="ic">①</span>業態・ブランド</a>
         <a href="#" style="opacity:0.4;"><span class="ic">②</span>店舗</a>
@@ -922,7 +922,7 @@
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc" style="background:#f8f9fa;">
-      <div style="font-size:11px;color:#888;margin-bottom:8px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 登録ガイドへ戻る</a></div>
+      <div style="font-size:11px;color:#888;margin-bottom:8px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 初期セットアップへ戻る</a></div>
       <div style="background:#fff;border:2px solid #2ec4a5;border-radius:12px;padding:32px;max-width:560px;margin:0 auto;text-align:center;">
         <span style="display:inline-block;font-size:10px;font-weight:700;color:#1a9e7e;background:#e8f8f5;padding:4px 12px;border-radius:20px;letter-spacing:1px;margin-bottom:16px;">STEP 1 / 4 ・ 初期登録</span>
         <h2 style="font-size:20px;margin-bottom:10px;">業態・ブランドを登録</h2>
@@ -938,7 +938,7 @@
   <div class="dash">
     <aside class="sb">
       <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">📋</span>登録ガイド</a></div>
+      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">📋</span>初期セットアップ</a></div>
       <div class="sb-sec"><div class="sl">初期登録ステップ</div>
         <a href="#" onclick="event.preventDefault();go('setup-brand')"><span class="ic">①</span>業態・ブランド ✓</a>
         <a href="#" class="act"><span class="ic">②</span>店舗</a>
@@ -948,7 +948,7 @@
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc" style="background:#f8f9fa;">
-      <div style="font-size:11px;color:#888;margin-bottom:8px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 登録ガイドへ戻る</a></div>
+      <div style="font-size:11px;color:#888;margin-bottom:8px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 初期セットアップへ戻る</a></div>
       <div style="background:#fff;border:2px solid #2ec4a5;border-radius:12px;padding:32px;max-width:560px;margin:0 auto;text-align:center;">
         <span style="display:inline-block;font-size:10px;font-weight:700;color:#1a9e7e;background:#e8f8f5;padding:4px 12px;border-radius:20px;letter-spacing:1px;margin-bottom:16px;">STEP 2 / 4 ・ 初期登録</span>
         <h2 style="font-size:20px;margin-bottom:10px;">店舗を登録</h2>
@@ -964,7 +964,7 @@
   <div class="dash">
     <aside class="sb">
       <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">📋</span>登録ガイド</a></div>
+      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">📋</span>初期セットアップ</a></div>
       <div class="sb-sec"><div class="sl">初期登録ステップ</div>
         <a href="#" onclick="event.preventDefault();go('setup-brand')"><span class="ic">①</span>業態・ブランド ✓</a>
         <a href="#" onclick="event.preventDefault();go('setup-store')"><span class="ic">②</span>店舗 ✓</a>
@@ -974,7 +974,7 @@
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc" style="background:#f8f9fa;">
-      <div style="font-size:11px;color:#888;margin-bottom:8px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 登録ガイドへ戻る</a></div>
+      <div style="font-size:11px;color:#888;margin-bottom:8px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 初期セットアップへ戻る</a></div>
       <div style="background:#fff;border:2px solid #2ec4a5;border-radius:12px;padding:32px;max-width:560px;margin:0 auto;text-align:center;">
         <span style="display:inline-block;font-size:10px;font-weight:700;color:#1a9e7e;background:#e8f8f5;padding:4px 12px;border-radius:20px;letter-spacing:1px;margin-bottom:16px;">STEP 3 / 4 ・ 初期登録</span>
         <h2 style="font-size:20px;margin-bottom:10px;">雇用区分を登録</h2>
@@ -990,7 +990,7 @@
   <div class="dash">
     <aside class="sb">
       <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">📋</span>登録ガイド</a></div>
+      <div class="sb-sec"><a href="#" class="act" onclick="go('b0')"><span class="ic">📋</span>初期セットアップ</a></div>
       <div class="sb-sec"><div class="sl">初期登録ステップ</div>
         <a href="#" onclick="event.preventDefault();go('setup-brand')"><span class="ic">①</span>業態・ブランド ✓</a>
         <a href="#" onclick="event.preventDefault();go('setup-store')"><span class="ic">②</span>店舗 ✓</a>
@@ -1000,7 +1000,7 @@
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc" style="background:#f8f9fa;">
-      <div style="font-size:11px;color:#888;margin-bottom:8px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 登録ガイドへ戻る</a></div>
+      <div style="font-size:11px;color:#888;margin-bottom:8px;"><a href="#" onclick="event.preventDefault();go('b0')" style="color:#2ec4a5;text-decoration:none;">← 初期セットアップへ戻る</a></div>
       <div style="background:#fff;border:2px solid #2ec4a5;border-radius:12px;padding:32px;max-width:560px;margin:0 auto;text-align:center;">
         <span style="display:inline-block;font-size:10px;font-weight:700;color:#1a9e7e;background:#e8f8f5;padding:4px 12px;border-radius:20px;letter-spacing:1px;margin-bottom:16px;">STEP 4 / 4 ・ 初期登録</span>
         <h2 style="font-size:20px;margin-bottom:10px;">従業員を登録</h2>
@@ -1011,7 +1011,7 @@
   </div>
 </div>
 
-<!-- ===== 新規登録ガイド専用 インポート画面 (運用更新用とは分離) ===== -->
+<!-- ===== 新規初期セットアップ専用 インポート画面 (運用更新用とは分離) ===== -->
 <!-- 注意: 既存インポートモック(rakmy-timerecord-import-spec) は運用更新専用。
      ガイド経由の新規登録は下記の専用ページを使用する。 -->
 
@@ -1206,7 +1206,7 @@
     <main class="mc">
       <div class="ph"><h2>打刻記録</h2></div>
 
-      <!-- 登録ガイド 未完了時/中断時のバナー(done基準で動的更新) -->
+      <!-- 初期セットアップ 未完了時/中断時のバナー(done基準で動的更新) -->
       <div id="b0-resume-banner" class="al al-w" style="margin-bottom:16px;max-width:760px;align-items:center;">
         <span style="font-size:18px;" id="b0-resume-icon">⚠️</span>
         <div style="flex:1;" id="b0-resume-msg">
@@ -2015,7 +2015,7 @@ function go(id) {
   if (t) t.classList.add('active');
   // d2(管理者登録)を開いた際は初期タブ「新規登録」にリセット
   if (id === 'd2') d2SwitchTab('new');
-  // b0(登録ガイド)を開いた際は保存済み進捗とメソッド選択を反映
+  // b0(初期セットアップ)を開いた際は保存済み進捗とメソッド選択を反映
   if (id === 'b0') {
     b0SetState(b0LoadDone());
     b0SetMethod(b0LoadMethod());
@@ -2037,7 +2037,7 @@ function go(id) {
   window.scrollTo(0, 0);
 }
 
-/* B-0: 登録ガイド 状態管理（双方向遷移対応） */
+/* B-0: 初期セットアップ 状態管理（双方向遷移対応） */
 // セッション内で進捗を保持（リロード/タブ間でも共有）
 function b0LoadDone() {
   try { return parseInt(sessionStorage.getItem('b0Done') || '0', 10) || 0; } catch (e) { return 0; }
@@ -2106,7 +2106,7 @@ function bSimulateImport(uptoStep) {
   bRefreshImportSteps();
   // 完了通知
   var msgs = ['', '① 業態・ブランド', '① 〜 ② 店舗', '① 〜 ③ 雇用区分', '① 〜 ④ 従業員（全項目）'];
-  alert('✓ インポート完了シミュレート: ' + msgs[uptoStep] + ' まで完了\n登録ガイドの進捗バー/ステップ状態が更新されました。');
+  alert('✓ インポート完了シミュレート: ' + msgs[uptoStep] + ' まで完了\n初期セットアップの進捗バー/ステップ状態が更新されました。');
 }
 
 /* インポート方式切替(テンプレート / 外部連携) */
@@ -2220,7 +2220,7 @@ function b0SetState(doneCount) {
     meta.classList.toggle('empty', c === 0);
   }
 
-  // A案: 完了後はサイドバー「登録ガイド」を非表示、業務メニューを通常アクセス可能に
+  // A案: 完了後はサイドバー「初期セットアップ」を非表示、業務メニューを通常アクセス可能に
   var sbGuide = document.getElementById('b0-sb-guide');
   var sbBizLabel = document.getElementById('b0-sb-biz-label');
   if (sbGuide) sbGuide.style.display = bizComplete ? 'none' : '';
@@ -2293,7 +2293,7 @@ function bCloseStep() {
 var SETUP_PAGES    = ['', 'setup-brand', 'setup-store', 'setup-emptype', 'setup-emp'];
 var SETTINGS_PAGES = ['', 'brand-settings', 'store-settings', 'emptype-settings', 'emp-settings'];
 
-// b0登録ガイドからの遷移: モードに応じて分岐 + 自動でモーダル展開
+// b0初期セットアップからの遷移: モードに応じて分岐 + 自動でモーダル展開
 function b0Go(stepNum) {
   var done = b0LoadDone();
   go(done < 4 ? SETUP_PAGES[stepNum] : SETTINGS_PAGES[stepNum]);
@@ -2372,7 +2372,7 @@ function refreshSetupBanner(stepNum) {
       '<strong>初期セットアップ進行中（' + done + '/4 完了）</strong><br>' +
       '今は<strong>「' + stepNames[stepNum] + '」</strong>を登録するステップです。「+ 追加」ボタンから登録してください。' +
       '</div>' +
-      '<button class="btn btn-s btn-sm" onclick="go(\'b0\')" style="margin-left:10px;">登録ガイドへ戻る</button>' +
+      '<button class="btn btn-s btn-sm" onclick="go(\'b0\')" style="margin-left:10px;">初期セットアップへ戻る</button>' +
       '</div>';
   } else {
     // 順序が違う: 強い警告 + 正しいステップへ誘導
@@ -2492,19 +2492,19 @@ function bShowBridgeModal(stepNum) {
   if (stepNum === 1) {
     text = '新しい<strong>ブランド</strong>を登録しました。<br>続けて、このブランドの<strong>店舗</strong>も登録しますか？';
     actions = '<button class="btn btn-p" onclick="bBridgeProceed(2)">店舗の登録に進む →</button>' +
-              '<button class="btn btn-s" onclick="bBridgeBackToGuide()">登録ガイドへ戻る</button>';
+              '<button class="btn btn-s" onclick="bBridgeBackToGuide()">初期セットアップへ戻る</button>';
   } else if (stepNum === 2) {
     text = '新しい<strong>店舗</strong>を登録しました。<br>続けて、この店舗の<strong>従業員</strong>も登録しますか？';
     actions = '<button class="btn btn-p" onclick="bBridgeProceed(4)">従業員の登録に進む →</button>' +
-              '<button class="btn btn-s" onclick="bBridgeBackToGuide()">登録ガイドへ戻る</button>';
+              '<button class="btn btn-s" onclick="bBridgeBackToGuide()">初期セットアップへ戻る</button>';
   } else if (stepNum === 3) {
     text = '新しい<strong>雇用区分</strong>を登録しました。<br>続けて、この区分の<strong>従業員</strong>も登録しますか？';
     actions = '<button class="btn btn-p" onclick="bBridgeProceed(4)">従業員の登録に進む →</button>' +
-              '<button class="btn btn-s" onclick="bBridgeBackToGuide()">登録ガイドへ戻る</button>';
+              '<button class="btn btn-s" onclick="bBridgeBackToGuide()">初期セットアップへ戻る</button>';
   } else {
     text = '新しい<strong>従業員</strong>を登録しました。<br>招待メールは<strong>従業員一覧</strong>の「招待送信」ボタンから送信してください。';
     actions = '<button class="btn btn-p" onclick="bBridgeDismiss();go(\'c1\');">従業員一覧へ →</button>' +
-              '<button class="btn btn-s" onclick="bBridgeBackToGuide()">登録ガイドへ戻る</button>';
+              '<button class="btn btn-s" onclick="bBridgeBackToGuide()">初期セットアップへ戻る</button>';
   }
   textEl.innerHTML = text;
   actEl.innerHTML = actions;
