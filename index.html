@@ -773,6 +773,26 @@
         <span class="ftab" onclick="b0SetState(4)" id="b0-tab-4">全完了</span>
       </div>
 
+      <!-- 完了サマリビュー(done=4のとき表示) -->
+      <div id="b0-completion-view" style="display:none;max-width:760px;margin-bottom:18px;">
+        <div style="background:linear-gradient(135deg,#e8f9f4 0%,#d9f3eb 100%);border:1px solid #2ec4a5;border-radius:12px;padding:20px 24px;">
+          <div style="font-size:15px;font-weight:800;color:#0e9077;margin-bottom:6px;">🎉 タイムレコードの運用を開始できます</div>
+          <div style="font-size:11px;color:#2a5d52;margin-bottom:12px;">必須4項目すべての登録が完了しました。</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;">
+            <div style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:6px;border:1px solid #b2ebe0;background:#fff;font-size:11px;color:#0e9077;font-weight:600;">✓ 業態・ブランド</div>
+            <div style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:6px;border:1px solid #b2ebe0;background:#fff;font-size:11px;color:#0e9077;font-weight:600;">✓ 店舗</div>
+            <div style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:6px;border:1px solid #b2ebe0;background:#fff;font-size:11px;color:#0e9077;font-weight:600;">✓ 雇用区分</div>
+            <div style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:6px;border:1px solid #b2ebe0;background:#fff;font-size:11px;color:#0e9077;font-weight:600;">✓ 従業員</div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <a href="#b0-empty" onclick="event.preventDefault();go('b0-empty')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">⏱ 打刻記録を開く →</a>
+            <a href="#brand-settings" onclick="event.preventDefault();go('brand-settings')" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">⚙ 設定画面へ</a>
+            <a href="#d1" onclick="event.preventDefault();go('d1')" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">👥 管理者を追加(任意)</a>
+          </div>
+          <div style="font-size:10px;color:#666;margin-top:12px;line-height:1.6;">※ データの追加・更新は <strong>運用設定画面の「📥 CSVインポート」</strong> から行えます。<br>※ 管理者は <strong>「管理者一覧」</strong> のCSVインポートから取り込み可能です。</div>
+        </div>
+      </div>
+
       <!-- Step 0: 登録方法選択 -->
       <div class="method-picker" id="b0-method-picker">
         <h4>📌 まずは登録方法を選択してください（Step 0）</h4>
@@ -801,9 +821,10 @@
         <div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:8px;padding:12px 14px;margin-bottom:14px;">
           <div style="font-size:11px;font-weight:700;color:#555;margin-bottom:8px;">まずは方式を選択</div>
           <div class="imethod-pills">
-            <div class="imethod-pill act" id="imp-method-template" onclick="bSetImportMethod('template')">📋 テンプレートで取り込み <span class="tag" style="margin-left:6px;">推奨</span></div>
-            <div class="imethod-pill" id="imp-method-external" onclick="bSetImportMethod('external')">🔄 外部勤怠サービスから取り込み</div>
+            <div class="imethod-pill act" id="imp-method-template" onclick="bSetImportMethod('template', true)">📋 テンプレートで取り込み <span class="tag" style="margin-left:6px;">推奨</span></div>
+            <div class="imethod-pill" id="imp-method-external" onclick="bSetImportMethod('external', true)">🔄 外部勤怠サービスから取り込み</div>
           </div>
+          <div style="font-size:10px;color:#666;margin-top:6px;">※ 選択するとインポート画面が <strong>新しいタブ</strong> で開きます。</div>
         </div>
 
         <!-- インポートガイド (テンプレ Step 1-4 / 外部 Step 1-2) -->
@@ -812,10 +833,10 @@
 
           <!-- テンプレートモード: コンパクト進捗ビュー -->
           <div id="istep-list-template">
-            <!-- 集約CTA -->
+            <!-- 再起動CTA(別タブを閉じてしまった等の場合に再度開く) -->
             <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;">
-              <div style="font-size:11px;color:#666;">画面1つで Step 1→2→3→4 を順番に取り込めます。</div>
-              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/#tpl-setup" target="_blank" rel="noopener" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">📥 テンプレ取り込み画面を開く ↗</a>
+              <div style="font-size:11px;color:#666;">インポート画面で Step 1→2→3→4 を順番に取り込んでください。</div>
+              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/#tpl-setup" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">↗ もう一度開く</a>
             </div>
             <!-- 進捗バー + 完了数 -->
             <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
@@ -2404,7 +2425,7 @@ function bLoadImportMethod() {
 function bSaveImportMethod(m) {
   try { sessionStorage.setItem('b0ImportMethod', m); } catch (e) {}
 }
-function bSetImportMethod(m) {
+function bSetImportMethod(m, fromClick) {
   if (m !== 'template' && m !== 'external') m = 'template';
   bSaveImportMethod(m);
   var pillT = document.getElementById('imp-method-template');
@@ -2416,6 +2437,13 @@ function bSetImportMethod(m) {
   if (listT) listT.style.display = (m === 'template') ? '' : 'none';
   if (listE) listE.style.display = (m === 'external') ? '' : 'none';
   bRefreshImportSteps();
+  // ピル選択操作時はインポート画面を新規タブで即起動(初期登録専用ハッシュ)
+  if (fromClick) {
+    var url = (m === 'template')
+      ? 'https://suguru789987.github.io/rakmy-timerecord-import-spec/#tpl-setup'
+      : 'https://suguru789987.github.io/rakmy-timerecord-import-spec/#saas-setup';
+    window.open(url, '_blank', 'noopener');
+  }
 }
 
 /* インポートステップのアンロック状態を反映(done基準) ※Step 1-4=エンティティ, 方式選択は分岐(別枠) */
@@ -2525,6 +2553,25 @@ function b0SetState(doneCount) {
     else if (m === doneCount + 1) mk.classList.add('now');
   }
   var bizComplete = (doneCount === 4);
+
+  // 完了サマリビュー表示制御: done=4ならガイド本体を隠し完了サマリのみ表示
+  var completionView = document.getElementById('b0-completion-view');
+  var methodPicker = document.getElementById('b0-method-picker');
+  var importPanel = document.getElementById('b0-import-panel');
+  var wizardCard = document.getElementById('b0-wizard-card');
+  if (bizComplete) {
+    if (completionView) completionView.style.display = '';
+    if (methodPicker) methodPicker.style.display = 'none';
+    if (importPanel) importPanel.style.display = 'none';
+    if (wizardCard) wizardCard.style.display = 'none';
+  } else {
+    if (completionView) completionView.style.display = 'none';
+    if (methodPicker) methodPicker.style.display = '';
+    // import-panel/wizard の表示は b0SetMethod が制御するので、ここでは未完了状態に戻すだけ
+    var m = b0LoadMethod();
+    if (importPanel) importPanel.style.display = (m === 'import') ? '' : 'none';
+    if (wizardCard) wizardCard.style.display = (m === 'manual') ? '' : 'none';
+  }
 
   // 件数表示更新（デモトグルとの整合: doneCount分のステップは最低1件として補正）
   var counts = b0LoadCounts();
