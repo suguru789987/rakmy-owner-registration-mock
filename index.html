@@ -2035,11 +2035,6 @@ function go(id) {
   if (settingsMap[id]) {
     refreshSettingsModeGuard(settingsMap[id]);
   }
-  // 新規登録インポート画面: モード別バナーを反映
-  var setupImportMap = {'setup-import-1':1,'setup-import-2':2,'setup-import-3':3,'setup-import-4':4};
-  if (setupImportMap[id]) {
-    bRefreshSetupImportBanner(setupImportMap[id]);
-  }
   // URLハッシュ同期(ディープリンク対応)
   if (location.hash !== '#' + id) {
     history.replaceState(null, '', '#' + id);
@@ -2098,56 +2093,6 @@ function b0SetMethod(m) {
   if (cardImport) cardImport.classList.toggle('act', m === 'import');
   if (wizard) wizard.style.display = (m === 'manual') ? '' : 'none';
   if (importPanel) importPanel.classList.toggle('act', m === 'import');
-}
-
-/* 新規登録用インポート画面: 完了処理 */
-function bSetupImportComplete(stepNum) {
-  var done = b0LoadDone();
-  if (stepNum > done) {
-    if (stepNum !== done + 1) {
-      alert('前のステップを先に完了してください（現在の次のステップ: Step ' + (done + 1) + '）');
-      return;
-    }
-    b0SaveDone(stepNum);
-  }
-  var counts = b0LoadCounts();
-  counts[stepNum - 1] = (counts[stepNum - 1] || 0) + 1;
-  b0SaveCounts(counts);
-  // 完了後、次のステップへ遷移 or 全完了でb0へ
-  var newDone = b0LoadDone();
-  if (newDone < 4) {
-    var nextStep = stepNum + 1;
-    if (nextStep <= 4) {
-      go('setup-import-' + nextStep);
-      alert('✓ インポート完了。次のステップへ進みます。');
-      return;
-    }
-  }
-  // 全完了
-  alert('🎉 すべてのインポートが完了しました！\n登録ガイドに戻り、完了サマリをご確認ください。');
-  go('b0');
-}
-
-/* 新規登録用インポート画面: モードに応じてバナー表示(テンプレ/外部連携) */
-function bRefreshSetupImportBanner(stepNum) {
-  var method = bLoadImportMethod();
-  var banner = document.getElementById('setup-import-banner-' + stepNum);
-  if (!banner) return;
-  var methodLabel = method === 'external' ? '外部勤怠サービスから取り込み' : 'テンプレートで取り込み';
-  var note = '';
-  if (method === 'external' && stepNum === 1) {
-    note = '<br>⚠️ 業態・ブランドは外部勤怠サービスに情報がないため、テンプレート方式で取り込みます。';
-  } else if (method === 'external') {
-    note = '<br>📌 KoT / ジョブカン などのCSVを列マッピングして取り込みます。';
-  }
-  banner.innerHTML =
-    '<div class="al al-i" style="margin-bottom:14px;align-items:center;">' +
-    '<span style="font-size:16px;">📋</span>' +
-    '<div style="flex:1;font-size:11px;">' +
-    '<strong>新規登録 ・ Step ' + ['','①','②','③','④'][stepNum] + '</strong> ・ <strong>' + methodLabel + '</strong>' +
-    note +
-    '</div>' +
-    '</div>';
 }
 
 /* デモ用: インポート完了をシミュレート(静的モック⇄動的モックの連携擬似再現) */
