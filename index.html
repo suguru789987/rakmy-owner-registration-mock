@@ -827,71 +827,11 @@
           <div style="font-size:10px;color:#666;margin-top:6px;">※ 選択するとインポート画面が <strong>新しいタブ</strong> で開きます。</div>
         </div>
 
-        <!-- インポートガイド (テンプレ Step 1-4 / 外部 Step 1-2) -->
-        <div class="istep-list">
-          <div class="istep-list-title">📋 インポートガイド</div>
-
-          <!-- テンプレートモード: コンパクト進捗ビュー -->
-          <div id="istep-list-template">
-            <!-- 再起動CTA(別タブを閉じてしまった等の場合に再度開く) -->
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;">
-              <div style="font-size:11px;color:#666;">インポート画面で Step 1→2→3→4 を順番に取り込んでください。</div>
-              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/#tpl-setup" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">↗ もう一度開く</a>
-            </div>
-            <!-- 進捗バー + 完了数 -->
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-              <div style="flex:1;height:6px;background:#eee;border-radius:3px;overflow:hidden;">
-                <div id="tpl-progress-fill" style="height:100%;background:#2ec4a5;width:0%;transition:width 0.4s;"></div>
-              </div>
-              <div style="font-size:11px;font-weight:700;color:#1a9e7e;white-space:nowrap;"><span id="tpl-progress-done">0</span>/4 完了</div>
-            </div>
-            <!-- 4項目の状態チップ(横並び) -->
-            <div style="display:flex;gap:6px;flex-wrap:wrap;">
-              <div class="tpl-chip" data-tpl-chip="1" style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:6px;border:1px solid #e8e8e8;background:#fff;font-size:11px;">
-                <span class="tpl-chip-ic" style="font-size:11px;">⏳</span>
-                <span style="font-weight:600;">業態・ブランド</span>
-              </div>
-              <div class="tpl-chip" data-tpl-chip="2" style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:6px;border:1px solid #e8e8e8;background:#fff;font-size:11px;">
-                <span class="tpl-chip-ic" style="font-size:11px;">🔒</span>
-                <span style="font-weight:600;">店舗</span>
-              </div>
-              <div class="tpl-chip" data-tpl-chip="3" style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:6px;border:1px solid #e8e8e8;background:#fff;font-size:11px;">
-                <span class="tpl-chip-ic" style="font-size:11px;">🔒</span>
-                <span style="font-weight:600;">雇用区分</span>
-              </div>
-              <div class="tpl-chip" data-tpl-chip="4" style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:6px;border:1px solid #e8e8e8;background:#fff;font-size:11px;">
-                <span class="tpl-chip-ic" style="font-size:11px;">🔒</span>
-                <span style="font-weight:600;">従業員</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- 外部連携モード: コンパクト進捗ビュー -->
-          <div id="istep-list-external" style="display:none;">
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;">
-              <div style="font-size:11px;color:#666;">外部連携画面でアップロード作業を行います。</div>
-              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/#saas-setup" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">↗ もう一度開く</a>
-            </div>
-            <!-- 進捗バー + 完了数 -->
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-              <div style="flex:1;height:6px;background:#eee;border-radius:3px;overflow:hidden;">
-                <div id="ext-progress-fill" style="height:100%;background:#2ec4a5;width:0%;transition:width 0.4s;"></div>
-              </div>
-              <div style="font-size:11px;font-weight:700;color:#1a9e7e;white-space:nowrap;"><span id="ext-progress-done">0</span>/2 完了</div>
-            </div>
-            <!-- 2項目の状態チップ(横並び) -->
-            <div style="display:flex;gap:6px;flex-wrap:wrap;">
-              <div class="ext-chip" data-ext-chip="1" style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:6px;border:1px solid #e8e8e8;background:#fff;font-size:11px;">
-                <span class="ext-chip-ic" style="font-size:11px;">⏳</span>
-                <span style="font-weight:600;">業態・ブランド(テンプレ)</span>
-              </div>
-              <div class="ext-chip" data-ext-chip="2" style="display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:6px;border:1px solid #e8e8e8;background:#fff;font-size:11px;">
-                <span class="ext-chip-ic" style="font-size:11px;">🔒</span>
-                <span style="font-weight:600;">店舗・雇用区分・従業員(外部一括)</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <!-- インポートガイド(チップ進捗)はピル選択即遷移のため撤去。
+             方式選択ピル直下の案内文「※選択するとインポート画面が新しいタブで開きます」が役割を果たす。
+             モード切替の表示制御互換のための空divを残す。 -->
+        <div id="istep-list-template" style="display:none;"></div>
+        <div id="istep-list-external" style="display:none;"></div>
 
         <!-- 後追加項目 -->
         <div style="height:1px;background:repeating-linear-gradient(90deg,#ddd,#ddd 5px,transparent 5px,transparent 10px);margin:18px 0 12px;"></div>
@@ -2450,64 +2390,9 @@ function bSetImportMethod(m, fromClick) {
   }
 }
 
-/* インポートステップのアンロック状態を反映(done基準) ※Step 1-4=エンティティ, 方式選択は分岐(別枠) */
+/* インポートステップ進捗反映: CSV一括のチップ進捗ビューは撤去済み(no-op) */
 function bRefreshImportSteps() {
-  var done = b0LoadDone();
-  // テンプレ Step 1-4: コンパクト進捗ビュー(チップ + 進捗バー)
-  var fill = document.getElementById('tpl-progress-fill');
-  var doneEl = document.getElementById('tpl-progress-done');
-  if (fill) fill.style.width = (done * 25) + '%';
-  if (doneEl) doneEl.textContent = done;
-  document.querySelectorAll('.tpl-chip').forEach(function(chip) {
-    var step = parseInt(chip.getAttribute('data-tpl-chip'), 10);
-    var ic = chip.querySelector('.tpl-chip-ic');
-    if (step <= done) {
-      chip.style.borderColor = '#b2ebe0';
-      chip.style.background = '#f0faf7';
-      chip.style.color = '#0e9077';
-      if (ic) ic.textContent = '✓';
-    } else if (step === done + 1) {
-      chip.style.borderColor = '#1a9e7e';
-      chip.style.background = '#e8f9f4';
-      chip.style.color = '#0e9077';
-      if (ic) ic.textContent = '⏳';
-    } else {
-      chip.style.borderColor = '#e8e8e8';
-      chip.style.background = '#fafafa';
-      chip.style.color = '#999';
-      if (ic) ic.textContent = '🔒';
-    }
-  });
-  // 外部連携モード: チップ進捗ビュー
-  // Step 1 = 業態テンプレ補完 (done >= 1 で完了)
-  // Step 2 = 店舗・雇用区分・従業員 外部一括 (done = 4 で完了)
-  var extDone = (done >= 1 ? 1 : 0) + (done >= 4 ? 1 : 0);
-  var extFill = document.getElementById('ext-progress-fill');
-  var extDoneEl = document.getElementById('ext-progress-done');
-  if (extFill) extFill.style.width = (extDone * 50) + '%';
-  if (extDoneEl) extDoneEl.textContent = extDone;
-  document.querySelectorAll('.ext-chip').forEach(function(chip) {
-    var step = parseInt(chip.getAttribute('data-ext-chip'), 10);
-    var ic = chip.querySelector('.ext-chip-ic');
-    var isDone = (step === 1 && done >= 1) || (step === 2 && done >= 4);
-    var isActive = !isDone && ((step === 1 && done === 0) || (step === 2 && done >= 1 && done < 4));
-    if (isDone) {
-      chip.style.borderColor = '#b2ebe0';
-      chip.style.background = '#f0faf7';
-      chip.style.color = '#0e9077';
-      if (ic) ic.textContent = '✓';
-    } else if (isActive) {
-      chip.style.borderColor = '#1a9e7e';
-      chip.style.background = '#e8f9f4';
-      chip.style.color = '#0e9077';
-      if (ic) ic.textContent = '⏳';
-    } else {
-      chip.style.borderColor = '#e8e8e8';
-      chip.style.background = '#fafafa';
-      chip.style.color = '#999';
-      if (ic) ic.textContent = '🔒';
-    }
-  });
+  // 進捗チップ/バーは廃止。manual モードのウィザード(ow-card)は b0SetState 内で更新。
 }
 
 function b0SetState(doneCount) {
