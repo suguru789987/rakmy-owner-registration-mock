@@ -810,15 +810,17 @@
         <div class="istep-list">
           <div class="istep-list-title">📋 インポートガイド</div>
 
-          <!-- テンプレートモード Step 1-4 -->
+          <!-- テンプレートモード Step 1-4 (集約CTA + 進捗表示のみ) -->
           <div id="istep-list-template">
+            <!-- 集約CTA: テンプレ取り込み画面でStep 1→2→3→4を順次アップロード -->
+            <div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
+              <a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/#tpl-setup" target="_blank" rel="noopener" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">📥 テンプレ取り込み画面を開く ↗</a>
+            </div>
+            <div style="font-size:10px;color:#888;margin-bottom:8px;">※ 画面1つでStep 1→2→3→4を順番に取り込めます。下の進捗で完了状況を確認。</div>
             <div class="istep-row" data-istep="1" style="border-top:none;">
               <div class="istep-num active">1</div>
               <div class="istep-body">
                 <div class="istep-name">Step 1: 業態・ブランド <span class="badge now">進行中</span></div>
-              </div>
-              <div class="istep-actions">
-                <a href="#setup-import-1" onclick="event.preventDefault();go('setup-import-1')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く →</a>
               </div>
             </div>
             <div class="istep-row is-locked" data-istep="2">
@@ -826,26 +828,17 @@
               <div class="istep-body">
                 <div class="istep-name">Step 2: 店舗 <span class="badge lock">🔒 Step 1完了後</span></div>
               </div>
-              <div class="istep-actions">
-                <a href="#setup-import-2" onclick="event.preventDefault();go('setup-import-2')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く →</a>
-              </div>
             </div>
             <div class="istep-row is-locked" data-istep="3">
               <div class="istep-num locked">3</div>
               <div class="istep-body">
                 <div class="istep-name">Step 3: 雇用区分 <span class="badge lock">🔒 Step 2完了後</span></div>
               </div>
-              <div class="istep-actions">
-                <a href="#setup-import-3" onclick="event.preventDefault();go('setup-import-3')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く →</a>
-              </div>
             </div>
             <div class="istep-row is-locked" data-istep="4">
               <div class="istep-num locked">4</div>
               <div class="istep-body">
                 <div class="istep-name">Step 4: 従業員 <span class="badge lock">🔒 Step 3完了後</span></div>
-              </div>
-              <div class="istep-actions">
-                <a href="#setup-import-4" onclick="event.preventDefault();go('setup-import-4')" class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">インポート画面を開く →</a>
               </div>
             </div>
           </div>
