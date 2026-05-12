@@ -758,12 +758,6 @@
       <p style="font-size:11px;color:#666;margin-bottom:14px;max-width:760px;" id="b0-page-sub">タイムレコードのご利用にあたり、以下の必須項目を順番に登録してください。完了するとダッシュボード（打刻記録）が利用可能になります。</p>
 
       <!-- 進捗バナー(未完了時表示): 完了/未完了を明示 -->
-      <div id="b0-progress-banner" style="display:none;max-width:760px;margin-bottom:16px;">
-        <div id="b0-progress-text" style="display:flex;align-items:center;gap:10px;font-size:12px;color:#666;margin-bottom:6px;"></div>
-        <div style="height:8px;background:#eee;border-radius:4px;overflow:hidden;max-width:760px;">
-          <div id="b0-progress-fill" style="height:100%;background:#2ec4a5;width:0%;transition:width 0.4s;"></div>
-        </div>
-      </div>
 
       <!-- 完了サマリビュー(done=4のとき表示) -->
       <div id="b0-completion-view" style="display:none;max-width:760px;margin-bottom:18px;">
@@ -850,6 +844,14 @@
           <div>
             <h3 id="b0-card-title">初期セットアップ（必須）</h3>
             <div style="font-size:11px;color:#888;margin-top:3px;" id="b0-card-sub">タイムレコードを利用開始するには、以下の順番で全項目の登録が必要です。</div>
+          </div>
+        </div>
+
+        <!-- シンプルプログレスバー(manualモード時、初期セットアップ進捗) -->
+        <div id="b0-progress-banner" style="display:none;margin-bottom:16px;">
+          <div id="b0-progress-text" style="font-size:11px;color:#666;margin-bottom:5px;"></div>
+          <div style="height:6px;background:#eee;border-radius:3px;overflow:hidden;">
+            <div id="b0-progress-fill" style="height:100%;background:#2ec4a5;width:0%;transition:width 0.4s;"></div>
           </div>
         </div>
 
