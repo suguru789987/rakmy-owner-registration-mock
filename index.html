@@ -2722,7 +2722,10 @@ function refreshSidebarSetupLink() {
   });
 }
 
-/* 打刻記録(b0-empty)の中断再開バナー: シンプル表記
+/* 打刻記録(b0-empty)の中断再開バナー
+ * - 必須4STEPの完了/不足表示
+ * - 一時保存中のSTEPを検知して再開CTA配置
+ * - CSVインポート中断(localStorage 'import_in_progress')検知して再開CTA配置
  * forceShow=true: done=4でも強制表示(デモ用「アラート時」モード) */
 function refreshB0ResumeBanner(forceShow) {
   var banner = document.getElementById('b0-resume-banner');
@@ -2731,30 +2734,74 @@ function refreshB0ResumeBanner(forceShow) {
   var btn = document.getElementById('b0-resume-btn');
   if (!banner || !msg || !btn) return;
   var done = b0LoadDone();
-  if (done >= 4 && !forceShow) {
+  // 一時保存中のSTEP検知
+  var draftSteps = [];
+  var stepLabels = ['', '業態', '店舗', '雇用区分', '従業員'];
+  for (var i = 1; i <= 4; i++) {
+    if (b0HasDraft(i)) {
+      var d = b0LoadDraft(i);
+      draftSteps.push({ step: i, name: stepLabels[i], count: d.length });
+    }
+  }
+  // CSVインポート中断検知
+  var importInProgress = null;
+  try {
+    var raw = localStorage.getItem('import_in_progress');
+    if (raw) importInProgress = JSON.parse(raw);
+  } catch (e) {}
+
+  // 中断要素がない & 完了済(done>=4) & 強制でない場合はバナー非表示
+  if (done >= 4 && !forceShow && draftSteps.length === 0 && !importInProgress) {
     banner.style.display = 'none';
     return;
   }
   banner.style.display = '';
-  var stepNames = ['', '業態', '店舗', '雇用区分', '従業員'];
+
   var missingNames = [];
   for (var i = 1; i <= 4; i++) {
-    if (i > done) missingNames.push(stepNames[i]);
+    if (i > done) missingNames.push(stepLabels[i]);
   }
   var remaining = 4 - done;
+  var mainMsg;
   if (done === 0) {
     if (icon) icon.textContent = '⚠️';
-    msg.innerHTML = '<strong>初期セットアップが未完了です（0/4）</strong> <span style="font-size:11px;color:#666;">不足: ' + missingNames.join('、') + '</span>';
+    mainMsg = '<strong>初期セットアップが未完了です（0/4）</strong> <span style="font-size:11px;color:#666;">不足: ' + missingNames.join('、') + '</span>';
     btn.textContent = 'セットアップを開く →';
   } else if (done < 4) {
     if (icon) icon.textContent = '🔄';
-    msg.innerHTML = '<strong>初期セットアップ進行中（' + done + '/4 ・ あと ' + remaining + ' 項目）</strong> <span style="font-size:11px;color:#666;">不足: ' + missingNames.join('、') + '</span>';
+    mainMsg = '<strong>初期セットアップ進行中（' + done + '/4 ・ あと ' + remaining + ' 項目）</strong> <span style="font-size:11px;color:#666;">不足: ' + missingNames.join('、') + '</span>';
     btn.textContent = '続きから再開する →';
   } else {
     if (icon) icon.textContent = '⚠️';
-    msg.innerHTML = '<strong>🛠 デモ: アラート時表示</strong> <span style="font-size:11px;color:#666;">(実際は4/4完了済)</span>';
+    mainMsg = '<strong>🛠 デモ: アラート時表示</strong> <span style="font-size:11px;color:#666;">(実際は4/4完了済)</span>';
     btn.textContent = 'セットアップを確認 →';
   }
+
+  // 中断ポイントCTAエリア(下書き + CSVインポート)
+  var resumeBlock = '';
+  if (draftSteps.length > 0 || importInProgress) {
+    resumeBlock = '<div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ccc;display:flex;flex-wrap:wrap;gap:6px;align-items:center;">' +
+                  '<span style="font-size:11px;color:#666;font-weight:600;">⏸ 中断ポイント:</span>';
+    draftSteps.forEach(function(d) {
+      resumeBlock += '<button class="btn btn-o btn-sm" style="padding:4px 10px;font-size:11px;" onclick="b0ResumeDraftStep(' + d.step + ')">STEP ' + d.step + ' (' + d.name + ')・下書き' + d.count + '件 →</button>';
+    });
+    if (importInProgress) {
+      var typeLabel = importInProgress.type === 'template' ? 'テンプレート' : '外部勤怠サービス';
+      var importUrl = importInProgress.type === 'template'
+        ? 'https://suguru789987.github.io/rakmy-timerecord-import-spec/#s-tpl1'
+        : 'https://suguru789987.github.io/rakmy-timerecord-import-spec/#s-saas1';
+      resumeBlock += '<a class="btn btn-o btn-sm" style="padding:4px 10px;font-size:11px;text-decoration:none;display:inline-flex;align-items:center;" href="' + importUrl + '" target="_blank" rel="noopener">📥 CSVインポート(' + typeLabel + ') 中断中 →</a>';
+    }
+    resumeBlock += '</div>';
+  }
+  msg.innerHTML = mainMsg + resumeBlock;
+}
+
+// 一時保存中のSTEPへ遷移して下書き復元(打刻記録の中断ポイントCTA用)
+function b0ResumeDraftStep(stepNum) {
+  saveSetupActiveStep(stepNum);
+  go(SETTINGS_PAGES[stepNum]);
+  setTimeout(function(){ bOpenStep(stepNum); }, 250);
 }
 
 function refreshSettingsModeGuard(stepNum) {
