@@ -860,7 +860,7 @@
             <div class="mc-ic">✏️</div>
             <div class="mc-name">設定画面で1件ずつ登録</div>
           </div>
-          <div class="method-card act" id="method-card-import" onclick="b0SetMethod('import')">
+          <div class="method-card" id="method-card-import" onclick="b0SetMethod('import')">
             <div class="mc-ic">📥</div>
             <div class="mc-name">CSVで一括インポート <span class="mc-rec">推奨</span></div>
           </div>
@@ -2239,15 +2239,15 @@ function b0SaveCounts(c) {
   try { sessionStorage.setItem('b0Counts', JSON.stringify(c)); } catch (e) {}
 }
 
-// 登録方法選択(Step 0): 'manual' (設定画面登録) / 'import' (CSV一括/推奨) / default='import'
+// 登録方法選択(Step 1): 'manual' (設定画面登録) / 'import' (CSV一括) / 'none' (未選択・初期遷移時)
 function b0LoadMethod() {
-  try { return sessionStorage.getItem('b0Method') || 'import'; } catch (e) { return 'import'; }
+  try { return sessionStorage.getItem('b0Method') || 'none'; } catch (e) { return 'none'; }
 }
 function b0SaveMethod(m) {
   try { sessionStorage.setItem('b0Method', m); } catch (e) {}
 }
 function b0SetMethod(m) {
-  if (m !== 'manual' && m !== 'import') m = 'import';
+  if (m !== 'manual' && m !== 'import' && m !== 'none') m = 'none';
   b0SaveMethod(m);
   var cardManual = document.getElementById('method-card-manual');
   var cardImport = document.getElementById('method-card-import');
@@ -2257,6 +2257,7 @@ function b0SetMethod(m) {
   if (cardImport) cardImport.classList.toggle('act', m === 'import');
   // 完了時(done=4)の表示制御は b0SetState 側が優先。完了前のみここで表示切替
   if (b0LoadDone() < 4) {
+    // 'none'(未選択)の場合は両方非表示、選択された方のみ表示
     if (wizard) wizard.style.display = (m === 'manual') ? '' : 'none';
     if (importPanel) {
       importPanel.classList.toggle('act', m === 'import');
