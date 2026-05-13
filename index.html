@@ -2886,29 +2886,65 @@ function renderSetupSettingsUI(stepNum) {
 
   var sb = pageEl.querySelector('aside.sb');
   if (sb) {
-    sb.querySelectorAll('a').forEach(function(a) {
-      if (a.classList.contains('act')) return;
-      var onclickStr = a.getAttribute('onclick') || '';
-      if (onclickStr.indexOf("go('b0')") >= 0) return;
-      a.style.pointerEvents = 'none';
-      a.style.opacity = '0.35';
-      a.title = '初期セットアップ完了後に編集可能になります';
-      a.setAttribute('data-setup-blocked', '1');
+    // 既存のサイドナビセクションを退避(setup-nav 以外を非表示)
+    sb.querySelectorAll('.sb-sec').forEach(function(sec) {
+      if (sec.classList.contains('sb-setup-nav')) return;
+      if (sec.getAttribute('data-setup-hidden') === '1') return;
+      sec.setAttribute('data-setup-hidden', '1');
+      sec.setAttribute('data-prev-display', sec.style.display || '');
+      sec.style.display = 'none';
     });
+    // setup-nav セクションを slogo 直後に追加(なければ)
+    var existingNav = sb.querySelector('.sb-setup-nav');
+    if (!existingNav) {
+      var navSec = document.createElement('div');
+      navSec.className = 'sb-sec sb-setup-nav';
+      var slogo = sb.querySelector('.slogo');
+      if (slogo && slogo.nextSibling) slogo.parentNode.insertBefore(navSec, slogo.nextSibling);
+      else sb.insertBefore(navSec, sb.firstChild);
+    }
+    renderSetupSidebarNav(sb, stepNum);
   }
   document.body.setAttribute('data-setup-mode', String(stepNum));
+}
+
+function renderSetupSidebarNav(sb, currentStep) {
+  var nav = sb.querySelector('.sb-setup-nav');
+  if (!nav) return;
+  var done = b0LoadDone();
+  var stepLabels = ['', '業態・ブランド', '店舗', '雇用区分', '従業員'];
+  var stepIcons = ['', '①', '②', '③', '④'];
+  var pages = ['', 'brand-settings', 'store-settings', 'emptype-settings', 'emp-settings'];
+  var html = '<a href="#" onclick="event.preventDefault();go(\'b0\')"><span class="ic">📋</span>初期セットアップ TOP</a>';
+  html += '<div class="sl">初期登録ステップ</div>';
+  for (var i = 1; i <= 4; i++) {
+    var isCurrent = (i === currentStep);
+    var isDone = (i <= done);
+    var isReachable = (i <= done + 1); // 完了済 or 直後のSTEP
+    var checkMark = isDone ? ' <span style="color:#1a9e7e;font-weight:700;">✓</span>' : '';
+    var actClass = isCurrent ? ' class="act"' : '';
+    if (isReachable) {
+      html += '<a href="#"' + actClass + ' onclick="event.preventDefault();saveSetupActiveStep(' + i + ');go(\'' + pages[i] + '\')"><span class="ic">' + stepIcons[i] + '</span>' + stepLabels[i] + checkMark + '</a>';
+    } else {
+      html += '<a href="#" style="opacity:0.4;pointer-events:none;cursor:not-allowed;" title="前のSTEPを完了してください"><span class="ic">' + stepIcons[i] + '</span>' + stepLabels[i] + '</a>';
+    }
+  }
+  nav.innerHTML = html;
 }
 
 function clearSetupSettingsUI() {
   document.querySelectorAll('.setup-mode-banner').forEach(function(el) { el.remove(); });
   var oldFloat = document.querySelector('.setup-mode-float-back');
   if (oldFloat) oldFloat.remove();
-  document.querySelectorAll('a[data-setup-blocked="1"]').forEach(function(a) {
-    a.style.pointerEvents = '';
-    a.style.opacity = '';
-    a.title = '';
-    a.removeAttribute('data-setup-blocked');
+  // 隠していた既存sb-secを復元
+  document.querySelectorAll('.sb-sec[data-setup-hidden="1"]').forEach(function(sec) {
+    var prev = sec.getAttribute('data-prev-display') || '';
+    sec.style.display = prev;
+    sec.removeAttribute('data-setup-hidden');
+    sec.removeAttribute('data-prev-display');
   });
+  // setup-nav セクションを削除
+  document.querySelectorAll('.sb-setup-nav').forEach(function(n) { n.remove(); });
   document.body.removeAttribute('data-setup-mode');
 }
 
