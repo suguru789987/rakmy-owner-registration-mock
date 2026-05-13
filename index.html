@@ -2676,7 +2676,8 @@ function applyB0EmptyMode(mode) {
     if (emptyView) emptyView.style.display = 'none';
     if (normalView) normalView.style.display = '';
   } else {
-    refreshB0ResumeBanner();
+    // アラートモード: done に関係なく強制的にバナーを表示(デモ用)
+    refreshB0ResumeBanner(true);
     if (emptyView) emptyView.style.display = '';
     if (normalView) normalView.style.display = 'none';
   }
@@ -2706,21 +2707,21 @@ function refreshSidebarSetupLink() {
 }
 
 /* 打刻記録(b0-empty)の中断再開バナー: done状態で動的更新
- * 必須4STEPの完了/未完了を個別にチップ表示して不足項目を可視化 */
-function refreshB0ResumeBanner() {
+ * 必須4STEPの完了/未完了を個別にチップ表示して不足項目を可視化
+ * forceShow=true: done=4でも強制表示(デモ用「アラート時」モード) */
+function refreshB0ResumeBanner(forceShow) {
   var banner = document.getElementById('b0-resume-banner');
   var icon = document.getElementById('b0-resume-icon');
   var msg = document.getElementById('b0-resume-msg');
   var btn = document.getElementById('b0-resume-btn');
   if (!banner || !msg || !btn) return;
   var done = b0LoadDone();
-  if (done >= 4) {
+  if (done >= 4 && !forceShow) {
     banner.style.display = 'none';
     return;
   }
   banner.style.display = '';
   var stepNames = ['', '業態・ブランド', '店舗', '雇用区分', '従業員'];
-  // 必須4STEPの完了/未完了チップ
   var chips = '';
   var missingNames = [];
   for (var i = 1; i <= 4; i++) {
@@ -2741,13 +2742,22 @@ function refreshB0ResumeBanner() {
       '<div style="margin-top:6px;line-height:1.9;">' + chips + '</div>' +
       '<div style="margin-top:6px;font-size:11px;color:#c62828;">⚠️ 不足: ' + missingNames.join('、') + '</div>';
     btn.textContent = 'セットアップを開く →';
-  } else {
+  } else if (done < 4) {
     if (icon) icon.textContent = '🔄';
     msg.innerHTML =
       '<strong>前回の続きから再開できます（' + done + '/4 完了 ・ あと ' + remaining + ' 項目)</strong><br>' +
       '<div style="margin-top:6px;line-height:1.9;">' + chips + '</div>' +
       '<div style="margin-top:6px;font-size:11px;color:#c62828;">⚠️ 不足: ' + missingNames.join('、') + '</div>';
     btn.textContent = '続きから再開する →';
+  } else {
+    // done === 4 で forceShow (デモ・アラートモード表示)
+    if (icon) icon.textContent = '⚠️';
+    msg.innerHTML =
+      '<strong>🛠 デモ: アラート時表示（実際は完了済 4/4）</strong><br>' +
+      '<span style="font-size:11px;">本来このバナーは未完了時のみ表示されます。デモ用「アラート時」モード選択中はサンプル表示しています。</span>' +
+      '<div style="margin-top:6px;line-height:1.9;">' + chips + '</div>' +
+      '<div style="margin-top:6px;font-size:11px;color:#1a9e7e;">✓ 全項目完了済み</div>';
+    btn.textContent = 'セットアップを確認 →';
   }
 }
 
