@@ -971,6 +971,37 @@
 
         <div class="al al-i" style="margin-top:18px;font-size:10px;" id="b0-card-tip"><span>💡</span><div>STEP 1〜4 は必須、STEP 5(管理者) は任意です。STEP 4 まで完了で初期セットアップは完了扱いとなり、管理者は運用開始後でも追加できます。</div></div>
       </div>
+
+      <!-- ===== STEP 5 管理者一覧パネル(b0画面内に統合、setupActiveStep===5 のとき表示) ===== -->
+      <div id="b0-step5-panel" style="display:none;max-width:760px;">
+        <div class="ph" style="margin-top:8px;">
+          <h2 style="font-size:16px;">管理者一覧 <span style="font-size:11px;font-weight:400;color:#888;">(STEP 5 ・ 任意)</span></h2>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-s" id="b0-step5-edit-btn" disabled title="管理者が登録されていません" style="opacity:0.5;">編集</button>
+            <button class="btn btn-p" onclick="bOpenSetupAdminModal()">+ 新規追加</button>
+          </div>
+        </div>
+
+        <!-- 0件: 空状態 -->
+        <div id="b0-step5-empty" style="background:#fff;border:1px dashed #ddd;border-radius:10px;padding:54px 30px;text-align:center;color:#888;">
+          <div style="font-size:42px;margin-bottom:14px;">👥</div>
+          <div style="font-size:15px;font-weight:700;color:#555;margin-bottom:8px;">まだ管理者が登録されていません</div>
+          <div style="font-size:11px;line-height:1.8;margin-bottom:18px;">右上の「+ 新規追加」ボタンから登録できます。<br>管理者は<strong>任意項目</strong>のため、登録せずに完了することもできます。</div>
+          <button class="btn btn-p" onclick="bOpenSetupAdminModal()">+ 管理者を登録する</button>
+        </div>
+
+        <!-- 1件以上: 一覧 -->
+        <div id="b0-step5-list-wrap" style="display:none;">
+          <div class="post-list" id="b0-step5-list"></div>
+          <div style="margin-top:14px;font-size:11px;color:#888;">※ 管理者には登録時に招待メール(72時間有効)が自動送信されています。</div>
+        </div>
+
+        <!-- STEP 5 内 CTA -->
+        <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;">
+          <button class="btn btn-p" onclick="setupCompleteAll()">✓ 初期セットアップを完了</button>
+          <button class="btn btn-s" onclick="b0Step5BackToWizard()">← ステップ一覧へ戻る</button>
+        </div>
+      </div>
     </main>
   </div>
 </div>
@@ -1052,7 +1083,7 @@
       </div>
 
       <!-- パネル2: 従業員から選択 -->
-      <div class="mtab-panel" id="setup-admin-panel-emp" style="display:none;">
+      <div class="mtab-panel" id="setup-admin-panel-emp">
         <div class="al al-i" style="margin-bottom:14px;font-size:10px;"><span>💡</span><div>既に従業員台帳に登録済みの方を管理者に昇格します。氏名を選択するとメールアドレスが自動入力されます。</div></div>
         <div class="fg">
           <label>従業員を選択 <span class="req">✳</span></label>
@@ -2131,19 +2162,18 @@ function go(id) {
     bSetImportMethod(bLoadImportMethod());
   }
   // 設定画面: 初期/運用モードに応じてバナー切替
-  // STEP 1〜4: *-settings(setupモード)、STEP 5: setup-admin 専用ページ(d2は運用更新専用に分離)
-  var settingsMap = {'brand-settings':1,'store-settings':2,'emptype-settings':3,'emp-settings':4,'setup-admin':5};
-  if (settingsMap[id] && settingsMap[id] <= 4) {
+  // STEP 1〜4: *-settings(setupモード)、STEP 5: b0画面内のパネル統合(setup-admin独立ページは廃止)
+  var settingsMap = {'brand-settings':1,'store-settings':2,'emptype-settings':3,'emp-settings':4};
+  if (settingsMap[id]) {
     refreshSettingsModeGuard(settingsMap[id]);
     applySetupModeOnSettings(settingsMap[id]);
-  } else if (settingsMap[id] === 5 && id === 'setup-admin') {
-    // setup-admin に直接遷移した場合(ナビタブ等)も setup mode を起動
-    if (loadSetupActiveStep() !== 5) saveSetupActiveStep(5);
-    applySetupModeOnSettings(5);
-    refreshSetupAdminPage();
   } else {
     // 設定画面以外 → setup UI クリア
     clearSetupSettingsUI();
+  }
+  // b0画面への遷移時、setupActiveStep===5 なら STEP 5パネル表示を維持
+  if (id === 'b0' && loadSetupActiveStep() === 5) {
+    setTimeout(function(){ b0ShowStep5Panel(); }, 0);
   }
   // 打刻記録(b0-empty)の中断再開バナー + デモ切替モード適用
   if (id === 'b0-empty') {
@@ -2478,19 +2508,76 @@ function bCloseStep() {
 
 // ページマッピング:
 // index 1〜4: 必須STEP(*-settings を setupモードで再利用)
-// index 5: 任意STEP(setup-admin 専用ページ。d1=運用更新画面とは別)
-var SETTINGS_PAGES = ['', 'brand-settings', 'store-settings', 'emptype-settings', 'emp-settings', 'setup-admin'];
+// index 5: 任意STEP(b0画面内のSTEP 5パネルに統合、ページ遷移なし)
+var SETTINGS_PAGES = ['', 'brand-settings', 'store-settings', 'emptype-settings', 'emp-settings', 'b0'];
 
 // b0初期セットアップからの遷移
 // 1〜4: *-settings + 複数行入力モーダル自動発火
-// 5(管理者・任意): setup-admin → オーバーレイモーダル自動発火
+// 5(管理者・任意): b0画面内のSTEP 5パネル表示 + オーバーレイモーダル自動発火(独立画面に遷移しない)
 function b0Go(stepNum) {
   saveSetupActiveStep(stepNum);
-  go(SETTINGS_PAGES[stepNum]);
-  if (stepNum <= 4) {
+  if (stepNum === 5) {
+    go('b0');
+    setTimeout(function(){ b0ShowStep5Panel(); bOpenSetupAdminModal(); }, 250);
+  } else {
+    go(SETTINGS_PAGES[stepNum]);
     setTimeout(function(){ bOpenStep(stepNum); }, 250);
-  } else if (stepNum === 5) {
-    setTimeout(function(){ bOpenSetupAdminModal(); }, 350);
+  }
+}
+
+// b0画面のメインエリアをSTEP 5パネルに切り替える(他パネルは隠す)
+function b0ShowStep5Panel() {
+  var panels = ['b0-method-picker', 'b0-import-panel', 'b0-wizard-card', 'b0-completion-view'];
+  panels.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  var step5 = document.getElementById('b0-step5-panel');
+  if (step5) step5.style.display = '';
+  refreshStep5Panel();
+}
+
+// STEP 5 パネルからb0のウィザードへ戻る
+function b0Step5BackToWizard() {
+  clearSetupActiveStep();
+  var step5 = document.getElementById('b0-step5-panel');
+  if (step5) step5.style.display = 'none';
+  b0SetState(b0LoadDone());
+  b0SetMethod(b0LoadMethod());
+}
+
+function refreshStep5Panel() {
+  var counts = b0LoadCounts();
+  var adminN = counts[4] || 0;
+  var emptyEl = document.getElementById('b0-step5-empty');
+  var listWrap = document.getElementById('b0-step5-list-wrap');
+  var listEl = document.getElementById('b0-step5-list');
+  var editBtn = document.getElementById('b0-step5-edit-btn');
+  if (adminN > 0) {
+    if (emptyEl) emptyEl.style.display = 'none';
+    if (listWrap) listWrap.style.display = '';
+    if (editBtn) { editBtn.disabled = false; editBtn.style.opacity = ''; editBtn.title = ''; }
+    if (listEl) {
+      var rows = '';
+      for (var i = 0; i < adminN; i++) {
+        rows +=
+          '<div class="pl-row" style="justify-content:space-between;align-items:center;">' +
+            '<div>' +
+              '<div class="nm">管理者' + (i + 1) + ' <span style="font-size:10px;color:#f0960a;background:#fff8e1;padding:2px 8px;border-radius:20px;font-weight:600;margin-left:6px;">招待中</span></div>' +
+              '<div class="meta">admin' + (i + 1) + '@example.jp ・ 渋谷店 ・ 招待メール送信済(72h有効)</div>' +
+            '</div>' +
+            '<div style="display:flex;gap:6px;">' +
+              '<button class="btn btn-o btn-sm">再送</button>' +
+              '<button class="btn btn-s btn-sm">編集</button>' +
+            '</div>' +
+          '</div>';
+      }
+      listEl.innerHTML = rows;
+    }
+  } else {
+    if (emptyEl) emptyEl.style.display = '';
+    if (listWrap) listWrap.style.display = 'none';
+    if (editBtn) { editBtn.disabled = true; editBtn.style.opacity = '0.5'; editBtn.title = '管理者が登録されていません'; }
   }
 }
 
@@ -3272,10 +3359,10 @@ function setupGoNextStep(currentStep) {
     go(SETTINGS_PAGES[next]);
     setTimeout(function(){ bOpenStep(next); }, 250);
   } else if (currentStep === 4) {
-    // STEP 4 → STEP 5 (管理者・任意): setup-admin → オーバーレイモーダル自動発火
+    // STEP 4 → STEP 5 (管理者・任意): b0画面内のSTEP 5パネル + オーバーレイモーダル
     saveSetupActiveStep(5);
-    go(SETTINGS_PAGES[5]); // setup-admin
-    setTimeout(function(){ bOpenSetupAdminModal(); }, 350);
+    go('b0');
+    setTimeout(function(){ b0ShowStep5Panel(); bOpenSetupAdminModal(); }, 250);
   } else {
     setupCompleteAll();
   }
@@ -3283,6 +3370,9 @@ function setupGoNextStep(currentStep) {
 function setupCompleteAll() {
   b0SaveDone(4);
   clearSetupActiveStep();
+  // STEP 5 パネルを隠して b0 のウィザード/完了サマリ表示に戻す
+  var step5 = document.getElementById('b0-step5-panel');
+  if (step5) step5.style.display = 'none';
   go('b0');
 }
 
@@ -3338,10 +3428,11 @@ function setupAdminSwitchTab(which) {
   document.querySelectorAll('#setup-admin-tabs .mtab').forEach(function(el) {
     el.classList.toggle('act', el.getAttribute('data-stab') === which);
   });
+  // .mtab-panel は CSS で display:none。.act クラス付与で表示する仕様
   var pNew = document.getElementById('setup-admin-panel-new');
   var pEmp = document.getElementById('setup-admin-panel-emp');
-  if (pNew) pNew.style.display = (which === 'new') ? '' : 'none';
-  if (pEmp) pEmp.style.display = (which === 'emp') ? '' : 'none';
+  if (pNew) { pNew.classList.toggle('act', which === 'new'); pNew.style.display = ''; }
+  if (pEmp) { pEmp.classList.toggle('act', which === 'emp'); pEmp.style.display = ''; }
 }
 
 /* d2 ページ(モーダル風)を setupモードで開いた時、登録ボタンを STEP 5 完了処理に書き換える */
@@ -3430,15 +3521,13 @@ function applySetupModeOnD2() {
   document.body.setAttribute('data-setup-mode', '5');
 }
 
-// setup-admin オーバーレイモーダル「登録 & 招待送信」ボタン
+// オーバーレイモーダル「登録 & 招待送信」ボタン
 function b0SubmitAdminEntry() {
   var counts = b0LoadCounts();
   counts[4] = (counts[4] || 0) + 1;
   b0SaveCounts(counts);
   bCloseSetupAdminModal();
-  refreshSetupAdminPage();
-  // 件数バナーも更新するため renderSetupSettingsUI を再描画
-  if (loadSetupActiveStep() === 5) renderSetupSettingsUI(5);
+  refreshStep5Panel(); // b0内STEP 5パネルを再描画
   setTimeout(function(){ bShowSetupAdminCompleteModal(counts[4]); }, 200);
 }
 
