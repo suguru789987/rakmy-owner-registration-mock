@@ -1320,7 +1320,7 @@
             <span style="color:#888;font-size:9px;font-weight:600;">CSV(外部勤怠)中断:</span>
             <button onclick="bDemoB0EmptyDraftSaasStep1()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">①項目選択</button>
             <button onclick="bDemoB0EmptyDraftSaasStep2()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">②マッピング設定</button>
-            <button onclick="bDemoB0EmptyDraftSaasStep3()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">③プレビュー・確認</button>
+            <button onclick="bDemoB0EmptyDraftSaasPreview()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">③プレビュー・マッピング修正</button>
           </div>
         </div>
       </div>
@@ -3181,15 +3181,15 @@ function bDemoB0EmptyDraftSaasStep2() {
   } catch (e) {}
   applyB0EmptyMode('alert');
 }
-// CSV(SaaS) ③プレビュー・確認中断: s-saas3 で停止
-function bDemoB0EmptyDraftSaasStep3() {
+// CSV(SaaS) ③プレビュー・マッピング修正中断: s-saas-preview で停止
+function bDemoB0EmptyDraftSaasPreview() {
   _bDemoClearAll();
   try {
     sessionStorage.setItem('b0Done', '0');
     sessionStorage.setItem('b0Counts', JSON.stringify([0, 0, 0, 0, 0]));
     localStorage.setItem('import_in_progress', JSON.stringify({
       type: 'saas', completed: 2, total: 5,
-      currentStep: 's-saas3', label: '③ プレビュー・確認',
+      currentStep: 's-saas-preview', label: '③ プレビュー・マッピング修正(途中)',
       startedAt: Date.now()
     }));
     sessionStorage.setItem('b0EmptyMode', 'alert');
