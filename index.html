@@ -2998,13 +2998,14 @@ window.addEventListener('DOMContentLoaded', function() {
     var params = new URLSearchParams(location.search);
     if (params.get('completed') === '1') {
       sessionStorage.setItem('b0Done', '4');
-      // 既存 counts があれば維持、なければダミー値で完了状態にする
       var existingCounts = sessionStorage.getItem('b0Counts');
       if (!existingCounts) {
         sessionStorage.setItem('b0Counts', JSON.stringify([2, 3, 4, 12, 0]));
       }
       sessionStorage.setItem('b0EmptyMode', 'normal');
       sessionStorage.removeItem('b0SetupActiveStep');
+      // URLから completed=1 を除去(リセット後の再適用を防ぐ)
+      history.replaceState(null, '', location.pathname + (location.hash || ''));
     }
   } catch (e) {}
   initSettingModeToggles();
@@ -3038,7 +3039,8 @@ function b0DemoReset() {
     sessionStorage.removeItem('b0Draft_3');
     sessionStorage.removeItem('b0Draft_4');
   } catch (e) {}
-  location.reload();
+  // URLクエリ(?completed=1等)もクリアしてリロード(再適用を防ぐ)
+  location.replace(location.pathname + (location.hash || ''));
 }
 
 /* デモ用: 設定画面の 設定前(empty) ↔ 設定後(filled) 切替 */
