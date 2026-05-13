@@ -1061,10 +1061,19 @@
         <div class="mtab" data-stab="emp" onclick="setupAdminSwitchTab('emp')">従業員から選択</div>
       </div>
 
-      <!-- パネル1: 新規登録 -->
+      <!-- パネル1: 新規登録 (ステージング版準拠: 名前/メアド/初期PW×2/担当店舗+警告) -->
       <div class="mtab-panel act" id="setup-admin-panel-new">
-        <div class="fg"><label>名前 <span class="req">✳</span></label><input id="setup-admin-new-name" value="" placeholder="例: 鈴木 花子" style="max-width:100%;"></div>
-        <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input id="setup-admin-new-email" type="email" value="" placeholder="例: suzuki@example.jp" style="max-width:100%;"></div>
+        <div class="fg"><label>名前 <span class="req">✳</span></label><input id="setup-admin-new-name" value="" placeholder="例: 佐藤 一郎" style="max-width:100%;"></div>
+        <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input id="setup-admin-new-email" type="email" value="" placeholder="例: sato@example.jp" style="max-width:100%;"></div>
+        <div class="fg">
+          <label>初期パスワード <span class="req">✳</span></label>
+          <input id="setup-admin-new-pw" type="password" value="" placeholder="8文字以上で入力" style="max-width:100%;">
+          <div class="hint" style="margin-top:6px;">8文字以上・強度「強い」以上が必要です。登録後、管理者に口頭やチャット等で共有してください</div>
+        </div>
+        <div class="fg">
+          <label>初期パスワード（確認）<span class="req">✳</span></label>
+          <input id="setup-admin-new-pw2" type="password" value="" placeholder="同じパスワードを再入力" style="max-width:100%;">
+        </div>
         <div class="dv" style="margin:14px 0;"></div>
         <div class="fg">
           <label>担当店舗 <span class="req">✳</span></label>
@@ -1076,9 +1085,10 @@
           </div>
           <div class="hint" style="margin-top:6px;">担当店舗の従業員管理・勤怠管理が可能になります</div>
         </div>
+        <div class="al al-w" style="margin-top:14px;font-size:11px;align-items:center;"><span>⚠️</span><div>管理者は担当店舗の従業員情報・勤怠データにアクセスできます。</div></div>
       </div>
 
-      <!-- パネル2: 従業員から選択 -->
+      <!-- パネル2: 従業員から選択 (ステージング版準拠) -->
       <div class="mtab-panel" id="setup-admin-panel-emp">
         <div class="fg">
           <label>従業員を選択 <span class="req">✳</span></label>
@@ -1091,6 +1101,15 @@
           </select>
         </div>
         <div class="fg"><label>メールアドレス（従業員台帳より自動入力）</label><input class="ro-input" value="" readonly placeholder="従業員を選択すると自動入力されます" style="max-width:100%;"></div>
+        <div class="fg">
+          <label>初期パスワード <span class="req">✳</span></label>
+          <input type="password" value="" placeholder="8文字以上で入力" style="max-width:100%;">
+          <div class="hint" style="margin-top:6px;">8文字以上・強度「強い」以上が必要です。登録後、管理者に口頭やチャット等で共有してください</div>
+        </div>
+        <div class="fg">
+          <label>初期パスワード（確認）<span class="req">✳</span></label>
+          <input type="password" value="" placeholder="同じパスワードを再入力" style="max-width:100%;">
+        </div>
         <div class="dv" style="margin:14px 0;"></div>
         <div class="fg">
           <label>担当店舗 <span class="req">✳</span></label>
@@ -1100,11 +1119,12 @@
             <label class="store-chk"><input type="checkbox"> 池袋店</label>
           </div>
         </div>
+        <div class="al al-w" style="margin-top:14px;font-size:11px;align-items:center;"><span>⚠️</span><div>管理者は担当店舗の従業員情報・勤怠データにアクセスできます。</div></div>
       </div>
 
       <div class="btn-grp">
         <button class="btn btn-s" onclick="bCloseSetupAdminModal()">キャンセル</button>
-        <button class="btn btn-p" onclick="b0SubmitAdminEntry()">登録 & 招待送信</button>
+        <button class="btn btn-p" onclick="b0SubmitAdminEntry()">管理者を登録</button>
       </div>
     </div>
   </div>
@@ -3847,18 +3867,14 @@ function setupAdminSwitchTab(which) {
   var pEmp = document.getElementById('setup-admin-panel-emp');
   if (pNew) { pNew.classList.toggle('act', which === 'new'); pNew.style.display = ''; }
   if (pEmp) { pEmp.classList.toggle('act', which === 'emp'); pEmp.style.display = ''; }
-  // ボタン文言とtooltipをタブ別に切替(従業員招待と管理者昇格でメール種別が異なる)
+  // ステージング版準拠: タブによらずボタンは「管理者を登録」で統一
   var primary = document.querySelector('#b-setup-admin-overlay .btn-grp .btn-p');
   if (primary) {
-    if (which === 'new') {
-      primary.setAttribute('data-which', 'new');
-      primary.innerHTML = '登録 & 招待送信';
-      primary.title = '従業員台帳に新規追加し、PW設定の管理者招待メール(72h有効)を送信';
-    } else {
-      primary.setAttribute('data-which', 'emp');
-      primary.innerHTML = '管理者として登録 (昇格通知のみ)';
-      primary.title = '既存従業員に管理者権限を付与。昇格通知メールのみ送信(PW設定不要)';
-    }
+    primary.setAttribute('data-which', which);
+    primary.innerHTML = '管理者を登録';
+    primary.title = (which === 'new')
+      ? '従業員台帳に新規アカウントを作成し、オーナーが設定した初期パスワードで登録'
+      : '既存従業員に管理者権限を付与(既存PWで管理者画面にログイン可能)';
   }
 }
 
@@ -3965,13 +3981,13 @@ function bShowSetupAdminCompleteModal(totalAdmins, which) {
   var titleEl = document.getElementById('b-bridge-title');
   var textEl = document.getElementById('b-bridge-text');
   var actEl = document.getElementById('b-bridge-actions');
-  // タブ別にメッセージを変える(招待メール vs 昇格通知)
+  // ステージング版準拠: オーナーが設定した初期PWで登録、口頭/チャットで共有
   if (which === 'emp') {
     titleEl.innerHTML = '✓ 既存従業員を管理者に昇格しました (累計 ' + totalAdmins + ' 名)';
-    textEl.innerHTML = '<span style="color:#1565c0;">昇格通知メール</span>を送信しました(PW設定は不要、既存のパスワードで管理者画面にログイン可能)。';
+    textEl.innerHTML = '従業員台帳の既存アカウントに管理者権限を付与しました。<br>既存のパスワードで管理者画面にログイン可能です。';
   } else {
     titleEl.innerHTML = '✓ 管理者を1名登録しました (累計 ' + totalAdmins + ' 名)';
-    textEl.innerHTML = '<span style="color:#1565c0;">管理者招待メール(72時間有効)</span>を送信しました。受信者がPWを設定すると管理者として有効になります。';
+    textEl.innerHTML = '初期パスワードはオーナーが設定済みです。<br>管理者へ <strong>口頭やチャット等で初期パスワードを共有</strong> してください。';
   }
   actEl.innerHTML =
     '<div class="b-bridge-primary">' +
