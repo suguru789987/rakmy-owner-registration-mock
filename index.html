@@ -1301,17 +1301,27 @@
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc">
-      <div class="ph" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+      <div class="ph" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px;">
         <h2>打刻記録</h2>
         <!-- 🛠 デモ用: アラート/通常/中断再開状態の出し分け -->
-        <div style="display:flex;align-items:center;gap:6px;font-size:10px;background:#fff3e0;border:1px dashed #e67e22;border-radius:8px;padding:5px 9px;flex-wrap:wrap;">
-          <span style="color:#e67e22;font-weight:700;">🛠 デモ用</span>
-          <button class="b0empty-mode-toggle" data-mode="alert" onclick="switchB0EmptyMode('alert')" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⚠️ アラート時</button>
-          <button class="b0empty-mode-toggle" data-mode="normal" onclick="switchB0EmptyMode('normal')" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">✓ 通常時</button>
-          <span style="color:#888;border-left:1px solid #ccc;padding-left:8px;margin-left:2px;font-size:9px;font-weight:600;">中断再現:</span>
-          <button onclick="bDemoB0EmptyDraftSettings()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⏸ 設定画面</button>
-          <button onclick="bDemoB0EmptyDraftTpl()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⏸ CSV(テンプレ)</button>
-          <button onclick="bDemoB0EmptyDraftSaas()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⏸ CSV(外部勤怠)</button>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:10px;background:#fff3e0;border:1px dashed #e67e22;border-radius:8px;padding:8px 10px;max-width:560px;">
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            <span style="color:#e67e22;font-weight:700;">🛠 デモ用:</span>
+            <button class="b0empty-mode-toggle" data-mode="alert" onclick="switchB0EmptyMode('alert')" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⚠️ アラート時</button>
+            <button class="b0empty-mode-toggle" data-mode="normal" onclick="switchB0EmptyMode('normal')" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">✓ 通常時</button>
+            <button onclick="bDemoB0EmptyDraftSettings()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⏸ 設定画面</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            <span style="color:#888;font-size:9px;font-weight:600;">CSV(テンプレ)中断:</span>
+            <button onclick="bDemoB0EmptyDraftTplStep1()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">①取込項目</button>
+            <button onclick="bDemoB0EmptyDraftTplStep2()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">②確認・実行</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            <span style="color:#888;font-size:9px;font-weight:600;">CSV(外部勤怠)中断:</span>
+            <button onclick="bDemoB0EmptyDraftSaasStep1()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">①項目選択</button>
+            <button onclick="bDemoB0EmptyDraftSaasStep2()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">②マッピング設定</button>
+            <button onclick="bDemoB0EmptyDraftSaasStep3()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">③プレビュー・確認</button>
+          </div>
         </div>
       </div>
 
@@ -3100,7 +3110,26 @@ function bDemoB0EmptyDraftSettings() {
   } catch (e) {}
   applyB0EmptyMode('alert');
 }
-function bDemoB0EmptyDraftTpl() {
+// CSVテンプレ ①取込項目中断: s-tpl1 で業態・店舗を選択済み状態
+function bDemoB0EmptyDraftTplStep1() {
+  _bDemoClearAll();
+  try {
+    sessionStorage.setItem('b0Done', '0');
+    sessionStorage.setItem('b0Counts', JSON.stringify([0, 0, 0, 0, 0]));
+    localStorage.setItem('import_in_progress', JSON.stringify({
+      type: 'template', completed: 2, total: 4,
+      currentStep: 's-tpl1', label: '① 取り込みデータ選択(2項目完了)',
+      itemsCompleted: ['brand', 'store'],
+      itemLabels: { brand: '① 業態・ブランド', store: '② 店舗', emptype: '③ 雇用区分', employee: '④ 従業員' },
+      startedAt: Date.now()
+    }));
+    sessionStorage.setItem('b0EmptyMode', 'alert');
+    clearSetupActiveStep();
+  } catch (e) {}
+  applyB0EmptyMode('alert');
+}
+// CSVテンプレ ②確認・実行中断: s-tpl2 で停止
+function bDemoB0EmptyDraftTplStep2() {
   _bDemoClearAll();
   try {
     sessionStorage.setItem('b0Done', '0');
@@ -3115,7 +3144,29 @@ function bDemoB0EmptyDraftTpl() {
   } catch (e) {}
   applyB0EmptyMode('alert');
 }
-function bDemoB0EmptyDraftSaas() {
+// CSV(SaaS) ①項目選択中断: s-saas1 で従業員データを選択済み
+function bDemoB0EmptyDraftSaasStep1() {
+  _bDemoClearAll();
+  try {
+    sessionStorage.setItem('b0Done', '0');
+    sessionStorage.setItem('b0Counts', JSON.stringify([0, 0, 0, 0, 0]));
+    localStorage.setItem('import_in_progress', JSON.stringify({
+      type: 'saas', completed: 1, total: 5,
+      currentStep: 's-saas1', label: '① 取り込みデータ選択(1項目完了)',
+      itemsCompleted: ['map-kot-emp'],
+      itemLabels: {
+        'map-kot-emp':'従業員データ','map-kot-hr':'従業員一覧',
+        'map-kot-group':'所属グループデータ','map-kot-rate':'単価データ','map-kot-admin':'管理者データ'
+      },
+      startedAt: Date.now()
+    }));
+    sessionStorage.setItem('b0EmptyMode', 'alert');
+    clearSetupActiveStep();
+  } catch (e) {}
+  applyB0EmptyMode('alert');
+}
+// CSV(SaaS) ②マッピング設定中断: s-saas2 で停止
+function bDemoB0EmptyDraftSaasStep2() {
   _bDemoClearAll();
   try {
     sessionStorage.setItem('b0Done', '0');
@@ -3123,6 +3174,22 @@ function bDemoB0EmptyDraftSaas() {
     localStorage.setItem('import_in_progress', JSON.stringify({
       type: 'saas', completed: 1, total: 5,
       currentStep: 's-saas2', label: '② マッピング設定',
+      startedAt: Date.now()
+    }));
+    sessionStorage.setItem('b0EmptyMode', 'alert');
+    clearSetupActiveStep();
+  } catch (e) {}
+  applyB0EmptyMode('alert');
+}
+// CSV(SaaS) ③プレビュー・確認中断: s-saas3 で停止
+function bDemoB0EmptyDraftSaasStep3() {
+  _bDemoClearAll();
+  try {
+    sessionStorage.setItem('b0Done', '0');
+    sessionStorage.setItem('b0Counts', JSON.stringify([0, 0, 0, 0, 0]));
+    localStorage.setItem('import_in_progress', JSON.stringify({
+      type: 'saas', completed: 2, total: 5,
+      currentStep: 's-saas3', label: '③ プレビュー・確認',
       startedAt: Date.now()
     }));
     sessionStorage.setItem('b0EmptyMode', 'alert');
