@@ -1399,18 +1399,17 @@
         <div style="display:flex;flex-direction:column;gap:6px;font-size:10px;background:#fff3e0;border:1px dashed #e67e22;border-radius:8px;padding:8px 10px;max-width:620px;">
           <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
             <span style="color:#e67e22;font-weight:700;">🛠 デモ用 通常表示:</span>
-            <button class="b0empty-mode-toggle" data-mode="normal" onclick="switchB0EmptyMode('normal')" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">✓ 通常時(完了状態)</button>
+            <button class="b0empty-mode-toggle" data-mode="normal" onclick="bDemoSettingsNormalMode()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">✓ 通常時(完了状態)</button>
           </div>
           <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
             <span style="color:#888;font-size:9px;font-weight:600;">設定画面登録 中断:</span>
-            <button class="b0empty-mode-toggle" data-mode="alert" onclick="switchB0EmptyMode('alert')" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⚠️ アラート時</button>
+            <button class="b0empty-mode-toggle" data-mode="alert" onclick="bDemoSettingsAlertMode()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⚠️ アラート時</button>
             <button onclick="bDemoB0EmptyAlertOnly()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⚠️ 完全未完了</button>
             <button onclick="bDemoB0EmptyDraftSettings()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⏸ 下書きあり</button>
           </div>
           <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
             <span style="color:#888;font-size:9px;font-weight:600;">CSV(テンプレ) 中断:</span>
             <button onclick="bDemoB0EmptyDraftTplStep1()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">①取込項目</button>
-            <button onclick="bDemoB0EmptyDraftTplStep2()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">②確認・実行</button>
           </div>
           <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
             <span style="color:#888;font-size:9px;font-weight:600;">CSV(外部勤怠) 中断:</span>
@@ -3198,6 +3197,31 @@ window.addEventListener('DOMContentLoaded', function() {
     }
   }
 });
+
+// 打刻記録画面用デモ: 「⚠️ アラート時」モード切替(CSV中断/下書きをクリアして純粋に設定画面登録アラート表示)
+function bDemoSettingsAlertMode() {
+  try {
+    localStorage.removeItem('import_in_progress');
+    sessionStorage.removeItem('b0Draft_1');
+    sessionStorage.removeItem('b0Draft_2');
+    sessionStorage.removeItem('b0Draft_3');
+    sessionStorage.removeItem('b0Draft_4');
+  } catch (e) {}
+  switchB0EmptyMode('alert');
+}
+// 「✓ 通常時」モード切替(CSV中断/下書きクリア+完了状態セット+通常表示)
+function bDemoSettingsNormalMode() {
+  try {
+    localStorage.removeItem('import_in_progress');
+    sessionStorage.removeItem('b0Draft_1');
+    sessionStorage.removeItem('b0Draft_2');
+    sessionStorage.removeItem('b0Draft_3');
+    sessionStorage.removeItem('b0Draft_4');
+    sessionStorage.setItem('b0Done', '4');
+    sessionStorage.setItem('b0Counts', JSON.stringify([2, 3, 4, 12, 0]));
+  } catch (e) {}
+  switchB0EmptyMode('normal');
+}
 
 // 打刻記録画面用デモ: 設定画面登録 中断「完全未完了」(下書きなし・CSV中断なし)
 function bDemoB0EmptyAlertOnly() {
