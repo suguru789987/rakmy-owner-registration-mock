@@ -2706,8 +2706,7 @@ function refreshSidebarSetupLink() {
   });
 }
 
-/* 打刻記録(b0-empty)の中断再開バナー: done状態で動的更新
- * 必須4STEPの完了/未完了を個別にチップ表示して不足項目を可視化
+/* 打刻記録(b0-empty)の中断再開バナー: シンプル表記
  * forceShow=true: done=4でも強制表示(デモ用「アラート時」モード) */
 function refreshB0ResumeBanner(forceShow) {
   var banner = document.getElementById('b0-resume-banner');
@@ -2721,42 +2720,23 @@ function refreshB0ResumeBanner(forceShow) {
     return;
   }
   banner.style.display = '';
-  var stepNames = ['', '業態・ブランド', '店舗', '雇用区分', '従業員'];
-  var chips = '';
+  var stepNames = ['', '業態', '店舗', '雇用区分', '従業員'];
   var missingNames = [];
   for (var i = 1; i <= 4; i++) {
-    var isDone = (i <= done);
-    var bg = isDone ? '#e8f8f5' : '#fff0f0';
-    var color = isDone ? '#1a9e7e' : '#c62828';
-    var border = isDone ? '#b2ebe0' : '#f5c2c2';
-    var mark = isDone ? '✓' : '✗';
-    chips += '<span style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:14px;background:' + bg + ';color:' + color + ';border:1px solid ' + border + ';font-size:11px;font-weight:600;margin-right:6px;margin-top:6px;">' + mark + ' ' + stepNames[i] + '</span>';
-    if (!isDone) missingNames.push('「' + stepNames[i] + '」');
+    if (i > done) missingNames.push(stepNames[i]);
   }
   var remaining = 4 - done;
   if (done === 0) {
     if (icon) icon.textContent = '⚠️';
-    msg.innerHTML =
-      '<strong>初期セットアップが未完了です（0/4 完了）</strong><br>' +
-      '<span style="font-size:11px;">タイムレコードを利用するには、<strong>必須4項目</strong>の登録が必要です：</span>' +
-      '<div style="margin-top:6px;line-height:1.9;">' + chips + '</div>' +
-      '<div style="margin-top:6px;font-size:11px;color:#c62828;">⚠️ 不足: ' + missingNames.join('、') + '</div>';
+    msg.innerHTML = '<strong>初期セットアップが未完了です（0/4）</strong> <span style="font-size:11px;color:#666;">不足: ' + missingNames.join('、') + '</span>';
     btn.textContent = 'セットアップを開く →';
   } else if (done < 4) {
     if (icon) icon.textContent = '🔄';
-    msg.innerHTML =
-      '<strong>前回の続きから再開できます（' + done + '/4 完了 ・ あと ' + remaining + ' 項目)</strong><br>' +
-      '<div style="margin-top:6px;line-height:1.9;">' + chips + '</div>' +
-      '<div style="margin-top:6px;font-size:11px;color:#c62828;">⚠️ 不足: ' + missingNames.join('、') + '</div>';
+    msg.innerHTML = '<strong>初期セットアップ進行中（' + done + '/4 ・ あと ' + remaining + ' 項目）</strong> <span style="font-size:11px;color:#666;">不足: ' + missingNames.join('、') + '</span>';
     btn.textContent = '続きから再開する →';
   } else {
-    // done === 4 で forceShow (デモ・アラートモード表示)
     if (icon) icon.textContent = '⚠️';
-    msg.innerHTML =
-      '<strong>🛠 デモ: アラート時表示（実際は完了済 4/4）</strong><br>' +
-      '<span style="font-size:11px;">本来このバナーは未完了時のみ表示されます。デモ用「アラート時」モード選択中はサンプル表示しています。</span>' +
-      '<div style="margin-top:6px;line-height:1.9;">' + chips + '</div>' +
-      '<div style="margin-top:6px;font-size:11px;color:#1a9e7e;">✓ 全項目完了済み</div>';
+    msg.innerHTML = '<strong>🛠 デモ: アラート時表示</strong> <span style="font-size:11px;color:#666;">(実際は4/4完了済)</span>';
     btn.textContent = 'セットアップを確認 →';
   }
 }
