@@ -2248,12 +2248,18 @@ function b0SetState(doneCount) {
 
 // B-STEPモーダル: 開閉(複数行入力対応モーダル、新規/運用 共通)
 function bOpenStep(stepNum, flow) {
-  // flow引数は旧API互換のため受けるが、現仕様では _bModalFlow は使わない
-  // (setupモードか opsモードかは sessionStorage の b0SetupActiveStep で判定)
   if (flow) window._bModalFlow = flow;
   document.querySelectorAll('.b-step-overlay').forEach(function(o){ o.classList.remove('act'); });
   var ov = document.getElementById('b-step-modal-' + stepNum);
   if (ov) ov.classList.add('act');
+  // setupモード時のみ下書き復元
+  var activeStep = loadSetupActiveStep();
+  if (activeStep === stepNum) {
+    var draft = b0LoadDraft(stepNum);
+    if (draft && draft.length > 0) {
+      setTimeout(function() { restoreDraftToModal(stepNum, draft); }, 50);
+    }
+  }
 }
 function bCloseStep() {
   document.querySelectorAll('.b-step-overlay').forEach(function(o){ o.classList.remove('act'); });
@@ -2601,6 +2607,10 @@ window.addEventListener('DOMContentLoaded', function() {
     sessionStorage.removeItem('b0Counts');
     sessionStorage.removeItem('b0EmptyMode');
     sessionStorage.removeItem('b0SetupActiveStep');
+    sessionStorage.removeItem('b0Draft_1');
+    sessionStorage.removeItem('b0Draft_2');
+    sessionStorage.removeItem('b0Draft_3');
+    sessionStorage.removeItem('b0Draft_4');
   } catch (e) {}
   initSettingModeToggles();
   // 登録モーダル4種を「複数行入力(batch)」対応化
@@ -2873,6 +2883,20 @@ function renderSetupSettingsUI(stepNum) {
     nextBtn = '<button class="btn btn-s btn-sm" disabled style="opacity:0.5;cursor:not-allowed;">登録すると次STEPへ進めます</button>';
   }
 
+  // 一時保存(下書き)ステータス
+  var draftBlock = '';
+  if (b0HasDraft(stepNum)) {
+    var draftData = b0LoadDraft(stepNum);
+    var draftN = draftData ? draftData.length : 0;
+    draftBlock =
+      '<div style="background:#fff3e0;border:1px solid #e67e22;border-radius:6px;padding:8px 12px;margin-top:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">' +
+        '<span style="font-size:16px;">💾</span>' +
+        '<div style="flex:1;min-width:140px;font-size:11px;color:#9c4d12;">一時保存中: <strong>' + draftN + '件分</strong>の入力内容が保存されています</div>' +
+        '<button class="btn btn-p btn-sm" onclick="bResumeDraft(' + stepNum + ')" style="background:#e67e22;border-color:#e67e22;">再開する →</button>' +
+        '<button class="btn btn-s btn-sm" onclick="b0DiscardDraft(' + stepNum + ')">破棄</button>' +
+      '</div>';
+  }
+
   var banner = document.createElement('div');
   banner.className = 'setup-mode-banner';
   banner.style.cssText = 'background:linear-gradient(135deg,#e8f8f5 0%,#d5f0e8 100%);border:2px solid #2ec4a5;border-radius:10px;padding:14px 18px;margin-bottom:16px;';
@@ -2886,7 +2910,8 @@ function renderSetupSettingsUI(stepNum) {
     '<div style="background:#fff;border-radius:20px;overflow:hidden;height:8px;border:1px solid #d1e7e0;">' +
       '<div style="background:linear-gradient(90deg,#2ec4a5,#1a9e7e);height:100%;width:' + pct + '%;transition:width 0.3s;"></div>' +
     '</div>' +
-    '<div style="font-size:10px;color:#0e9077;margin-top:6px;">進捗: ' + done + '/4 STEP完了 ・ 当STEP登録件数: ' + registered + '件 ・ <strong>※ 設定画面の並び順≠初期登録の必須順</strong></div>';
+    '<div style="font-size:10px;color:#0e9077;margin-top:6px;">進捗: ' + done + '/4 STEP完了 ・ 当STEP登録件数: ' + registered + '件 ・ <strong>※ 設定画面の並び順≠初期登録の必須順</strong></div>' +
+    draftBlock;
   mainEl.insertBefore(banner, mainEl.firstChild);
 
   var oldFloat = document.querySelector('.setup-mode-float-back');
@@ -3052,8 +3077,107 @@ function bSetupBatchModal(stepNum) {
     if (primaryBtn) {
       primaryBtn.setAttribute('onclick', 'b0SubmitBatch(' + stepNum + ')');
       primaryBtn.innerHTML = '登録 (<span class="batch-count-display">1</span>件)';
+      // 一時保存ボタン(下書き)を「登録」の前に挿入
+      var draftBtn = document.createElement('button');
+      draftBtn.type = 'button';
+      draftBtn.className = 'btn btn-s';
+      draftBtn.style.cssText = 'background:#fff3e0;border:1px solid #e67e22;color:#e67e22;font-weight:600;';
+      draftBtn.innerHTML = '💾 一時保存';
+      draftBtn.onclick = function() { b0SaveDraft(stepNum); };
+      btnGrp.insertBefore(draftBtn, primaryBtn);
     }
   }
+}
+
+/* ===== 一時保存(下書き)機能 =====
+ * - モーダル入力途中のデータをsessionStorage 'b0Draft_N' に保存
+ * - setupモード時のみ復元(opsモードは新規入力前提)
+ * - *-settings の setupバナーに「💾 一時保存中: N件」ステータス + 再開/破棄ボタン */
+function b0SaveDraft(stepNum) {
+  var modal = document.getElementById('b-step-modal-' + stepNum);
+  if (!modal) return;
+  var rows = modal.querySelectorAll('.batch-row');
+  if (rows.length === 0) return;
+  var draftData = [];
+  rows.forEach(function(row) {
+    var rowData = { inputs: [], selects: [] };
+    row.querySelectorAll('input, textarea').forEach(function(el) { rowData.inputs.push(el.value); });
+    row.querySelectorAll('select').forEach(function(el) { rowData.selects.push(el.selectedIndex); });
+    draftData.push(rowData);
+  });
+  try { sessionStorage.setItem('b0Draft_' + stepNum, JSON.stringify(draftData)); } catch (e) {}
+  bCloseStep();
+  // setupモード中ならバナー再描画(下書きバッジ表示)
+  var activeStep = loadSetupActiveStep();
+  var activePage = document.querySelector('.page.active');
+  var settingsMap = {'page-brand-settings':1,'page-store-settings':2,'page-emptype-settings':3,'page-emp-settings':4};
+  if (activeStep === stepNum && activePage && settingsMap[activePage.id] === stepNum) {
+    renderSetupSettingsUI(stepNum);
+  }
+  // 軽量トースト
+  var toast = document.getElementById('b-toast');
+  if (toast) {
+    var stepNames = ['', '業態・ブランド', '店舗', '雇用区分', '従業員'];
+    document.getElementById('b-toast-title').textContent = '💾 ' + stepNames[stepNum] + 'を一時保存しました(' + draftData.length + '件)';
+    document.getElementById('b-toast-next').textContent = '上部の「再開する」ボタンから続きを編集できます。';
+    document.getElementById('b-toast-actions').innerHTML = '<button class="btn btn-s" onclick="bDismissToast()">閉じる</button>';
+    toast.classList.add('act');
+    clearTimeout(window.bToastTimer);
+    window.bToastTimer = setTimeout(function(){ toast.classList.remove('act'); }, 4000);
+  }
+}
+
+function b0LoadDraft(stepNum) {
+  try {
+    var raw = sessionStorage.getItem('b0Draft_' + stepNum);
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) { return null; }
+}
+
+function b0HasDraft(stepNum) {
+  var d = b0LoadDraft(stepNum);
+  return !!(d && d.length > 0);
+}
+
+function b0ClearDraft(stepNum) {
+  try { sessionStorage.removeItem('b0Draft_' + stepNum); } catch (e) {}
+}
+
+function bResumeDraft(stepNum) {
+  bOpenStep(stepNum); // 下書きは bOpenStep 内で自動復元される
+}
+
+function b0DiscardDraft(stepNum) {
+  if (!confirm('一時保存中の入力内容を破棄しますか？')) return;
+  b0ClearDraft(stepNum);
+  // バナー再描画
+  var activeStep = loadSetupActiveStep();
+  if (activeStep === stepNum) renderSetupSettingsUI(stepNum);
+}
+
+function restoreDraftToModal(stepNum, draft) {
+  var modal = document.getElementById('b-step-modal-' + stepNum);
+  if (!modal) return;
+  var rowsContainer = modal.querySelector('.batch-rows');
+  if (!rowsContainer) return;
+  // 既存行を1行に戻す
+  var existingRows = rowsContainer.querySelectorAll('.batch-row');
+  for (var i = 1; i < existingRows.length; i++) existingRows[i].remove();
+  // 必要な行数を追加
+  while (rowsContainer.querySelectorAll('.batch-row').length < draft.length) {
+    bAddBatchRow(stepNum);
+  }
+  // 値の流し込み
+  var rows = rowsContainer.querySelectorAll('.batch-row');
+  draft.forEach(function(rowData, idx) {
+    var row = rows[idx];
+    if (!row) return;
+    var inputs = row.querySelectorAll('input, textarea');
+    rowData.inputs.forEach(function(v, i) { if (inputs[i]) inputs[i].value = v; });
+    var selects = row.querySelectorAll('select');
+    rowData.selects.forEach(function(v, i) { if (selects[i]) selects[i].selectedIndex = v; });
+  });
+  bUpdateBatchCount(stepNum);
 }
 
 function bAddBatchRow(stepNum) {
@@ -3122,6 +3246,7 @@ function b0SubmitBatch(stepNum) {
     // 現STEPを done として確定(setupGoNextStepを使わずに留まる場合に備えて)
     var prevDone = b0LoadDone();
     if (prevDone < stepNum) b0SaveDone(stepNum);
+    b0ClearDraft(stepNum); // 登録完了 → 下書きクリア
     renderSetupSettingsUI(stepNum);
     bShowSetupBatchModal(stepNum, n);
   } else {
