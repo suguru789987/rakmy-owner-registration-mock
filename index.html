@@ -1303,11 +1303,15 @@
     <main class="mc">
       <div class="ph" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
         <h2>打刻記録</h2>
-        <!-- 🛠 デモ用: 通常時 / アラート時 切替 -->
-        <div style="display:flex;align-items:center;gap:6px;font-size:10px;background:#fff3e0;border:1px dashed #e67e22;border-radius:8px;padding:5px 9px;">
+        <!-- 🛠 デモ用: アラート/通常/中断再開状態の出し分け -->
+        <div style="display:flex;align-items:center;gap:6px;font-size:10px;background:#fff3e0;border:1px dashed #e67e22;border-radius:8px;padding:5px 9px;flex-wrap:wrap;">
           <span style="color:#e67e22;font-weight:700;">🛠 デモ用</span>
           <button class="b0empty-mode-toggle" data-mode="alert" onclick="switchB0EmptyMode('alert')" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⚠️ アラート時</button>
           <button class="b0empty-mode-toggle" data-mode="normal" onclick="switchB0EmptyMode('normal')" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">✓ 通常時</button>
+          <span style="color:#888;border-left:1px solid #ccc;padding-left:8px;margin-left:2px;font-size:9px;font-weight:600;">中断再現:</span>
+          <button onclick="bDemoB0EmptyDraftSettings()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⏸ 設定画面</button>
+          <button onclick="bDemoB0EmptyDraftTpl()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⏸ CSV(テンプレ)</button>
+          <button onclick="bDemoB0EmptyDraftSaas()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⏸ CSV(外部勤怠)</button>
         </div>
       </div>
 
@@ -3080,6 +3084,52 @@ window.addEventListener('DOMContentLoaded', function() {
     }
   }
 });
+
+// 打刻記録画面用デモ: ボタン押下で即その場で中断状態を再現+アラートバナー再描画
+function bDemoB0EmptyDraftSettings() {
+  _bDemoClearAll();
+  try {
+    sessionStorage.setItem('b0Done', '1');
+    sessionStorage.setItem('b0Counts', JSON.stringify([1, 0, 0, 0, 0]));
+    sessionStorage.setItem('b0Draft_2', JSON.stringify([
+      { inputs: ['渋谷店', '東京都渋谷区道玄坂1-1-1', '11:00', '23:00'], selects: [0] },
+      { inputs: ['新宿店', '東京都新宿区西新宿2-2-2', '11:00', '22:00'], selects: [0] }
+    ]));
+    sessionStorage.setItem('b0EmptyMode', 'alert');
+    clearSetupActiveStep();
+  } catch (e) {}
+  applyB0EmptyMode('alert');
+}
+function bDemoB0EmptyDraftTpl() {
+  _bDemoClearAll();
+  try {
+    sessionStorage.setItem('b0Done', '0');
+    sessionStorage.setItem('b0Counts', JSON.stringify([0, 0, 0, 0, 0]));
+    localStorage.setItem('import_in_progress', JSON.stringify({
+      type: 'template', completed: 0, total: 4,
+      currentStep: 's-tpl2', label: '② 確認・実行',
+      startedAt: Date.now()
+    }));
+    sessionStorage.setItem('b0EmptyMode', 'alert');
+    clearSetupActiveStep();
+  } catch (e) {}
+  applyB0EmptyMode('alert');
+}
+function bDemoB0EmptyDraftSaas() {
+  _bDemoClearAll();
+  try {
+    sessionStorage.setItem('b0Done', '0');
+    sessionStorage.setItem('b0Counts', JSON.stringify([0, 0, 0, 0, 0]));
+    localStorage.setItem('import_in_progress', JSON.stringify({
+      type: 'saas', completed: 1, total: 5,
+      currentStep: 's-saas2', label: '② マッピング設定',
+      startedAt: Date.now()
+    }));
+    sessionStorage.setItem('b0EmptyMode', 'alert');
+    clearSetupActiveStep();
+  } catch (e) {}
+  applyB0EmptyMode('alert');
+}
 
 // デモ用ヘルパー: 全クリア → 指定状態をセット
 function _bDemoClearAll() {
