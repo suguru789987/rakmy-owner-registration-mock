@@ -3499,6 +3499,8 @@ function refreshSetupAdminPage() {
 function bOpenSetupAdminModal() {
   var ov = document.getElementById('b-setup-admin-overlay');
   if (ov) ov.classList.add('act');
+  // 開いた時点で「新規登録」タブ初期化(ボタン文言も合わせて切替)
+  setupAdminSwitchTab('new');
 }
 function bCloseSetupAdminModal() {
   var ov = document.getElementById('b-setup-admin-overlay');
@@ -3513,6 +3515,19 @@ function setupAdminSwitchTab(which) {
   var pEmp = document.getElementById('setup-admin-panel-emp');
   if (pNew) { pNew.classList.toggle('act', which === 'new'); pNew.style.display = ''; }
   if (pEmp) { pEmp.classList.toggle('act', which === 'emp'); pEmp.style.display = ''; }
+  // ボタン文言とtooltipをタブ別に切替(従業員招待と管理者昇格でメール種別が異なる)
+  var primary = document.querySelector('#b-setup-admin-overlay .btn-grp .btn-p');
+  if (primary) {
+    if (which === 'new') {
+      primary.setAttribute('data-which', 'new');
+      primary.innerHTML = '登録 & 招待送信';
+      primary.title = '従業員台帳に新規追加し、PW設定の管理者招待メール(72h有効)を送信';
+    } else {
+      primary.setAttribute('data-which', 'emp');
+      primary.innerHTML = '管理者として登録 (昇格通知のみ)';
+      primary.title = '既存従業員に管理者権限を付与。昇格通知メールのみ送信(PW設定不要)';
+    }
+  }
 }
 
 /* d2 ページ(モーダル風)を setupモードで開いた時、登録ボタンを STEP 5 完了処理に書き換える */
@@ -3601,23 +3616,30 @@ function applySetupModeOnD2() {
   document.body.setAttribute('data-setup-mode', '5');
 }
 
-// オーバーレイモーダル「登録 & 招待送信」ボタン
+// オーバーレイモーダル登録ボタン (タブ別にメール種別が異なる)
 function b0SubmitAdminEntry() {
+  var primary = document.querySelector('#b-setup-admin-overlay .btn-grp .btn-p');
+  var which = primary ? primary.getAttribute('data-which') : 'new';
   var counts = b0LoadCounts();
   counts[4] = (counts[4] || 0) + 1;
   b0SaveCounts(counts);
   bCloseSetupAdminModal();
-  refreshStep5Panel(); // b0内STEP 5パネルを再描画
-  setTimeout(function(){ bShowSetupAdminCompleteModal(counts[4]); }, 200);
+  refreshStep5Panel();
+  setTimeout(function(){ bShowSetupAdminCompleteModal(counts[4], which); }, 200);
 }
 
-function bShowSetupAdminCompleteModal(totalAdmins) {
+function bShowSetupAdminCompleteModal(totalAdmins, which) {
   var titleEl = document.getElementById('b-bridge-title');
   var textEl = document.getElementById('b-bridge-text');
   var actEl = document.getElementById('b-bridge-actions');
-  titleEl.textContent = '✓ 管理者を1名登録しました (累計 ' + totalAdmins + ' 名)';
-  textEl.innerHTML = '管理者は<strong>任意項目</strong>です。続けてもう1名追加するか、初期セットアップを完了できます。';
-  // 主CTA(初期セットアップ完了) + 副CTA(もう1名追加/留まる)
+  // タブ別にメッセージを変える(招待メール vs 昇格通知)
+  if (which === 'emp') {
+    titleEl.innerHTML = '✓ 既存従業員を管理者に昇格しました (累計 ' + totalAdmins + ' 名)';
+    textEl.innerHTML = '<span style="color:#1565c0;">昇格通知メール</span>を送信しました(PW設定は不要、既存のパスワードで管理者画面にログイン可能)。';
+  } else {
+    titleEl.innerHTML = '✓ 管理者を1名登録しました (累計 ' + totalAdmins + ' 名)';
+    textEl.innerHTML = '<span style="color:#1565c0;">管理者招待メール(72時間有効)</span>を送信しました。受信者がPWを設定すると管理者として有効になります。';
+  }
   actEl.innerHTML =
     '<div class="b-bridge-primary">' +
       '<button class="btn btn-p" onclick="bSetupBridgeDismiss();setupCompleteAll()">✓ 初期セットアップを完了する</button>' +
