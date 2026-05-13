@@ -2802,9 +2802,13 @@ function refreshB0ResumeBanner(forceShow) {
   // 右端の単独ボタンは非表示(全CTAを下部の同列に並べる)
   btn.style.display = 'none';
 
-  // CTAエリア: 「セットアップを開く」+ 中断再開CTAを同列で並べる
+  // CTAエリア: 中断ポイントがある場合は「再開ボタン」のみ、ない場合は「セットアップを開く」を表示
   var ctaItems = [];
-  ctaItems.push('<button class="btn btn-p btn-sm" onclick="go(\'b0\')">' + openSetupLabel + '</button>');
+  var hasResume = (draftSteps.length > 0 || !!importInProgress);
+  if (!hasResume) {
+    // 中断ポイントなし → 「セットアップを開く」のみ
+    ctaItems.push('<button class="btn btn-p btn-sm" onclick="go(\'b0\')">' + openSetupLabel + '</button>');
+  }
   draftSteps.forEach(function(d) {
     ctaItems.push('<button class="btn btn-p btn-sm" onclick="b0ResumeDraftStep(' + d.step + ')">▶ STEP ' + d.step + ' ' + d.name + '(下書き' + d.count + '件) から再開</button>');
   });
