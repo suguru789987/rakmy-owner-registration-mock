@@ -299,16 +299,21 @@
     .b-step-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
     .b-step-overlay.act { display: flex; }
     .b-step-modal { background: #fff; border-radius: 12px; max-width: 540px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 16px 48px rgba(0,0,0,0.18); }
-    /* batch化された複数行入力モーダル: ワイド表示+グリッドレイアウト */
-    .b-step-modal.b-step-modal-wide { max-width: 920px; }
+    /* batch化された複数行入力モーダル: ワイド表形式 */
+    .b-step-modal.b-step-modal-wide { max-width: 1100px; }
     .b-step-modal.b-step-modal-wide .mb { padding: 22px 26px; }
-    .b-step-modal.b-step-modal-wide .batch-row { display: grid; grid-template-columns: 1fr 1fr; column-gap: 16px; row-gap: 10px; padding: 16px 18px 14px; }
-    .b-step-modal.b-step-modal-wide .batch-row legend { grid-column: 1 / -1; }
-    .b-step-modal.b-step-modal-wide .batch-row > .fg { margin: 0; }
-    .b-step-modal.b-step-modal-wide .batch-row > .fr { grid-column: 1 / -1; display: flex; gap: 16px; margin: 0; }
-    .b-step-modal.b-step-modal-wide .batch-row > .fr > .fg { flex: 1; margin: 0; }
-    .b-step-modal.b-step-modal-wide .batch-row .batch-remove { position: absolute; }
-    .b-step-modal.b-step-modal-wide .batch-rows + .btn { font-size: 12px; padding: 10px 14px; }
+    .batch-table-wrap { overflow-x: auto; margin-bottom: 14px; border: 1px solid #e0e0e0; border-radius: 8px; }
+    .batch-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .batch-table thead th { background: #f5f7f9; color: #555; font-weight: 600; padding: 10px 12px; border-bottom: 1px solid #e0e0e0; text-align: left; white-space: nowrap; vertical-align: top; }
+    .batch-table thead th .req { color: #c62828; font-weight: 700; }
+    .batch-table .batch-hint { font-size: 9px; color: #888; font-weight: 400; margin-top: 3px; line-height: 1.4; white-space: normal; max-width: 220px; }
+    .batch-table tbody td { padding: 8px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
+    .batch-table tbody tr:last-child td { border-bottom: none; }
+    .batch-table tbody tr:hover td { background: #fafbfb; }
+    .batch-table input[type="text"], .batch-table input[type="email"], .batch-table input:not([type]), .batch-table select, .batch-table textarea { width: 100%; min-width: 110px; padding: 6px 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; background: #fff; }
+    .batch-table .batch-row-num { color: #888; font-size: 11px; text-align: center; width: 36px; }
+    .batch-table .batch-row-remove { padding: 3px 8px; color: #c62828; border: 1px solid #f0d4d4; background: #fff; border-radius: 4px; cursor: pointer; font-size: 11px; }
+    .batch-table .batch-row-remove:hover { background: #fef0f0; }
 
     /* 登録成功トースト(B-0へ戻った後に表示) */
     .b-toast { position: fixed; top: 100px; right: 20px; z-index: 3000; background: #fff; color: #333; padding: 16px 18px; border-radius: 10px; box-shadow: 0 12px 36px rgba(0,0,0,0.18); border: 1px solid #b2ebe0; display: none; max-width: 380px; min-width: 320px; line-height: 1.6; }
@@ -3071,53 +3076,90 @@ function setupCompleteAll() {
   go('b0');
 }
 
-/* ===== 複数行入力(batch)モーダル =====
- * 既存の b-step-modal-N の入力フィールド群を「行」化、
- * 「+もう1件追加」「✕削除」「登録(N件)」で複数件まとめて登録 */
+/* ===== 複数行入力(batch)モーダル: 表形式 =====
+ * 既存の .fg/.fr フィールド定義を抽出し、列=項目/行=1件の<table>に再構成
+ * 「+ 行を追加」「✕」「登録(N件)」 + 「💾 一時保存」 */
 function bSetupBatchModal(stepNum) {
   var modal = document.getElementById('b-step-modal-' + stepNum);
   if (!modal) return;
   var mb = modal.querySelector('.mb');
   if (!mb) return;
-  if (mb.querySelector('.batch-rows')) return;
-  // ワイドモーダル化
+  if (mb.querySelector('.batch-table')) return;
   var inner = modal.querySelector('.b-step-modal');
   if (inner) inner.classList.add('b-step-modal-wide');
 
+  // フィールド定義抽出
+  var fields = [];
+  var hintEls = [];
+  var btnGrp = null;
   var children = Array.prototype.slice.call(mb.children);
-  var rowsContainer = document.createElement('div');
-  rowsContainer.className = 'batch-rows';
-  var firstRow = document.createElement('fieldset');
-  firstRow.className = 'batch-row';
-  firstRow.style.cssText = 'border:1px solid #e0e0e0;border-radius:8px;padding:14px 14px 10px;margin-bottom:12px;position:relative;background:#fafbfb;';
-  firstRow.innerHTML = '<legend style="font-size:11px;color:#0e9077;font-weight:700;padding:0 8px;">1件目</legend>';
-  var hintEl = null, btnGrp = null;
   children.forEach(function(c) {
-    if (c.classList.contains('al')) { hintEl = c; return; }
+    if (c.classList.contains('al')) { hintEls.push(c); return; }
     if (c.classList.contains('btn-grp')) { btnGrp = c; return; }
-    firstRow.appendChild(c);
+    if (c.classList.contains('fg')) { fields.push(_extractField(c)); return; }
+    if (c.classList.contains('fr')) {
+      c.querySelectorAll('.fg').forEach(function(fg) { fields.push(_extractField(fg)); });
+      return;
+    }
   });
-  rowsContainer.appendChild(firstRow);
-  if (hintEl) {
-    hintEl.parentNode.insertBefore(rowsContainer, hintEl.nextSibling);
+  // 元の .fg / .fr を削除(table に再構成)
+  children.forEach(function(c) {
+    if (c.classList.contains('fg') || c.classList.contains('fr')) c.remove();
+  });
+  modal._batchFields = fields;
+
+  // table 構築
+  var wrap = document.createElement('div');
+  wrap.className = 'batch-table-wrap';
+  var table = document.createElement('table');
+  table.className = 'batch-table';
+  var thead = document.createElement('thead');
+  var hr = document.createElement('tr');
+  hr.innerHTML = '<th style="width:36px;text-align:center;">#</th>';
+  fields.forEach(function(f) {
+    var th = document.createElement('th');
+    var lbl = f.label + (f.required ? ' <span class="req">✳</span>' : '');
+    th.innerHTML = lbl + (f.hint ? '<div class="batch-hint">' + f.hint + '</div>' : '');
+    hr.appendChild(th);
+  });
+  hr.innerHTML += '<th style="width:60px;text-align:center;">操作</th>';
+  thead.appendChild(hr);
+  table.appendChild(thead);
+  var tbody = document.createElement('tbody');
+  tbody.className = 'batch-tbody';
+  tbody.appendChild(_createBatchTableRow(fields, 1));
+  table.appendChild(tbody);
+  wrap.appendChild(table);
+
+  // ヒント(.al)→table上に表示
+  hintEls.forEach(function(h) { h.style.margin = '0 0 12px 0'; });
+
+  // mb に再配置: hint -> table -> +行ボタン -> btn-grp
+  if (hintEls.length > 0) {
+    mb.insertBefore(wrap, hintEls[hintEls.length - 1].nextSibling);
   } else {
-    mb.insertBefore(rowsContainer, mb.firstChild);
+    mb.insertBefore(wrap, mb.firstChild);
   }
 
+  // 「+ 行を追加」
   var addBtn = document.createElement('button');
   addBtn.type = 'button';
   addBtn.className = 'btn btn-s';
   addBtn.style.cssText = 'margin-bottom:14px;border:1px dashed #2ec4a5;color:#0e9077;background:#fff;width:100%;';
-  addBtn.innerHTML = '+ もう1件追加';
+  addBtn.innerHTML = '+ 行を追加';
   addBtn.onclick = function() { bAddBatchRow(stepNum); };
-  rowsContainer.parentNode.insertBefore(addBtn, rowsContainer.nextSibling);
+  if (btnGrp) {
+    mb.insertBefore(addBtn, btnGrp);
+  } else {
+    wrap.parentNode.insertBefore(addBtn, wrap.nextSibling);
+  }
 
+  // 登録ボタン書き換え + 一時保存ボタン挿入
   if (btnGrp) {
     var primaryBtn = btnGrp.querySelector('.btn-p');
     if (primaryBtn) {
       primaryBtn.setAttribute('onclick', 'b0SubmitBatch(' + stepNum + ')');
       primaryBtn.innerHTML = '登録 (<span class="batch-count-display">1</span>件)';
-      // 一時保存ボタン(下書き)を「登録」の前に挿入
       var draftBtn = document.createElement('button');
       draftBtn.type = 'button';
       draftBtn.className = 'btn btn-s';
@@ -3129,6 +3171,59 @@ function bSetupBatchModal(stepNum) {
   }
 }
 
+function _extractField(fgEl) {
+  var labelEl = fgEl.querySelector('label');
+  var input = fgEl.querySelector('input, select, textarea');
+  var hintEl = fgEl.querySelector('.hint');
+  var required = !!fgEl.querySelector('.req');
+  var labelText = '';
+  if (labelEl) {
+    var clone = labelEl.cloneNode(true);
+    var req = clone.querySelector('.req');
+    if (req) req.remove();
+    labelText = clone.textContent.trim();
+  }
+  if (!input) input = document.createElement('input');
+  // テンプレートは値クリア
+  var tpl = input.cloneNode(true);
+  tpl.removeAttribute('id');
+  if (tpl.tagName === 'SELECT') tpl.selectedIndex = 0;
+  else tpl.value = '';
+  // 元の幅指定スタイルをクリア(table内で全幅にする)
+  tpl.style.cssText = '';
+  return {
+    label: labelText,
+    required: required,
+    hint: hintEl ? hintEl.textContent.trim() : '',
+    template: tpl
+  };
+}
+
+function _createBatchTableRow(fields, rowNum) {
+  var tr = document.createElement('tr');
+  tr.className = 'batch-tr';
+  var numTd = document.createElement('td');
+  numTd.className = 'batch-row-num';
+  numTd.textContent = rowNum;
+  tr.appendChild(numTd);
+  fields.forEach(function(f) {
+    var td = document.createElement('td');
+    var el = f.template.cloneNode(true);
+    td.appendChild(el);
+    tr.appendChild(td);
+  });
+  var rmTd = document.createElement('td');
+  rmTd.style.textAlign = 'center';
+  var rmBtn = document.createElement('button');
+  rmBtn.type = 'button';
+  rmBtn.className = 'batch-row-remove';
+  rmBtn.innerHTML = '✕';
+  rmBtn.onclick = function() { bRemoveBatchTableRow(this); };
+  rmTd.appendChild(rmBtn);
+  tr.appendChild(rmTd);
+  return tr;
+}
+
 /* ===== 一時保存(下書き)機能 =====
  * - モーダル入力途中のデータをsessionStorage 'b0Draft_N' に保存
  * - setupモード時のみ復元(opsモードは新規入力前提)
@@ -3136,7 +3231,7 @@ function bSetupBatchModal(stepNum) {
 function b0SaveDraft(stepNum) {
   var modal = document.getElementById('b-step-modal-' + stepNum);
   if (!modal) return;
-  var rows = modal.querySelectorAll('.batch-row');
+  var rows = modal.querySelectorAll('.batch-tr');
   if (rows.length === 0) return;
   var draftData = [];
   rows.forEach(function(row) {
@@ -3198,17 +3293,16 @@ function b0DiscardDraft(stepNum) {
 function restoreDraftToModal(stepNum, draft) {
   var modal = document.getElementById('b-step-modal-' + stepNum);
   if (!modal) return;
-  var rowsContainer = modal.querySelector('.batch-rows');
-  if (!rowsContainer) return;
+  var tbody = modal.querySelector('.batch-tbody');
+  if (!tbody) return;
   // 既存行を1行に戻す
-  var existingRows = rowsContainer.querySelectorAll('.batch-row');
+  var existingRows = tbody.querySelectorAll('tr');
   for (var i = 1; i < existingRows.length; i++) existingRows[i].remove();
-  // 必要な行数を追加
-  while (rowsContainer.querySelectorAll('.batch-row').length < draft.length) {
+  // 必要な行数まで追加
+  while (tbody.querySelectorAll('tr').length < draft.length) {
     bAddBatchRow(stepNum);
   }
-  // 値の流し込み
-  var rows = rowsContainer.querySelectorAll('.batch-row');
+  var rows = tbody.querySelectorAll('tr');
   draft.forEach(function(rowData, idx) {
     var row = rows[idx];
     if (!row) return;
@@ -3222,52 +3316,47 @@ function restoreDraftToModal(stepNum, draft) {
 
 function bAddBatchRow(stepNum) {
   var modal = document.getElementById('b-step-modal-' + stepNum);
-  if (!modal) return;
-  var rows = modal.querySelector('.batch-rows');
-  if (!rows) return;
-  var firstRow = rows.querySelector('.batch-row');
-  if (!firstRow) return;
-  var newRow = firstRow.cloneNode(true);
-  newRow.querySelectorAll('input, textarea').forEach(function(el) { el.value = ''; });
-  newRow.querySelectorAll('select').forEach(function(el) { el.selectedIndex = 0; });
-  var oldRm = newRow.querySelector('.batch-remove');
-  if (oldRm) oldRm.remove();
-  var rowCount = rows.querySelectorAll('.batch-row').length + 1;
-  var leg = newRow.querySelector('legend');
-  if (leg) leg.textContent = rowCount + '件目';
-  var rmBtn = document.createElement('button');
-  rmBtn.type = 'button';
-  rmBtn.className = 'batch-remove';
-  rmBtn.style.cssText = 'position:absolute;top:6px;right:8px;background:transparent;border:none;color:#c62828;cursor:pointer;font-size:11px;';
-  rmBtn.innerHTML = '✕ 削除';
-  rmBtn.onclick = function() { bRemoveBatchRow(stepNum, newRow); };
-  newRow.appendChild(rmBtn);
-  rows.appendChild(newRow);
+  if (!modal || !modal._batchFields) return;
+  var tbody = modal.querySelector('.batch-tbody');
+  if (!tbody) return;
+  var n = tbody.querySelectorAll('tr').length + 1;
+  tbody.appendChild(_createBatchTableRow(modal._batchFields, n));
   bUpdateBatchCount(stepNum);
 }
 
-function bRemoveBatchRow(stepNum, rowEl) {
-  rowEl.remove();
-  var modal = document.getElementById('b-step-modal-' + stepNum);
-  if (!modal) return;
-  modal.querySelectorAll('.batch-row').forEach(function(r, i) {
-    var l = r.querySelector('legend');
-    if (l) l.textContent = (i + 1) + '件目';
-  });
-  bUpdateBatchCount(stepNum);
+function bRemoveBatchTableRow(btn) {
+  var tr = btn.closest('tr');
+  var tbody = tr.closest('tbody');
+  var overlay = tr.closest('.b-step-overlay');
+  var stepNum = overlay ? parseInt((overlay.id || '').replace('b-step-modal-', ''), 10) : 0;
+  // 1件以上は残す
+  if (tbody && tbody.querySelectorAll('tr').length <= 1) {
+    // 値だけクリア
+    tr.querySelectorAll('input, textarea').forEach(function(el) { el.value = ''; });
+    tr.querySelectorAll('select').forEach(function(el) { el.selectedIndex = 0; });
+    return;
+  }
+  tr.remove();
+  if (tbody) {
+    tbody.querySelectorAll('tr').forEach(function(t, i) {
+      var nEl = t.querySelector('.batch-row-num');
+      if (nEl) nEl.textContent = (i + 1);
+    });
+  }
+  if (stepNum) bUpdateBatchCount(stepNum);
 }
 
 function bUpdateBatchCount(stepNum) {
   var modal = document.getElementById('b-step-modal-' + stepNum);
   if (!modal) return;
-  var n = modal.querySelectorAll('.batch-row').length;
+  var n = modal.querySelectorAll('.batch-tr').length;
   modal.querySelectorAll('.batch-count-display').forEach(function(el) { el.textContent = String(n); });
 }
 
 function b0SubmitBatch(stepNum) {
   var modal = document.getElementById('b-step-modal-' + stepNum);
   if (!modal) return;
-  var rows = modal.querySelectorAll('.batch-row');
+  var rows = modal.querySelectorAll('.batch-tr');
   var n = rows.length;
   if (n === 0) return;
   var counts = b0LoadCounts();
