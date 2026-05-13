@@ -2777,39 +2777,24 @@ function refreshB0ResumeBanner(forceShow) {
     btn.textContent = 'セットアップを確認 →';
   }
 
-  // 中断ポイントCTAエリア
-  var resumeBlock = '';
-  // 設定画面の下書きSTEP
-  if (draftSteps.length > 0) {
-    resumeBlock += '<div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ccc;display:flex;flex-wrap:wrap;gap:6px;align-items:center;">' +
-                   '<span style="font-size:11px;color:#666;font-weight:600;">⏸ 一時保存中(設定画面登録):</span>';
-    draftSteps.forEach(function(d) {
-      resumeBlock += '<button class="btn btn-o btn-sm" style="padding:4px 10px;font-size:11px;" onclick="b0ResumeDraftStep(' + d.step + ')">STEP ' + d.step + ' (' + d.name + ')・下書き' + d.count + '件 →</button>';
-    });
-    resumeBlock += '</div>';
-  }
-  // CSVインポート中断: プログレスバー連動表示 + 続きから再開
+  // 中断ポイントCTAエリア(1行表記でシンプル化)
+  var resumeItems = [];
+  draftSteps.forEach(function(d) {
+    resumeItems.push('<button class="btn btn-o btn-sm" style="padding:3px 9px;font-size:11px;" onclick="b0ResumeDraftStep(' + d.step + ')">STEP ' + d.step + ' ' + d.name + '(下書き' + d.count + '件) →</button>');
+  });
   if (importInProgress) {
-    var typeLabel = importInProgress.type === 'template' ? 'テンプレート' : '外部勤怠サービス';
+    var typeLabel = importInProgress.type === 'template' ? 'テンプレ' : 'SaaS';
     var setupHash = importInProgress.type === 'template' ? 'tpl-setup' : 'saas-setup';
-    var currentStep = importInProgress.currentStep || '';
-    // setupハッシュで初回起動させた後 内部navで該当画面に飛ばすため URL は setup ハッシュにする
-    // ただし screen ID を直接指定したい場合は currentStep を渡せる仕様にする
-    var importUrl = 'https://suguru789987.github.io/rakmy-timerecord-import-spec/?resume=' + currentStep + '#' + setupHash;
+    var importUrl = 'https://suguru789987.github.io/rakmy-timerecord-import-spec/?resume=' + (importInProgress.currentStep || '') + '#' + setupHash;
     var completed = importInProgress.completed || 0;
     var total = importInProgress.total || 1;
-    var pct = Math.round(completed / total * 100);
     var label = importInProgress.label || '進行中';
-    resumeBlock += '<div style="margin-top:10px;padding:10px 14px;background:#fff;border:1px solid #b2ebe0;border-radius:8px;">' +
-                   '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px;">' +
-                     '<span style="font-size:12px;color:#0e9077;font-weight:700;">📥 CSVインポート(' + typeLabel + ') 中断中</span>' +
-                     '<span style="font-size:11px;color:#666;">進捗 ' + completed + '/' + total + ' 完了 ・ 中断地点: <strong>' + label + '</strong></span>' +
-                   '</div>' +
-                   '<div style="background:#eee;height:6px;border-radius:3px;overflow:hidden;margin-bottom:10px;">' +
-                     '<div style="background:linear-gradient(90deg,#2ec4a5,#1a9e7e);height:100%;width:' + pct + '%;transition:width 0.4s;"></div>' +
-                   '</div>' +
-                   '<a class="btn btn-p btn-sm" style="font-size:11px;text-decoration:none;display:inline-flex;align-items:center;" href="' + importUrl + '" target="_blank" rel="noopener">続きから再開する →</a>' +
-                   '</div>';
+    resumeItems.push('<a class="btn btn-o btn-sm" style="padding:3px 9px;font-size:11px;text-decoration:none;display:inline-flex;align-items:center;" href="' + importUrl + '" target="_blank" rel="noopener">📥 CSV(' + typeLabel + ') ' + completed + '/' + total + ' ' + label + ' →</a>');
+  }
+  var resumeBlock = '';
+  if (resumeItems.length > 0) {
+    resumeBlock = '<div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:11px;">' +
+                  '<span style="color:#666;">⏸ 中断中:</span>' + resumeItems.join('') + '</div>';
   }
   msg.innerHTML = mainMsg + resumeBlock;
 }
