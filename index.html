@@ -2350,10 +2350,10 @@ function bCloseStep() {
 var SETUP_PAGES    = ['', 'setup-brand', 'setup-store', 'setup-emptype', 'setup-emp'];
 var SETTINGS_PAGES = ['', 'brand-settings', 'store-settings', 'emptype-settings', 'emp-settings'];
 
-// b0初期セットアップからの遷移: モードに応じて分岐 + 自動でモーダル展開
+// b0初期セットアップからの遷移: 必ず setup-* (新規登録) へ → CTAモーダル発火
+// (運用更新はサイドバー→各設定画面から直接アクセスする別動線)
 function b0Go(stepNum) {
-  var done = b0LoadDone();
-  go(done < 4 ? SETUP_PAGES[stepNum] : SETTINGS_PAGES[stepNum]);
+  go(SETUP_PAGES[stepNum]);
   setTimeout(function(){ bOpenStep(stepNum); }, 200);
 }
 
@@ -2570,26 +2570,23 @@ function b0CompleteStep(stepNum) {
   var setupMap = {'page-setup-brand':1,'page-setup-store':2,'page-setup-emptype':3,'page-setup-emp':4};
   var settingsMap = {'page-brand-settings':1,'page-store-settings':2,'page-emptype-settings':3,'page-emp-settings':4};
 
-  // ★ 運用設定画面(*-settings) → 必ずCTAトースト(運用更新の所作・モーダル/ガイド遷移なし)
+  // ★★★ URLベースで完全分離(doneでの分岐は撤去) ★★★
+  // 設定画面(*-settings) は 運用更新 = 必ずトースト
+  // setup-* / b0 (登録ガイド) は 新規登録 = 必ずモーダル
+  // この分離は done に依存しない
+
+  // 運用更新: *-settings → CTAトースト
   if (settingsMap[pageId]) {
     refreshSettingsModeGuard(settingsMap[pageId]);
     bShowToast(stepNum);
     return;
   }
-  // ★ done=4完了後はどこから登録してもトースト(運用更新扱い・防御的)
-  if (b0LoadDone() >= 4) {
-    if (pageId === 'page-b0') {
-      b0SetState(b0LoadDone());
-      bPulseNextStep();
-    }
-    bShowToast(stepNum);
-    return;
-  }
-  // ★ 新規登録進行中(done<4)のsetup-* / b0画面 → CTAモーダル(強誘導)
+  // 新規登録: setup-* → CTAモーダル
   if (setupMap[pageId]) {
     bShowBridgeModal(stepNum);
     return;
   }
+  // 新規登録: b0 (登録ガイド) → CTAモーダル
   if (pageId === 'page-b0') {
     b0SetState(b0LoadDone());
     bPulseNextStep();
