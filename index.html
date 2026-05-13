@@ -2993,6 +2993,20 @@ function d2OnEmpSelect() {
 // リロード時には sessionStorage の状態を維持(初期登録ステップから離脱させない)
 // デモ用に状態をリセットしたい場合は b0DemoReset() を呼ぶ
 window.addEventListener('DOMContentLoaded', function() {
+  // import-spec から遷移時 ?completed=1 で初期セットアップ完了状態を強制適用
+  try {
+    var params = new URLSearchParams(location.search);
+    if (params.get('completed') === '1') {
+      sessionStorage.setItem('b0Done', '4');
+      // 既存 counts があれば維持、なければダミー値で完了状態にする
+      var existingCounts = sessionStorage.getItem('b0Counts');
+      if (!existingCounts) {
+        sessionStorage.setItem('b0Counts', JSON.stringify([2, 3, 4, 12, 0]));
+      }
+      sessionStorage.setItem('b0EmptyMode', 'normal');
+      sessionStorage.removeItem('b0SetupActiveStep');
+    }
+  } catch (e) {}
   initSettingModeToggles();
   // 登録モーダル4種を「複数行入力(batch)」対応化
   [1, 2, 3, 4].forEach(function(n) { bSetupBatchModal(n); });
