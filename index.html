@@ -3279,11 +3279,10 @@ function applySetupModeOnSettings(stepNum) {
     renderSetupSettingsUI(stepNum);
     if (stepNum <= 4) {
       var info = SETTING_PAGES[stepNum - 1];
-      var counts = b0LoadCounts();
-      var registered = counts[stepNum - 1] || 0;
-      if (info) switchSettingMode(info.id, registered >= 1 ? 'filled' : 'empty');
+      // setup mode 進行中は常に「設定前」モードを初期表示(件数に関わらず)
+      // 登録後は b0SubmitBatch 内で switchSettingMode('filled') が呼ばれて一覧に切替わる
+      if (info) switchSettingMode(info.id, 'empty');
     }
-    // STEP 5(管理者・d1)は既存リスト表示そのまま
   } else {
     clearSetupSettingsUI();
   }
