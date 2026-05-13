@@ -969,8 +969,7 @@
         <div class="ph" style="margin-top:8px;">
           <h2 style="font-size:16px;">管理者一覧 <span style="font-size:11px;font-weight:400;color:#888;">(STEP 5 ・ 任意)</span></h2>
           <div style="display:flex;gap:8px;">
-            <button class="btn btn-s" id="b0-step5-edit-btn" disabled title="管理者が登録されていません" style="opacity:0.5;">編集</button>
-            <button class="btn btn-p" onclick="bOpenSetupAdminModal()">+ 新規追加</button>
+            <button class="btn btn-p" id="b0-step5-header-add" onclick="bOpenSetupAdminModal()" style="display:none;">+ 管理者を登録する</button>
           </div>
         </div>
 
@@ -2617,11 +2616,11 @@ function refreshStep5Panel() {
   var emptyEl = document.getElementById('b0-step5-empty');
   var listWrap = document.getElementById('b0-step5-list-wrap');
   var listEl = document.getElementById('b0-step5-list');
-  var editBtn = document.getElementById('b0-step5-edit-btn');
+  var headerAddBtn = document.getElementById('b0-step5-header-add');
   if (adminN > 0) {
     if (emptyEl) emptyEl.style.display = 'none';
     if (listWrap) listWrap.style.display = '';
-    if (editBtn) { editBtn.disabled = false; editBtn.style.opacity = ''; editBtn.title = ''; }
+    if (headerAddBtn) headerAddBtn.style.display = ''; // 1件以上ならヘッダーCTA表示
     if (listEl) {
       var rows = '';
       for (var i = 0; i < adminN; i++) {
@@ -2642,7 +2641,7 @@ function refreshStep5Panel() {
   } else {
     if (emptyEl) emptyEl.style.display = '';
     if (listWrap) listWrap.style.display = 'none';
-    if (editBtn) { editBtn.disabled = true; editBtn.style.opacity = '0.5'; editBtn.title = '管理者が登録されていません'; }
+    if (headerAddBtn) headerAddBtn.style.display = 'none'; // 0件時はヘッダーCTAを隠す(空状態ヒーローの中央CTAをメインに)
   }
 }
 
