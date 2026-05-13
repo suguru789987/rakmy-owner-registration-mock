@@ -477,7 +477,7 @@
     <span class="nav-sep"></span>
     <span class="nav-flow" style="color:#0e9077;">🆕 B 初期セットアップ（オーケストレーター）</span>
     <span class="nav-tab" onclick="go('b0')" id="nav-b0">初期セットアップ</span>
-    <span class="nav-tab" onclick="go('setup-admin')" id="nav-setup-admin">[初回]⑤管理者(任意)</span>
+    <span class="nav-tab" onclick="b0Go(5)" id="nav-setup-admin">[初回]⑤管理者(任意)</span>
     <span class="nav-tab" onclick="go('b0-empty')" id="nav-b0-empty">打刻記録(未セットアップ)</span>
     <span class="nav-sep"></span>
     <span class="nav-flow" style="color:#1a73e8;">🔁 B' 設定画面（新規/運用 兼用 ・ setupモード時はバナー表示）</span>
@@ -2078,11 +2078,15 @@ function go(id) {
     refreshSettingsModeGuard(settingsMap[id]);
     applySetupModeOnSettings(settingsMap[id]);
   } else if (settingsMap[id] === 5) {
+    // setup-admin に直接遷移した場合(ナビタブ等)も setup mode を起動
     if (id === 'setup-admin') {
+      if (loadSetupActiveStep() !== 5) saveSetupActiveStep(5);
       applySetupModeOnSettings(5);
       refreshSetupAdminPage();
-    } else {
-      applySetupModeOnD2();
+    } else { // d2
+      // d2 を直接開いた場合も setupActiveStep=5 ならsetup mode、そうでなければ運用更新
+      if (loadSetupActiveStep() === 5) applySetupModeOnD2();
+      else clearSetupSettingsUI();
     }
   } else {
     // 設定画面以外 → setup UI クリア
@@ -2426,12 +2430,14 @@ var SETTINGS_PAGES = ['', 'brand-settings', 'store-settings', 'emptype-settings'
 
 // b0初期セットアップからの遷移
 // 1〜4: *-settings + 複数行入力モーダル自動発火
-// 5(管理者・任意): d1へ遷移、モーダル(d2)は別途「+管理者を登録」ボタンから
+// 5(管理者・任意): setup-admin → 250ms後 d2(モーダル風)を自動発火
 function b0Go(stepNum) {
   saveSetupActiveStep(stepNum);
   go(SETTINGS_PAGES[stepNum]);
   if (stepNum <= 4) {
     setTimeout(function(){ bOpenStep(stepNum); }, 250);
+  } else if (stepNum === 5) {
+    setTimeout(function(){ go('d2'); }, 350);
   }
 }
 
@@ -3208,9 +3214,10 @@ function setupGoNextStep(currentStep) {
     go(SETTINGS_PAGES[next]);
     setTimeout(function(){ bOpenStep(next); }, 250);
   } else if (currentStep === 4) {
-    // STEP 4 → STEP 5 (管理者・任意)
+    // STEP 4 → STEP 5 (管理者・任意): setup-admin → d2 自動発火
     saveSetupActiveStep(5);
-    go(SETTINGS_PAGES[5]); // d1
+    go(SETTINGS_PAGES[5]); // setup-admin
+    setTimeout(function(){ go('d2'); }, 350);
   } else {
     setupCompleteAll();
   }
