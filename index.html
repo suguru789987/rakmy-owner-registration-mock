@@ -2629,8 +2629,9 @@ function bShowBridgeModal(stepNum) {
 }
 function bBridgeProceed(nextStep) {
   document.getElementById('b-bridge-overlay').classList.remove('act');
-  // 該当設定画面へ遷移 → 200ms後にモーダル展開
-  bGotoSettingsAndOpenModal(nextStep);
+  // 新規登録の連鎖CTA: 必ず setup-* へ遷移(運用更新の*-settingsには飛ばさない)
+  go(SETUP_PAGES[nextStep]);
+  setTimeout(function(){ bOpenStep(nextStep); }, 200);
 }
 function bBridgeDismiss() {
   document.getElementById('b-bridge-overlay').classList.remove('act');
