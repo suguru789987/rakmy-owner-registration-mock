@@ -804,10 +804,15 @@
               <span style="flex:1;">雇用区分</span>
               <span id="b0-done-count-3" style="color:#888;font-size:11px;">- 件</span>
             </div>
-            <div class="b0-done-row" style="display:flex;align-items:center;gap:10px;padding:10px 16px;">
+            <div class="b0-done-row" style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid #f0f0f0;">
               <span style="color:#2ec4a5;font-weight:700;width:18px;">✓</span>
               <span style="flex:1;">従業員</span>
               <span id="b0-done-count-4" style="color:#888;font-size:11px;">- 件</span>
+            </div>
+            <div class="b0-done-row" style="display:flex;align-items:center;gap:10px;padding:10px 16px;background:#fafafa;">
+              <span id="b0-done-mark-5" style="color:#888;font-weight:700;width:18px;">-</span>
+              <span style="flex:1;color:#666;">管理者 <span style="color:#888;font-size:10px;font-weight:400;">(任意)</span></span>
+              <span id="b0-done-count-5" style="color:#888;font-size:11px;">- 件</span>
             </div>
           </div>
         </div>
@@ -823,7 +828,7 @@
           <div style="font-size:11px;color:#888;font-weight:600;margin-bottom:8px;">その他の操作（任意）</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
             <a href="#brand-settings" onclick="event.preventDefault();go('brand-settings')" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">⚙ 設定画面で追加・編集</a>
-            <a href="#d1" onclick="event.preventDefault();go('d1')" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">👥 管理者を追加</a>
+            <a href="#d1" onclick="event.preventDefault();b0Go(5)" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">👥 管理者を追加 (STEP 5・任意)</a>
           </div>
         </div>
       </div>
@@ -952,7 +957,19 @@
           <div class="ow-step-action"><button class="btn btn-p btn-sm" id="b0-btn-4" disabled onclick="b0Go(4)">登録する →</button></div>
         </div>
 
-        <div class="al al-i" style="margin-top:18px;font-size:10px;" id="b0-card-tip"><span>💡</span><div>各ステップは前のステップ完了後にアクティブ化されます。すべて登録完了後も、新規追加の際はこのガイドから前提登録を確認できます。</div></div>
+        <!-- ステップ5: 管理者登録(任意) -->
+        <div class="ow-step is-locked" id="b0-step-5" data-step="5" style="border-style:dashed;background:#fafafa;">
+          <div class="ow-step-num locked" style="background:#bbb;">5</div>
+          <div class="ow-step-body">
+            <div class="ow-step-title">管理者登録 <span class="ow-badge lock" style="background:#fff3e0;color:#888;border:1px solid #ddd;">任意・④完了後</span></div>
+            <div class="ow-step-desc">担当店舗の従業員管理・勤怠管理を委任する管理者を登録します。<strong>必須ではありません</strong>。新規入力または既存従業員からの選択で登録できます。</div>
+            <div class="ow-step-deps"><span class="deps-label">前提登録:</span><span class="dep-chip">④ 従業員(任意)</span></div>
+            <div class="ow-step-meta empty" id="b0-meta-5">登録済み: 0 名</div>
+          </div>
+          <div class="ow-step-action"><button class="btn btn-s btn-sm" id="b0-btn-5" disabled onclick="b0Go(5)">登録する (任意) →</button></div>
+        </div>
+
+        <div class="al al-i" style="margin-top:18px;font-size:10px;" id="b0-card-tip"><span>💡</span><div>STEP 1〜4 は必須、STEP 5(管理者) は任意です。STEP 4 まで完了で初期セットアップは完了扱いとなり、管理者は運用開始後でも追加できます。</div></div>
       </div>
     </main>
   </div>
@@ -2013,10 +2030,15 @@ function go(id) {
     bSetImportMethod(bLoadImportMethod());
   }
   // 設定画面: 初期/運用モードに応じてバナー切替
-  var settingsMap = {'brand-settings':1,'store-settings':2,'emptype-settings':3,'emp-settings':4};
-  if (settingsMap[id]) {
+  // d1(管理者一覧)=STEP 5(任意), d2(管理者登録モーダル風ページ)も STEP 5 setup扱い
+  var settingsMap = {'brand-settings':1,'store-settings':2,'emptype-settings':3,'emp-settings':4,'d1':5,'d2':5};
+  if (settingsMap[id] && settingsMap[id] <= 4) {
     refreshSettingsModeGuard(settingsMap[id]);
     applySetupModeOnSettings(settingsMap[id]);
+  } else if (settingsMap[id] === 5) {
+    // STEP 5: d1 と d2 両方で setup mode UI を適用
+    if (id === 'd1') applySetupModeOnSettings(5);
+    else applySetupModeOnD2();
   } else {
     // 設定画面以外 → setup UI クリア
     clearSetupSettingsUI();
@@ -2054,14 +2076,18 @@ var B0_STATUS_MSGS = [
   '✓ 初期登録は完了しています。新規追加の際は、各項目の前提登録を確認のうえ追加してください'
 ];
 
-// 件数管理: sessionStorage 'b0Counts' に [n1, n2, n3, n4]
+// 件数管理: sessionStorage 'b0Counts' に [n1, n2, n3, n4, n5(管理者・任意)]
 function b0LoadCounts() {
   try {
     var raw = sessionStorage.getItem('b0Counts');
-    if (!raw) return [0, 0, 0, 0];
+    if (!raw) return [0, 0, 0, 0, 0];
     var arr = JSON.parse(raw);
-    return Array.isArray(arr) && arr.length === 4 ? arr : [0, 0, 0, 0];
-  } catch (e) { return [0, 0, 0, 0]; }
+    if (Array.isArray(arr)) {
+      while (arr.length < 5) arr.push(0);
+      return arr;
+    }
+    return [0, 0, 0, 0, 0];
+  } catch (e) { return [0, 0, 0, 0, 0]; }
 }
 function b0SaveCounts(c) {
   try { sessionStorage.setItem('b0Counts', JSON.stringify(c)); } catch (e) {}
@@ -2202,11 +2228,19 @@ function b0SetState(doneCount) {
     if (methodPicker) methodPicker.style.display = 'none';
     if (importPanel) importPanel.style.display = 'none';
     if (wizardCard) wizardCard.style.display = 'none';
-    // 完了項目リストの件数を反映
+    // 完了項目リストの件数を反映 (5番目は任意なので未登録時は「未登録」)
     var doneCounts = b0LoadCounts();
     for (var di = 1; di <= 4; di++) {
       var el = document.getElementById('b0-done-count-' + di);
       if (el) el.textContent = (doneCounts[di - 1] || 0) + ' 件';
+    }
+    var admin5 = doneCounts[4] || 0;
+    var el5 = document.getElementById('b0-done-count-5');
+    if (el5) el5.textContent = admin5 > 0 ? (admin5 + ' 件') : '未登録';
+    var mark5 = document.getElementById('b0-done-mark-5');
+    if (mark5) {
+      mark5.textContent = admin5 > 0 ? '✓' : '–';
+      mark5.style.color = admin5 > 0 ? '#2ec4a5' : '#bbb';
     }
   } else {
     if (completionView) completionView.style.display = 'none';
@@ -2255,7 +2289,7 @@ function b0SetState(doneCount) {
     var item = document.getElementById('b0-sb-biz-' + b);
     if (item) item.style.opacity = bizComplete ? '' : '0.5';
   }
-  // 各ステップの見た目更新
+  // 各ステップの見た目更新 (STEP 1〜4: 必須、STEP 5: 任意)
   for (var s = 1; s <= 4; s++) {
     var step = document.getElementById('b0-step-' + s);
     if (!step) continue;
@@ -2267,26 +2301,56 @@ function b0SetState(doneCount) {
     badge.classList.remove('now','done','lock');
     btn.disabled = false;
     if (s <= doneCount) {
-      // 完了 → 再編集可
       num.classList.add('done'); num.textContent = '✓';
       badge.classList.add('done'); badge.textContent = '✓ 完了';
       btn.textContent = '再編集 →';
       btn.classList.remove('btn-p'); btn.classList.add('btn-s');
       step.classList.add('is-done');
     } else if (s === doneCount + 1) {
-      // 進行中（次に登録すべきステップ）
       num.classList.add('active'); num.textContent = s;
       badge.classList.add('now'); badge.textContent = '進行中';
       btn.textContent = '登録する →';
       btn.classList.remove('btn-s'); btn.classList.add('btn-p');
     } else {
-      // ロック
       num.classList.add('locked'); num.textContent = s;
       badge.classList.add('lock'); badge.textContent = '🔒 ' + (s - 1) + '完了後';
       btn.textContent = '登録する →';
       btn.classList.remove('btn-s'); btn.classList.add('btn-p');
       btn.disabled = true;
       step.classList.add('is-locked');
+    }
+  }
+  // STEP 5 (管理者・任意): STEP 4完了でアクティブ化(ただし任意ラベル維持)
+  var step5 = document.getElementById('b0-step-5');
+  if (step5) {
+    var num5 = step5.querySelector('.ow-step-num');
+    var badge5 = step5.querySelector('.ow-badge');
+    var btn5 = document.getElementById('b0-btn-5');
+    var counts5 = b0LoadCounts();
+    var admin5 = counts5[4] || 0;
+    step5.classList.remove('is-locked','is-done');
+    num5.classList.remove('todo','active','done','locked');
+    badge5.classList.remove('now','done','lock');
+    if (doneCount >= 4) {
+      // アクティブ化(任意)
+      if (admin5 >= 1) {
+        num5.classList.add('done'); num5.textContent = '✓';
+        badge5.style.cssText = 'background:#e8f8f5;color:#0e9077;border:1px solid #b2ebe0;';
+        badge5.textContent = '✓ ' + admin5 + ' 名登録(任意)';
+        btn5.textContent = '追加 / 再編集 →';
+      } else {
+        num5.style.cssText = 'background:#888;color:#fff;';
+        badge5.style.cssText = 'background:#fff3e0;color:#888;border:1px solid #ddd;';
+        badge5.textContent = '任意・未登録';
+        btn5.textContent = '登録する (任意) →';
+      }
+      btn5.disabled = false;
+    } else {
+      step5.classList.add('is-locked');
+      num5.classList.add('locked'); num5.textContent = '5';
+      badge5.style.cssText = 'background:#fff3e0;color:#888;border:1px solid #ddd;';
+      badge5.textContent = '任意・④完了後';
+      btn5.disabled = true;
     }
   }
 }
@@ -2311,13 +2375,18 @@ function bCloseStep() {
 }
 
 // ページマッピング: 新規/運用ともに *-settings を使用(B案再構築)
-var SETTINGS_PAGES = ['', 'brand-settings', 'store-settings', 'emptype-settings', 'emp-settings'];
+// index 1〜4: 必須STEP(業態/店舗/雇用区分/従業員)、index 5: 任意STEP(管理者=d1)
+var SETTINGS_PAGES = ['', 'brand-settings', 'store-settings', 'emptype-settings', 'emp-settings', 'd1'];
 
-// b0初期セットアップからの遷移: *-settings を setupモードで開く + 複数行入力モーダル自動発火
+// b0初期セットアップからの遷移
+// 1〜4: *-settings + 複数行入力モーダル自動発火
+// 5(管理者・任意): d1へ遷移、モーダル(d2)は別途「+管理者を登録」ボタンから
 function b0Go(stepNum) {
   saveSetupActiveStep(stepNum);
   go(SETTINGS_PAGES[stepNum]);
-  setTimeout(function(){ bOpenStep(stepNum); }, 250);
+  if (stepNum <= 4) {
+    setTimeout(function(){ bOpenStep(stepNum); }, 250);
+  }
 }
 
 // トースト連鎖CTAでの遷移+モーダル展開: 必ず運用設定画面(*-settings)へ
@@ -2894,18 +2963,21 @@ function applySetupModeOnSettings(stepNum) {
   var activeStep = loadSetupActiveStep();
   if (activeStep === stepNum && activeStep > 0) {
     renderSetupSettingsUI(stepNum);
-    var info = SETTING_PAGES[stepNum - 1];
-    var counts = b0LoadCounts();
-    var registered = counts[stepNum - 1] || 0;
-    if (info) switchSettingMode(info.id, registered >= 1 ? 'filled' : 'empty');
+    if (stepNum <= 4) {
+      var info = SETTING_PAGES[stepNum - 1];
+      var counts = b0LoadCounts();
+      var registered = counts[stepNum - 1] || 0;
+      if (info) switchSettingMode(info.id, registered >= 1 ? 'filled' : 'empty');
+    }
+    // STEP 5(管理者・d1)は既存リスト表示そのまま
   } else {
     clearSetupSettingsUI();
   }
 }
 
 function renderSetupSettingsUI(stepNum) {
-  var pageIds = ['', 'page-brand-settings', 'page-store-settings', 'page-emptype-settings', 'page-emp-settings'];
-  var stepNames = ['', '業態・ブランド', '店舗', '雇用区分', '従業員'];
+  var pageIds = ['', 'page-brand-settings', 'page-store-settings', 'page-emptype-settings', 'page-emp-settings', 'page-d1'];
+  var stepNames = ['', '業態・ブランド', '店舗', '雇用区分', '従業員', '管理者 (任意)'];
   var pageEl = document.getElementById(pageIds[stepNum]);
   if (!pageEl) return;
   var mainEl = pageEl.querySelector('main.mc');
@@ -2922,7 +2994,11 @@ function renderSetupSettingsUI(stepNum) {
   var nextBtn;
   if (registered >= 1 && stepNum < 4) {
     nextBtn = '<button class="btn btn-p btn-sm" onclick="setupGoNextStep(' + stepNum + ')">→ STEP ' + (stepNum + 1) + ' (' + nextStepName + ')へ進む</button>';
-  } else if (registered >= 1 && stepNum === 4) {
+  } else if (stepNum === 4 && registered >= 1) {
+    nextBtn =
+      '<button class="btn btn-p btn-sm" onclick="setupGoNextStep(4)">→ STEP 5 (管理者・任意)へ進む</button>' +
+      '<button class="btn btn-s btn-sm" onclick="setupCompleteAll()">✓ ここで完了する</button>';
+  } else if (stepNum === 5) {
     nextBtn = '<button class="btn btn-p btn-sm" onclick="setupCompleteAll()">✓ 初期セットアップを完了する</button>';
   } else {
     nextBtn = '<button class="btn btn-s btn-sm" disabled style="opacity:0.5;cursor:not-allowed;">登録すると次STEPへ進めます</button>';
@@ -2942,20 +3018,24 @@ function renderSetupSettingsUI(stepNum) {
       '</div>';
   }
 
+  var stepBadgeText = stepNum <= 4 ? ('初期セットアップ STEP ' + stepNum + ' / 4') : ('任意STEP ' + stepNum + ' / 5');
+  var stepBadgeBg = stepNum <= 4 ? '#2ec4a5' : '#888';
+  var titleSuffix = stepNum === 5 ? ' を登録 (任意)' : ' を登録してください';
+
   var banner = document.createElement('div');
   banner.className = 'setup-mode-banner';
   banner.style.cssText = 'background:linear-gradient(135deg,#e8f8f5 0%,#d5f0e8 100%);border:2px solid #2ec4a5;border-radius:10px;padding:14px 18px;margin-bottom:16px;';
   banner.innerHTML =
     '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;">' +
-      '<div style="background:#2ec4a5;color:#fff;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;">初期セットアップ STEP ' + stepNum + ' / 4</div>' +
-      '<div style="font-size:13px;color:#0e9077;font-weight:700;">' + stepNames[stepNum] + ' を登録してください</div>' +
+      '<div style="background:' + stepBadgeBg + ';color:#fff;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;">' + stepBadgeText + '</div>' +
+      '<div style="font-size:13px;color:#0e9077;font-weight:700;">' + stepNames[stepNum] + titleSuffix + '</div>' +
       '<div style="flex:1;min-width:10px;"></div>' +
       nextBtn +
     '</div>' +
     '<div style="background:#fff;border-radius:20px;overflow:hidden;height:8px;border:1px solid #d1e7e0;">' +
       '<div style="background:linear-gradient(90deg,#2ec4a5,#1a9e7e);height:100%;width:' + pct + '%;transition:width 0.3s;"></div>' +
     '</div>' +
-    '<div style="font-size:10px;color:#0e9077;margin-top:6px;">進捗: ' + done + '/4 STEP完了 ・ 当STEP登録件数: ' + registered + '件 ・ <strong>※ 設定画面の並び順≠初期登録の必須順</strong></div>' +
+    '<div style="font-size:10px;color:#0e9077;margin-top:6px;">進捗: ' + done + '/4 STEP完了 ・ 当STEP登録件数: ' + registered + '件' + (stepNum === 5 ? ' ・ <strong>任意項目</strong>' : ' ・ <strong>※ 設定画面の並び順≠初期登録の必須順</strong>') + '</div>' +
     draftBlock;
   mainEl.insertBefore(banner, mainEl.firstChild);
 
@@ -3014,21 +3094,31 @@ function renderSetupSidebarNav(sb, currentStep) {
   var nav = sb.querySelector('.sb-setup-nav');
   if (!nav) return;
   var done = b0LoadDone();
-  var stepLabels = ['', '業態・ブランド', '店舗', '雇用区分', '従業員'];
-  var stepIcons = ['', '①', '②', '③', '④'];
-  var pages = ['', 'brand-settings', 'store-settings', 'emptype-settings', 'emp-settings'];
+  var counts = b0LoadCounts();
+  var stepLabels = ['', '業態・ブランド', '店舗', '雇用区分', '従業員', '管理者'];
+  var stepIcons = ['', '①', '②', '③', '④', '⑤'];
+  var pages = ['', 'brand-settings', 'store-settings', 'emptype-settings', 'emp-settings', 'd1'];
   var html = '<a href="#" onclick="event.preventDefault();go(\'b0\')"><span class="ic">📋</span>初期セットアップ TOP</a>';
   html += '<div class="sl">初期登録ステップ</div>';
-  for (var i = 1; i <= 4; i++) {
+  for (var i = 1; i <= 5; i++) {
     var isCurrent = (i === currentStep);
-    var isDone = (i <= done);
-    var isReachable = (i <= done + 1); // 完了済 or 直後のSTEP
+    var isDone, isReachable;
+    if (i <= 4) {
+      isDone = (i <= done);
+      isReachable = (i <= done + 1);
+    } else {
+      // STEP 5(管理者・任意): STEP 4 完了後アクセス可。完了は b0Counts[4] >= 1 で判定
+      isDone = (counts[4] || 0) >= 1;
+      isReachable = (done >= 4);
+    }
     var checkMark = isDone ? ' <span style="color:#1a9e7e;font-weight:700;">✓</span>' : '';
+    var optionalMark = (i === 5) ? ' <span style="color:#888;font-size:9px;font-weight:400;">(任意)</span>' : '';
     var actClass = isCurrent ? ' class="act"' : '';
     if (isReachable) {
-      html += '<a href="#"' + actClass + ' onclick="event.preventDefault();b0Go(' + i + ')"><span class="ic">' + stepIcons[i] + '</span>' + stepLabels[i] + checkMark + '</a>';
+      html += '<a href="#"' + actClass + ' onclick="event.preventDefault();b0Go(' + i + ')"><span class="ic">' + stepIcons[i] + '</span>' + stepLabels[i] + optionalMark + checkMark + '</a>';
     } else {
-      html += '<a href="#" style="opacity:0.4;pointer-events:none;cursor:not-allowed;" title="前のSTEPを完了してください"><span class="ic">' + stepIcons[i] + '</span>' + stepLabels[i] + '</a>';
+      var tip = (i === 5) ? 'STEP 1〜4 を完了すると追加可能になります' : '前のSTEPを完了してください';
+      html += '<a href="#" style="opacity:0.4;pointer-events:none;cursor:not-allowed;" title="' + tip + '"><span class="ic">' + stepIcons[i] + '</span>' + stepLabels[i] + optionalMark + '</a>';
     }
   }
   nav.innerHTML = html;
@@ -3055,17 +3145,26 @@ function clearSetupSettingsUI() {
     d.style.display = '';
     d.removeAttribute('data-setup-hidden-caption');
   });
+  // d2 setup 書き換えの復元
+  document.querySelectorAll('[data-setup-rewired="1"]').forEach(function(b) {
+    b.removeAttribute('data-setup-rewired');
+    b.setAttribute('onclick', "go('d1')");
+  });
   document.body.removeAttribute('data-setup-mode');
 }
 
 function setupGoNextStep(currentStep) {
   var done = b0LoadDone();
-  if (done < currentStep) b0SaveDone(currentStep);
+  if (done < currentStep && currentStep <= 4) b0SaveDone(currentStep);
   if (currentStep < 4) {
     var next = currentStep + 1;
     saveSetupActiveStep(next);
     go(SETTINGS_PAGES[next]);
     setTimeout(function(){ bOpenStep(next); }, 250);
+  } else if (currentStep === 4) {
+    // STEP 4 → STEP 5 (管理者・任意)
+    saveSetupActiveStep(5);
+    go(SETTINGS_PAGES[5]); // d1
   } else {
     setupCompleteAll();
   }
@@ -3074,6 +3173,83 @@ function setupCompleteAll() {
   b0SaveDone(4);
   clearSetupActiveStep();
   go('b0');
+}
+
+/* ===== STEP 5 (管理者・任意) =====
+ * d2 ページ(モーダル風)を setupモードで開いた時、登録ボタンを STEP 5 完了処理に書き換える */
+function applySetupModeOnD2() {
+  var pageEl = document.getElementById('page-d2');
+  if (!pageEl) return;
+  // d2 内 main の上部に setupバナー追加
+  var mainEl = pageEl.querySelector('main.mc');
+  if (mainEl) {
+    var oldBanner = mainEl.querySelector('.setup-mode-banner-d2');
+    if (oldBanner) oldBanner.remove();
+    var counts = b0LoadCounts();
+    var adminN = counts[4] || 0;
+    var banner = document.createElement('div');
+    banner.className = 'setup-mode-banner setup-mode-banner-d2';
+    banner.style.cssText = 'background:linear-gradient(135deg,#e8f8f5 0%,#d5f0e8 100%);border:2px solid #2ec4a5;border-radius:10px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;';
+    banner.innerHTML =
+      '<div style="background:#888;color:#fff;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;">任意STEP 5 / 5</div>' +
+      '<div style="font-size:12px;color:#0e9077;font-weight:700;">管理者を登録 (任意・現在 ' + adminN + ' 名登録済)</div>' +
+      '<div style="flex:1;min-width:10px;"></div>' +
+      '<button class="btn btn-s btn-sm" onclick="setupCompleteAll()">✓ 初期セットアップを完了</button>';
+    mainEl.insertBefore(banner, mainEl.firstChild);
+  }
+  // d2 の「登録」ボタンを setup 完了処理に書き換え
+  var btnGrps = pageEl.querySelectorAll('.btn-grp');
+  btnGrps.forEach(function(g) {
+    var primary = g.querySelector('.btn-p');
+    if (primary && /登録/.test(primary.textContent) && !primary.hasAttribute('data-setup-rewired')) {
+      primary.setAttribute('data-setup-rewired', '1');
+      primary.setAttribute('onclick', 'b0SubmitAdminEntry()');
+    }
+  });
+  // 右下「← 初期セットアップへ戻る」ボタン
+  var oldFloat = document.querySelector('.setup-mode-float-back');
+  if (oldFloat) oldFloat.remove();
+  var floatBtn = document.createElement('a');
+  floatBtn.className = 'setup-mode-float-back';
+  floatBtn.href = '#';
+  floatBtn.onclick = function(ev) { ev.preventDefault(); go('b0'); };
+  floatBtn.style.cssText = 'position:fixed;right:24px;bottom:24px;z-index:50;background:#2ec4a5;color:#fff;padding:14px 24px;border-radius:30px;font-size:13px;font-weight:700;text-decoration:none;box-shadow:0 4px 16px rgba(46,196,165,0.35);display:inline-flex;align-items:center;gap:6px;';
+  floatBtn.textContent = '← 初期セットアップへ戻る';
+  document.body.appendChild(floatBtn);
+  document.body.setAttribute('data-setup-mode', '5');
+}
+
+// d2 内「登録」ボタン → setup mode時は カウント加算 + 完了選択モーダル
+function b0SubmitAdminEntry() {
+  var activeStep = loadSetupActiveStep();
+  if (activeStep !== 5) {
+    // ops mode: 既存通り d1 へ戻る
+    go('d1');
+    return;
+  }
+  var counts = b0LoadCounts();
+  counts[4] = (counts[4] || 0) + 1;
+  b0SaveCounts(counts);
+  go('d1');
+  setTimeout(function(){ bShowSetupAdminCompleteModal(counts[4]); }, 300);
+}
+
+function bShowSetupAdminCompleteModal(totalAdmins) {
+  var titleEl = document.getElementById('b-bridge-title');
+  var textEl = document.getElementById('b-bridge-text');
+  var actEl = document.getElementById('b-bridge-actions');
+  titleEl.textContent = '✓ 管理者を1名登録しました (累計 ' + totalAdmins + ' 名)';
+  textEl.innerHTML = '管理者は<strong>任意項目</strong>です。続けてもう1名追加するか、初期セットアップを完了できます。';
+  actEl.innerHTML =
+    '<button class="btn btn-p" onclick="bSetupAdminAddMore()">+ もう1名追加</button>' +
+    '<button class="btn btn-p" onclick="bSetupBridgeDismiss();setupCompleteAll()">✓ 初期セットアップを完了</button>' +
+    '<button class="btn btn-s" onclick="bSetupBridgeDismiss()">この画面に留まる</button>';
+  document.getElementById('b-bridge-overlay').classList.add('act');
+}
+
+function bSetupAdminAddMore() {
+  document.getElementById('b-bridge-overlay').classList.remove('act');
+  go('d2');
 }
 
 /* ===== 複数行入力(batch)モーダル: 表形式 =====
