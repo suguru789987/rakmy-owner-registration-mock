@@ -771,6 +771,17 @@
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc" style="background:#f8f9fa;">
+      <!-- モック開発用デモシミュレーション(完了/未完了切替・常時表示) -->
+      <div style="margin-bottom:14px;padding:10px 14px;background:#fff3e0;border:1px dashed #e67e22;border-radius:8px;max-width:760px;">
+        <div style="font-size:11px;font-weight:700;color:#e67e22;margin-bottom:6px;">🛠 デモ用シミュレーション(モック確認用・常時表示)</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-s btn-sm" onclick="bSimulateImport(1)">① 業態完了</button>
+          <button class="btn btn-s btn-sm" onclick="bSimulateImport(2)">② 店舗完了</button>
+          <button class="btn btn-s btn-sm" onclick="bSimulateImport(3)">③ 雇用区分完了</button>
+          <button class="btn btn-s btn-sm" onclick="bSimulateImport(4)">④ 必須4項目完了</button>
+          <button class="btn btn-s btn-sm" onclick="b0DemoReset()" style="color:#c62828;border-color:#f5c2c2;">🔄 未完了に戻す</button>
+        </div>
+      </div>
       <!-- 完了済みガード(done=4時に表示) -->
       <div id="b0-completed-banner"></div>
       <div class="ph"><h2 id="b0-page-title">初期セットアップ</h2></div>
@@ -884,17 +895,7 @@
         <div id="istep-list-template" style="display:none;"></div>
         <div id="istep-list-external" style="display:none;"></div>
 
-        <!-- デモ用シミュレーション -->
-        <div style="margin-top:14px;padding:10px 14px;background:#fff3e0;border:1px dashed #e67e22;border-radius:8px;">
-          <div style="font-size:11px;font-weight:700;color:#e67e22;margin-bottom:6px;">🛠 デモ用シミュレーション</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <button class="btn btn-s btn-sm" onclick="bSimulateImport(1)">① 業態・ブランド完了</button>
-            <button class="btn btn-s btn-sm" onclick="bSimulateImport(2)">② 店舗完了</button>
-            <button class="btn btn-s btn-sm" onclick="bSimulateImport(3)">③ 雇用区分完了</button>
-            <button class="btn btn-s btn-sm" onclick="bSimulateImport(4)">④ 全項目完了</button>
-            <button class="btn btn-s btn-sm" onclick="b0DemoReset()" style="color:#c62828;border-color:#f5c2c2;">🔄 状態をリセット(未完了に戻す)</button>
-          </div>
-        </div>
+        <!-- (デモシミュレーションは b0 メイン最上部に移設、完了状態でも常時表示) -->
       </div>
 
       <!-- 順序明示型 初期セットアップ ウィザード (manual mode時のみ表示) -->
