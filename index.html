@@ -3029,21 +3029,9 @@ window.addEventListener('DOMContentLoaded', function() {
 // デモ用: セッション状態を完全リセット(モック開発確認用)
 function b0DemoReset() {
   if (!confirm('初期セットアップの進捗・件数・下書きを全てリセットしますか？')) return;
-  try {
-    sessionStorage.removeItem('b0Done');
-    sessionStorage.removeItem('b0Counts');
-    sessionStorage.removeItem('b0EmptyMode');
-    sessionStorage.removeItem('b0SetupActiveStep');
-    sessionStorage.removeItem('b0Draft_1');
-    sessionStorage.removeItem('b0Draft_2');
-    sessionStorage.removeItem('b0Draft_3');
-    sessionStorage.removeItem('b0Draft_4');
-    sessionStorage.removeItem('b0Method');
-    sessionStorage.removeItem('b0ImportMethod');
-  } catch (e) {}
-  // URLクエリを消し、キャッシュバスタを付けて確実にリロード
-  var bust = '?nocache=' + Date.now();
-  location.href = location.pathname + bust + '#b0';
+  try { sessionStorage.clear(); } catch (e) {}
+  // location.replace で URL クエリを消した上で、確実にフルリロードを発生させる
+  window.location.replace(location.pathname + '?reset=' + Date.now() + '#b0');
 }
 
 /* デモ用: 設定画面の 設定前(empty) ↔ 設定後(filled) 切替 */
