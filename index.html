@@ -484,11 +484,17 @@
     <span class="nav-tab" onclick="go('b0')" id="nav-b0">初期セットアップ</span>
     <span class="nav-tab" onclick="go('b0-empty')" id="nav-b0-empty">打刻記録(未セットアップ)</span>
     <span class="nav-sep"></span>
-    <span class="nav-flow" style="color:#1a73e8;">🔁 B' 設定画面（新規/運用 兼用 ・ setupモード時はバナー表示）</span>
-    <span class="nav-tab" onclick="go('brand-settings')" id="nav-brand-settings">業態・ブランド</span>
-    <span class="nav-tab" onclick="go('store-settings')" id="nav-store-settings">店舗</span>
-    <span class="nav-tab" onclick="go('emptype-settings')" id="nav-emptype-settings">雇用区分</span>
-    <span class="nav-tab" onclick="go('emp-settings')" id="nav-emp-settings">従業員</span>
+    <span class="nav-flow" style="color:#1a73e8;">🔁 B' 設定画面A(新規登録・setup mode)</span>
+    <span class="nav-tab" onclick="go('brand-settings')" id="nav-brand-settings">[新規]業態・ブランド</span>
+    <span class="nav-tab" onclick="go('store-settings')" id="nav-store-settings">[新規]店舗</span>
+    <span class="nav-tab" onclick="go('emptype-settings')" id="nav-emptype-settings">[新規]雇用区分</span>
+    <span class="nav-tab" onclick="go('emp-settings')" id="nav-emp-settings">[新規]従業員</span>
+    <span class="nav-sep"></span>
+    <span class="nav-flow" style="color:#1565c0;">⚙ B'' 設定画面B(運用更新・ops mode)</span>
+    <span class="nav-tab" onclick="go('brand-ops-settings')" id="nav-brand-ops-settings">[運用]業態・ブランド</span>
+    <span class="nav-tab" onclick="go('store-ops-settings')" id="nav-store-ops-settings">[運用]店舗</span>
+    <span class="nav-tab" onclick="go('emptype-ops-settings')" id="nav-emptype-ops-settings">[運用]雇用区分</span>
+    <span class="nav-tab" onclick="go('emp-ops-settings')" id="nav-emp-ops-settings">[運用]従業員</span>
     <span class="nav-flow">C 従業員</span>
     <span class="nav-tab" onclick="go('c1')" id="nav-c1">オーナー視点</span>
     <span class="nav-tab" onclick="go('c2')" id="nav-c2">管理者視点</span>
@@ -1133,6 +1139,72 @@
 <!-- ===== 新規初期セットアップ専用 インポート画面 (運用更新用とは分離) ===== -->
 <!-- 注意: 既存インポートモック(rakmy-timerecord-import-spec) は運用更新専用。
      ガイド経由の新規登録は下記の専用ページを使用する。 -->
+
+
+<!-- ===== 運用更新専用 設定画面B (空状態ヒーロー/setup banner 不要) ===== -->
+<!-- 業態・ブランド(運用) -->
+<div class="page" id="page-brand-ops-settings">
+  <div class="dash">
+    <aside class="sb">
+      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+      <div class="sb-sec"><a href="#" onclick="event.preventDefault();go('b0-empty')"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📥</span>エクスポート</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
+      <div class="sb-sec"><div class="sl">設定(運用)</div><a href="#" onclick="event.preventDefault();go('emp-ops-settings')"><span class="ic">👤</span>従業員</a><a href="#" onclick="event.preventDefault();go('emptype-ops-settings')"><span class="ic">📋</span>雇用区分</a><a href="#" onclick="event.preventDefault();go('store-ops-settings')"><span class="ic">🏠</span>店舗情報</a><a href="#" class="act"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="event.preventDefault();go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a></div>
+      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
+    </aside>
+    <main class="mc" style="background:#f8f9fa;">
+      <div class="ph"><h2>業態・ブランド <span style="font-size:10px;color:#1a73e8;font-weight:600;background:#e3f2fd;padding:3px 10px;border-radius:12px;margin-left:8px;">運用更新</span></h2><div style="display:flex;gap:8px;"><a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">📥 CSVインポート ↗</a><button class="btn btn-p" onclick="bOpenStep(1, 'ops')">+ ブランドを追加</button></div></div>
+      <div class="post-list"><div class="pl-row"><div class="nm">ラクミー食堂</div><div class="meta">飲食店 / RKM</div></div><div class="pl-row"><div class="nm">ラクミーカフェ</div><div class="meta">カフェ / RKC</div></div><div class="pl-row"><div class="nm">ラクミーバル</div><div class="meta">居酒屋・バー / RKB</div></div></div>
+    </main>
+  </div>
+</div>
+
+<!-- 店舗(運用) -->
+<div class="page" id="page-store-ops-settings">
+  <div class="dash">
+    <aside class="sb">
+      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+      <div class="sb-sec"><a href="#" onclick="event.preventDefault();go('b0-empty')"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📥</span>エクスポート</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
+      <div class="sb-sec"><div class="sl">設定(運用)</div><a href="#" onclick="event.preventDefault();go('emp-ops-settings')"><span class="ic">👤</span>従業員</a><a href="#" onclick="event.preventDefault();go('emptype-ops-settings')"><span class="ic">📋</span>雇用区分</a><a href="#" class="act"><span class="ic">🏠</span>店舗情報</a><a href="#" onclick="event.preventDefault();go('brand-ops-settings')"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="event.preventDefault();go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a></div>
+      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
+    </aside>
+    <main class="mc" style="background:#f8f9fa;">
+      <div class="ph"><h2>店舗情報 <span style="font-size:10px;color:#1a73e8;font-weight:600;background:#e3f2fd;padding:3px 10px;border-radius:12px;margin-left:8px;">運用更新</span></h2><div style="display:flex;gap:8px;"><a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">📥 CSVインポート ↗</a><button class="btn btn-p" onclick="bOpenStep(2, 'ops')">+ 店舗を追加</button></div></div>
+      <div class="post-list"><div class="pl-row"><div class="nm">渋谷店</div><div class="meta">ラクミー食堂 / 渋谷区道玄坂 / 11:00-23:00</div></div><div class="pl-row"><div class="nm">新宿店</div><div class="meta">ラクミー食堂 / 新宿区西新宿 / 11:00-23:00</div></div><div class="pl-row"><div class="nm">池袋店</div><div class="meta">ラクミー食堂 / 豊島区池袋 / 11:00-22:00</div></div><div class="pl-row"><div class="nm">表参道店</div><div class="meta">ラクミーカフェ / 港区南青山 / 8:00-21:00</div></div><div class="pl-row"><div class="nm">六本木店</div><div class="meta">ラクミーバル / 港区六本木 / 17:00-翌2:00</div></div></div>
+    </main>
+  </div>
+</div>
+
+<!-- 雇用区分(運用) -->
+<div class="page" id="page-emptype-ops-settings">
+  <div class="dash">
+    <aside class="sb">
+      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+      <div class="sb-sec"><a href="#" onclick="event.preventDefault();go('b0-empty')"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📥</span>エクスポート</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
+      <div class="sb-sec"><div class="sl">設定(運用)</div><a href="#" onclick="event.preventDefault();go('emp-ops-settings')"><span class="ic">👤</span>従業員</a><a href="#" class="act"><span class="ic">📋</span>雇用区分</a><a href="#" onclick="event.preventDefault();go('store-ops-settings')"><span class="ic">🏠</span>店舗情報</a><a href="#" onclick="event.preventDefault();go('brand-ops-settings')"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="event.preventDefault();go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a></div>
+      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
+    </aside>
+    <main class="mc" style="background:#f8f9fa;">
+      <div class="ph"><h2>雇用区分 <span style="font-size:10px;color:#1a73e8;font-weight:600;background:#e3f2fd;padding:3px 10px;border-radius:12px;margin-left:8px;">運用更新</span></h2><div style="display:flex;gap:8px;"><a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">📥 CSVインポート ↗</a><button class="btn btn-p" onclick="bOpenStep(3, 'ops')">+ 雇用区分を追加</button></div></div>
+      <div class="post-list"><div class="pl-row"><div class="nm">正社員</div><div class="meta">月給 ・ ¥250,000〜</div></div><div class="pl-row"><div class="nm">契約社員</div><div class="meta">月給 ・ ¥200,000〜</div></div><div class="pl-row"><div class="nm">アルバイト</div><div class="meta">時給 ・ ¥1,200〜</div></div><div class="pl-row"><div class="nm">業務委託</div><div class="meta">日給 ・ ¥10,000〜</div></div></div>
+    </main>
+  </div>
+</div>
+
+<!-- 従業員(運用) -->
+<div class="page" id="page-emp-ops-settings">
+  <div class="dash">
+    <aside class="sb">
+      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+      <div class="sb-sec"><a href="#" onclick="event.preventDefault();go('b0-empty')"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📥</span>エクスポート</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
+      <div class="sb-sec"><div class="sl">設定(運用)</div><a href="#" class="act"><span class="ic">👤</span>従業員</a><a href="#" onclick="event.preventDefault();go('emptype-ops-settings')"><span class="ic">📋</span>雇用区分</a><a href="#" onclick="event.preventDefault();go('store-ops-settings')"><span class="ic">🏠</span>店舗情報</a><a href="#" onclick="event.preventDefault();go('brand-ops-settings')"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="event.preventDefault();go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a></div>
+      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
+    </aside>
+    <main class="mc" style="background:#f8f9fa;">
+      <div class="ph"><h2>従業員 <span style="font-size:10px;color:#1a73e8;font-weight:600;background:#e3f2fd;padding:3px 10px;border-radius:12px;margin-left:8px;">運用更新</span></h2><div style="display:flex;gap:8px;"><a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">📥 CSVインポート ↗</a><button class="btn btn-p" onclick="bOpenStep(4, 'ops')">+ 従業員を追加</button></div></div>
+      <div class="post-list"><div class="pl-row"><div class="nm">吉田 七美</div><div class="meta">渋谷店 / 正社員 / <span style="color:#f0960a;">招待中</span></div></div><div class="pl-row"><div class="nm">鈴木 太郎</div><div class="meta">新宿店 / アルバイト / <span style="color:#1a9e7e;">有効</span></div></div><div class="pl-row"><div class="nm">田中 花子</div><div class="meta">池袋店 / 契約社員 / <span style="color:#1a9e7e;">有効</span></div></div><div class="pl-row"><div class="nm">山田 健一</div><div class="meta">表参道店 / 正社員 / <span style="color:#1a9e7e;">有効</span></div></div><div class="pl-row"><div class="nm">佐藤 美咲</div><div class="meta">六本木店 / アルバイト / <span style="color:#1a9e7e;">有効</span></div></div><div class="pl-row"><div class="nm">高橋 直樹</div><div class="meta">渋谷店 / 業務委託 / <span style="color:#1a9e7e;">有効</span></div></div><div class="pl-row"><div class="nm">伊藤 由佳</div><div class="meta">新宿店 / アルバイト / <span style="color:#1a9e7e;">有効</span></div></div><div style="padding:8px 4px;color:#888;font-size:11px;text-align:center;">他 12 名</div></div>
+    </main>
+  </div>
+</div>
 
 <!-- ① 業態・ブランド インポート -->
 <!-- 業態・ブランド設定 -->
@@ -2549,7 +2621,11 @@ function bConfigureStep4Buttons() {
   if (!btnGrp) return;
   var primary = btnGrp.querySelector('.btn-p');
   if (!primary) return;
-  var isSetup = (loadSetupActiveStep() === 4);
+  // 画面ID + done で判定: 設定画面A+未完了=setup、それ以外=ops
+  var activePage = document.querySelector('.page.active');
+  var pageId = activePage ? activePage.id : '';
+  var isSetupPage = /^page-(brand|store|emptype|emp)-settings$/.test(pageId) || pageId === 'page-b0';
+  var isSetup = (isSetupPage && b0LoadDone() < 4);
   // 既存の「登録のみ」ボタン(ops用)を一旦削除
   var oldRegOnly = btnGrp.querySelector('.btn-register-only');
   if (oldRegOnly) oldRegOnly.remove();
@@ -4343,20 +4419,30 @@ function b0SubmitBatch(stepNum, withInvite) {
   b0SaveCounts(counts);
   bCloseStep();
 
-  // ★ done ベースで一意判定: done<4=新規登録中(モーダル) / done>=4=運用中(トースト)
-  if (b0LoadDone() < 4) {
-    // 新規登録中: 橋渡しCTAモーダル
+  // ★ 画面ID + done ベースで判定:
+  // 設定画面A(*-settings) + done<4 → setupモード(モーダル)
+  // 設定画面B(*-ops-settings) → 必ずops(トースト)
+  // それ以外 → done<4 ならsetup、>=4 ならops
+  var activePage = document.querySelector('.page.active');
+  var pageId = activePage ? activePage.id : '';
+  var isOpsPage = /^page-(brand|store|emptype|emp)-ops-settings$/.test(pageId);
+  var isSetupPage = /^page-(brand|store|emptype|emp)-settings$/.test(pageId);
+
+  if (isOpsPage) {
+    // 設定画面B(運用) → トースト
+    bShowToast(stepNum);
+  } else if (b0LoadDone() < 4 && (isSetupPage || pageId === 'page-b0')) {
+    // 設定画面A(新規) または b0画面 + 未完了 → 橋渡しCTAモーダル
     var info = SETTING_PAGES[stepNum - 1];
     if (info) switchSettingMode(info.id, 'filled');
     var prevDone = b0LoadDone();
     if (prevDone < stepNum) b0SaveDone(stepNum);
-    // setupActiveStep が未セット時はこのSTEPにセット(動線整合)
     if (loadSetupActiveStep() !== stepNum) saveSetupActiveStep(stepNum);
     b0ClearDraft(stepNum);
     renderSetupSettingsUI(stepNum);
     bShowSetupBatchModal(stepNum, n);
   } else {
-    // 運用中(初期登録後): トースト
+    // 完了済または不明 → トースト
     bShowToast(stepNum);
   }
 }
