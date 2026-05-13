@@ -775,12 +775,19 @@
       <!-- モック開発用デモシミュレーション(完了/未完了切替・常時表示) -->
       <div style="margin-bottom:14px;padding:10px 14px;background:#fff3e0;border:1px dashed #e67e22;border-radius:8px;max-width:760px;">
         <div style="font-size:11px;font-weight:700;color:#e67e22;margin-bottom:6px;">🛠 デモ用シミュレーション(モック確認用・常時表示)</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
+          <span style="font-size:10px;color:#888;font-weight:600;align-self:center;">完了:</span>
+          <button class="btn btn-s btn-sm" onclick="bSimulateImport(1)">① 業態</button>
+          <button class="btn btn-s btn-sm" onclick="bSimulateImport(2)">② 店舗</button>
+          <button class="btn btn-s btn-sm" onclick="bSimulateImport(3)">③ 雇用区分</button>
+          <button class="btn btn-s btn-sm" onclick="bSimulateImport(4)">④ 必須4項目</button>
+        </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <button class="btn btn-s btn-sm" onclick="bSimulateImport(1)">① 業態完了</button>
-          <button class="btn btn-s btn-sm" onclick="bSimulateImport(2)">② 店舗完了</button>
-          <button class="btn btn-s btn-sm" onclick="bSimulateImport(3)">③ 雇用区分完了</button>
-          <button class="btn btn-s btn-sm" onclick="bSimulateImport(4)">④ 必須4項目完了</button>
-          <button class="btn btn-s btn-sm" onclick="b0SimulateDraft()" style="color:#e67e22;border-color:#ffd9b0;">⏸ 中断デモ生成(設定+CSV)</button>
+          <span style="font-size:10px;color:#888;font-weight:600;align-self:center;">中断:</span>
+          <button class="btn btn-s btn-sm" onclick="bDemoAlert()" style="color:#e67e22;border-color:#ffd9b0;">⚠️ アラート(未完了)</button>
+          <button class="btn btn-s btn-sm" onclick="bDemoDraftSettings()" style="color:#e67e22;border-color:#ffd9b0;">⏸ 中断:設定画面</button>
+          <button class="btn btn-s btn-sm" onclick="bDemoDraftTpl()" style="color:#e67e22;border-color:#ffd9b0;">⏸ 中断:CSV(テンプレ)</button>
+          <button class="btn btn-s btn-sm" onclick="bDemoDraftSaas()" style="color:#e67e22;border-color:#ffd9b0;">⏸ 中断:CSV(外部勤怠)</button>
           <button class="btn btn-s btn-sm" onclick="b0DemoReset()" style="color:#c62828;border-color:#f5c2c2;">🔄 未完了に戻す</button>
         </div>
       </div>
@@ -3074,28 +3081,81 @@ window.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-// デモ用: 中断状態を再現(設定画面下書き + CSVインポート中断 のダミーデータをセット)
-function b0SimulateDraft() {
+// デモ用ヘルパー: 全クリア → 指定状態をセット
+function _bDemoClearAll() {
   try {
-    // 必須4STEPのうち2STEP完了で、STEP 2(店舗)の下書きあり + CSVインポート中断中
-    sessionStorage.setItem('b0Done', '2');
+    sessionStorage.removeItem('b0Draft_1');
+    sessionStorage.removeItem('b0Draft_2');
+    sessionStorage.removeItem('b0Draft_3');
+    sessionStorage.removeItem('b0Draft_4');
+    localStorage.removeItem('import_in_progress');
+  } catch (e) {}
+}
+
+// デモ用: アラート時(完全未完了)を再現
+function bDemoAlert() {
+  _bDemoClearAll();
+  try {
+    sessionStorage.setItem('b0Done', '0');
+    sessionStorage.setItem('b0Counts', JSON.stringify([0, 0, 0, 0, 0]));
+    sessionStorage.setItem('b0EmptyMode', 'alert');
+    clearSetupActiveStep();
+  } catch (e) {}
+  alert('🛠 「⚠️ アラート(完全未完了)」状態を再現しました\n→ 打刻記録画面で確認できます。');
+  b0SetState(0);
+}
+
+// デモ用: 設定画面登録の中断(STEP 2 店舗で下書き2件、業態のみ完了)
+function bDemoDraftSettings() {
+  _bDemoClearAll();
+  try {
+    sessionStorage.setItem('b0Done', '1');
     sessionStorage.setItem('b0Counts', JSON.stringify([1, 0, 0, 0, 0]));
-    // STEP 2(店舗) のダミー下書き(2件分)
     sessionStorage.setItem('b0Draft_2', JSON.stringify([
       { inputs: ['渋谷店', '東京都渋谷区道玄坂1-1-1', '11:00', '23:00'], selects: [0] },
       { inputs: ['新宿店', '東京都新宿区西新宿2-2-2', '11:00', '22:00'], selects: [0] }
     ]));
-    // CSVインポート中断(SaaS の ②マッピング設定 で停止)
+    sessionStorage.setItem('b0EmptyMode', 'alert');
+    clearSetupActiveStep();
+  } catch (e) {}
+  alert('🛠 「⏸ 設定画面登録 中断」状態を再現\n・業態のみ完了(1/4)\n・STEP 2(店舗) 下書き2件\n→ 打刻記録画面で確認できます。');
+  b0SetState(1);
+}
+
+// デモ用: CSVインポート(テンプレ)中断
+function bDemoDraftTpl() {
+  _bDemoClearAll();
+  try {
+    sessionStorage.setItem('b0Done', '0');
+    sessionStorage.setItem('b0Counts', JSON.stringify([0, 0, 0, 0, 0]));
+    localStorage.setItem('import_in_progress', JSON.stringify({
+      type: 'template', completed: 0, total: 4,
+      currentStep: 's-tpl2', label: '② 確認・実行',
+      startedAt: Date.now()
+    }));
+    sessionStorage.setItem('b0EmptyMode', 'alert');
+    clearSetupActiveStep();
+  } catch (e) {}
+  alert('🛠 「⏸ CSVインポート(テンプレ) 中断」状態を再現\n・テンプレートインポート ②確認・実行 で停止\n→ 打刻記録画面で確認できます。');
+  b0SetState(0);
+}
+
+// デモ用: CSVインポート(外部勤怠サービス)中断
+function bDemoDraftSaas() {
+  _bDemoClearAll();
+  try {
+    sessionStorage.setItem('b0Done', '0');
+    sessionStorage.setItem('b0Counts', JSON.stringify([0, 0, 0, 0, 0]));
     localStorage.setItem('import_in_progress', JSON.stringify({
       type: 'saas', completed: 1, total: 5,
       currentStep: 's-saas2', label: '② マッピング設定',
       startedAt: Date.now()
     }));
     sessionStorage.setItem('b0EmptyMode', 'alert');
+    clearSetupActiveStep();
   } catch (e) {}
-  alert('🛠 中断デモを生成しました\n\n・必須STEP: 1/4 完了(業態のみ)\n・STEP 2(店舗) 下書き 2件\n・CSVインポート(SaaS) 中断中 1/5 ②マッピング設定\n\n打刻記録画面で確認できます。');
-  // 反映のため b0画面を再描画
-  b0SetState(b0LoadDone());
+  alert('🛠 「⏸ CSVインポート(外部勤怠サービス) 中断」状態を再現\n・SaaS連携 ②マッピング設定 で停止(1/5)\n→ 打刻記録画面で確認できます。');
+  b0SetState(0);
 }
 
 // デモ用: セッション状態を完全リセット(モック開発確認用)
