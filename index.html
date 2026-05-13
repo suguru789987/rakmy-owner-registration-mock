@@ -2785,10 +2785,10 @@ function refreshB0ResumeBanner(forceShow) {
     btn.textContent = 'セットアップを確認 →';
   }
 
-  // 中断ポイントCTAエリア(1行表記でシンプル化)
+  // 中断ポイントCTAエリア(メインCTAと同じプライマリスタイルで目立たせる)
   var resumeItems = [];
   draftSteps.forEach(function(d) {
-    resumeItems.push('<button class="btn btn-o btn-sm" style="padding:3px 9px;font-size:11px;" onclick="b0ResumeDraftStep(' + d.step + ')">STEP ' + d.step + ' ' + d.name + '(下書き' + d.count + '件) →</button>');
+    resumeItems.push('<button class="btn btn-p btn-sm" onclick="b0ResumeDraftStep(' + d.step + ')">▶ STEP ' + d.step + ' ' + d.name + '(下書き' + d.count + '件) から再開</button>');
   });
   if (importInProgress) {
     var typeLabel = importInProgress.type === 'template' ? 'テンプレ' : 'SaaS';
@@ -2797,12 +2797,12 @@ function refreshB0ResumeBanner(forceShow) {
     var completed = importInProgress.completed || 0;
     var total = importInProgress.total || 1;
     var label = importInProgress.label || '進行中';
-    resumeItems.push('<a class="btn btn-o btn-sm" style="padding:3px 9px;font-size:11px;text-decoration:none;display:inline-flex;align-items:center;" href="' + importUrl + '" target="_blank" rel="noopener">📥 CSV(' + typeLabel + ') ' + completed + '/' + total + ' ' + label + ' →</a>');
+    resumeItems.push('<a class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;" href="' + importUrl + '" target="_blank" rel="noopener">▶ 📥 CSV(' + typeLabel + ') ' + completed + '/' + total + ' ' + label + ' から再開</a>');
   }
   var resumeBlock = '';
   if (resumeItems.length > 0) {
-    resumeBlock = '<div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:11px;">' +
-                  '<span style="color:#666;">⏸ 中断中:</span>' + resumeItems.join('') + '</div>';
+    resumeBlock = '<div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ccc;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">' +
+                  '<span style="font-size:11px;color:#666;font-weight:700;align-self:center;">⏸ 中断ポイント:</span>' + resumeItems.join('') + '</div>';
   }
   msg.innerHTML = mainMsg + resumeBlock;
 }
