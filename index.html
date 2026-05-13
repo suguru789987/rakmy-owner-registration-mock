@@ -977,7 +977,6 @@
         <div id="b0-step5-empty" style="background:#fff;border:1px dashed #ddd;border-radius:10px;padding:54px 30px;text-align:center;color:#888;">
           <div style="font-size:42px;margin-bottom:14px;">👥</div>
           <div style="font-size:15px;font-weight:700;color:#555;margin-bottom:8px;">まだ管理者が登録されていません</div>
-          <div style="font-size:11px;line-height:1.8;margin-bottom:18px;">右上の「+ 新規追加」ボタンから登録できます。<br>管理者は<strong>任意項目</strong>のため、登録せずに完了することもできます。</div>
           <button class="btn btn-p" onclick="bOpenSetupAdminModal()">+ 管理者を登録する</button>
         </div>
 
@@ -1031,7 +1030,6 @@
       <div id="setup-admin-empty" style="background:#fff;border:1px dashed #ddd;border-radius:10px;padding:54px 30px;text-align:center;color:#888;">
         <div style="font-size:42px;margin-bottom:14px;">👥</div>
         <div style="font-size:15px;font-weight:700;color:#555;margin-bottom:8px;">まだ管理者が登録されていません</div>
-        <div style="font-size:11px;line-height:1.8;margin-bottom:18px;">右上の「+ 新規追加」ボタンから登録できます。<br>管理者は<strong>任意項目</strong>のため、登録せずに初期セットアップを完了することもできます。</div>
         <button class="btn btn-p" onclick="bOpenSetupAdminModal()">+ 管理者を登録する</button>
       </div>
 
@@ -3067,8 +3065,7 @@ function initSettingModeToggles() {
       var ctaText = '+ ' + p.label + 'を登録する';
       var ctaOnclick = (p.id === 'd1') ? "go('d2')" : ("bOpenStep(" + (idx + 1) + ",'ops')");
       empty.innerHTML = '<div style="font-size:42px;margin-bottom:14px;">📭</div>' +
-        '<div style="font-size:15px;font-weight:700;color:#555;margin-bottom:8px;">まだ' + p.label + 'が登録されていません</div>' +
-        '<div style="font-size:11px;line-height:1.8;margin-bottom:18px;">下記のボタンから登録できます。</div>' +
+        '<div style="font-size:15px;font-weight:700;color:#555;margin-bottom:14px;">まだ' + p.label + 'が登録されていません</div>' +
         '<button class="btn btn-p" onclick="' + ctaOnclick + '">' + ctaText + '</button>';
       list.parentNode.insertBefore(empty, list);
     }
