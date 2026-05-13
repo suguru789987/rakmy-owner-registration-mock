@@ -848,12 +848,8 @@
         </div>
       </div>
 
-      <!-- Step 0: 登録方法選択 -->
+      <!-- 登録方法選択 -->
       <div class="method-picker" id="b0-method-picker">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-          <span style="background:#2ec4a5;color:#fff;padding:2px 10px;border-radius:10px;font-size:10px;font-weight:700;">Step 1</span>
-          <span style="font-size:12px;font-weight:700;color:#555;">📌 まずは登録方法を選択</span>
-        </div>
         <div class="method-options">
           <div class="method-card" id="method-card-manual" onclick="b0SetMethod('manual')">
             <div class="mc-ic">✏️</div>
@@ -868,26 +864,17 @@
 
       <!-- インポートパネル(method=importの時のみ表示) -->
       <div class="import-panel" id="b0-import-panel">
-        <h3>📥 CSVインポートで一括登録</h3>
-
-        <!-- Step 2: 方式選択(分岐) -->
-        <div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:8px;padding:12px 14px;margin-bottom:14px;">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-            <span style="background:#2ec4a5;color:#fff;padding:2px 10px;border-radius:10px;font-size:10px;font-weight:700;">Step 2</span>
-            <span style="font-size:12px;font-weight:700;color:#555;">方式を選択</span>
+        <div class="method-options">
+          <div class="method-card act imethod-pill" id="imp-method-template" onclick="bSetImportMethod('template', true)">
+            <div class="mc-ic">📋</div>
+            <div class="mc-name">テンプレートで取り込み</div>
           </div>
-          <div class="method-options">
-            <div class="method-card act imethod-pill" id="imp-method-template" onclick="bSetImportMethod('template', true)">
-              <div class="mc-ic">📋</div>
-              <div class="mc-name">テンプレートで取り込み</div>
-            </div>
-            <div class="method-card imethod-pill" id="imp-method-external" onclick="bSetImportMethod('external', true)">
-              <div class="mc-ic">🔄</div>
-              <div class="mc-name">外部勤怠サービスから取り込み</div>
-            </div>
+          <div class="method-card imethod-pill" id="imp-method-external" onclick="bSetImportMethod('external', true)">
+            <div class="mc-ic">🔄</div>
+            <div class="mc-name">外部勤怠サービスから取り込み</div>
           </div>
-          <div style="font-size:10px;color:#888;margin-top:8px;">※ 選択するとインポート画面が新しいタブで開きます。</div>
         </div>
+        <div style="font-size:10px;color:#888;margin-top:8px;">※ 選択するとインポート画面が新しいタブで開きます。</div>
 
         <!-- インポートガイド(チップ進捗)はピル選択即遷移のため撤去。
              方式選択ピル直下の案内文「※選択するとインポート画面が新しいタブで開きます」が役割を果たす。
