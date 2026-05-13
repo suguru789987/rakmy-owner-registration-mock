@@ -1843,7 +1843,11 @@
             </div>
 
             <div class="al al-i"><span>💡</span><div>管理者がパスワードを忘れた場合は、ログイン画面の「パスワードを忘れた」から自分でリセットできます。</div></div>
-            <div class="btn-grp"><button class="btn btn-s" onclick="go('d1')">キャンセル</button><button class="btn btn-p" onclick="go('d1')">登録</button></div>
+            <div class="btn-grp">
+              <button class="btn btn-s" onclick="go('d1')">キャンセル</button>
+              <button class="btn btn-s" onclick="d2SubmitRegisterOnly()">登録のみ (招待は後で)</button>
+              <button class="btn btn-p" onclick="d2SubmitWithInvite()">登録 & 招待送信</button>
+            </div>
           </div>
         </div>
       </div>
@@ -2494,6 +2498,37 @@ function bOpenStep(stepNum, flow) {
       setTimeout(function() { restoreDraftToModal(stepNum, draft); }, 50);
     }
   }
+  // STEP 4 (従業員) のみ: setup=統合 / ops=分離 でボタンを切替
+  if (stepNum === 4) bConfigureStep4Buttons();
+}
+
+function bConfigureStep4Buttons() {
+  var modal = document.getElementById('b-step-modal-4');
+  if (!modal) return;
+  var btnGrp = modal.querySelector('.btn-grp');
+  if (!btnGrp) return;
+  var primary = btnGrp.querySelector('.btn-p');
+  if (!primary) return;
+  var isSetup = (loadSetupActiveStep() === 4);
+  // 既存の「登録のみ」ボタン(ops用)を一旦削除
+  var oldRegOnly = btnGrp.querySelector('.btn-register-only');
+  if (oldRegOnly) oldRegOnly.remove();
+  if (isSetup) {
+    // setup mode: 統合のみ
+    primary.innerHTML = '登録 & 招待送信 (<span class="batch-count-display">1</span>件)';
+    primary.setAttribute('onclick', 'b0SubmitBatch(4, true)');
+  } else {
+    // ops mode: 分離(登録のみ / 登録 & 招待送信)
+    primary.innerHTML = '登録 & 招待送信 (<span class="batch-count-display">1</span>件)';
+    primary.setAttribute('onclick', 'b0SubmitBatch(4, true)');
+    var regOnly = document.createElement('button');
+    regOnly.type = 'button';
+    regOnly.className = 'btn btn-s btn-register-only';
+    regOnly.innerHTML = '登録のみ (招待は後で)';
+    regOnly.setAttribute('onclick', 'b0SubmitBatch(4, false)');
+    btnGrp.insertBefore(regOnly, primary);
+  }
+  bUpdateBatchCount(4);
 }
 function bCloseStep() {
   document.querySelectorAll('.b-step-overlay').forEach(function(o){ o.classList.remove('act'); });
@@ -2868,8 +2903,15 @@ function bShowToast(stepNum) {
       actions = '<button class="btn btn-p" onclick="bToastAction(4)">この区分の従業員を登録 →</button>' +
                 '<button class="btn btn-s" onclick="bDismissToast()">閉じる</button>';
     } else {
-      // stepNum === 4(従業員追加直後・運用)
-      nextEl.textContent = '新しい従業員を登録しました。招待メールは「従業員一覧」の招待送信ボタンから送信してください。';
+      // stepNum === 4(従業員追加直後・運用): withInvite で文言を出し分け
+      var withInvite = (window._lastSubmitWithInvite !== false); // デフォルトtrue
+      if (withInvite) {
+        titleEl.textContent = '✓ 従業員を登録し、招待メールを送信しました';
+        nextEl.textContent = '招待メール(72h)を送信済みです。受信者がPW設定すると「有効」になります。';
+      } else {
+        titleEl.textContent = '✓ 従業員を登録しました(招待メール未送信)';
+        nextEl.textContent = '招待メールは「従業員一覧」の「招待送信」ボタンから後で送信できます。';
+      }
       actions = '<button class="btn btn-p" onclick="bDismissToast();go(\'c1\');">従業員一覧へ →</button>' +
                 '<button class="btn btn-s" onclick="bDismissToast()">閉じる</button>';
     }
@@ -3442,6 +3484,37 @@ function setupCompleteAll() {
   go('b0');
 }
 
+// d2 ops mode 用: 「登録のみ」「登録 & 招待送信」
+function d2SubmitRegisterOnly() {
+  // 招待メール未送信、d1 へ戻る + 軽量トースト
+  go('d1');
+  setTimeout(function(){
+    var toast = document.getElementById('b-toast');
+    if (toast) {
+      document.getElementById('b-toast-title').textContent = '✓ 管理者を登録しました(招待メール未送信)';
+      document.getElementById('b-toast-next').textContent = '招待メールは管理者一覧の「招待送信」ボタンから後で送信できます。';
+      document.getElementById('b-toast-actions').innerHTML = '<button class="btn btn-s" onclick="bDismissToast()">閉じる</button>';
+      toast.classList.add('act');
+      clearTimeout(window.bToastTimer);
+      window.bToastTimer = setTimeout(function(){ toast.classList.remove('act'); }, 5000);
+    }
+  }, 200);
+}
+function d2SubmitWithInvite() {
+  go('d1');
+  setTimeout(function(){
+    var toast = document.getElementById('b-toast');
+    if (toast) {
+      document.getElementById('b-toast-title').textContent = '✓ 管理者を登録し、招待メールを送信しました';
+      document.getElementById('b-toast-next').textContent = '招待メール(72h)を送信済みです。受信者がPW設定すると有効になります。';
+      document.getElementById('b-toast-actions').innerHTML = '<button class="btn btn-s" onclick="bDismissToast()">閉じる</button>';
+      toast.classList.add('act');
+      clearTimeout(window.bToastTimer);
+      window.bToastTimer = setTimeout(function(){ toast.classList.remove('act'); }, 5000);
+    }
+  }, 200);
+}
+
 /* ===== STEP 5 (管理者・任意) 専用画面 =====
  * page-setup-admin: 初期登録専用「管理者一覧」画面(d1運用更新画面とは別)
  * 流れ: setup-admin(一覧+新規追加ボタン) → +新規追加 → オーバーレイモーダル(b-setup-admin-overlay)
@@ -3951,12 +4024,14 @@ function bUpdateBatchCount(stepNum) {
   modal.querySelectorAll('.batch-count-display').forEach(function(el) { el.textContent = String(n); });
 }
 
-function b0SubmitBatch(stepNum) {
+function b0SubmitBatch(stepNum, withInvite) {
+  if (withInvite === undefined) withInvite = true; // setup mode は常に true(統合)、ops STEP 4 のみ false 指定可
   var modal = document.getElementById('b-step-modal-' + stepNum);
   if (!modal) return;
   var rows = modal.querySelectorAll('.batch-tr');
   var n = rows.length;
   if (n === 0) return;
+  window._lastSubmitWithInvite = withInvite; // ops トースト文言用に保持
   var counts = b0LoadCounts();
   counts[stepNum - 1] = (counts[stepNum - 1] || 0) + n;
   b0SaveCounts(counts);
