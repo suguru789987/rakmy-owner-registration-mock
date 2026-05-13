@@ -937,7 +937,7 @@
         <span style="display:inline-block;font-size:10px;font-weight:700;color:#1a9e7e;background:#e8f8f5;padding:4px 12px;border-radius:20px;letter-spacing:1px;margin-bottom:16px;">STEP 1 / 4 ・ 初期登録</span>
         <h2 style="font-size:20px;margin-bottom:10px;">業態・ブランドを登録</h2>
         <p style="font-size:12px;color:#666;line-height:1.8;margin-bottom:24px;">店舗の業態と運営ブランド名を登録します。</p>
-        <button class="btn btn-p btn-lg" onclick="bOpenStep(1)" style="max-width:300px;">+ ブランドを登録する</button>
+        <button class="btn btn-p btn-lg" onclick="bOpenStep(1, 'setup')" style="max-width:300px;">+ ブランドを登録する</button>
       </div>
     </main>
   </div>
@@ -963,7 +963,7 @@
         <span style="display:inline-block;font-size:10px;font-weight:700;color:#1a9e7e;background:#e8f8f5;padding:4px 12px;border-radius:20px;letter-spacing:1px;margin-bottom:16px;">STEP 2 / 4 ・ 初期登録</span>
         <h2 style="font-size:20px;margin-bottom:10px;">店舗を登録</h2>
         <p style="font-size:12px;color:#666;line-height:1.8;margin-bottom:24px;">店舗名・住所・営業時間などの店舗情報を登録します。</p>
-        <button class="btn btn-p btn-lg" onclick="bOpenStep(2)" style="max-width:300px;">+ 店舗を登録する</button>
+        <button class="btn btn-p btn-lg" onclick="bOpenStep(2, 'setup')" style="max-width:300px;">+ 店舗を登録する</button>
       </div>
     </main>
   </div>
@@ -989,7 +989,7 @@
         <span style="display:inline-block;font-size:10px;font-weight:700;color:#1a9e7e;background:#e8f8f5;padding:4px 12px;border-radius:20px;letter-spacing:1px;margin-bottom:16px;">STEP 3 / 4 ・ 初期登録</span>
         <h2 style="font-size:20px;margin-bottom:10px;">雇用区分を登録</h2>
         <p style="font-size:12px;color:#666;line-height:1.8;margin-bottom:24px;">正社員・アルバイト・業務委託など、従業員の雇用区分を登録します。</p>
-        <button class="btn btn-p btn-lg" onclick="bOpenStep(3)" style="max-width:300px;">+ 雇用区分を登録する</button>
+        <button class="btn btn-p btn-lg" onclick="bOpenStep(3, 'setup')" style="max-width:300px;">+ 雇用区分を登録する</button>
       </div>
     </main>
   </div>
@@ -1015,7 +1015,7 @@
         <span style="display:inline-block;font-size:10px;font-weight:700;color:#1a9e7e;background:#e8f8f5;padding:4px 12px;border-radius:20px;letter-spacing:1px;margin-bottom:16px;">STEP 4 / 4 ・ 初期登録</span>
         <h2 style="font-size:20px;margin-bottom:10px;">従業員を登録</h2>
         <p style="font-size:12px;color:#666;line-height:1.8;margin-bottom:24px;">店舗・雇用区分を割り当てて、従業員を登録します。<br>招待メールは登録後、従業員一覧の「招待送信」ボタンから送信できます。</p>
-        <button class="btn btn-p btn-lg" onclick="bOpenStep(4)" style="max-width:300px;">+ 従業員を登録する</button>
+        <button class="btn btn-p btn-lg" onclick="bOpenStep(4, 'setup')" style="max-width:300px;">+ 従業員を登録する</button>
       </div>
     </main>
   </div>
@@ -1036,7 +1036,7 @@
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc" style="background:#f8f9fa;">
-      <div class="ph"><h2>業態・ブランド</h2><div style="display:flex;gap:8px;"><a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">📥 CSVインポート ↗</a><button class="btn btn-p" onclick="bOpenStep(1)">+ ブランドを追加</button></div></div>
+      <div class="ph"><h2>業態・ブランド</h2><div style="display:flex;gap:8px;"><a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">📥 CSVインポート ↗</a><button class="btn btn-p" onclick="bOpenStep(1, 'ops')">+ ブランドを追加</button></div></div>
       <div style="font-size:10px;color:#888;margin-bottom:10px;">💡 「📥 CSVインポート」を押すと、別タブで <strong>タイムレコード インポート画面</strong> が開きます（方式選択画面から：テンプレ / 外部連携を都度選択）。本番では取込完了後この一覧に反映されます。</div>
       <div class="post-list" id="list-brand"><div class="pl-row"><div class="nm">ラクミー食堂</div><div class="meta">飲食店 / RKM</div></div><div class="pl-row"><div class="nm">ラクミーカフェ</div><div class="meta">カフェ / RKC</div></div><div class="pl-row"><div class="nm">ラクミーバル</div><div class="meta">居酒屋・バー / RKB</div></div></div>
     </main>
@@ -1053,7 +1053,7 @@
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc" style="background:#f8f9fa;">
-      <div class="ph"><h2>店舗情報</h2><div style="display:flex;gap:8px;"><a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">📥 CSVインポート ↗</a><button class="btn btn-p" id="btn-add-store" onclick="bOpenStep(2)">+ 店舗を追加</button></div></div>
+      <div class="ph"><h2>店舗情報</h2><div style="display:flex;gap:8px;"><a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">📥 CSVインポート ↗</a><button class="btn btn-p" id="btn-add-store" onclick="bOpenStep(2, 'ops')">+ 店舗を追加</button></div></div>
       <div style="font-size:10px;color:#888;margin-bottom:10px;">💡 「📥 CSVインポート」を押すと、別タブで <strong>タイムレコード インポート画面</strong> が開きます。本番では取込完了後この一覧に反映されます。</div>
       <div class="post-list" id="list-store"><div class="pl-row"><div class="nm">渋谷店</div><div class="meta">ラクミー食堂 / 渋谷区道玄坂 / 11:00-23:00</div></div><div class="pl-row"><div class="nm">新宿店</div><div class="meta">ラクミー食堂 / 新宿区西新宿 / 11:00-23:00</div></div><div class="pl-row"><div class="nm">池袋店</div><div class="meta">ラクミー食堂 / 豊島区池袋 / 11:00-22:00</div></div><div class="pl-row"><div class="nm">表参道店</div><div class="meta">ラクミーカフェ / 港区南青山 / 8:00-21:00</div></div><div class="pl-row"><div class="nm">六本木店</div><div class="meta">ラクミーバル / 港区六本木 / 17:00-翌2:00</div></div></div>
     </main>
@@ -1070,7 +1070,7 @@
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc" style="background:#f8f9fa;">
-      <div class="ph"><h2>雇用区分</h2><div style="display:flex;gap:8px;"><a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">📥 CSVインポート ↗</a><button class="btn btn-p" onclick="bOpenStep(3)">+ 雇用区分を追加</button></div></div>
+      <div class="ph"><h2>雇用区分</h2><div style="display:flex;gap:8px;"><a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">📥 CSVインポート ↗</a><button class="btn btn-p" onclick="bOpenStep(3, 'ops')">+ 雇用区分を追加</button></div></div>
       <div style="font-size:10px;color:#888;margin-bottom:10px;">💡 「📥 CSVインポート」を押すと、別タブで <strong>タイムレコード インポート画面</strong> が開きます。本番では取込完了後この一覧に反映されます。</div>
       <div class="post-list" id="list-emptype"><div class="pl-row"><div class="nm">正社員</div><div class="meta">月給 ・ ¥250,000〜</div></div><div class="pl-row"><div class="nm">契約社員</div><div class="meta">月給 ・ ¥200,000〜</div></div><div class="pl-row"><div class="nm">アルバイト</div><div class="meta">時給 ・ ¥1,200〜</div></div><div class="pl-row"><div class="nm">業務委託</div><div class="meta">日給 ・ ¥10,000〜</div></div></div>
     </main>
@@ -1087,7 +1087,7 @@
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc" style="background:#f8f9fa;">
-      <div class="ph"><h2>従業員</h2><div style="display:flex;gap:8px;"><a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">📥 CSVインポート ↗</a><button class="btn btn-p" onclick="bOpenStep(4)">+ 従業員を追加</button></div></div>
+      <div class="ph"><h2>従業員</h2><div style="display:flex;gap:8px;"><a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">📥 CSVインポート ↗</a><button class="btn btn-p" onclick="bOpenStep(4, 'ops')">+ 従業員を追加</button></div></div>
       <div style="font-size:10px;color:#888;margin-bottom:10px;">💡 「📥 CSVインポート」を押すと、別タブで <strong>タイムレコード インポート画面</strong> が開きます。本番では取込完了後この一覧に反映されます。</div>
       <div class="post-list" id="list-emp"><div class="pl-row"><div class="nm">吉田 七美</div><div class="meta">渋谷店 / 正社員 / <span style="color:#f0960a;">招待中</span></div></div><div class="pl-row"><div class="nm">鈴木 太郎</div><div class="meta">新宿店 / アルバイト / <span style="color:#1a9e7e;">有効</span></div></div><div class="pl-row"><div class="nm">田中 花子</div><div class="meta">池袋店 / 契約社員 / <span style="color:#1a9e7e;">有効</span></div></div><div class="pl-row"><div class="nm">山田 健一</div><div class="meta">表参道店 / 正社員 / <span style="color:#1a9e7e;">有効</span></div></div><div class="pl-row"><div class="nm">佐藤 美咲</div><div class="meta">六本木店 / アルバイト / <span style="color:#1a9e7e;">有効</span></div></div><div class="pl-row"><div class="nm">高橋 直樹</div><div class="meta">渋谷店 / 業務委託 / <span style="color:#1a9e7e;">有効</span></div></div><div class="pl-row"><div class="nm">伊藤 由佳</div><div class="meta">新宿店 / アルバイト / <span style="color:#1a9e7e;">有効</span></div></div><div style="padding:8px 4px;color:#888;font-size:11px;text-align:center;">他 12 名</div></div>
       <div style="margin-top:10px;font-size:11px;color:#888;">※ 招待中ステータスの従業員は「招待送信」ボタンから招待メールを送信できます（既存機能）</div>
@@ -2337,7 +2337,19 @@ function b0SetState(doneCount) {
 }
 
 // B-STEPモーダル: 開閉(モーダルは純粋な登録フォームのみ、警告類はCTAモーダル側で扱う)
-function bOpenStep(stepNum) {
+function bOpenStep(stepNum, flow) {
+  // flow: 'setup' (新規登録) / 'ops' (運用更新) - 呼出元から明示的に指定
+  // 未指定の場合は URL から推定
+  if (flow === 'setup' || flow === 'ops') {
+    window._bModalFlow = flow;
+  } else {
+    // URLから推定
+    var activePage = document.querySelector('.page.active');
+    var pageId = activePage ? activePage.id : '';
+    if (/^page-setup-/.test(pageId) || pageId === 'page-b0') window._bModalFlow = 'setup';
+    else if (/^page-(brand|store|emptype|emp)-settings$/.test(pageId)) window._bModalFlow = 'ops';
+    else window._bModalFlow = 'ops'; // フォールバック
+  }
   document.querySelectorAll('.b-step-overlay').forEach(function(o){ o.classList.remove('act'); });
   var ov = document.getElementById('b-step-modal-' + stepNum);
   if (ov) ov.classList.add('act');
@@ -2351,17 +2363,15 @@ var SETUP_PAGES    = ['', 'setup-brand', 'setup-store', 'setup-emptype', 'setup-
 var SETTINGS_PAGES = ['', 'brand-settings', 'store-settings', 'emptype-settings', 'emp-settings'];
 
 // b0初期セットアップからの遷移: 必ず setup-* (新規登録) へ → CTAモーダル発火
-// (運用更新はサイドバー→各設定画面から直接アクセスする別動線)
 function b0Go(stepNum) {
   go(SETUP_PAGES[stepNum]);
-  setTimeout(function(){ bOpenStep(stepNum); }, 200);
+  setTimeout(function(){ bOpenStep(stepNum, 'setup'); }, 200);
 }
 
 // トースト連鎖CTAでの遷移+モーダル展開: 必ず運用設定画面(*-settings)へ
-// (トースト発火自体が運用更新モードの所作。新規登録モードは bShowBridgeModal で別系統)
 function bGotoSettingsAndOpenModal(stepNum) {
   go(SETTINGS_PAGES[stepNum]);
-  setTimeout(function(){ bOpenStep(stepNum); }, 200);
+  setTimeout(function(){ bOpenStep(stepNum, 'ops'); }, 200);
 }
 
 // 運用設定画面: 一覧更新のみ(初期モードバナーは廃止、設定画面は運用専用)
@@ -2570,30 +2580,42 @@ function b0CompleteStep(stepNum) {
   var setupMap = {'page-setup-brand':1,'page-setup-store':2,'page-setup-emptype':3,'page-setup-emp':4};
   var settingsMap = {'page-brand-settings':1,'page-store-settings':2,'page-emptype-settings':3,'page-emp-settings':4};
 
-  // ★★★ URLベースで完全分離(doneでの分岐は撤去) ★★★
-  // 設定画面(*-settings) は 運用更新 = 必ずトースト
-  // setup-* / b0 (登録ガイド) は 新規登録 = 必ずモーダル
-  // この分離は done に依存しない
+  // ★★★ 完全分離: 呼出元flow(setup/ops)優先 → URLフォールバック ★★★
+  var flow = window._bModalFlow;
 
-  // 運用更新: *-settings → CTAトースト
+  // 運用更新フロー
+  if (flow === 'ops') {
+    if (settingsMap[pageId]) refreshSettingsModeGuard(settingsMap[pageId]);
+    bShowToast(stepNum);
+    return;
+  }
+  // 新規登録フロー
+  if (flow === 'setup') {
+    if (pageId === 'page-b0') {
+      b0SetState(b0LoadDone());
+      bPulseNextStep();
+    }
+    bShowBridgeModal(stepNum);
+    return;
+  }
+
+  // ★ フォールバック(flow未設定時): URLで判定
   if (settingsMap[pageId]) {
     refreshSettingsModeGuard(settingsMap[pageId]);
     bShowToast(stepNum);
     return;
   }
-  // 新規登録: setup-* → CTAモーダル
   if (setupMap[pageId]) {
     bShowBridgeModal(stepNum);
     return;
   }
-  // 新規登録: b0 (登録ガイド) → CTAモーダル
   if (pageId === 'page-b0') {
     b0SetState(b0LoadDone());
     bPulseNextStep();
     bShowBridgeModal(stepNum);
     return;
   }
-  // フォールバック(安全側でトースト)
+  // 最終フォールバック(運用更新扱い)
   bShowToast(stepNum);
 }
 
@@ -2629,9 +2651,9 @@ function bShowBridgeModal(stepNum) {
 }
 function bBridgeProceed(nextStep) {
   document.getElementById('b-bridge-overlay').classList.remove('act');
-  // 新規登録の連鎖CTA: 必ず setup-* へ遷移(運用更新の*-settingsには飛ばさない)
+  // 新規登録の連鎖CTA: 必ず setup-* へ遷移
   go(SETUP_PAGES[nextStep]);
-  setTimeout(function(){ bOpenStep(nextStep); }, 200);
+  setTimeout(function(){ bOpenStep(nextStep, 'setup'); }, 200);
 }
 function bBridgeDismiss() {
   document.getElementById('b-bridge-overlay').classList.remove('act');
