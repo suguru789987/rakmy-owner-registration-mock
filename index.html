@@ -892,6 +892,7 @@
             <button class="btn btn-s btn-sm" onclick="bSimulateImport(2)">② 店舗完了</button>
             <button class="btn btn-s btn-sm" onclick="bSimulateImport(3)">③ 雇用区分完了</button>
             <button class="btn btn-s btn-sm" onclick="bSimulateImport(4)">④ 全項目完了</button>
+            <button class="btn btn-s btn-sm" onclick="b0DemoReset()" style="color:#c62828;border-color:#f5c2c2;">🔄 状態をリセット(未完了に戻す)</button>
           </div>
         </div>
       </div>
@@ -2973,8 +2974,30 @@ function d2OnEmpSelect() {
   });
 }
 // 起動時: URLハッシュがあれば該当画面へ
+// リロード時には sessionStorage の状態を維持(初期登録ステップから離脱させない)
+// デモ用に状態をリセットしたい場合は b0DemoReset() を呼ぶ
 window.addEventListener('DOMContentLoaded', function() {
-  // モック: 毎回未完了状態で起動(完了状態だと操作できない画面があるため)
+  initSettingModeToggles();
+  // 登録モーダル4種を「複数行入力(batch)」対応化
+  [1, 2, 3, 4].forEach(function(n) { bSetupBatchModal(n); });
+  var h = (location.hash || '').replace('#', '');
+  if (h && document.getElementById('page-' + h)) {
+    go(h);
+  } else if (loadSetupActiveStep() >= 1) {
+    // setup進行中なら b0 を表示し、該当STEPへリストア
+    var step = loadSetupActiveStep();
+    if (step === 5) {
+      go('b0');
+      setTimeout(function(){ b0ShowStep5Panel(); }, 100);
+    } else {
+      go(SETTINGS_PAGES[step]);
+    }
+  }
+});
+
+// デモ用: セッション状態を完全リセット(モック開発確認用)
+function b0DemoReset() {
+  if (!confirm('初期セットアップの進捗・件数・下書きを全てリセットしますか？')) return;
   try {
     sessionStorage.removeItem('b0Done');
     sessionStorage.removeItem('b0Counts');
@@ -2985,12 +3008,8 @@ window.addEventListener('DOMContentLoaded', function() {
     sessionStorage.removeItem('b0Draft_3');
     sessionStorage.removeItem('b0Draft_4');
   } catch (e) {}
-  initSettingModeToggles();
-  // 登録モーダル4種を「複数行入力(batch)」対応化
-  [1, 2, 3, 4].forEach(function(n) { bSetupBatchModal(n); });
-  var h = (location.hash || '').replace('#', '');
-  if (h && document.getElementById('page-' + h)) go(h);
-});
+  location.reload();
+}
 
 /* デモ用: 設定画面の 設定前(empty) ↔ 設定後(filled) 切替 */
 var SETTING_PAGES = [
