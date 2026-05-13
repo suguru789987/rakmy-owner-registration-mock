@@ -2244,13 +2244,14 @@ function b0SetMethod(m) {
 /* デモ用: インポート完了をシミュレート(静的モック⇄動的モックの連携擬似再現) */
 function bSimulateImport(uptoStep) {
   if (uptoStep < 1 || uptoStep > 4) return;
-  // 該当ステップまで進捗を更新 + 各件数を1件に補正
   b0SaveDone(uptoStep);
   var counts = b0LoadCounts();
   for (var i = 0; i < uptoStep; i++) {
     if ((counts[i] || 0) < 1) counts[i] = 1;
   }
   b0SaveCounts(counts);
+  // done=4(完了) なら setupActiveStep もクリアして ops モードへ移行(動線整合)
+  if (uptoStep >= 4) clearSetupActiveStep();
   // 設定画面に戻ったとき(または既にb0にいるとき)に反映するため、画面を再描画
   b0SetState(uptoStep);
   // インポートステップのアンロック状態も更新
@@ -3271,16 +3272,19 @@ function clearSetupActiveStep() {
 }
 
 function applySetupModeOnSettings(stepNum) {
-  var activeStep = loadSetupActiveStep();
-  if (activeStep === stepNum && activeStep > 0) {
+  // ★ done ベースで一意判定: done<4=新規登録中 → setup mode UI / done>=4=運用中 → ops UI
+  if (b0LoadDone() < 4) {
+    // 新規登録中: setup mode UI 表示
+    if (loadSetupActiveStep() !== stepNum) saveSetupActiveStep(stepNum);
     renderSetupSettingsUI(stepNum);
     if (stepNum <= 4) {
       var info = SETTING_PAGES[stepNum - 1];
-      // setup mode 進行中は常に「設定前」モードを初期表示(件数に関わらず)
-      // 登録後は b0SubmitBatch 内で switchSettingMode('filled') が呼ばれて一覧に切替わる
+      // setup mode 進行中は常に「設定前」モードを初期表示
       if (info) switchSettingMode(info.id, 'empty');
     }
   } else {
+    // 運用中(done>=4): setup UI 完全クリア → 通常の設定画面表示
+    clearSetupActiveStep();
     clearSetupSettingsUI();
   }
 }
@@ -3688,6 +3692,7 @@ function applySetupModeOnD2() {
 }
 
 // オーバーレイモーダル登録ボタン (タブ別にメール種別が異なる)
+// 注: このオーバーレイは b0画面内STEP 5 パネル経由でのみ発火する=setup mode 専用動線
 function b0SubmitAdminEntry() {
   var primary = document.querySelector('#b-setup-admin-overlay .btn-grp .btn-p');
   var which = primary ? primary.getAttribute('data-which') : 'new';
@@ -4037,34 +4042,32 @@ function bUpdateBatchCount(stepNum) {
 }
 
 function b0SubmitBatch(stepNum, withInvite) {
-  if (withInvite === undefined) withInvite = true; // setup mode は常に true(統合)、ops STEP 4 のみ false 指定可
+  if (withInvite === undefined) withInvite = true;
   var modal = document.getElementById('b-step-modal-' + stepNum);
   if (!modal) return;
   var rows = modal.querySelectorAll('.batch-tr');
   var n = rows.length;
   if (n === 0) return;
-  window._lastSubmitWithInvite = withInvite; // ops トースト文言用に保持
+  window._lastSubmitWithInvite = withInvite;
   var counts = b0LoadCounts();
   counts[stepNum - 1] = (counts[stepNum - 1] || 0) + n;
   b0SaveCounts(counts);
   bCloseStep();
-  var activeStep = loadSetupActiveStep();
-  var activePage = document.querySelector('.page.active');
-  var pageId = activePage ? activePage.id : '';
-  var settingsMap = {'page-brand-settings':1,'page-store-settings':2,'page-emptype-settings':3,'page-emp-settings':4};
 
-  if (activeStep === stepNum && settingsMap[pageId] === stepNum) {
-    // setupモード: 一覧反映 + バナー再描画 + 橋渡しCTAモーダル
+  // ★ done ベースで一意判定: done<4=新規登録中(モーダル) / done>=4=運用中(トースト)
+  if (b0LoadDone() < 4) {
+    // 新規登録中: 橋渡しCTAモーダル
     var info = SETTING_PAGES[stepNum - 1];
     if (info) switchSettingMode(info.id, 'filled');
-    // 現STEPを done として確定(setupGoNextStepを使わずに留まる場合に備えて)
     var prevDone = b0LoadDone();
     if (prevDone < stepNum) b0SaveDone(stepNum);
-    b0ClearDraft(stepNum); // 登録完了 → 下書きクリア
+    // setupActiveStep が未セット時はこのSTEPにセット(動線整合)
+    if (loadSetupActiveStep() !== stepNum) saveSetupActiveStep(stepNum);
+    b0ClearDraft(stepNum);
     renderSetupSettingsUI(stepNum);
     bShowSetupBatchModal(stepNum, n);
   } else {
-    // opsモード: 通常の登録トースト
+    // 運用中(初期登録後): トースト
     bShowToast(stepNum);
   }
 }
