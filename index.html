@@ -3335,7 +3335,12 @@ function bSetupBatchModal(stepNum) {
     var primaryBtn = btnGrp.querySelector('.btn-p');
     if (primaryBtn) {
       primaryBtn.setAttribute('onclick', 'b0SubmitBatch(' + stepNum + ')');
-      primaryBtn.innerHTML = '登録 (<span class="batch-count-display">1</span>件)';
+      // STEP 4 (従業員) のみ「登録 & 招待送信」表記
+      if (stepNum === 4) {
+        primaryBtn.innerHTML = '登録 & 招待送信 (<span class="batch-count-display">1</span>件)';
+      } else {
+        primaryBtn.innerHTML = '登録 (<span class="batch-count-display">1</span>件)';
+      }
       var draftBtn = document.createElement('button');
       draftBtn.type = 'button';
       draftBtn.className = 'btn btn-s';
@@ -3344,6 +3349,15 @@ function bSetupBatchModal(stepNum) {
       draftBtn.onclick = function() { b0SaveDraft(stepNum); };
       btnGrp.insertBefore(draftBtn, primaryBtn);
     }
+  }
+
+  // STEP 4 のみ: 列ヘッダー下にヘルプテキスト追加(招待メール一括送信の説明)
+  if (stepNum === 4) {
+    var info = document.createElement('div');
+    info.style.cssText = 'background:#e3f2fd;border:1px solid #90caf9;border-radius:6px;padding:8px 12px;margin-bottom:10px;font-size:11px;color:#1565c0;display:flex;align-items:center;gap:8px;';
+    info.innerHTML = '<span style="font-size:14px;">✉️</span><div>登録すると、入力したメールアドレスへ招待メール(72時間有効)を一括送信します。受信者がパスワードを設定すると「有効」ステータスになります。</div>';
+    var wrap = mb.querySelector('.batch-table-wrap');
+    if (wrap) mb.insertBefore(info, wrap);
   }
 }
 
@@ -3566,7 +3580,12 @@ function bShowSetupBatchModal(stepNum, n) {
   var titleEl = document.getElementById('b-bridge-title');
   var textEl = document.getElementById('b-bridge-text');
   var actEl = document.getElementById('b-bridge-actions');
-  titleEl.textContent = '✓ ' + stepNames[stepNum] + 'を' + n + '件登録しました';
+  // STEP 4 は登録+招待送信を完了タイトルで明示
+  if (stepNum === 4) {
+    titleEl.innerHTML = '✓ 従業員を' + n + '件登録し、<span style="color:#1565c0;">招待メールを' + n + '件送信</span>しました';
+  } else {
+    titleEl.textContent = '✓ ' + stepNames[stepNum] + 'を' + n + '件登録しました';
+  }
   var nextStepName = stepNum < 4 ? stepNames[stepNum + 1] : '';
   var text, actions;
   if (stepNum < 4) {
@@ -3576,9 +3595,11 @@ function bShowSetupBatchModal(stepNum, n) {
       '<button class="btn btn-s" onclick="bSetupBridgeDismiss()">この画面に留まる</button>' +
       '<button class="btn btn-s" onclick="bSetupBridgeBackToGuide()">初期セットアップTOPへ</button>';
   } else {
-    text = '初期登録の全STEPが完了しました。<br>初期セットアップを完了しますか？';
+    // STEP 4: 必須完了→ STEP 5(任意) or 完了
+    text = '必須登録(STEP 1〜4)が完了しました。<br>続けて <strong>STEP 5 (管理者・任意)</strong> へ進むこともできます。';
     actions =
-      '<button class="btn btn-p" onclick="bSetupBridgeDismiss();setupCompleteAll()">✓ 初期セットアップを完了</button>' +
+      '<button class="btn btn-p" onclick="bSetupBridgeProceed(4)">→ STEP 5 (管理者・任意) へ進む</button>' +
+      '<button class="btn btn-p" onclick="bSetupBridgeDismiss();setupCompleteAll()">✓ ここで完了する</button>' +
       '<button class="btn btn-s" onclick="bSetupBridgeDismiss()">この画面に留まる</button>';
   }
   textEl.innerHTML = text;
