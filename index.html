@@ -2248,10 +2248,11 @@ function bCloseStep() {
 // ページマッピング: 新規/運用ともに *-settings を使用(B案再構築)
 var SETTINGS_PAGES = ['', 'brand-settings', 'store-settings', 'emptype-settings', 'emp-settings'];
 
-// b0初期セットアップからの遷移: *-settings を setupモードで開く(モーダル自動発火しない)
+// b0初期セットアップからの遷移: *-settings を setupモードで開く + 複数行入力モーダル自動発火
 function b0Go(stepNum) {
   saveSetupActiveStep(stepNum);
   go(SETTINGS_PAGES[stepNum]);
+  setTimeout(function(){ bOpenStep(stepNum); }, 250);
 }
 
 // トースト連鎖CTAでの遷移+モーダル展開: 必ず運用設定画面(*-settings)へ
@@ -2884,6 +2885,23 @@ function renderSetupSettingsUI(stepNum) {
   floatBtn.textContent = '← 初期セットアップへ戻る';
   document.body.appendChild(floatBtn);
 
+  // CSVインポートリンクと案内キャプションを退避(setupモードでは複数行入力に一本化)
+  var phEl = mainEl.querySelector('.ph');
+  if (phEl) {
+    phEl.querySelectorAll('a').forEach(function(a) {
+      if ((a.textContent || '').indexOf('CSVインポート') >= 0) {
+        a.setAttribute('data-setup-hidden-csv', '1');
+        a.style.display = 'none';
+      }
+    });
+  }
+  Array.prototype.slice.call(mainEl.children).forEach(function(d) {
+    if (d.tagName === 'DIV' && (d.textContent || '').indexOf('CSVインポート') >= 0 && !d.classList.contains('ph') && !d.classList.contains('setup-mode-banner')) {
+      d.setAttribute('data-setup-hidden-caption', '1');
+      d.style.display = 'none';
+    }
+  });
+
   var sb = pageEl.querySelector('aside.sb');
   if (sb) {
     // 既存のサイドナビセクションを退避(setup-nav 以外を非表示)
@@ -2924,7 +2942,7 @@ function renderSetupSidebarNav(sb, currentStep) {
     var checkMark = isDone ? ' <span style="color:#1a9e7e;font-weight:700;">✓</span>' : '';
     var actClass = isCurrent ? ' class="act"' : '';
     if (isReachable) {
-      html += '<a href="#"' + actClass + ' onclick="event.preventDefault();saveSetupActiveStep(' + i + ');go(\'' + pages[i] + '\')"><span class="ic">' + stepIcons[i] + '</span>' + stepLabels[i] + checkMark + '</a>';
+      html += '<a href="#"' + actClass + ' onclick="event.preventDefault();b0Go(' + i + ')"><span class="ic">' + stepIcons[i] + '</span>' + stepLabels[i] + checkMark + '</a>';
     } else {
       html += '<a href="#" style="opacity:0.4;pointer-events:none;cursor:not-allowed;" title="前のSTEPを完了してください"><span class="ic">' + stepIcons[i] + '</span>' + stepLabels[i] + '</a>';
     }
@@ -2943,8 +2961,16 @@ function clearSetupSettingsUI() {
     sec.removeAttribute('data-setup-hidden');
     sec.removeAttribute('data-prev-display');
   });
-  // setup-nav セクションを削除
   document.querySelectorAll('.sb-setup-nav').forEach(function(n) { n.remove(); });
+  // CSVインポートリンク・キャプションの復元
+  document.querySelectorAll('[data-setup-hidden-csv="1"]').forEach(function(a) {
+    a.style.display = '';
+    a.removeAttribute('data-setup-hidden-csv');
+  });
+  document.querySelectorAll('[data-setup-hidden-caption="1"]').forEach(function(d) {
+    d.style.display = '';
+    d.removeAttribute('data-setup-hidden-caption');
+  });
   document.body.removeAttribute('data-setup-mode');
 }
 
@@ -2952,8 +2978,10 @@ function setupGoNextStep(currentStep) {
   var done = b0LoadDone();
   if (done < currentStep) b0SaveDone(currentStep);
   if (currentStep < 4) {
-    saveSetupActiveStep(currentStep + 1);
-    go(SETTINGS_PAGES[currentStep + 1]);
+    var next = currentStep + 1;
+    saveSetupActiveStep(next);
+    go(SETTINGS_PAGES[next]);
+    setTimeout(function(){ bOpenStep(next); }, 250);
   } else {
     setupCompleteAll();
   }
@@ -3071,33 +3099,56 @@ function b0SubmitBatch(stepNum) {
   var settingsMap = {'page-brand-settings':1,'page-store-settings':2,'page-emptype-settings':3,'page-emp-settings':4};
 
   if (activeStep === stepNum && settingsMap[pageId] === stepNum) {
-    // setupモード: 一覧反映 + バナー再描画 + 軽量トースト
+    // setupモード: 一覧反映 + バナー再描画 + 橋渡しCTAモーダル
     var info = SETTING_PAGES[stepNum - 1];
     if (info) switchSettingMode(info.id, 'filled');
+    // 現STEPを done として確定(setupGoNextStepを使わずに留まる場合に備えて)
+    var prevDone = b0LoadDone();
+    if (prevDone < stepNum) b0SaveDone(stepNum);
     renderSetupSettingsUI(stepNum);
-    bShowSetupBatchToast(stepNum, n);
+    bShowSetupBatchModal(stepNum, n);
   } else {
     // opsモード: 通常の登録トースト
     bShowToast(stepNum);
   }
 }
 
-function bShowSetupBatchToast(stepNum, n) {
-  var toast = document.getElementById('b-toast');
-  if (!toast) return;
-  var titleEl = document.getElementById('b-toast-title');
-  var nextEl = document.getElementById('b-toast-next');
-  var actionsEl = document.getElementById('b-toast-actions');
+// setupモード登録完了後の橋渡しCTAモーダル(複数行登録 + 次STEP誘導)
+function bShowSetupBatchModal(stepNum, n) {
   var stepNames = ['', '業態・ブランド', '店舗', '雇用区分', '従業員'];
+  var titleEl = document.getElementById('b-bridge-title');
+  var textEl = document.getElementById('b-bridge-text');
+  var actEl = document.getElementById('b-bridge-actions');
   titleEl.textContent = '✓ ' + stepNames[stepNum] + 'を' + n + '件登録しました';
-  var msg = stepNum < 4
-    ? '上部の「→ STEP ' + (stepNum + 1) + ' へ進む」ボタンから次に進めます。'
-    : '上部の「✓ 初期セットアップを完了する」ボタンから完了できます。';
-  nextEl.textContent = msg;
-  actionsEl.innerHTML = '<button class="btn btn-s" onclick="bDismissToast()">閉じる</button>';
-  toast.classList.add('act');
-  clearTimeout(window.bToastTimer);
-  window.bToastTimer = setTimeout(function(){ toast.classList.remove('act'); }, 4000);
+  var nextStepName = stepNum < 4 ? stepNames[stepNum + 1] : '';
+  var text, actions;
+  if (stepNum < 4) {
+    text = '続けて <strong>STEP ' + (stepNum + 1) + ' (' + nextStepName + ')</strong> の登録に進みますか？';
+    actions =
+      '<button class="btn btn-p" onclick="bSetupBridgeProceed(' + stepNum + ')">→ STEP ' + (stepNum + 1) + ' へ進む</button>' +
+      '<button class="btn btn-s" onclick="bSetupBridgeDismiss()">この画面に留まる</button>' +
+      '<button class="btn btn-s" onclick="bSetupBridgeBackToGuide()">初期セットアップTOPへ</button>';
+  } else {
+    text = '初期登録の全STEPが完了しました。<br>初期セットアップを完了しますか？';
+    actions =
+      '<button class="btn btn-p" onclick="bSetupBridgeDismiss();setupCompleteAll()">✓ 初期セットアップを完了</button>' +
+      '<button class="btn btn-s" onclick="bSetupBridgeDismiss()">この画面に留まる</button>';
+  }
+  textEl.innerHTML = text;
+  actEl.innerHTML = actions;
+  document.getElementById('b-bridge-overlay').classList.add('act');
+}
+
+function bSetupBridgeProceed(currentStep) {
+  document.getElementById('b-bridge-overlay').classList.remove('act');
+  setupGoNextStep(currentStep);
+}
+function bSetupBridgeDismiss() {
+  document.getElementById('b-bridge-overlay').classList.remove('act');
+}
+function bSetupBridgeBackToGuide() {
+  document.getElementById('b-bridge-overlay').classList.remove('act');
+  go('b0');
 }
 </script>
 </body>
