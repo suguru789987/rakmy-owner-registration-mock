@@ -3038,9 +3038,12 @@ function b0DemoReset() {
     sessionStorage.removeItem('b0Draft_2');
     sessionStorage.removeItem('b0Draft_3');
     sessionStorage.removeItem('b0Draft_4');
+    sessionStorage.removeItem('b0Method');
+    sessionStorage.removeItem('b0ImportMethod');
   } catch (e) {}
-  // URLクエリ(?completed=1等)もクリアしてリロード(再適用を防ぐ)
-  location.replace(location.pathname + (location.hash || ''));
+  // URLクエリを消し、キャッシュバスタを付けて確実にリロード
+  var bust = '?nocache=' + Date.now();
+  location.href = location.pathname + bust + '#b0';
 }
 
 /* デモ用: 設定画面の 設定前(empty) ↔ 設定後(filled) 切替 */
