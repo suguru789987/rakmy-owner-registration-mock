@@ -2775,24 +2775,28 @@ function refreshB0ResumeBanner(forceShow) {
   }
   var remaining = 4 - done;
   var mainMsg;
+  var openSetupLabel;
   if (done === 0) {
     if (icon) icon.textContent = '⚠️';
     mainMsg = '<strong>初期セットアップが未完了です（0/4）</strong> <span style="font-size:11px;color:#666;">不足: ' + missingNames.join('、') + '</span>';
-    btn.textContent = 'セットアップを開く →';
+    openSetupLabel = 'セットアップを開く →';
   } else if (done < 4) {
     if (icon) icon.textContent = '🔄';
     mainMsg = '<strong>初期セットアップ進行中（' + done + '/4 ・ あと ' + remaining + ' 項目）</strong> <span style="font-size:11px;color:#666;">不足: ' + missingNames.join('、') + '</span>';
-    btn.textContent = '続きから再開する →';
+    openSetupLabel = '続きから再開する →';
   } else {
     if (icon) icon.textContent = '⚠️';
     mainMsg = '<strong>🛠 デモ: アラート時表示</strong> <span style="font-size:11px;color:#666;">(実際は4/4完了済)</span>';
-    btn.textContent = 'セットアップを確認 →';
+    openSetupLabel = 'セットアップを確認 →';
   }
+  // 右端の単独ボタンは非表示(全CTAを下部の同列に並べる)
+  btn.style.display = 'none';
 
-  // 中断ポイントCTAエリア(メインCTAと同じプライマリスタイルで目立たせる)
-  var resumeItems = [];
+  // CTAエリア: 「セットアップを開く」+ 中断再開CTAを同列で並べる
+  var ctaItems = [];
+  ctaItems.push('<button class="btn btn-p btn-sm" onclick="go(\'b0\')">' + openSetupLabel + '</button>');
   draftSteps.forEach(function(d) {
-    resumeItems.push('<button class="btn btn-p btn-sm" onclick="b0ResumeDraftStep(' + d.step + ')">▶ STEP ' + d.step + ' ' + d.name + '(下書き' + d.count + '件) から再開</button>');
+    ctaItems.push('<button class="btn btn-p btn-sm" onclick="b0ResumeDraftStep(' + d.step + ')">▶ STEP ' + d.step + ' ' + d.name + '(下書き' + d.count + '件) から再開</button>');
   });
   if (importInProgress) {
     var typeLabel = importInProgress.type === 'template' ? 'テンプレ' : 'SaaS';
@@ -2801,14 +2805,10 @@ function refreshB0ResumeBanner(forceShow) {
     var completed = importInProgress.completed || 0;
     var total = importInProgress.total || 1;
     var label = importInProgress.label || '進行中';
-    resumeItems.push('<a class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;" href="' + importUrl + '" target="_blank" rel="noopener">▶ 📥 CSV(' + typeLabel + ') ' + completed + '/' + total + ' ' + label + ' から再開</a>');
+    ctaItems.push('<a class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;" href="' + importUrl + '" target="_blank" rel="noopener">▶ 📥 CSV(' + typeLabel + ') ' + completed + '/' + total + ' ' + label + ' から再開</a>');
   }
-  var resumeBlock = '';
-  if (resumeItems.length > 0) {
-    resumeBlock = '<div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ccc;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">' +
-                  '<span style="font-size:11px;color:#666;font-weight:700;align-self:center;">⏸ 中断ポイント:</span>' + resumeItems.join('') + '</div>';
-  }
-  msg.innerHTML = mainMsg + resumeBlock;
+  var ctaBlock = '<div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ccc;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">' + ctaItems.join('') + '</div>';
+  msg.innerHTML = mainMsg + ctaBlock;
 }
 
 // 一時保存中のSTEPへ遷移して下書き復元(打刻記録の中断ポイントCTA用)
