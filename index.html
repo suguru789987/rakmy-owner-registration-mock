@@ -983,7 +983,7 @@
 
 <!-- (2026-05-13: setup-* 専用ページ群を廃止、*-settings を setupモードで再利用) -->
 
-<!-- ===== STEP 5 (管理者・任意) 専用画面: d1(運用更新)と完全分離 ===== -->
+<!-- ===== STEP 5 (管理者・任意) 専用画面: 管理者一覧画面(d1運用更新とは別) ===== -->
 <div class="page" id="page-setup-admin">
   <div class="dash">
     <aside class="sb">
@@ -996,31 +996,91 @@
     <main class="mc" style="background:#f8f9fa;">
       <!-- setupバナーは applySetupModeOnSettings(5) → renderSetupSettingsUI(5) で動的挿入 -->
 
-      <!-- 中央ヒーロー: STEP 5 専用 -->
-      <div style="background:#fff;border:2px dashed #888;border-radius:12px;padding:36px 32px;max-width:600px;margin:0 auto;text-align:center;">
-        <span style="display:inline-block;background:#888;color:#fff;padding:5px 14px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:0.5px;margin-bottom:14px;">任意STEP 5 / 5 ・ 初期登録</span>
-        <h2 style="font-size:22px;margin-bottom:10px;">管理者を登録</h2>
-        <p style="font-size:12px;color:#666;line-height:1.8;margin-bottom:18px;">担当店舗の従業員管理・勤怠管理を委任する <strong>管理者</strong> を登録します。<br><strong>必須ではありません</strong>。運用開始後でも追加・編集が可能です。</p>
-
-        <!-- 現在の登録数 -->
-        <div id="setup-admin-count-display" style="background:#e8f8f5;border:1px solid #b2ebe0;border-radius:8px;padding:10px 14px;margin:14px 0;font-size:12px;color:#0e9077;font-weight:600;">現在の登録数: <span id="setup-admin-count-num">0</span> 名</div>
-
-        <!-- 既登録管理者リスト(動的更新) -->
-        <div id="setup-admin-registered-list" style="display:none;text-align:left;background:#fafafa;border:1px solid #e0e0e0;border-radius:8px;padding:10px 14px;margin:10px 0 18px;font-size:11px;color:#555;"></div>
-
-        <button class="btn btn-p btn-lg" onclick="bOpenAdminRegisterModal()" style="max-width:320px;">+ 管理者を登録する</button>
-
-        <div style="margin-top:18px;font-size:10px;color:#888;line-height:1.7;">
-          登録モーダルでは「新規入力」と「既存従業員から選択」の2方式から選べます。<br>
-          登録するとパスワード設定用の招待メール(72時間有効)が自動送信されます。
-        </div>
-
-        <!-- 完了/スキップCTA -->
-        <div style="border-top:1px solid #e0e0e0;margin-top:24px;padding-top:18px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap;">
-          <button class="btn btn-p" onclick="setupCompleteAll()">✓ 初期セットアップを完了</button>
+      <!-- 管理者一覧ヘッダー -->
+      <div class="ph">
+        <h2>管理者一覧</h2>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-s" id="setup-admin-edit-btn" disabled title="管理者が登録されていません" style="opacity:0.5;">編集</button>
+          <button class="btn btn-p" onclick="bOpenSetupAdminModal()">+ 新規追加</button>
         </div>
       </div>
+
+      <!-- 0件: 空状態ヒーロー -->
+      <div id="setup-admin-empty" style="background:#fff;border:1px dashed #ddd;border-radius:10px;padding:54px 30px;text-align:center;color:#888;">
+        <div style="font-size:42px;margin-bottom:14px;">👥</div>
+        <div style="font-size:15px;font-weight:700;color:#555;margin-bottom:8px;">まだ管理者が登録されていません</div>
+        <div style="font-size:11px;line-height:1.8;margin-bottom:18px;">右上の「+ 新規追加」ボタンから登録できます。<br>管理者は<strong>任意項目</strong>のため、登録せずに初期セットアップを完了することもできます。</div>
+        <button class="btn btn-p" onclick="bOpenSetupAdminModal()">+ 管理者を登録する</button>
+      </div>
+
+      <!-- 1件以上: 一覧表示 -->
+      <div id="setup-admin-list-wrap" style="display:none;">
+        <div class="post-list" id="setup-admin-list"></div>
+        <div style="margin-top:14px;font-size:11px;color:#888;">※ 管理者には登録時に招待メール(72時間有効)が自動送信されています。一覧で「招待中」状態の管理者には、再送・編集が可能です。</div>
+      </div>
     </main>
+  </div>
+</div>
+
+<!-- ===== 管理者登録オーバーレイモーダル(setup mode用) ===== -->
+<div class="b-step-overlay" id="b-setup-admin-overlay">
+  <div class="b-step-modal" style="max-width:560px;">
+    <div class="mh"><h3>管理者を登録</h3><button class="mx" onclick="bCloseSetupAdminModal()">✕</button></div>
+    <div class="mb">
+      <!-- タブ: 新規入力 / 従業員から選択 -->
+      <div class="mtabs" id="setup-admin-tabs" style="margin-bottom:14px;">
+        <div class="mtab act" data-stab="new" onclick="setupAdminSwitchTab('new')">新規登録</div>
+        <div class="mtab" data-stab="emp" onclick="setupAdminSwitchTab('emp')">従業員から選択</div>
+      </div>
+
+      <!-- パネル1: 新規登録 -->
+      <div class="mtab-panel act" id="setup-admin-panel-new">
+        <div class="al al-i" style="margin-bottom:14px;font-size:10px;"><span>💡</span><div>従業員台帳に未登録の方を、管理者として直接追加します。登録後、パスワード設定の招待メール(72時間有効)が自動送信されます。</div></div>
+        <div class="fg"><label>名前 <span class="req">✳</span></label><input id="setup-admin-new-name" value="" placeholder="例: 鈴木 花子" style="max-width:100%;"></div>
+        <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input id="setup-admin-new-email" type="email" value="" placeholder="例: suzuki@example.jp" style="max-width:100%;"></div>
+        <div class="dv" style="margin:14px 0;"></div>
+        <div class="fg">
+          <label>担当店舗 <span class="req">✳</span></label>
+          <div class="store-chk-grid">
+            <label class="store-chk"><input type="checkbox"> 渋谷店</label>
+            <label class="store-chk"><input type="checkbox"> 新宿店</label>
+            <label class="store-chk"><input type="checkbox"> 池袋店</label>
+            <label class="store-chk"><input type="checkbox"> 北海道支店</label>
+          </div>
+          <div class="hint" style="margin-top:6px;">担当店舗の従業員管理・勤怠管理が可能になります</div>
+        </div>
+      </div>
+
+      <!-- パネル2: 従業員から選択 -->
+      <div class="mtab-panel" id="setup-admin-panel-emp" style="display:none;">
+        <div class="al al-i" style="margin-bottom:14px;font-size:10px;"><span>💡</span><div>既に従業員台帳に登録済みの方を管理者に昇格します。氏名を選択するとメールアドレスが自動入力されます。</div></div>
+        <div class="fg">
+          <label>従業員を選択 <span class="req">✳</span></label>
+          <select id="setup-admin-emp-select" style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+            <option value="">-- 従業員を選択してください --</option>
+            <option value="emp-001">test（業務委託 / 渋谷店）</option>
+            <option value="emp-002">TEST TARO（代表取締役 / 渋谷店）</option>
+            <option value="emp-003">岩田（バイトさん / 新宿店）</option>
+            <option value="emp-004">佐々木（業務委託 / 池袋店）</option>
+          </select>
+        </div>
+        <div class="fg"><label>メールアドレス（従業員台帳より自動入力）</label><input class="ro-input" value="" readonly placeholder="従業員を選択すると自動入力されます" style="max-width:100%;"></div>
+        <div class="dv" style="margin:14px 0;"></div>
+        <div class="fg">
+          <label>担当店舗 <span class="req">✳</span></label>
+          <div class="store-chk-grid">
+            <label class="store-chk"><input type="checkbox"> 渋谷店</label>
+            <label class="store-chk"><input type="checkbox"> 新宿店</label>
+            <label class="store-chk"><input type="checkbox"> 池袋店</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-grp">
+        <button class="btn btn-s" onclick="bCloseSetupAdminModal()">キャンセル</button>
+        <button class="btn btn-p" onclick="b0SubmitAdminEntry()">登録 & 招待送信</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -2071,22 +2131,16 @@ function go(id) {
     bSetImportMethod(bLoadImportMethod());
   }
   // 設定画面: 初期/運用モードに応じてバナー切替
-  // STEP 1〜4: *-settings(setupモード)、STEP 5: setup-admin 専用ページ + d2(モーダル風)
-  var settingsMap = {'brand-settings':1,'store-settings':2,'emptype-settings':3,'emp-settings':4,'setup-admin':5,'d2':5};
+  // STEP 1〜4: *-settings(setupモード)、STEP 5: setup-admin 専用ページ(d2は運用更新専用に分離)
+  var settingsMap = {'brand-settings':1,'store-settings':2,'emptype-settings':3,'emp-settings':4,'setup-admin':5};
   if (settingsMap[id] && settingsMap[id] <= 4) {
     refreshSettingsModeGuard(settingsMap[id]);
     applySetupModeOnSettings(settingsMap[id]);
-  } else if (settingsMap[id] === 5) {
+  } else if (settingsMap[id] === 5 && id === 'setup-admin') {
     // setup-admin に直接遷移した場合(ナビタブ等)も setup mode を起動
-    if (id === 'setup-admin') {
-      if (loadSetupActiveStep() !== 5) saveSetupActiveStep(5);
-      applySetupModeOnSettings(5);
-      refreshSetupAdminPage();
-    } else { // d2
-      // d2 を直接開いた場合も setupActiveStep=5 ならsetup mode、そうでなければ運用更新
-      if (loadSetupActiveStep() === 5) applySetupModeOnD2();
-      else clearSetupSettingsUI();
-    }
+    if (loadSetupActiveStep() !== 5) saveSetupActiveStep(5);
+    applySetupModeOnSettings(5);
+    refreshSetupAdminPage();
   } else {
     // 設定画面以外 → setup UI クリア
     clearSetupSettingsUI();
@@ -2429,14 +2483,14 @@ var SETTINGS_PAGES = ['', 'brand-settings', 'store-settings', 'emptype-settings'
 
 // b0初期セットアップからの遷移
 // 1〜4: *-settings + 複数行入力モーダル自動発火
-// 5(管理者・任意): setup-admin → 250ms後 d2(モーダル風)を自動発火
+// 5(管理者・任意): setup-admin → オーバーレイモーダル自動発火
 function b0Go(stepNum) {
   saveSetupActiveStep(stepNum);
   go(SETTINGS_PAGES[stepNum]);
   if (stepNum <= 4) {
     setTimeout(function(){ bOpenStep(stepNum); }, 250);
   } else if (stepNum === 5) {
-    setTimeout(function(){ go('d2'); }, 350);
+    setTimeout(function(){ bOpenSetupAdminModal(); }, 350);
   }
 }
 
@@ -3218,10 +3272,10 @@ function setupGoNextStep(currentStep) {
     go(SETTINGS_PAGES[next]);
     setTimeout(function(){ bOpenStep(next); }, 250);
   } else if (currentStep === 4) {
-    // STEP 4 → STEP 5 (管理者・任意): setup-admin → d2 自動発火
+    // STEP 4 → STEP 5 (管理者・任意): setup-admin → オーバーレイモーダル自動発火
     saveSetupActiveStep(5);
     go(SETTINGS_PAGES[5]); // setup-admin
-    setTimeout(function(){ go('d2'); }, 350);
+    setTimeout(function(){ bOpenSetupAdminModal(); }, 350);
   } else {
     setupCompleteAll();
   }
@@ -3233,34 +3287,61 @@ function setupCompleteAll() {
 }
 
 /* ===== STEP 5 (管理者・任意) 専用画面 =====
- * page-setup-admin: 初期登録専用の管理者登録画面(d1/d2運用更新画面とは分離)
- * 流れ: setup-admin(ヒーロー) → 「+管理者を登録」→ d2(setupモード、登録モーダル風)
- *       → b0SubmitAdminEntry → setup-admin に戻る + ブリッジモーダル */
+ * page-setup-admin: 初期登録専用「管理者一覧」画面(d1運用更新画面とは別)
+ * 流れ: setup-admin(一覧+新規追加ボタン) → +新規追加 → オーバーレイモーダル(b-setup-admin-overlay)
+ *       → b0SubmitAdminEntry → 一覧に反映 + ブリッジモーダル */
 function refreshSetupAdminPage() {
   var counts = b0LoadCounts();
   var adminN = counts[4] || 0;
-  var numEl = document.getElementById('setup-admin-count-num');
-  if (numEl) numEl.textContent = adminN;
-  // 既登録リスト(モック: 件数のみ表示)
-  var listEl = document.getElementById('setup-admin-registered-list');
-  if (listEl) {
-    if (adminN > 0) {
-      var rows = '<div style="font-size:11px;font-weight:700;color:#555;margin-bottom:6px;">登録済み管理者(' + adminN + '名):</div>';
+  var emptyEl = document.getElementById('setup-admin-empty');
+  var listWrap = document.getElementById('setup-admin-list-wrap');
+  var listEl = document.getElementById('setup-admin-list');
+  var editBtn = document.getElementById('setup-admin-edit-btn');
+  if (adminN > 0) {
+    if (emptyEl) emptyEl.style.display = 'none';
+    if (listWrap) listWrap.style.display = '';
+    if (editBtn) { editBtn.disabled = false; editBtn.style.opacity = ''; editBtn.title = ''; }
+    if (listEl) {
+      var rows = '';
       for (var i = 0; i < adminN; i++) {
-        rows += '<div style="padding:4px 0;border-bottom:1px dashed #e0e0e0;display:flex;align-items:center;gap:8px;"><span style="color:#1a9e7e;">✓</span><span>管理者' + (i + 1) + ' <span style="color:#888;font-size:10px;">(招待メール送信済 / 72時間有効)</span></span></div>';
+        rows +=
+          '<div class="pl-row" style="justify-content:space-between;align-items:center;">' +
+            '<div>' +
+              '<div class="nm">管理者' + (i + 1) + ' <span style="font-size:10px;color:#f0960a;background:#fff8e1;padding:2px 8px;border-radius:20px;font-weight:600;margin-left:6px;">招待中</span></div>' +
+              '<div class="meta">admin' + (i + 1) + '@example.jp ・ 渋谷店 ・ 招待メール送信済(72h有効)</div>' +
+            '</div>' +
+            '<div style="display:flex;gap:6px;">' +
+              '<button class="btn btn-o btn-sm">再送</button>' +
+              '<button class="btn btn-s btn-sm">編集</button>' +
+            '</div>' +
+          '</div>';
       }
-      listEl.style.display = '';
       listEl.innerHTML = rows;
-    } else {
-      listEl.style.display = 'none';
     }
+  } else {
+    if (emptyEl) emptyEl.style.display = '';
+    if (listWrap) listWrap.style.display = 'none';
+    if (editBtn) { editBtn.disabled = true; editBtn.style.opacity = '0.5'; editBtn.title = '管理者が登録されていません'; }
   }
 }
 
-// setup-admin から管理者登録モーダル(d2)を開く
-function bOpenAdminRegisterModal() {
-  // setupActiveStepはすでに5
-  go('d2');
+// オーバーレイモーダル開閉
+function bOpenSetupAdminModal() {
+  var ov = document.getElementById('b-setup-admin-overlay');
+  if (ov) ov.classList.add('act');
+}
+function bCloseSetupAdminModal() {
+  var ov = document.getElementById('b-setup-admin-overlay');
+  if (ov) ov.classList.remove('act');
+}
+function setupAdminSwitchTab(which) {
+  document.querySelectorAll('#setup-admin-tabs .mtab').forEach(function(el) {
+    el.classList.toggle('act', el.getAttribute('data-stab') === which);
+  });
+  var pNew = document.getElementById('setup-admin-panel-new');
+  var pEmp = document.getElementById('setup-admin-panel-emp');
+  if (pNew) pNew.style.display = (which === 'new') ? '' : 'none';
+  if (pEmp) pEmp.style.display = (which === 'emp') ? '' : 'none';
 }
 
 /* d2 ページ(モーダル風)を setupモードで開いた時、登録ボタンを STEP 5 完了処理に書き換える */
@@ -3349,19 +3430,16 @@ function applySetupModeOnD2() {
   document.body.setAttribute('data-setup-mode', '5');
 }
 
-// d2 内「登録」ボタン → setup mode時は カウント加算 + setup-admin へ戻る + ブリッジモーダル
+// setup-admin オーバーレイモーダル「登録 & 招待送信」ボタン
 function b0SubmitAdminEntry() {
-  var activeStep = loadSetupActiveStep();
-  if (activeStep !== 5) {
-    // ops mode: 既存通り d1 へ戻る
-    go('d1');
-    return;
-  }
   var counts = b0LoadCounts();
   counts[4] = (counts[4] || 0) + 1;
   b0SaveCounts(counts);
-  go('setup-admin');
-  setTimeout(function(){ bShowSetupAdminCompleteModal(counts[4]); }, 300);
+  bCloseSetupAdminModal();
+  refreshSetupAdminPage();
+  // 件数バナーも更新するため renderSetupSettingsUI を再描画
+  if (loadSetupActiveStep() === 5) renderSetupSettingsUI(5);
+  setTimeout(function(){ bShowSetupAdminCompleteModal(counts[4]); }, 200);
 }
 
 function bShowSetupAdminCompleteModal(totalAdmins) {
@@ -3379,7 +3457,25 @@ function bShowSetupAdminCompleteModal(totalAdmins) {
 
 function bSetupAdminAddMore() {
   document.getElementById('b-bridge-overlay').classList.remove('act');
-  go('d2');
+  // 入力値をクリアしてからモーダルを再オープン
+  var newPanel = document.getElementById('setup-admin-panel-new');
+  if (newPanel) {
+    newPanel.querySelectorAll('input').forEach(function(el) {
+      if (el.type === 'checkbox') el.checked = false;
+      else el.value = '';
+    });
+  }
+  var empPanel = document.getElementById('setup-admin-panel-emp');
+  if (empPanel) {
+    empPanel.querySelectorAll('input').forEach(function(el) {
+      if (el.type === 'checkbox') el.checked = false;
+      else el.value = '';
+    });
+    var sel = empPanel.querySelector('select');
+    if (sel) sel.selectedIndex = 0;
+  }
+  setupAdminSwitchTab('new');
+  bOpenSetupAdminModal();
 }
 
 /* ===== 複数行入力(batch)モーダル: 表形式 =====
