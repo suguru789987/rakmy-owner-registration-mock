@@ -780,6 +780,7 @@
           <button class="btn btn-s btn-sm" onclick="bSimulateImport(2)">② 店舗完了</button>
           <button class="btn btn-s btn-sm" onclick="bSimulateImport(3)">③ 雇用区分完了</button>
           <button class="btn btn-s btn-sm" onclick="bSimulateImport(4)">④ 必須4項目完了</button>
+          <button class="btn btn-s btn-sm" onclick="b0SimulateDraft()" style="color:#e67e22;border-color:#ffd9b0;">⏸ 中断デモ生成(設定+CSV)</button>
           <button class="btn btn-s btn-sm" onclick="b0DemoReset()" style="color:#c62828;border-color:#f5c2c2;">🔄 未完了に戻す</button>
         </div>
       </div>
@@ -3073,11 +3074,37 @@ window.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+// デモ用: 中断状態を再現(設定画面下書き + CSVインポート中断 のダミーデータをセット)
+function b0SimulateDraft() {
+  try {
+    // 必須4STEPのうち2STEP完了で、STEP 2(店舗)の下書きあり + CSVインポート中断中
+    sessionStorage.setItem('b0Done', '2');
+    sessionStorage.setItem('b0Counts', JSON.stringify([1, 0, 0, 0, 0]));
+    // STEP 2(店舗) のダミー下書き(2件分)
+    sessionStorage.setItem('b0Draft_2', JSON.stringify([
+      { inputs: ['渋谷店', '東京都渋谷区道玄坂1-1-1', '11:00', '23:00'], selects: [0] },
+      { inputs: ['新宿店', '東京都新宿区西新宿2-2-2', '11:00', '22:00'], selects: [0] }
+    ]));
+    // CSVインポート中断(SaaS の ②マッピング設定 で停止)
+    localStorage.setItem('import_in_progress', JSON.stringify({
+      type: 'saas', completed: 1, total: 5,
+      currentStep: 's-saas2', label: '② マッピング設定',
+      startedAt: Date.now()
+    }));
+    sessionStorage.setItem('b0EmptyMode', 'alert');
+  } catch (e) {}
+  alert('🛠 中断デモを生成しました\n\n・必須STEP: 1/4 完了(業態のみ)\n・STEP 2(店舗) 下書き 2件\n・CSVインポート(SaaS) 中断中 1/5 ②マッピング設定\n\n打刻記録画面で確認できます。');
+  // 反映のため b0画面を再描画
+  b0SetState(b0LoadDone());
+}
+
 // デモ用: セッション状態を完全リセット(モック開発確認用)
 function b0DemoReset() {
   if (!confirm('初期セットアップの進捗・件数・下書きを全てリセットしますか？')) return;
-  try { sessionStorage.clear(); } catch (e) {}
-  // location.replace で URL クエリを消した上で、確実にフルリロードを発生させる
+  try {
+    sessionStorage.clear();
+    localStorage.removeItem('import_in_progress'); // CSV中断状態もクリア
+  } catch (e) {}
   window.location.replace(location.pathname + '?reset=' + Date.now() + '#b0');
 }
 
