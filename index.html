@@ -2525,7 +2525,7 @@ function b0Go(stepNum) {
   }
 }
 
-// b0画面のメインエリアをSTEP 5パネルに切り替える(他パネルは隠す)
+// b0画面のメインエリアをSTEP 5パネルに切り替える(他パネルは隠す + サイドナビをsetup-navに)
 function b0ShowStep5Panel() {
   var panels = ['b0-method-picker', 'b0-import-panel', 'b0-wizard-card', 'b0-completion-view'];
   panels.forEach(function(id) {
@@ -2535,6 +2535,32 @@ function b0ShowStep5Panel() {
   var step5 = document.getElementById('b0-step5-panel');
   if (step5) step5.style.display = '';
   refreshStep5Panel();
+  // b0画面のサイドナビを setup-nav (①〜⑤) に書き換え
+  applySetupSidebarToPage('page-b0', 5);
+  document.body.setAttribute('data-setup-mode', '5');
+}
+
+// 汎用: 任意のページのサイドナビを setup-nav に書き換え
+function applySetupSidebarToPage(pageId, currentStep) {
+  var pageEl = document.getElementById(pageId);
+  if (!pageEl) return;
+  var sb = pageEl.querySelector('aside.sb');
+  if (!sb) return;
+  sb.querySelectorAll('.sb-sec').forEach(function(sec) {
+    if (sec.classList.contains('sb-setup-nav')) return;
+    if (sec.getAttribute('data-setup-hidden') === '1') return;
+    sec.setAttribute('data-setup-hidden', '1');
+    sec.setAttribute('data-prev-display', sec.style.display || '');
+    sec.style.display = 'none';
+  });
+  if (!sb.querySelector('.sb-setup-nav')) {
+    var navSec = document.createElement('div');
+    navSec.className = 'sb-sec sb-setup-nav';
+    var slogo = sb.querySelector('.slogo');
+    if (slogo && slogo.nextSibling) slogo.parentNode.insertBefore(navSec, slogo.nextSibling);
+    else sb.insertBefore(navSec, sb.firstChild);
+  }
+  renderSetupSidebarNav(sb, currentStep);
 }
 
 // STEP 5 パネルからb0のウィザードへ戻る
@@ -2542,8 +2568,23 @@ function b0Step5BackToWizard() {
   clearSetupActiveStep();
   var step5 = document.getElementById('b0-step5-panel');
   if (step5) step5.style.display = 'none';
+  clearSetupSidebarOnPage('page-b0');
+  document.body.removeAttribute('data-setup-mode');
   b0SetState(b0LoadDone());
   b0SetMethod(b0LoadMethod());
+}
+
+// 汎用: 指定ページの setup-nav 書き換えを復元
+function clearSetupSidebarOnPage(pageId) {
+  var pageEl = document.getElementById(pageId);
+  if (!pageEl) return;
+  pageEl.querySelectorAll('.sb-sec[data-setup-hidden="1"]').forEach(function(sec) {
+    var prev = sec.getAttribute('data-prev-display') || '';
+    sec.style.display = prev;
+    sec.removeAttribute('data-setup-hidden');
+    sec.removeAttribute('data-prev-display');
+  });
+  pageEl.querySelectorAll('.sb-setup-nav').forEach(function(n) { n.remove(); });
 }
 
 function refreshStep5Panel() {
@@ -3373,6 +3414,8 @@ function setupCompleteAll() {
   // STEP 5 パネルを隠して b0 のウィザード/完了サマリ表示に戻す
   var step5 = document.getElementById('b0-step5-panel');
   if (step5) step5.style.display = 'none';
+  clearSetupSidebarOnPage('page-b0');
+  document.body.removeAttribute('data-setup-mode');
   go('b0');
 }
 
