@@ -1323,21 +1323,25 @@
     <main class="mc">
       <div class="ph" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px;">
         <h2>打刻記録</h2>
-        <!-- 🛠 デモ用: アラート/通常/中断再開状態の出し分け -->
-        <div style="display:flex;flex-direction:column;gap:6px;font-size:10px;background:#fff3e0;border:1px dashed #e67e22;border-radius:8px;padding:8px 10px;max-width:560px;">
+        <!-- 🛠 デモ用: 状態切替/設定画面登録中断/CSV中断 をグルーピング -->
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:10px;background:#fff3e0;border:1px dashed #e67e22;border-radius:8px;padding:8px 10px;max-width:580px;">
           <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-            <span style="color:#e67e22;font-weight:700;">🛠 デモ用:</span>
+            <span style="color:#e67e22;font-weight:700;">🛠 デモ用 状態切替:</span>
             <button class="b0empty-mode-toggle" data-mode="alert" onclick="switchB0EmptyMode('alert')" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⚠️ アラート時</button>
             <button class="b0empty-mode-toggle" data-mode="normal" onclick="switchB0EmptyMode('normal')" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">✓ 通常時</button>
-            <button onclick="bDemoB0EmptyDraftSettings()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⏸ 設定画面</button>
           </div>
           <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-            <span style="color:#888;font-size:9px;font-weight:600;">CSV(テンプレ)中断:</span>
+            <span style="color:#888;font-size:9px;font-weight:600;">設定画面登録 中断:</span>
+            <button onclick="bDemoB0EmptyAlertOnly()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⚠️ 完全未完了</button>
+            <button onclick="bDemoB0EmptyDraftSettings()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⏸ 下書きあり</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            <span style="color:#888;font-size:9px;font-weight:600;">CSV(テンプレ) 中断:</span>
             <button onclick="bDemoB0EmptyDraftTplStep1()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">①取込項目</button>
             <button onclick="bDemoB0EmptyDraftTplStep2()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">②確認・実行</button>
           </div>
           <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-            <span style="color:#888;font-size:9px;font-weight:600;">CSV(外部勤怠)中断:</span>
+            <span style="color:#888;font-size:9px;font-weight:600;">CSV(外部勤怠) 中断:</span>
             <button onclick="bDemoB0EmptyDraftSaasStep1()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">①項目選択</button>
             <button onclick="bDemoB0EmptyDraftSaasStep2()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">②マッピング設定</button>
             <button onclick="bDemoB0EmptyDraftSaasPreview()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">③プレビュー・マッピング修正</button>
@@ -3118,6 +3122,18 @@ window.addEventListener('DOMContentLoaded', function() {
     }
   }
 });
+
+// 打刻記録画面用デモ: 設定画面登録 中断「完全未完了」(下書きなし・CSV中断なし)
+function bDemoB0EmptyAlertOnly() {
+  _bDemoClearAll();
+  try {
+    sessionStorage.setItem('b0Done', '0');
+    sessionStorage.setItem('b0Counts', JSON.stringify([0, 0, 0, 0, 0]));
+    sessionStorage.setItem('b0EmptyMode', 'alert');
+    clearSetupActiveStep();
+  } catch (e) {}
+  applyB0EmptyMode('alert');
+}
 
 // 打刻記録画面用デモ: ボタン押下で即その場で中断状態を再現+アラートバナー再描画
 function bDemoB0EmptyDraftSettings() {
