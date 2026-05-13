@@ -843,7 +843,7 @@
         <!-- 主CTA: 次のアクション -->
         <div style="background:#f0faf7;border:2px solid #2ec4a5;border-radius:10px;padding:16px 20px;margin-bottom:14px;">
           <div style="font-size:11px;color:#0e9077;font-weight:700;margin-bottom:8px;">▶ 次のアクション</div>
-          <a href="#b0-empty" onclick="event.preventDefault();go('b0-empty')" class="btn btn-p btn-lg" style="text-decoration:none;display:inline-flex;align-items:center;width:100%;max-width:none;justify-content:center;">⏱ 打刻記録を開く →</a>
+          <a href="#b0-empty" onclick="event.preventDefault();go('b0-empty')" class="btn btn-p btn-lg" style="text-decoration:none;display:inline-flex;align-items:center;width:100%;max-width:none;justify-content:center;">⏱ 打刻記録画面へ（TOP）</a>
         </div>
 
         <!-- 副CTA: その他の操作 -->
@@ -2950,7 +2950,7 @@ function bShowToast(stepNum) {
   } else if (done === 4 && stepNum === 4) {
     // 【初期登録 完了直後】 全項目登録完了のお祝い + 打刻記録誘導
     nextEl.textContent = '🎉 すべての必須登録が完了しました。打刻記録をご利用いただけます。';
-    actions = '<button class="btn btn-p" onclick="bDismissToast();go(\'b0-empty\');">打刻記録を開く →</button>' +
+    actions = '<button class="btn btn-p" onclick="bDismissToast();go(\'b0-empty\');">⏱ 打刻記録画面へ（TOP）</button>' +
               '<button class="btn btn-s" onclick="bDismissToast()">閉じる</button>';
     duration = 10000;
   } else {
