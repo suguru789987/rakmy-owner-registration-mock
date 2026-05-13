@@ -3201,6 +3201,11 @@ function clearSetupSettingsUI() {
     b.removeAttribute('data-setup-rewired');
     b.setAttribute('onclick', "go('d1')");
   });
+  // d2 見出しの復元
+  document.querySelectorAll('[data-setup-original]').forEach(function(el) {
+    el.textContent = el.getAttribute('data-setup-original');
+    el.removeAttribute('data-setup-original');
+  });
   document.body.removeAttribute('data-setup-mode');
 }
 
@@ -3262,8 +3267,16 @@ function bOpenAdminRegisterModal() {
 function applySetupModeOnD2() {
   var pageEl = document.getElementById('page-d2');
   if (!pageEl) return;
-  // d2 内 main の上部に setupバナー追加
   var mainEl = pageEl.querySelector('main.mc');
+  // d2 の見出し「管理者一覧」を setupモード時は「管理者を登録(STEP 5・任意)」に
+  if (mainEl) {
+    var phH2 = mainEl.querySelector('.ph h2');
+    if (phH2 && !phH2.hasAttribute('data-setup-original')) {
+      phH2.setAttribute('data-setup-original', phH2.textContent);
+      phH2.textContent = '管理者を登録 (STEP 5 ・ 任意)';
+    }
+  }
+  // d2 内 main の上部に setupバナー追加
   if (mainEl) {
     var oldBanner = mainEl.querySelector('.setup-mode-banner-d2');
     if (oldBanner) oldBanner.remove();
@@ -3276,6 +3289,7 @@ function applySetupModeOnD2() {
       '<div style="background:#888;color:#fff;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;">任意STEP 5 / 5</div>' +
       '<div style="font-size:12px;color:#0e9077;font-weight:700;">管理者を登録 (任意・現在 ' + adminN + ' 名登録済)</div>' +
       '<div style="flex:1;min-width:10px;"></div>' +
+      '<button class="btn btn-s btn-sm" onclick="go(\'setup-admin\')">← 一覧画面へ戻る</button>' +
       '<button class="btn btn-s btn-sm" onclick="setupCompleteAll()">✓ 初期セットアップを完了</button>';
     mainEl.insertBefore(banner, mainEl.firstChild);
   }
@@ -3287,7 +3301,21 @@ function applySetupModeOnD2() {
       primary.setAttribute('data-setup-rewired', '1');
       primary.setAttribute('onclick', 'b0SubmitAdminEntry()');
     }
+    // d2 の キャンセル(go('d1'))ボタンを setup-admin に戻すよう書き換え
+    var cancel = g.querySelector('.btn-s');
+    if (cancel && /キャンセル/.test(cancel.textContent) && !cancel.hasAttribute('data-setup-rewired')) {
+      cancel.setAttribute('data-setup-rewired', '1');
+      cancel.setAttribute('onclick', "go('setup-admin')");
+    }
   });
+  // d2 内のモーダル右上「✕」も setup-admin に戻すよう書き換え
+  pageEl.querySelectorAll('.mx').forEach(function(x) {
+    if (!x.hasAttribute('data-setup-rewired')) {
+      x.setAttribute('data-setup-rewired', '1');
+      x.setAttribute('onclick', "go('setup-admin')");
+    }
+  });
+
   // 右下「← 初期セットアップへ戻る」ボタン
   var oldFloat = document.querySelector('.setup-mode-float-back');
   if (oldFloat) oldFloat.remove();
@@ -3298,6 +3326,26 @@ function applySetupModeOnD2() {
   floatBtn.style.cssText = 'position:fixed;right:24px;bottom:24px;z-index:50;background:#2ec4a5;color:#fff;padding:14px 24px;border-radius:30px;font-size:13px;font-weight:700;text-decoration:none;box-shadow:0 4px 16px rgba(46,196,165,0.35);display:inline-flex;align-items:center;gap:6px;';
   floatBtn.textContent = '← 初期セットアップへ戻る';
   document.body.appendChild(floatBtn);
+
+  // サイドナビを setup-nav に置換 (STEP 1〜4 と同じ動線)
+  var sb = pageEl.querySelector('aside.sb');
+  if (sb) {
+    sb.querySelectorAll('.sb-sec').forEach(function(sec) {
+      if (sec.classList.contains('sb-setup-nav')) return;
+      if (sec.getAttribute('data-setup-hidden') === '1') return;
+      sec.setAttribute('data-setup-hidden', '1');
+      sec.setAttribute('data-prev-display', sec.style.display || '');
+      sec.style.display = 'none';
+    });
+    if (!sb.querySelector('.sb-setup-nav')) {
+      var navSec = document.createElement('div');
+      navSec.className = 'sb-sec sb-setup-nav';
+      var slogo = sb.querySelector('.slogo');
+      if (slogo && slogo.nextSibling) slogo.parentNode.insertBefore(navSec, slogo.nextSibling);
+      else sb.insertBefore(navSec, sb.firstChild);
+    }
+    renderSetupSidebarNav(sb, 5);
+  }
   document.body.setAttribute('data-setup-mode', '5');
 }
 
