@@ -2885,7 +2885,19 @@ function refreshB0ResumeBanner(forceShow) {
   var remaining = 4 - done;
   var mainMsg;
   var openSetupLabel;
-  if (done === 0) {
+  // ★ CSV インポート中断時はシナリオ別の主文言に置き換える(設定画面 STEP 進捗とは別シナリオのため)
+  if (importInProgress) {
+    if (icon) icon.textContent = '💾';
+    var typeLabel0 = importInProgress.type === 'template' ? 'CSV(テンプレ)' : 'CSV(外部勤怠サービス)';
+    if (importInProgress.mapping_changed) {
+      mainMsg = '<strong>📥 ' + typeLabel0 + ' マッピング設定を変更途中（本取り込み未実行）</strong> <span style="font-size:11px;color:#666;">— 設定を保存して続きから再開できます</span>';
+    } else if (importInProgress.preview_changed) {
+      mainMsg = '<strong>📥 ' + typeLabel0 + ' プレビュー修正を変更途中（本取り込み未実行）</strong> <span style="font-size:11px;color:#666;">— 修正を保存して続きから再開できます</span>';
+    } else {
+      mainMsg = '<strong>📥 ' + typeLabel0 + ' アップ済データを一時保存中（本取り込み未実行）</strong> <span style="font-size:11px;color:#666;">— 続きから再開して本取り込みへ進めます</span>';
+    }
+    openSetupLabel = '続きから再開する →';
+  } else if (done === 0) {
     if (icon) icon.textContent = '⚠️';
     mainMsg = '<strong>初期セットアップが未完了です（0/4）</strong> <span style="font-size:11px;color:#666;">不足: ' + missingNames.join('、') + '</span>';
     openSetupLabel = 'セットアップを開く →';
@@ -2911,6 +2923,8 @@ function refreshB0ResumeBanner(forceShow) {
   draftSteps.forEach(function(d) {
     ctaItems.push('<button class="btn btn-p btn-sm" onclick="b0ResumeDraftStep(' + d.step + ')">▶ STEP ' + d.step + ' ' + d.name + '(下書き' + d.count + '件) から再開</button>');
   });
+  // CSV取り込み: 「本取り込み前」「アップ済データ名」を明示するサブブロックを追加
+  var importDetailBlock = '';
   if (importInProgress) {
     var typeLabel = importInProgress.type === 'template' ? 'テンプレ' : 'SaaS';
     var setupHash = importInProgress.type === 'template' ? 'tpl-setup' : 'saas-setup';
@@ -2918,10 +2932,46 @@ function refreshB0ResumeBanner(forceShow) {
     var completed = importInProgress.completed || 0;
     var total = importInProgress.total || 1;
     var label = importInProgress.label || '進行中';
-    ctaItems.push('<a class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;" href="' + importUrl + '" target="_blank" rel="noopener">▶ 📥 CSV(' + typeLabel + ') ' + completed + '/' + total + ' ' + label + ' から再開</a>');
+
+    // 取り込みデータ項目名を展開(itemsCompleted + itemLabels から)
+    var itemNames = [];
+    if (importInProgress.itemsCompleted && importInProgress.itemLabels) {
+      importInProgress.itemsCompleted.forEach(function(k) {
+        var nm = importInProgress.itemLabels[k] || k;
+        // 「① 業態・ブランド」等の番号プレフィックスを除去して項目名のみに
+        nm = nm.replace(/^[①②③④⑤◯●0-9]+[\s.．、・]*/, '').replace(/\s*\(.*$/, '').trim();
+        if (nm) itemNames.push(nm);
+      });
+    }
+    var itemListStr = itemNames.length > 0
+      ? itemNames.join(' / ')
+      : '(マッピング設定/プレビュー修正の進捗のみ)';
+
+    // 状態の小見出し: 「本取り込み未実行=一時保存中」を明示
+    var stateLine = '';
+    if (importInProgress.mapping_changed) {
+      stateLine = '<span style="font-size:11px;color:#9c4d12;">マッピング設定を変更途中（本取り込み未実行）</span>';
+    } else if (importInProgress.preview_changed) {
+      stateLine = '<span style="font-size:11px;color:#9c4d12;">プレビュー修正を変更途中（本取り込み未実行）</span>';
+    } else {
+      stateLine = '<span style="font-size:11px;color:#9c4d12;">アップ済データを一時保存中（本取り込み未実行）</span>';
+    }
+
+    importDetailBlock =
+      '<div style="margin-top:8px;padding:8px 12px;background:#fff8ed;border:1px solid #fde68a;border-radius:6px;font-size:11px;color:#9c4d12;line-height:1.6;">' +
+        '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">' +
+          '<span style="font-size:14px;">💾</span>' +
+          '<strong>📥 CSV(' + typeLabel + ') ' + completed + '/' + total + '</strong>' +
+          ' <span style="color:#9c4d12;">— ' + label + '</span>' +
+        '</div>' +
+        '<div style="margin-top:4px;">' + stateLine + '</div>' +
+        '<div style="margin-top:4px;color:#555;"><strong>取り込みデータ:</strong> ' + itemListStr + '</div>' +
+      '</div>';
+
+    ctaItems.push('<a class="btn btn-p btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;background:#e67e22;border-color:#e67e22;" href="' + importUrl + '" target="_blank" rel="noopener">▶ 続きから再開（本取り込みへ進む）</a>');
   }
   var ctaBlock = '<div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ccc;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">' + ctaItems.join('') + '</div>';
-  msg.innerHTML = mainMsg + ctaBlock;
+  msg.innerHTML = mainMsg + importDetailBlock + ctaBlock;
 }
 
 // 一時保存中のSTEPへ遷移して下書き復元(打刻記録の中断ポイントCTA用)
@@ -3313,7 +3363,13 @@ function bDemoB0EmptyDraftSaasStep2() {
     sessionStorage.setItem('b0Counts', JSON.stringify([0, 0, 0, 0, 0]));
     localStorage.setItem('import_in_progress', JSON.stringify({
       type: 'saas', completed: 1, total: 5,
-      currentStep: 's-saas2', label: '② マッピング設定',
+      currentStep: 's-saas2', label: '② マッピング設定(変更途中)',
+      mapping_changed: true,
+      itemsCompleted: ['map-kot-emp', 'map-kot-hr'],
+      itemLabels: {
+        'map-kot-emp':'従業員データ','map-kot-hr':'従業員一覧',
+        'map-kot-group':'所属グループデータ','map-kot-rate':'単価データ','map-kot-admin':'管理者データ'
+      },
       startedAt: Date.now()
     }));
     sessionStorage.setItem('b0EmptyMode', 'alert');
@@ -3329,7 +3385,13 @@ function bDemoB0EmptyDraftSaasPreview() {
     sessionStorage.setItem('b0Counts', JSON.stringify([0, 0, 0, 0, 0]));
     localStorage.setItem('import_in_progress', JSON.stringify({
       type: 'saas', completed: 2, total: 5,
-      currentStep: 's-saas-preview', label: '③ プレビュー・マッピング修正(途中)',
+      currentStep: 's-saas-preview', label: '③ プレビュー・マッピング修正(変更途中)',
+      preview_changed: true,
+      itemsCompleted: ['map-kot-emp', 'map-kot-hr'],
+      itemLabels: {
+        'map-kot-emp':'従業員データ','map-kot-hr':'従業員一覧',
+        'map-kot-group':'所属グループデータ','map-kot-rate':'単価データ','map-kot-admin':'管理者データ'
+      },
       startedAt: Date.now()
     }));
     sessionStorage.setItem('b0EmptyMode', 'alert');
@@ -3674,11 +3736,27 @@ function applySetupModeOnSettings(stepNum) {
       var info = SETTING_PAGES[stepNum - 1];
       // setup mode 進行中は常に「設定前」モードを初期表示
       if (info) switchSettingMode(info.id, 'empty');
+      // setup mode 進行中は ops 用デモトグル(設定前/設定後切替)を非表示にして混在回避
+      // (CTA は新規登録=モーダル / 運用更新=トースト で完全分離するため、ops UI は出さない)
+      if (info) {
+        var settingPage = document.getElementById('page-' + info.id);
+        if (settingPage) {
+          var modeBlock = settingPage.querySelector('.setting-mode-block');
+          if (modeBlock) modeBlock.style.display = 'none';
+        }
+      }
     }
   } else {
     // 運用中(done>=4): setup UI 完全クリア → 通常の設定画面表示
     clearSetupActiveStep();
     clearSetupSettingsUI();
+    // ops用デモトグルを復活(通常運用モード)
+    SETTING_PAGES.forEach(function(p) {
+      var sp = document.getElementById('page-' + p.id);
+      if (!sp) return;
+      var mb = sp.querySelector('.setting-mode-block');
+      if (mb) mb.style.display = '';
+    });
   }
 }
 
@@ -3711,19 +3789,9 @@ function renderSetupSettingsUI(stepNum) {
     nextBtn = '<button class="btn btn-s btn-sm" disabled style="opacity:0.5;cursor:not-allowed;">登録すると次STEPへ進めます</button>';
   }
 
-  // 一時保存(下書き)ステータス
-  var draftBlock = '';
-  if (b0HasDraft(stepNum)) {
-    var draftData = b0LoadDraft(stepNum);
-    var draftN = draftData ? draftData.length : 0;
-    draftBlock =
-      '<div style="background:#fff3e0;border:1px solid #e67e22;border-radius:6px;padding:8px 12px;margin-top:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">' +
-        '<span style="font-size:16px;">💾</span>' +
-        '<div style="flex:1;min-width:140px;font-size:11px;color:#9c4d12;">一時保存中: <strong>' + draftN + '件分</strong>の入力内容が保存されています</div>' +
-        '<button class="btn btn-p btn-sm" onclick="bResumeDraft(' + stepNum + ')" style="background:#e67e22;border-color:#e67e22;">再開する →</button>' +
-        '<button class="btn btn-s btn-sm" onclick="b0DiscardDraft(' + stepNum + ')">破棄</button>' +
-      '</div>';
-  }
+  // 一時保存(下書き)ステータスは設定画面に出さない:
+  // 一時保存=画面離脱の状態 → 表示先は「打刻記録画面TOPの中断CTA」(refreshB0ResumeBanner)
+  // ここに出すと「離脱前提のCTA」と「現在編集中の画面」が混在し意味矛盾するため削除済
 
   var stepBadgeText = stepNum <= 4 ? ('初期セットアップ STEP ' + stepNum + ' / 4') : ('任意STEP ' + stepNum + ' / 5');
   var stepBadgeBg = stepNum <= 4 ? '#2ec4a5' : '#888';
@@ -3742,8 +3810,7 @@ function renderSetupSettingsUI(stepNum) {
     '<div style="background:#fff;border-radius:20px;overflow:hidden;height:8px;border:1px solid #d1e7e0;">' +
       '<div style="background:linear-gradient(90deg,#2ec4a5,#1a9e7e);height:100%;width:' + pct + '%;transition:width 0.3s;"></div>' +
     '</div>' +
-    '<div style="font-size:10px;color:#0e9077;margin-top:6px;">進捗: ' + done + '/4 STEP完了 ・ 当STEP登録件数: ' + registered + '件' + (stepNum === 5 ? ' ・ <strong>任意項目</strong>' : ' ・ <strong>※ 設定画面の並び順≠初期登録の必須順</strong>') + '</div>' +
-    draftBlock;
+    '<div style="font-size:10px;color:#0e9077;margin-top:6px;">進捗: ' + done + '/4 STEP完了 ・ 当STEP登録件数: ' + registered + '件' + (stepNum === 5 ? ' ・ <strong>任意項目</strong>' : ' ・ <strong>※ 設定画面の並び順≠初期登録の必須順</strong>') + '</div>';
   mainEl.insertBefore(banner, mainEl.firstChild);
 
   var oldFloat = document.querySelector('.setup-mode-float-back');
