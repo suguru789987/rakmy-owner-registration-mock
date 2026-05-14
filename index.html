@@ -3356,10 +3356,15 @@ function bDemoB0EmptyDraftSaasFix() {
   try {
     sessionStorage.setItem('b0Done', '0');
     sessionStorage.setItem('b0Counts', JSON.stringify([0, 0, 0, 0, 0]));
+    // 注: currentStep==='s-saas-fix' は refreshB0ResumeBanner で最優先判定されるため
+    // preview_changed フラグは打刻記録の文言には影響しない。但しimport-spec側で
+    // _mockSaasPreviewChanged フラグの復元用に preview_changed:true を残しておく。
     localStorage.setItem('import_in_progress', JSON.stringify({
       type: 'saas', completed: 2, total: 5,
       currentStep: 's-saas-fix', label: '③ エラー/未マップ項目 修正中',
       preview_changed: true,
+      // デモ用 fix_state: 値変更済 → s-saas-preview のサマリーカードが「⚠ 一部修正済」表示になる
+      fix_state: { error_action: 'value-changed', error_new_value: 'アルバイト', defaults_skipped: false },
       itemsCompleted: ['map-kot-emp', 'map-kot-hr'],
       itemLabels: {
         'map-kot-emp':'従業員データ','map-kot-hr':'従業員一覧',
