@@ -3307,10 +3307,11 @@ function bDemoB0EmptyDraftTplStep1() {
     sessionStorage.setItem('b0Done', '0');
     sessionStorage.setItem('b0Counts', JSON.stringify([0, 0, 0, 0, 0]));
     localStorage.setItem('import_in_progress', JSON.stringify({
-      type: 'template', completed: 2, total: 4,
-      currentStep: 's-tpl1', label: '① 取り込みデータ選択(2項目完了)',
-      itemsCompleted: ['brand', 'store'],
-      itemLabels: { brand: '① 業態・ブランド', store: '② 店舗', emptype: '③ 雇用区分', employee: '④ 従業員' },
+      type: 'template', completed: 4, total: 4,
+      currentStep: 's-tpl1', label: '✓ 必須項目すべて完了(登録前準備完了)',
+      allRequiredDone: true,
+      itemsCompleted: ['brand', 'store', 'emptype', 'employee'],
+      itemLabels: { brand: '① 業態・ブランド', store: '② 店舗', emptype: '③ 雇用区分', employee: '④ 従業員', admin: '⑤ 管理者(任意)' },
       startedAt: Date.now()
     }));
     sessionStorage.setItem('b0EmptyMode', 'alert');
