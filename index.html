@@ -2419,7 +2419,7 @@ function b0SetState(doneCount) {
   b0SaveDone(doneCount);
   // デモトグル「未完了」へ戻した場合は件数もリセット(新規登録感の再現)
   if (doneCount === 0) {
-    b0SaveCounts([0, 0, 0, 0]);
+    b0SaveCounts([0, 0, 0, 0, 0]); // counts は 5 要素 (STEP 1〜5: 業態/店舗/雇用区分/従業員/管理者)
   }
   // デモ用 状態切替トグル更新
   for (var i = 0; i <= 4; i++) {
@@ -2892,10 +2892,25 @@ function refreshB0ResumeBanner(forceShow) {
     if (icon) icon.textContent = '💾';
     var typeLabel0 = importInProgress.type === 'template' ? 'CSV(テンプレ)' : 'CSV(外部勤怠)';
     var stateShort;
-    if (importInProgress.currentStep === 's-saas-fix') stateShort = 'エラー/未マップ項目 修正中';
-    else if (importInProgress.mapping_changed) stateShort = 'マッピング設定 変更途中';
-    else if (importInProgress.preview_changed) stateShort = 'プレビュー修正 変更途中';
-    else stateShort = 'アップ済データ 一時保存中';
+    // 優先度: s-saas-fix > mapping_changed > preview_changed > s-saas2/preview の到達のみ > allRequiredDone > 通常アップ
+    if (importInProgress.currentStep === 's-saas-fix') {
+      stateShort = 'エラー/未マップ項目 修正中';
+    } else if (importInProgress.mapping_changed) {
+      stateShort = 'マッピング設定 変更途中';
+    } else if (importInProgress.preview_changed) {
+      stateShort = 'プレビュー修正 変更途中';
+    } else if (importInProgress.currentStep === 's-saas2') {
+      stateShort = 'マッピング設定(プリセット適用済)';
+    } else if (importInProgress.currentStep === 's-saas-preview') {
+      stateShort = 'プレビュー(マッピング確認済)';
+    } else if (importInProgress.allRequiredDone) {
+      // 必須項目すべて完了済(登録前準備完了) — テンプレ4/4 or SaaS 必須カバー時
+      stateShort = '✓ 必須項目すべて完了(登録前準備完了)';
+    } else if (importInProgress.completed != null && importInProgress.total != null) {
+      stateShort = 'アップ済(' + importInProgress.completed + '/' + importInProgress.total + ') 一時保存中';
+    } else {
+      stateShort = 'アップ済データ 一時保存中';
+    }
     mainMsg = '<strong style="color:#9c4d12;">📥 ' + typeLabel0 + ' ' + stateShort + '（本取り込み前）</strong>';
     openSetupLabel = '続きから再開 →';
   } else if (done === 0) {
@@ -3950,13 +3965,17 @@ function setupGoNextStep(currentStep) {
   }
 }
 function setupCompleteAll() {
-  b0SaveDone(4);
+  b0SaveDone(4); // setupGoNextStep(4) で既に4にしている場合もあるが、べき等なのでOK
   clearSetupActiveStep();
   // STEP 5 パネルを隠して b0 のウィザード/完了サマリ表示に戻す
   var step5 = document.getElementById('b0-step5-panel');
   if (step5) step5.style.display = 'none';
   clearSetupSidebarOnPage('page-b0');
   document.body.removeAttribute('data-setup-mode');
+  // 完了 → 打刻記録の表示モードを normal に明示切替 (バナー描画のため refreshB0ResumeBanner も呼ぶ)
+  try { sessionStorage.setItem('b0EmptyMode', 'normal'); } catch (e) {}
+  if (typeof refreshB0ResumeBanner === 'function') refreshB0ResumeBanner();
+  if (typeof refreshSidebarSetupLink === 'function') refreshSidebarSetupLink();
   go('b0');
 }
 
