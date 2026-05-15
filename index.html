@@ -854,25 +854,8 @@
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc" style="background:#f8f9fa;">
-      <!-- モック開発用デモシミュレーション(完了/未完了切替・常時表示) -->
-      <div style="margin-bottom:14px;padding:10px 14px;background:#fff3e0;border:1px dashed #e67e22;border-radius:8px;max-width:760px;">
-        <div style="font-size:11px;font-weight:700;color:#e67e22;margin-bottom:6px;">🛠 デモ用シミュレーション(モック確認用・常時表示)</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
-          <span style="font-size:10px;color:#888;font-weight:600;align-self:center;">完了:</span>
-          <button class="btn btn-s btn-sm" onclick="bSimulateImport(1)">① 業態</button>
-          <button class="btn btn-s btn-sm" onclick="bSimulateImport(2)">② 店舗</button>
-          <button class="btn btn-s btn-sm" onclick="bSimulateImport(3)">③ 雇用区分</button>
-          <button class="btn btn-s btn-sm" onclick="bSimulateImport(4)">④ 必須4項目</button>
-        </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <span style="font-size:10px;color:#888;font-weight:600;align-self:center;">中断:</span>
-          <button class="btn btn-s btn-sm" onclick="bDemoAlert()" style="color:#e67e22;border-color:#ffd9b0;">⚠️ アラート(未完了)</button>
-          <button class="btn btn-s btn-sm" onclick="bDemoDraftSettings()" style="color:#e67e22;border-color:#ffd9b0;">⏸ 中断:設定画面</button>
-          <button class="btn btn-s btn-sm" onclick="bDemoDraftTpl()" style="color:#e67e22;border-color:#ffd9b0;">⏸ 中断:CSV(テンプレ)</button>
-          <button class="btn btn-s btn-sm" onclick="bDemoDraftSaas()" style="color:#e67e22;border-color:#ffd9b0;">⏸ 中断:CSV(外部勤怠)</button>
-          <button class="btn btn-s btn-sm" onclick="b0DemoReset()" style="color:#c62828;border-color:#f5c2c2;">🔄 未完了に戻す</button>
-        </div>
-      </div>
+      <!-- (page-b0 のデモバーは撤去 — page-b0 は初期セットアップガイドであり、デモバーはここに置くべきでない。
+           done 値変更等のシミュレートは page-b0-empty (打刻記録 TOP) のデモバーから行う) -->
       <!-- 完了済みガード(done=4時に表示) -->
       <div id="b0-completed-banner"></div>
       <div class="ph"><h2 id="b0-page-title">初期セットアップ</h2></div>
