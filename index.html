@@ -2793,6 +2793,15 @@ function b0SetState(doneCount) {
       '<div style="flex:1;"><strong>初期登録は完了しています。</strong> 下の運用導線からご利用ください。</div>' +
       '</div>' : '';
   }
+  // 整合性ガード: STEP 5 パネルが非表示の場合は b0ShowStep5Panel で書き換えた UI を必ず元に戻す
+  // (STEP 5 パネル表示中に書き換えた b0-completed-banner.style.display と b0-page-title.textContent の対称処理)
+  var _step5PanelEl = document.getElementById('b0-step5-panel');
+  var _step5Visible = _step5PanelEl && _step5PanelEl.style.display !== 'none';
+  if (!_step5Visible) {
+    if (compBanner) compBanner.style.display = '';
+    var _pgTitle = document.getElementById('b0-page-title');
+    if (_pgTitle) _pgTitle.textContent = '初期セットアップ';
+  }
   for (var b = 1; b <= 5; b++) {
     var item = document.getElementById('b0-sb-biz-' + b);
     if (item) item.style.opacity = bizComplete ? '' : '0.5';
@@ -3082,6 +3091,16 @@ function applyB0EmptyMode(mode) {
   var banner = document.getElementById('b0-resume-banner');
   var emptyView = document.getElementById('b0-empty-state');
   var normalView = document.getElementById('b0-normal-view');
+  // 整合性ガード: normal モード指定でも、必須未完 or STEP 1〜5 中断 draft があれば強制的に alert に切替
+  // (打刻記録 TOP に直接アクセスしても中断状態が見えなくなるコンタミを防止)
+  if (mode === 'normal') {
+    var _hasDraft = false;
+    for (var _i = 1; _i <= 5; _i++) {
+      if (typeof b0HasDraft === 'function' && b0HasDraft(_i)) { _hasDraft = true; break; }
+    }
+    var _needAlert = (b0LoadDone() < 4) || _hasDraft;
+    if (_needAlert) mode = 'alert';
+  }
   if (mode === 'normal') {
     if (banner) banner.style.display = 'none';
     if (emptyView) emptyView.style.display = 'none';
