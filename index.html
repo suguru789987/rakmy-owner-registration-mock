@@ -4540,7 +4540,8 @@ function b0ClearDraft(stepNum) {
   try { sessionStorage.removeItem('b0Draft_' + stepNum); } catch (e) {}
 }
 
-// STEP 5 管理者登録モーダル用 一時保存 (他STEPと整合性のため追加)
+// STEP 5 管理者登録モーダル用 一時保存
+// 整合性: 他STEP (1〜4) の b0SaveDraft と同様、空入力でも保存可 (ガードなし)
 function b0SaveAdminDraft() {
   var modal = document.getElementById('b-setup-admin-overlay');
   if (!modal) return;
@@ -4559,12 +4560,7 @@ function b0SaveAdminDraft() {
   modal.querySelectorAll('select').forEach(function(el) {
     if (el.offsetParent !== null) selects.push(el.selectedIndex);
   });
-  // 入力が空っぽならガード
-  var hasInput = inputs.some(function(v) { return v && v.trim(); }) || checks.some(function(b) { return b; }) || selects.some(function(i) { return i > 0; });
-  if (!hasInput) {
-    alert('⚠️ 入力内容がありません\n\n名前/メアド/初期パスワード/担当店舗 等を入力してから一時保存してください。');
-    return;
-  }
+  // ★ 整合性: 他STEP同様、空入力でも保存可 (ガードを撤去)
   var draftData = [{ inputs: inputs, selects: selects, checks: checks, tabType: tabType }];
   try { sessionStorage.setItem('b0Draft_5', JSON.stringify(draftData)); } catch (e) {}
   bCloseSetupAdminModal();
