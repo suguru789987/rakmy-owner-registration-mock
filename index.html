@@ -1074,13 +1074,18 @@
         <div class="fg"><label>名前 <span class="req">✳</span></label><input id="setup-admin-new-name" value="" placeholder="例: 佐藤 一郎" style="max-width:100%;"></div>
         <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input id="setup-admin-new-email" type="email" value="" placeholder="例: sato@example.jp" style="max-width:100%;"></div>
         <div class="fg">
-          <label>初期パスワード <span class="req">✳</span></label>
-          <input id="setup-admin-new-pw" type="password" value="" placeholder="8文字以上で入力" style="max-width:100%;">
-          <div class="hint" style="margin-top:6px;">8文字以上・強度「強い」以上が必要です。登録後、管理者に口頭やチャット等で共有してください</div>
+          <label>初期パスワード <span class="req">✳</span> <span style="font-size:10px;color:#0e9077;font-weight:600;">(自動生成済)</span></label>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <input id="setup-admin-new-pw" type="text" value="" readonly style="flex:1;background:#f9f9f9;font-family:monospace;font-size:14px;letter-spacing:1px;font-weight:700;">
+            <button type="button" onclick="regenerateAdminPw('setup-admin-new-pw','setup-admin-new-pw2')" style="padding:8px 12px;border:1px solid #ccc;border-radius:6px;background:#fff;cursor:pointer;font-size:11px;font-weight:700;">🔄 再生成</button>
+            <button type="button" onclick="copyAdminPw('setup-admin-new-pw')" style="padding:8px 12px;border:1px solid #ccc;border-radius:6px;background:#fff;cursor:pointer;font-size:11px;font-weight:700;">📋 コピー</button>
+          </div>
+          <div class="hint" style="margin-top:6px;">8文字以上・強度「強い」以上を自動生成。<strong>管理者に口頭やチャット等でこのパスワードを共有してください</strong>。「🔄 再生成」で作り直せます。</div>
         </div>
         <div class="fg">
           <label>初期パスワード（確認）<span class="req">✳</span></label>
-          <input id="setup-admin-new-pw2" type="password" value="" placeholder="同じパスワードを再入力" style="max-width:100%;">
+          <input id="setup-admin-new-pw2" type="text" value="" readonly style="max-width:100%;background:#f9f9f9;font-family:monospace;font-size:14px;letter-spacing:1px;font-weight:700;">
+          <div class="hint" style="margin-top:6px;">自動生成のため確認欄も自動同期されます</div>
         </div>
         <div class="dv" style="margin:14px 0;"></div>
         <div class="fg">
@@ -2056,13 +2061,18 @@
               <div class="fg"><label>名前 <span class="req">✳</span></label><input id="d2-new-name" value="" placeholder="例: 鈴木 花子" style="max-width:100%;"></div>
               <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input id="d2-new-email" type="email" value="" placeholder="例: suzuki@example.jp" style="max-width:100%;"></div>
               <div class="fg">
-                <label>初期パスワード <span class="req">✳</span></label>
-                <input id="d2-new-pw" type="password" value="" placeholder="8文字以上で入力" style="max-width:100%;">
-                <div class="hint" style="margin-top:6px;">8文字以上・強度「強い」以上が必要です。登録後、管理者に口頭やチャット等で共有してください</div>
+                <label>初期パスワード <span class="req">✳</span> <span style="font-size:10px;color:#0e9077;font-weight:600;">(自動生成済)</span></label>
+                <div style="display:flex;gap:6px;align-items:center;">
+                  <input id="d2-new-pw" type="text" value="" readonly style="flex:1;background:#f9f9f9;font-family:monospace;font-size:14px;letter-spacing:1px;font-weight:700;">
+                  <button type="button" onclick="regenerateAdminPw('d2-new-pw','d2-new-pw2')" style="padding:8px 12px;border:1px solid #ccc;border-radius:6px;background:#fff;cursor:pointer;font-size:11px;font-weight:700;">🔄 再生成</button>
+                  <button type="button" onclick="copyAdminPw('d2-new-pw')" style="padding:8px 12px;border:1px solid #ccc;border-radius:6px;background:#fff;cursor:pointer;font-size:11px;font-weight:700;">📋 コピー</button>
+                </div>
+                <div class="hint" style="margin-top:6px;">8文字以上・強度「強い」以上を自動生成。<strong>管理者に口頭やチャット等でこのパスワードを共有してください</strong>。「🔄 再生成」で作り直せます。</div>
               </div>
               <div class="fg">
                 <label>初期パスワード（確認）<span class="req">✳</span></label>
-                <input id="d2-new-pw2" type="password" value="" placeholder="同じパスワードを再入力" style="max-width:100%;">
+                <input id="d2-new-pw2" type="text" value="" readonly style="max-width:100%;background:#f9f9f9;font-family:monospace;font-size:14px;letter-spacing:1px;font-weight:700;">
+                <div class="hint" style="margin-top:6px;">自動生成のため確認欄も自動同期されます</div>
               </div>
 
               <div class="dv" style="margin:14px 0;"></div>
@@ -2428,7 +2438,11 @@ function go(id) {
   var t = document.getElementById('nav-' + id);
   if (t) t.classList.add('active');
   // d2(管理者登録)を開いた際は初期タブ「新規登録」にリセット
-  if (id === 'd2') d2SwitchTab('new');
+  if (id === 'd2') {
+    d2SwitchTab('new');
+    // ★ 初期パスワード自動生成 (オーナーが毎回考えなくていいよう)
+    if (typeof regenerateAdminPw === 'function') regenerateAdminPw('d2-new-pw', 'd2-new-pw2');
+  }
   // b0(初期セットアップ)を開いた際は保存済み進捗とメソッド選択を反映
   if (id === 'b0') {
     b0SetState(b0LoadDone());
@@ -4323,6 +4337,50 @@ function bOpenSetupAdminModal() {
   if (ov) ov.classList.add('act');
   // 開いた時点で「新規登録」タブ初期化(ボタン文言も合わせて切替)
   setupAdminSwitchTab('new');
+  // ★ 初期パスワード自動生成 (オーナーが毎回考えなくていいよう)
+  regenerateAdminPw('setup-admin-new-pw', 'setup-admin-new-pw2');
+}
+
+// 管理者初期パスワード自動生成: 英大文字+英小文字+数字を混在で12文字
+function generateAdminInitialPw() {
+  var upper = 'ABCDEFGHJKLMNPQRSTUVWXYZ';   // 紛らわしい I/O 除外
+  var lower = 'abcdefghijkmnpqrstuvwxyz';   // 同 l/o 除外
+  var digit = '23456789';                    // 0/1 除外
+  var all = upper + lower + digit;
+  var len = 12;
+  // 各カテゴリから最低1文字保証
+  var chars = [
+    upper[Math.floor(Math.random() * upper.length)],
+    lower[Math.floor(Math.random() * lower.length)],
+    digit[Math.floor(Math.random() * digit.length)]
+  ];
+  for (var i = chars.length; i < len; i++) {
+    chars.push(all[Math.floor(Math.random() * all.length)]);
+  }
+  // シャッフル
+  for (var j = chars.length - 1; j > 0; j--) {
+    var k = Math.floor(Math.random() * (j + 1));
+    var tmp = chars[j]; chars[j] = chars[k]; chars[k] = tmp;
+  }
+  return chars.join('');
+}
+// 入力欄に自動生成PWをセット (確認欄にも同期)
+function regenerateAdminPw(pwId, pw2Id) {
+  var pw = generateAdminInitialPw();
+  var el1 = document.getElementById(pwId);
+  var el2 = pw2Id ? document.getElementById(pw2Id) : null;
+  if (el1) el1.value = pw;
+  if (el2) el2.value = pw;
+}
+// クリップボードにコピー (ユーザーが管理者へ口頭/チャット共有しやすいよう)
+function copyAdminPw(pwId) {
+  var el = document.getElementById(pwId);
+  if (!el) return;
+  try {
+    if (navigator.clipboard) navigator.clipboard.writeText(el.value);
+    else { el.select(); document.execCommand('copy'); }
+    alert('📋 初期パスワードをコピーしました: ' + el.value + '\n\n管理者へ口頭/チャット等で共有してください。');
+  } catch (e) { alert('コピー失敗: ' + el.value + '\n手動で選択してコピーしてください。'); }
 }
 function bCloseSetupAdminModal() {
   var ov = document.getElementById('b-setup-admin-overlay');
