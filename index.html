@@ -1178,15 +1178,8 @@
           </select>
         </div>
         <div class="fg"><label>メールアドレス（従業員台帳より自動入力）</label><input class="ro-input" value="" readonly placeholder="従業員を選択すると自動入力されます" style="max-width:100%;"></div>
-        <div class="fg">
-          <label>初期パスワード <span class="req">✳</span></label>
-          <input type="password" value="" placeholder="8文字以上で入力" style="max-width:100%;">
-          <div class="hint" style="margin-top:6px;">8文字以上・強度「強い」以上が必要です。登録後、管理者に口頭やチャット等で共有してください</div>
-        </div>
-        <div class="fg">
-          <label>初期パスワード（確認）<span class="req">✳</span></label>
-          <input type="password" value="" placeholder="同じパスワードを再入力" style="max-width:100%;">
-        </div>
+        <!-- 仕様: 従業員から選択は既存従業員アカウントへの権限昇格のため、初期パスワード設定は不要 -->
+        <div class="al al-i" style="margin-top:6px;font-size:11px;align-items:center;"><span>💡</span><div>既存の従業員アカウントに管理者権限を付与します。<strong>初期パスワードは不要</strong>です（従業員が既に設定済みのパスワードでログインします）。</div></div>
         <div class="dv" style="margin:14px 0;"></div>
         <div class="fg">
           <label>担当店舗 <span class="req">✳</span></label>
