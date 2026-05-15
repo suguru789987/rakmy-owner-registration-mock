@@ -3678,14 +3678,15 @@ function bDemoB0EmptyDraftAdminStep5New() {
   applyB0EmptyMode('alert');
 }
 // STEP 5 管理者(任意・従業員から選択タブ) で一時保存中の状態を再現
+// 仕様変更 (2026-05-15): 従業員から選択タブには PW フィールドなし → inputs はメアド (auto) のみ
 function bDemoB0EmptyDraftAdminStep5Emp() {
   _bDemoClearAll();
   try {
     sessionStorage.setItem('b0Done', '4');
     sessionStorage.setItem('b0Counts', JSON.stringify([2, 3, 4, 12, 0]));
-    // 従業員から選択タブ: 従業員dropdown / メアド自動 / 初期PW / 確認PW
+    // 従業員から選択タブ: 従業員dropdown(select) / メアド自動(readonly) / 担当店舗(checks)
     sessionStorage.setItem('b0Draft_5', JSON.stringify([
-      { inputs: ['', 'pass5678', 'pass5678'], selects: [2], checks: [true, false, false, false], tabType: 'emp' }
+      { inputs: [''], selects: [2], checks: [true, false, false, false], tabType: 'emp' }
     ]));
     sessionStorage.setItem('b0DraftSavedAt', String(Date.now())); // ★ シナリオ排他用
     sessionStorage.setItem('b0EmptyMode', 'alert');
