@@ -508,6 +508,7 @@
     <span class="nav-tab" onclick="go('d2')" id="nav-d2">管理者登録</span>
     <span class="nav-tab" onclick="go('admin-invite-email')" id="nav-admin-invite-email">📧 管理者招待メール</span>
     <span class="nav-tab" onclick="go('admin-pw-setup')" id="nav-admin-pw-setup">🔑 招待URL先 PW設定</span>
+    <span class="nav-tab" onclick="go('admin-b0')" id="nav-admin-b0">👑 管理者ログイン後 TOP</span>
     <span class="nav-tab" onclick="go('d3')" id="nav-d3">登録完了メール(新規)</span>
     <span class="nav-tab" onclick="go('d4')" id="nav-d4">登録完了メール(昇格)</span>
     <span class="nav-tab" onclick="go('d1e')" id="nav-d1e">管理者編集</span>
@@ -759,6 +760,81 @@
       </div>
     </div>
     <div class="public-right"><div class="clock-ph"><div class="clock-bar"></div></div></div>
+  </div>
+</div>
+
+<!-- ===== 管理者専用 打刻記録 TOP (招待URLログイン後の遷移先) =====
+     混在回避: オーナー画面 (page-b0) と完全分離した管理者専用画面 -->
+<div class="page" id="page-admin-b0">
+  <div class="dash">
+    <aside class="sb">
+      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
+      <!-- 管理者ナビ (オーナーと違い、設定/初期セットアップ/管理者管理は表示しない) -->
+      <div class="sb-sec">
+        <a href="#" class="act"><span class="ic">⏱</span>打刻記録</a>
+        <a href="#"><span class="ic">📊</span>勤務時間集計</a>
+        <a href="#"><span class="ic">💰</span>給与</a>
+        <a href="#"><span class="ic">📥</span>エクスポート</a>
+      </div>
+      <div class="sb-sec">
+        <div class="sl">担当店舗の管理</div>
+        <a href="#"><span class="ic">👤</span>従業員 (担当店舗)</a>
+        <a href="#"><span class="ic">📋</span>雇用区分 (担当店舗)</a>
+      </div>
+      <!-- 設定系・管理者管理は表示しない (オーナー専用のため) -->
+    </aside>
+    <main class="mc">
+      <div class="ph" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <h2 style="margin:0;">打刻記録</h2>
+        <span style="background:#e3f2fd;color:#0d47a1;padding:3px 9px;border-radius:10px;font-size:10px;font-weight:700;">👑 管理者ビュー</span>
+        <span style="color:#888;font-size:11px;">佐藤 一郎 さん / 担当店舗: 渋谷店</span>
+      </div>
+
+      <!-- (管理者登録バナーはここに refreshAdminRegisteredBanner で動的挿入) -->
+
+      <div class="al al-i" style="margin-top:16px;font-size:12px;">💡 管理者は担当店舗の従業員管理・勤怠管理・給与確認が可能です。設定変更や他店舗のデータへはアクセスできません。</div>
+
+      <!-- 簡易打刻記録テーブル (管理者ビュー) -->
+      <div style="background:#fff;border:1px solid #eee;border-radius:8px;padding:18px;margin-top:18px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-p btn-sm">本日</button>
+            <button class="btn btn-s btn-sm">今週</button>
+            <button class="btn btn-s btn-sm">今月</button>
+          </div>
+          <div style="flex:1;min-width:10px;"></div>
+          <div style="font-size:11px;color:#888;">店舗: <strong>渋谷店</strong> (担当店舗のみ表示)</div>
+        </div>
+        <table style="width:100%;font-size:12px;border-collapse:collapse;">
+          <thead>
+            <tr style="background:#fafafa;border-bottom:1px solid #eee;">
+              <th style="text-align:left;padding:8px 10px;">従業員</th>
+              <th style="text-align:left;padding:8px 10px;">店舗</th>
+              <th style="text-align:left;padding:8px 10px;">出勤</th>
+              <th style="text-align:left;padding:8px 10px;">退勤</th>
+              <th style="text-align:left;padding:8px 10px;">勤務時間</th>
+              <th style="text-align:left;padding:8px 10px;">状態</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid #f5f5f5;"><td style="padding:8px 10px;">吉田 七美</td><td style="padding:8px 10px;">渋谷店</td><td style="padding:8px 10px;">09:00</td><td style="padding:8px 10px;">18:05</td><td style="padding:8px 10px;">8:05</td><td style="padding:8px 10px;color:#0e9077;">✓ 確定</td></tr>
+            <tr style="border-bottom:1px solid #f5f5f5;"><td style="padding:8px 10px;">山田 健一</td><td style="padding:8px 10px;">渋谷店</td><td style="padding:8px 10px;">09:30</td><td style="padding:8px 10px;">19:00</td><td style="padding:8px 10px;">8:30</td><td style="padding:8px 10px;color:#0e9077;">✓ 確定</td></tr>
+            <tr><td style="padding:8px 10px;">佐藤 美咲</td><td style="padding:8px 10px;">渋谷店</td><td style="padding:8px 10px;">14:00</td><td style="padding:8px 10px;">23:00</td><td style="padding:8px 10px;">8:00</td><td style="padding:8px 10px;color:#0e9077;">✓ 確定</td></tr>
+          </tbody>
+        </table>
+        <div style="text-align:center;color:#aaa;font-size:11px;margin-top:14px;">他 5 件の打刻記録があります (担当店舗 渋谷店分のみ)</div>
+      </div>
+
+      <!-- 仕様メモ (モック確認用、本番では非表示) -->
+      <div style="margin-top:24px;padding:12px 14px;background:#fff8ed;border:1px solid #fde68a;border-radius:8px;font-size:11px;color:#9c4d12;line-height:1.7;">
+        💡 <strong>モック仕様メモ:</strong><br>
+        • この画面 (<code>page-admin-b0</code>) は <strong>管理者専用の打刻記録 TOP</strong> です<br>
+        • オーナー画面 (<code>page-b0</code>) とは完全に独立 (混在回避)<br>
+        • 招待URLログイン後 (adminPwSetupCompleteLogin) はこの画面に遷移<br>
+        • サイドナビ: 担当店舗関連のみ表示、設定/初期セットアップ/管理者管理は非表示<br>
+        • 「💡 管理者登録されました（YYYY/M/D）」バナーは画面上部に表示
+      </div>
+    </main>
   </div>
 </div>
 
@@ -2467,8 +2543,8 @@ function go(id) {
   if (id === 'b0-empty') {
     applyB0EmptyMode(loadB0EmptyMode());
   }
-  // 打刻記録 (b0 / b0-empty) 上部の「管理者登録されました」バナー再描画
-  if ((id === 'b0' || id === 'b0-empty') && typeof refreshAdminRegisteredBanner === 'function') {
+  // 打刻記録 (b0 / b0-empty / admin-b0) 上部の「管理者登録されました」バナー再描画
+  if ((id === 'b0' || id === 'b0-empty' || id === 'admin-b0') && typeof refreshAdminRegisteredBanner === 'function') {
     refreshAdminRegisteredBanner();
   }
   // サイドバー「📋 初期セットアップ」リンクの表示制御(完了前のみ)
@@ -4517,7 +4593,8 @@ function b0SubmitAdminEntry() {
   setTimeout(function(){ bShowSetupAdminCompleteModal(counts[4], which); }, 200);
 }
 
-// 招待PW設定画面の「登録を完了してログイン」: adminRegisteredAt 記録 → 打刻記録画面に遷移してバナー表示
+// 招待PW設定画面の「登録を完了してログイン」: adminRegisteredAt 記録 → 管理者専用画面 (page-admin-b0) に遷移
+// (オーナー画面 page-b0 と混在回避のため admin-b0 へ)
 function adminPwSetupCompleteLogin() {
   try {
     var today = new Date();
@@ -4525,15 +4602,15 @@ function adminPwSetupCompleteLogin() {
     sessionStorage.setItem('adminRegisteredAt', ymd);
     sessionStorage.setItem('adminRegisteredWhich', 'new');
   } catch (e) {}
-  if (typeof go === 'function') go('b0');
+  if (typeof go === 'function') go('admin-b0');
   if (typeof refreshAdminRegisteredBanner === 'function') refreshAdminRegisteredBanner();
 }
 
-// 打刻記録画面 (page-b0 / page-b0-empty) 上部の「管理者登録されました」バナー再描画
+// 打刻記録画面 (page-b0 / page-b0-empty / page-admin-b0) 上部の「管理者登録されました」バナー再描画
 function refreshAdminRegisteredBanner() {
   var ymd;
   try { ymd = sessionStorage.getItem('adminRegisteredAt'); } catch (e) {}
-  ['page-b0', 'page-b0-empty'].forEach(function(pageId) {
+  ['page-b0', 'page-b0-empty', 'page-admin-b0'].forEach(function(pageId) {
     var page = document.getElementById(pageId);
     if (!page) return;
     var existing = page.querySelector('.admin-registered-banner');
