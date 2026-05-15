@@ -4918,11 +4918,13 @@ function bCloseSetupSaveDraftModal() {
 // 「⏱ 打刻記録画面へ（TOP）」: モーダル閉じて打刻記録画面に遷移
 function bSetupSaveDraftGoTop() {
   bCloseSetupSaveDraftModal();
-  // ★ 一時保存中バナー表示のため b0EmptyMode='alert' を強制セット
-  //   (デフォルトは done に応じて normal/alert が決まるが、一時保存中なら必ずバナー表示が必要)
+  // ★ 設定画面シナリオに集中するため、CSV側の中断状態 (localStorage.import_in_progress) をクリア
+  //   理由: ユーザー指示「設定画面登録とCSV一括インポートは独立、同時シナリオは想定外」
+  //   コンタミ回避: 打刻記録バナーで両系の再開CTAが併記される状態を防ぐ
+  try { localStorage.removeItem('import_in_progress'); } catch (e) {}
+  // 一時保存中バナー表示のため b0EmptyMode='alert' を強制セット
   try { sessionStorage.setItem('b0EmptyMode', 'alert'); } catch (e) {}
   if (typeof go === 'function') go('b0-empty');
-  // 遷移後にバナー再描画 (refreshB0ResumeBanner は applyB0EmptyMode 内で呼ばれる)
   if (typeof applyB0EmptyMode === 'function') applyB0EmptyMode('alert');
 }
 
