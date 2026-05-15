@@ -2540,15 +2540,11 @@ function go(id) {
     setTimeout(function(){ b0ShowStep5Panel(); }, 0);
   }
   // 打刻記録(b0-empty)の中断再開バナー + デモ切替モード適用
+  // 「打刻記録画面 (TOP)」として、done に依らず常に表示 (mode 切替で内容差分)
+  // - done<4: アラートモード (セットアップ未完了)
+  // - done=4 + 中断あり (b0Draft_5 / import_in_progress): アラートモード (中断バナー表示)
+  // - done=4 + 中断なし: ノーマルモード (通常の打刻記録テーブル)
   if (id === 'b0-empty') {
-    // ★ done>=4 (セットアップ完了済) で b0-empty に来たら b0 (完了画面) にリダイレクト
-    //   コンタミ回避: 画面と状態を 1対1 対応 (b0-empty=done<4 / b0=done>=4)
-    try {
-      if (b0LoadDone() >= 4) {
-        setTimeout(function(){ go('b0'); }, 30);
-        return;
-      }
-    } catch (e) {}
     applyB0EmptyMode(loadB0EmptyMode());
   }
   // 打刻記録 (b0 / b0-empty / admin-b0) 上部の「管理者登録されました」バナー再描画
@@ -3247,9 +3243,17 @@ function refreshB0ResumeBanner(forceShow) {
     }
     openSetupLabel = '続きから再開する →';
   } else {
-    if (icon) icon.textContent = '⚠️';
-    mainMsg = '<strong>🛠 デモ: アラート時表示</strong> <span style="font-size:11px;color:#666;">(実際は4/4完了済)</span>';
-    openSetupLabel = 'セットアップを確認 →';
+    // done >= 4: 必須完了済。STEP 5 (任意・管理者) の一時保存中なら専用メッセ
+    if (icon) icon.textContent = '💾';
+    if (draftSteps.length > 0 && draftSteps[0].step === 5) {
+      var step5 = draftSteps[0];
+      mainMsg = '<strong style="color:#9c4d12;">💾 任意STEP 5 管理者登録を中断中</strong>: ' + step5.name + '(下書き' + step5.count + '件)' +
+                '<div style="font-size:11px;color:#888;margin-top:4px;">※ 必須4項目(業態/店舗/雇用区分/従業員)の登録は完了済です</div>';
+      openSetupLabel = '続きから再開する →';
+    } else {
+      mainMsg = '<strong>🛠 デモ: アラート時表示</strong> <span style="font-size:11px;color:#666;">(実際は4/4完了済)</span>';
+      openSetupLabel = 'セットアップを確認 →';
+    }
   }
   // 右端の単独ボタンは非表示(全CTAを下部の同列に並べる)
   btn.style.display = 'none';
@@ -4960,18 +4964,11 @@ function bSetupSaveDraftGoTop() {
   bCloseSetupSaveDraftModal();
   // ★ 設定画面シナリオに集中するため、CSV側の中断状態をクリア (シナリオ排他)
   try { localStorage.removeItem('import_in_progress'); } catch (e) {}
-  // 遷移先: done<4 なら b0-empty (未セットアップ画面)、done>=4 なら b0 (完了画面、STEP 5任意の一時保存ケース)
-  var done = (typeof b0LoadDone === 'function') ? b0LoadDone() : 0;
-  if (done >= 4) {
-    // STEP 5 一時保存ケース: 完了画面 (page-b0) に遷移し、上部に STEP 5 再開CTAを表示
-    if (typeof go === 'function') go('b0');
-    if (typeof refreshSetupDraftBannerOnB0 === 'function') refreshSetupDraftBannerOnB0();
-  } else {
-    // STEP 1〜4 一時保存ケース: 未セットアップ画面 (page-b0-empty) に遷移してアラート表示
-    try { sessionStorage.setItem('b0EmptyMode', 'alert'); } catch (e) {}
-    if (typeof go === 'function') go('b0-empty');
-    if (typeof applyB0EmptyMode === 'function') applyB0EmptyMode('alert');
-  }
+  // 「打刻記録画面 (TOP)」 = page-b0-empty に統一 (page-b0 はセットアップガイドであり TOP ではない)
+  // 中断中なので alert モードで再開バナー表示
+  try { sessionStorage.setItem('b0EmptyMode', 'alert'); } catch (e) {}
+  if (typeof go === 'function') go('b0-empty');
+  if (typeof applyB0EmptyMode === 'function') applyB0EmptyMode('alert');
 }
 
 // page-b0 (完了画面) 上部に STEP 5 一時保存の再開バナーを動的挿入
@@ -5006,8 +5003,9 @@ function refreshSetupDraftBannerOnB0() {
   banner.className = 'b0-step5-resume-banner';
   banner.style.cssText = 'background:#fff8ed;border:1px solid #fde68a;color:#9c4d12;border-radius:8px;padding:12px 14px;margin:12px 0;font-size:12px;line-height:1.7;max-width:760px;';
   banner.innerHTML =
-    '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><span style="font-size:14px;">💾</span>' +
-      '<span>設定画面 一時保存中: <strong>STEP 5 <span class="adm-step5-name">' + name + '</span>(' + count + '件)</strong></span></div>' +
+    '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><span style="font-size:14px;">💾</span>' +
+      '<span><strong>任意STEP 5 管理者登録を中断中</strong>: <span class="adm-step5-name">' + name + '</span>(下書き' + count + '件)</span></div>' +
+    '<div style="font-size:11px;color:#888;margin-bottom:8px;">※ 必須4項目(業態/店舗/雇用区分/従業員)の登録は完了済です。任意STEPの続きから再開できます。</div>' +
     '<button class="btn btn-p btn-sm adm-step5-cta" onclick="b0ResumeDraftStep(5)">▶ STEP 5 ' + name + '(下書き' + count + '件) から再開</button>';
   main.insertBefore(banner, main.firstChild);
 }
