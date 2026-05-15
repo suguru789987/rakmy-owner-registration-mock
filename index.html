@@ -2561,10 +2561,8 @@ function go(id) {
   if ((id === 'b0' || id === 'b0-empty' || id === 'admin-b0') && typeof refreshAdminRegisteredBanner === 'function') {
     refreshAdminRegisteredBanner();
   }
-  // page-b0 (完了画面) 上部 STEP 5 一時保存 再開バナー
-  if (id === 'b0' && typeof refreshSetupDraftBannerOnB0 === 'function') {
-    refreshSetupDraftBannerOnB0();
-  }
+  // 注: page-b0 (初期セットアップガイド) には STEP 5 一時保存バナーを出さない
+  //     TOP = page-b0-empty に統一 (refreshB0ResumeBanner が一元担当)
   // サイドバー「📋 初期セットアップ」リンクの表示制御(完了前のみ)
   refreshSidebarSetupLink();
   // URLハッシュ同期(ディープリンク対応)
@@ -4971,43 +4969,15 @@ function bSetupSaveDraftGoTop() {
   if (typeof applyB0EmptyMode === 'function') applyB0EmptyMode('alert');
 }
 
-// page-b0 (完了画面) 上部に STEP 5 一時保存の再開バナーを動的挿入
-// (STEP 5 = 任意なので done=4 完了後の打刻記録画面で表示)
+// (旧 refreshSetupDraftBannerOnB0 は撤回 — STEP 5 一時保存バナーは TOP=page-b0-empty
+//  の refreshB0ResumeBanner に一元化。page-b0 はセットアップガイドなのでバナーを出さない)
 function refreshSetupDraftBannerOnB0() {
+  // page-b0 上の旧バナー残骸を除去
   var page = document.getElementById('page-b0');
-  if (!page) return;
-  var main = page.querySelector('main.mc');
-  if (!main) return;
-  var existing = page.querySelector('.b0-step5-resume-banner');
-  // STEP 5 のみ対象、それ以下のSTEPは page-b0-empty で扱う
-  var hasStep5Draft = (typeof b0HasDraft === 'function') && b0HasDraft(5);
-  if (!hasStep5Draft) {
+  if (page) {
+    var existing = page.querySelector('.b0-step5-resume-banner');
     if (existing) existing.remove();
-    return;
   }
-  // タブ種別取得
-  var d = b0LoadDraft(5);
-  var name = '管理者(任意)';
-  if (d && d[0] && d[0].tabType) {
-    name = '管理者(任意・' + (d[0].tabType === 'emp' ? '従業員から選択' : '新規登録') + ')';
-  }
-  var count = (d && d.length) || 1;
-  if (existing) {
-    var titleEl = existing.querySelector('.adm-step5-name');
-    if (titleEl) titleEl.textContent = name;
-    var ctaEl = existing.querySelector('.adm-step5-cta');
-    if (ctaEl) ctaEl.textContent = '▶ STEP 5 ' + name + '(下書き' + count + '件) から再開';
-    return;
-  }
-  var banner = document.createElement('div');
-  banner.className = 'b0-step5-resume-banner';
-  banner.style.cssText = 'background:#fff8ed;border:1px solid #fde68a;color:#9c4d12;border-radius:8px;padding:12px 14px;margin:12px 0;font-size:12px;line-height:1.7;max-width:760px;';
-  banner.innerHTML =
-    '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><span style="font-size:14px;">💾</span>' +
-      '<span><strong>任意STEP 5 管理者登録を中断中</strong>: <span class="adm-step5-name">' + name + '</span>(下書き' + count + '件)</span></div>' +
-    '<div style="font-size:11px;color:#888;margin-bottom:8px;">※ 必須4項目(業態/店舗/雇用区分/従業員)の登録は完了済です。任意STEPの続きから再開できます。</div>' +
-    '<button class="btn btn-p btn-sm adm-step5-cta" onclick="b0ResumeDraftStep(5)">▶ STEP 5 ' + name + '(下書き' + count + '件) から再開</button>';
-  main.insertBefore(banner, main.firstChild);
 }
 
 function b0LoadDraft(stepNum) {
