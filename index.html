@@ -1130,6 +1130,8 @@
 
       <div class="btn-grp">
         <button class="btn btn-s" onclick="bCloseSetupAdminModal()">キャンセル</button>
+        <!-- 整合性: 他STEP (1〜4) と同じく一時保存ボタンを設置 (任意STEP 5 でも離脱時に状態保持できるよう) -->
+        <button class="btn btn-s" onclick="b0SaveAdminDraft()" style="background:#fff3e0;border-color:#e67e22;color:#e67e22;font-weight:700;">💾 一時保存</button>
         <button class="btn btn-p" onclick="b0SubmitAdminEntry()">管理者を登録</button>
       </div>
     </div>
@@ -2872,10 +2874,10 @@ function refreshB0ResumeBanner(forceShow) {
   var btn = document.getElementById('b0-resume-btn');
   if (!banner || !msg || !btn) return;
   var done = b0LoadDone();
-  // 一時保存中のSTEP検知
+  // 一時保存中のSTEP検知 (STEP 5 管理者・任意も対象に追加)
   var draftSteps = [];
-  var stepLabels = ['', '業態', '店舗', '雇用区分', '従業員'];
-  for (var i = 1; i <= 4; i++) {
+  var stepLabels = ['', '業態', '店舗', '雇用区分', '従業員', '管理者(任意)'];
+  for (var i = 1; i <= 5; i++) {
     if (b0HasDraft(i)) {
       var d = b0LoadDraft(i);
       draftSteps.push({ step: i, name: stepLabels[i], count: d.length });
@@ -2990,6 +2992,44 @@ function refreshB0ResumeBanner(forceShow) {
 // 一時保存中のSTEPへ遷移して下書き復元(打刻記録の中断ポイントCTA用)
 function b0ResumeDraftStep(stepNum) {
   saveSetupActiveStep(stepNum);
+  if (stepNum === 5) {
+    // STEP 5: 管理者 (任意) — page-b0 のSTEP5パネル → 管理者モーダルを開いて下書き復元
+    go('b0');
+    setTimeout(function(){
+      if (typeof b0ShowStep5Panel === 'function') b0ShowStep5Panel();
+      if (typeof bOpenSetupAdminModal === 'function') bOpenSetupAdminModal();
+      // 管理者モーダルへ下書き復元
+      setTimeout(function(){
+        var draft = b0LoadDraft(5);
+        if (!draft || !draft[0]) return;
+        var d = draft[0];
+        var modal = document.getElementById('b-setup-admin-overlay');
+        if (!modal) return;
+        // タブ復元
+        if (d.tabType && typeof setupAdminSwitchTab === 'function') setupAdminSwitchTab(d.tabType);
+        // 入力値復元
+        var inputEls = [];
+        modal.querySelectorAll('input[type="text"], input[type="email"], input[type="password"]').forEach(function(el) {
+          if (el.offsetParent !== null) inputEls.push(el);
+        });
+        (d.inputs || []).forEach(function(v, i) { if (inputEls[i]) inputEls[i].value = v; });
+        // チェック復元
+        var checkEls = [];
+        modal.querySelectorAll('input[type="checkbox"]').forEach(function(el) {
+          if (el.offsetParent !== null) checkEls.push(el);
+        });
+        (d.checks || []).forEach(function(b, i) { if (checkEls[i]) checkEls[i].checked = !!b; });
+        // select復元
+        var selectEls = [];
+        modal.querySelectorAll('select').forEach(function(el) {
+          if (el.offsetParent !== null) selectEls.push(el);
+        });
+        (d.selects || []).forEach(function(idx, i) { if (selectEls[i]) selectEls[i].selectedIndex = idx; });
+      }, 200);
+    }, 200);
+    return;
+  }
+  // STEP 1〜4: 設定画面 + 下書きモーダル復元 (既存)
   go(SETTINGS_PAGES[stepNum]);
   setTimeout(function(){ bOpenStep(stepNum); }, 250);
 }
@@ -4200,6 +4240,7 @@ function b0SubmitAdminEntry() {
   var counts = b0LoadCounts();
   counts[4] = (counts[4] || 0) + 1;
   b0SaveCounts(counts);
+  b0ClearDraft(5); // 登録完了で STEP 5 下書きクリア (他STEPと整合性)
   bCloseSetupAdminModal();
   refreshStep5Panel();
   setTimeout(function(){ bShowSetupAdminCompleteModal(counts[4], which); }, 200);
@@ -4445,15 +4486,17 @@ function b0SaveDraft(stepNum) {
 }
 
 // 新規登録セットアップステップ用 中断地点保存モーダル
-// 文言整合性: refreshB0ResumeBanner と統一 (stepLabels = 短縮版「業態/店舗/雇用区分/従業員」)
+// 文言整合性: refreshB0ResumeBanner と統一 (stepLabels = 短縮版「業態/店舗/雇用区分/従業員/管理者」)
 function bShowSetupSaveDraftModal(stepNum, n) {
   // バナーと同じ短縮ステップ名 (refreshB0ResumeBanner の stepLabels 参照)
-  var stepLabels = ['', '業態', '店舗', '雇用区分', '従業員'];
+  var stepLabels = ['', '業態', '店舗', '雇用区分', '従業員', '管理者(任意)'];
   var detail = document.getElementById('b-setup-save-draft-detail');
   if (detail) {
+    // STEP 5 (管理者) は任意なので進捗表記を「STEP 5/5」ではなく「任意STEP」表記
+    var progressLabel = (stepNum === 5) ? '任意STEP' : '進捗 ' + stepNum + '/4';
     detail.innerHTML = '<strong>初期セットアップ取込</strong> の中断地点を保存しました。<br>' +
                        '中断地点: <strong>STEP ' + stepNum + ' ' + stepLabels[stepNum] + '(下書き ' + n + ' 件)</strong>' +
-                       ' <span style="font-size:11px;color:#666;">(進捗 ' + stepNum + '/4)</span>';
+                       ' <span style="font-size:11px;color:#666;">(' + progressLabel + ')</span>';
   }
   var ov = document.getElementById('b-setup-save-draft-overlay');
   if (ov) ov.classList.add('act');
@@ -4482,6 +4525,37 @@ function b0HasDraft(stepNum) {
 
 function b0ClearDraft(stepNum) {
   try { sessionStorage.removeItem('b0Draft_' + stepNum); } catch (e) {}
+}
+
+// STEP 5 管理者登録モーダル用 一時保存 (他STEPと整合性のため追加)
+function b0SaveAdminDraft() {
+  var modal = document.getElementById('b-setup-admin-overlay');
+  if (!modal) return;
+  // 現在 active なタブ (新規登録 / 従業員から選択) を判定し、入力値を保存
+  var activeTab = modal.querySelector('.mtab.act');
+  var tabType = activeTab ? activeTab.getAttribute('data-stab') : 'new';
+  var inputs = [];
+  modal.querySelectorAll('input[type="text"], input[type="email"], input[type="password"]').forEach(function(el) {
+    if (el.offsetParent !== null) inputs.push(el.value || '');
+  });
+  var checks = [];
+  modal.querySelectorAll('input[type="checkbox"]').forEach(function(el) {
+    if (el.offsetParent !== null) checks.push(!!el.checked);
+  });
+  var selects = [];
+  modal.querySelectorAll('select').forEach(function(el) {
+    if (el.offsetParent !== null) selects.push(el.selectedIndex);
+  });
+  // 入力が空っぽならガード
+  var hasInput = inputs.some(function(v) { return v && v.trim(); }) || checks.some(function(b) { return b; }) || selects.some(function(i) { return i > 0; });
+  if (!hasInput) {
+    alert('⚠️ 入力内容がありません\n\n名前/メアド/初期パスワード/担当店舗 等を入力してから一時保存してください。');
+    return;
+  }
+  var draftData = [{ inputs: inputs, selects: selects, checks: checks, tabType: tabType }];
+  try { sessionStorage.setItem('b0Draft_5', JSON.stringify(draftData)); } catch (e) {}
+  bCloseSetupAdminModal();
+  bShowSetupSaveDraftModal(5, 1);
 }
 
 function bResumeDraft(stepNum) {
