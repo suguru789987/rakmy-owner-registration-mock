@@ -3150,6 +3150,14 @@ function refreshB0ResumeBanner(forceShow) {
       draftSteps.push({ step: i, name: name, count: d.length });
     }
   }
+  // ★ 必須STEPは順序強制: 「次に進むべきSTEP (done+1)」の draft のみ表示
+  //   STEP 5 (任意) は done=4 完了後にのみ表示
+  //   理由: 仕様上 STEP 1 未完了で STEP 2 に進めない → 再開ボタンが複数並ぶのは仕様外
+  draftSteps = draftSteps.filter(function(d) {
+    if (d.step <= 4) return d.step === (done + 1);
+    if (d.step === 5) return done >= 4;
+    return false;
+  });
   // CSVインポート中断検知
   var importInProgress = null;
   try {
