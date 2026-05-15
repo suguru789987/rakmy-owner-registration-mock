@@ -1423,7 +1423,8 @@
             <span style="color:#888;font-size:9px;font-weight:600;">設定画面登録 中断:</span>
             <button class="b0empty-mode-toggle" data-mode="alert" onclick="bDemoSettingsAlertMode()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⚠️ アラート時</button>
             <button onclick="bDemoB0EmptyAlertOnly()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⚠️ 完全未完了</button>
-            <button onclick="bDemoB0EmptyDraftSettings()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⏸ 下書きあり</button>
+            <button onclick="bDemoB0EmptyDraftSettings()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⏸ 下書きあり (STEP 2 店舗)</button>
+            <button onclick="bDemoB0EmptyDraftAdminStep5()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⏸ STEP 5 管理者(任意)</button>
           </div>
           <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
             <span style="color:#888;font-size:9px;font-weight:600;">CSV(テンプレ) 中断:</span>
@@ -3353,6 +3354,22 @@ function bDemoB0EmptyDraftSettings() {
   } catch (e) {}
   applyB0EmptyMode('alert');
 }
+
+// STEP 5 管理者(任意) で一時保存中の状態を再現
+function bDemoB0EmptyDraftAdminStep5() {
+  _bDemoClearAll();
+  try {
+    // STEP 1〜4 は完了済 (done=4) で、STEP 5 管理者(任意) のみ一時保存中
+    sessionStorage.setItem('b0Done', '4');
+    sessionStorage.setItem('b0Counts', JSON.stringify([2, 3, 4, 12, 0]));
+    sessionStorage.setItem('b0Draft_5', JSON.stringify([
+      { inputs: ['佐藤 一郎', 'sato@example.jp', 'pass1234', 'pass1234'], selects: [0], checks: [true, false, false, false], tabType: 'new' }
+    ]));
+    sessionStorage.setItem('b0EmptyMode', 'alert');
+    saveSetupActiveStep(5);
+  } catch (e) {}
+  applyB0EmptyMode('alert');
+}
 // CSVテンプレ ①取込項目中断: s-tpl1 で業態・店舗を選択済み状態
 function bDemoB0EmptyDraftTplStep1() {
   _bDemoClearAll();
@@ -4521,7 +4538,12 @@ function bCloseSetupSaveDraftModal() {
 // 「⏱ 打刻記録画面へ（TOP）」: モーダル閉じて打刻記録画面に遷移
 function bSetupSaveDraftGoTop() {
   bCloseSetupSaveDraftModal();
+  // ★ 一時保存中バナー表示のため b0EmptyMode='alert' を強制セット
+  //   (デフォルトは done に応じて normal/alert が決まるが、一時保存中なら必ずバナー表示が必要)
+  try { sessionStorage.setItem('b0EmptyMode', 'alert'); } catch (e) {}
   if (typeof go === 'function') go('b0-empty');
+  // 遷移後にバナー再描画 (refreshB0ResumeBanner は applyB0EmptyMode 内で呼ばれる)
+  if (typeof applyB0EmptyMode === 'function') applyB0EmptyMode('alert');
 }
 
 function b0LoadDraft(stepNum) {
