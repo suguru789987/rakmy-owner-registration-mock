@@ -506,6 +506,8 @@
     <span class="nav-flow">D 管理者</span>
     <span class="nav-tab" onclick="go('d1')" id="nav-d1">管理者一覧</span>
     <span class="nav-tab" onclick="go('d2')" id="nav-d2">管理者登録</span>
+    <span class="nav-tab" onclick="go('admin-invite-email')" id="nav-admin-invite-email">📧 管理者招待メール</span>
+    <span class="nav-tab" onclick="go('admin-pw-setup')" id="nav-admin-pw-setup">🔑 招待URL先 PW設定</span>
     <span class="nav-tab" onclick="go('d3')" id="nav-d3">登録完了メール(新規)</span>
     <span class="nav-tab" onclick="go('d4')" id="nav-d4">登録完了メール(昇格)</span>
     <span class="nav-tab" onclick="go('d1e')" id="nav-d1e">管理者編集</span>
@@ -1848,6 +1850,101 @@
 </div>
 
 <!-- ===== D-1: 管理者一覧（直接登録方式） ===== -->
+<!-- ===== 管理者権限付き 招待メール プレビュー (新規登録タブ送付分のサンプル) ===== -->
+<div class="page" id="page-admin-invite-email">
+  <main class="mc" style="max-width:760px;margin:40px auto;padding:0 20px;">
+    <h1 style="font-size:20px;margin-bottom:18px;">📧 招待メール プレビュー (管理者権限付き)</h1>
+    <div class="al al-i" style="margin-bottom:20px;font-size:12px;">受信者にはこのメールが届きます。<strong>通常の従業員招待メールと同じフォーマット</strong>ですが、招待URLからのアクティブ化で<strong>管理者権限付きアカウント</strong>として登録されます。</div>
+
+    <div style="background:#fff;border:1px solid #ddd;border-radius:8px;padding:24px;font-size:13px;line-height:1.8;color:#333;font-family:'Hiragino Kaku Gothic ProN', sans-serif;">
+      <div style="border-bottom:1px solid #eee;padding-bottom:14px;margin-bottom:14px;">
+        <div style="font-size:11px;color:#888;">From: noreply@rakmy.jp</div>
+        <div style="font-size:11px;color:#888;">To: sato@example.jp</div>
+        <div style="font-size:11px;color:#888;">Date: 2026/5/15 13:15</div>
+        <div style="font-weight:700;margin-top:8px;font-size:15px;">件名: 【ラクミー タイムレコード】 アカウント招待のお知らせ</div>
+      </div>
+
+      <div>佐藤 一郎 様</div>
+      <br>
+      <div>このたび、株式会社サンプルの ラクミー タイムレコード にご招待いただきました。</div>
+      <div>下記の URL からアカウントを有効化してください。</div>
+      <br>
+      <div style="background:#f5f5f5;border-radius:6px;padding:14px;margin:10px 0;">
+        <div style="font-size:11px;color:#666;margin-bottom:6px;">▼ アカウント有効化URL</div>
+        <a href="#" onclick="event.preventDefault();go('admin-pw-setup')" style="color:#0e9077;font-weight:700;text-decoration:underline;word-break:break-all;">https://rakmy.jp/invite?t=admin-3a9f8e2c1b...</a>
+      </div>
+      <br>
+      <div>※ オーナーが初期パスワードを設定済みです。<br>URL先のパスワード設定画面で、初期パスワードを確認・変更後、ログインできます。</div>
+      <br>
+      <hr style="border:none;border-top:1px solid #eee;margin:14px 0;">
+      <div style="font-size:11px;color:#888;">ラクミー タイムレコード サポート<br>support@rakmy.jp</div>
+    </div>
+
+    <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn btn-p" onclick="go('admin-pw-setup')">▶ アカウント有効化URL をクリック (PW設定画面へ)</button>
+      <button class="btn btn-s" onclick="go('b0')">← 打刻記録に戻る</button>
+    </div>
+
+    <div style="margin-top:30px;padding:14px;background:#fff8ed;border:1px solid #fde68a;border-radius:8px;font-size:11px;color:#9c4d12;line-height:1.7;">
+      💡 <strong>仕様メモ:</strong><br>
+      • メールフォーマット自体は通常の従業員招待メールと同一<br>
+      • 違いは「招待URL」のトークン (?t=admin-... vs ?t=emp-...) で識別<br>
+      • 招待URL先のPW設定画面で、管理者権限バッジを表示 + 初期PWプリセット
+    </div>
+  </main>
+</div>
+
+<!-- ===== 招待URL先 PW設定画面 (管理者権限付き、初期PWプリセット) ===== -->
+<div class="page" id="page-admin-pw-setup">
+  <main class="mc" style="max-width:520px;margin:40px auto;padding:0 20px;">
+    <div style="text-align:center;margin-bottom:28px;">
+      <div style="font-size:28px;color:#0e9077;font-weight:800;letter-spacing:1px;">ラクミー <span style="font-size:13px;color:#888;">タイムレコード</span></div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #ddd;border-radius:10px;padding:30px 28px;">
+      <div style="text-align:center;margin-bottom:18px;">
+        <div style="display:inline-block;background:#e3f2fd;color:#0d47a1;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:10px;">👑 管理者権限付きアカウント</div>
+        <h1 style="font-size:18px;font-weight:800;margin:0;">パスワード設定</h1>
+        <div style="font-size:12px;color:#666;margin-top:6px;">招待メールから来ました。下記情報を確認し、パスワードを設定して有効化してください。</div>
+      </div>
+
+      <div style="background:#f9f9f9;border-radius:6px;padding:12px 14px;margin-bottom:18px;font-size:12px;line-height:1.8;">
+        <div><strong>名前:</strong> 佐藤 一郎</div>
+        <div><strong>メールアドレス:</strong> sato@example.jp</div>
+        <div><strong>所属:</strong> 株式会社サンプル</div>
+        <div><strong>担当店舗:</strong> 渋谷店</div>
+        <div><strong>権限:</strong> <span style="color:#0d47a1;font-weight:700;">管理者</span></div>
+      </div>
+
+      <div class="al al-w" style="font-size:11px;margin-bottom:18px;">
+        ⚠️ オーナーが設定した初期パスワードが下記に入力済みです。<br>
+        必要に応じて変更してから「アカウントを有効化」を押してください。
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:6px;">パスワード <span style="color:#e74c3c;">✳</span></label>
+        <input id="admin-pw-input" type="password" value="pass1234" style="width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:6px;font-size:13px;box-sizing:border-box;">
+        <div style="font-size:10px;color:#888;margin-top:4px;">8文字以上 / 強度「強い」以上推奨</div>
+      </div>
+
+      <div style="margin-bottom:18px;">
+        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:6px;">パスワード(確認) <span style="color:#e74c3c;">✳</span></label>
+        <input id="admin-pw-confirm" type="password" value="pass1234" style="width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:6px;font-size:13px;box-sizing:border-box;">
+      </div>
+
+      <button class="btn btn-p" style="width:100%;padding:12px;font-size:14px;font-weight:700;" onclick="alert('✓ アカウントを有効化しました。管理者として打刻記録画面にログインします。');go('b0');">アカウントを有効化してログイン</button>
+    </div>
+
+    <div style="margin-top:30px;padding:14px;background:#fff8ed;border:1px solid #fde68a;border-radius:8px;font-size:11px;color:#9c4d12;line-height:1.7;">
+      💡 <strong>仕様メモ:</strong><br>
+      • 通常の従業員招待リンク (?t=emp-...) なら「管理者権限付き」バッジは表示されず権限=従業員<br>
+      • 管理者招待リンク (?t=admin-...) なら 上部に「👑 管理者権限付きアカウント」バッジ表示<br>
+      • PW欄の初期値は管理者登録モーダルで設定した初期PW (pass1234 等) がプリセット済<br>
+      • ユーザーは変更可能 (推奨は変更だがそのままでも有効化可能)
+    </div>
+  </main>
+</div>
+
 <div class="page" id="page-d1">
   <div class="dash">
     <aside class="sb">
@@ -4352,7 +4449,8 @@ function bShowSetupAdminCompleteModal(totalAdmins, which) {
     titleEl.innerHTML = '✓ 管理者を1名登録し、招待メールを送付しました (累計 ' + totalAdmins + ' 名)';
     textEl.innerHTML = '新規アカウントを作成し、<strong>管理者権限付きの招待メール</strong> を送付しました。<br>' +
                        '受信者が招待メールから PW を設定すると <strong>管理者権限付きアカウント</strong> として管理者画面にログイン可能になります。<br><br>' +
-                       '<span style="color:#0d47a1;background:#e3f2fd;padding:4px 8px;border-radius:4px;font-size:11px;">💡 打刻記録画面の上部に「管理者登録されました」コメントが表示されます。</span>';
+                       '<span style="color:#0d47a1;background:#e3f2fd;padding:4px 8px;border-radius:4px;font-size:11px;">💡 打刻記録画面の上部に「管理者登録されました」コメントが表示されます。</span><br><br>' +
+                       '<button class="btn btn-s btn-sm" onclick="bSetupBridgeDismiss();go(\'admin-invite-email\')" style="background:#e3f2fd;border:1px solid #90caf9;color:#0d47a1;font-weight:700;">📧 送付された招待メールを確認</button>';
   }
   actEl.innerHTML =
     '<div class="b-bridge-primary">' +
