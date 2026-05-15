@@ -1085,11 +1085,9 @@
         <div class="dv" style="margin:14px 0;"></div>
         <div class="fg">
           <label>担当店舗 <span class="req">✳</span></label>
-          <div class="store-chk-grid">
-            <label class="store-chk"><input type="checkbox"> 渋谷店</label>
-            <label class="store-chk"><input type="checkbox"> 新宿店</label>
-            <label class="store-chk"><input type="checkbox"> 池袋店</label>
-            <label class="store-chk"><input type="checkbox"> 北海道支店</label>
+          <div class="store-chk-grid" style="grid-template-columns:1fr;">
+            <!-- 現行版準拠: 設定された店舗のみ表示 (モック上は代表サンプル「アリランロードサイド」) -->
+            <label class="store-chk"><input type="checkbox"> アリランロードサイド</label>
           </div>
           <div class="hint" style="margin-top:6px;">担当店舗の従業員管理・勤怠管理が可能になります</div>
         </div>
@@ -1121,11 +1119,11 @@
         <div class="dv" style="margin:14px 0;"></div>
         <div class="fg">
           <label>担当店舗 <span class="req">✳</span></label>
-          <div class="store-chk-grid">
-            <label class="store-chk"><input type="checkbox"> 渋谷店</label>
-            <label class="store-chk"><input type="checkbox"> 新宿店</label>
-            <label class="store-chk"><input type="checkbox"> 池袋店</label>
+          <div class="store-chk-grid" style="grid-template-columns:1fr;">
+            <!-- 現行版準拠: 設定された店舗のみ表示 (モック上は代表サンプル「アリランロードサイド」) -->
+            <label class="store-chk"><input type="checkbox"> アリランロードサイド</label>
           </div>
+          <div class="hint" style="margin-top:6px;">担当店舗の従業員管理・勤怠管理が可能になります</div>
         </div>
         <div class="al al-w" style="margin-top:14px;font-size:11px;align-items:center;"><span>⚠️</span><div>管理者は担当店舗の従業員情報・勤怠データにアクセスできます。</div></div>
       </div>
@@ -3509,7 +3507,7 @@ function bDemoB0EmptyDraftAdminStep5New() {
     sessionStorage.setItem('b0Done', '4');
     sessionStorage.setItem('b0Counts', JSON.stringify([2, 3, 4, 12, 0]));
     sessionStorage.setItem('b0Draft_5', JSON.stringify([
-      { inputs: ['佐藤 一郎', 'sato@example.jp', 'pass1234', 'pass1234'], selects: [0], checks: [true, false, false, false], tabType: 'new' }
+      { inputs: ['佐藤 一郎', 'sato@example.jp', 'pass1234', 'pass1234'], selects: [0], checks: [true], tabType: 'new' }
     ]));
     sessionStorage.setItem('b0EmptyMode', 'alert');
     saveSetupActiveStep(5);
@@ -3524,7 +3522,7 @@ function bDemoB0EmptyDraftAdminStep5Emp() {
     sessionStorage.setItem('b0Counts', JSON.stringify([2, 3, 4, 12, 0]));
     // 従業員から選択タブ: 従業員dropdown / メアド自動 / 初期PW / 確認PW
     sessionStorage.setItem('b0Draft_5', JSON.stringify([
-      { inputs: ['', 'pass5678', 'pass5678'], selects: [2], checks: [false, true, false, false], tabType: 'emp' }
+      { inputs: ['', 'pass5678', 'pass5678'], selects: [2], checks: [true], tabType: 'emp' }
     ]));
     sessionStorage.setItem('b0EmptyMode', 'alert');
     saveSetupActiveStep(5);
