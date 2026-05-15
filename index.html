@@ -2541,6 +2541,14 @@ function go(id) {
   }
   // 打刻記録(b0-empty)の中断再開バナー + デモ切替モード適用
   if (id === 'b0-empty') {
+    // ★ done>=4 (セットアップ完了済) で b0-empty に来たら b0 (完了画面) にリダイレクト
+    //   コンタミ回避: 画面と状態を 1対1 対応 (b0-empty=done<4 / b0=done>=4)
+    try {
+      if (b0LoadDone() >= 4) {
+        setTimeout(function(){ go('b0'); }, 30);
+        return;
+      }
+    } catch (e) {}
     applyB0EmptyMode(loadB0EmptyMode());
   }
   // 打刻記録 (b0 / b0-empty / admin-b0) 上部の「管理者登録されました」バナー再描画
