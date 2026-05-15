@@ -1424,7 +1424,8 @@
             <button class="b0empty-mode-toggle" data-mode="alert" onclick="bDemoSettingsAlertMode()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⚠️ アラート時</button>
             <button onclick="bDemoB0EmptyAlertOnly()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⚠️ 完全未完了</button>
             <button onclick="bDemoB0EmptyDraftSettings()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⏸ 下書きあり (STEP 2 店舗)</button>
-            <button onclick="bDemoB0EmptyDraftAdminStep5()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⏸ STEP 5 管理者(任意)</button>
+            <button onclick="bDemoB0EmptyDraftAdminStep5New()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⏸ STEP 5 管理者(新規登録)</button>
+            <button onclick="bDemoB0EmptyDraftAdminStep5Emp()" style="font-size:10px;padding:3px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;">⏸ STEP 5 管理者(従業員から選択)</button>
           </div>
           <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
             <span style="color:#888;font-size:9px;font-weight:600;">CSV(テンプレ) 中断:</span>
@@ -2875,13 +2876,19 @@ function refreshB0ResumeBanner(forceShow) {
   var btn = document.getElementById('b0-resume-btn');
   if (!banner || !msg || !btn) return;
   var done = b0LoadDone();
-  // 一時保存中のSTEP検知 (STEP 5 管理者・任意も対象に追加)
+  // 一時保存中のSTEP検知 (STEP 5 管理者・任意も対象に追加、STEP 5 はタブ種別も明示)
   var draftSteps = [];
   var stepLabels = ['', '業態', '店舗', '雇用区分', '従業員', '管理者(任意)'];
   for (var i = 1; i <= 5; i++) {
     if (b0HasDraft(i)) {
       var d = b0LoadDraft(i);
-      draftSteps.push({ step: i, name: stepLabels[i], count: d.length });
+      var name = stepLabels[i];
+      // STEP 5 (管理者): tabType を併記 (新規登録 / 従業員から選択)
+      if (i === 5 && d && d[0] && d[0].tabType) {
+        var tabLabel = (d[0].tabType === 'emp') ? '従業員から選択' : '新規登録';
+        name = '管理者(任意・' + tabLabel + ')';
+      }
+      draftSteps.push({ step: i, name: name, count: d.length });
     }
   }
   // CSVインポート中断検知
@@ -3355,15 +3362,29 @@ function bDemoB0EmptyDraftSettings() {
   applyB0EmptyMode('alert');
 }
 
-// STEP 5 管理者(任意) で一時保存中の状態を再現
-function bDemoB0EmptyDraftAdminStep5() {
+// STEP 5 管理者(任意・新規登録タブ) で一時保存中の状態を再現
+function bDemoB0EmptyDraftAdminStep5New() {
   _bDemoClearAll();
   try {
-    // STEP 1〜4 は完了済 (done=4) で、STEP 5 管理者(任意) のみ一時保存中
     sessionStorage.setItem('b0Done', '4');
     sessionStorage.setItem('b0Counts', JSON.stringify([2, 3, 4, 12, 0]));
     sessionStorage.setItem('b0Draft_5', JSON.stringify([
       { inputs: ['佐藤 一郎', 'sato@example.jp', 'pass1234', 'pass1234'], selects: [0], checks: [true, false, false, false], tabType: 'new' }
+    ]));
+    sessionStorage.setItem('b0EmptyMode', 'alert');
+    saveSetupActiveStep(5);
+  } catch (e) {}
+  applyB0EmptyMode('alert');
+}
+// STEP 5 管理者(任意・従業員から選択タブ) で一時保存中の状態を再現
+function bDemoB0EmptyDraftAdminStep5Emp() {
+  _bDemoClearAll();
+  try {
+    sessionStorage.setItem('b0Done', '4');
+    sessionStorage.setItem('b0Counts', JSON.stringify([2, 3, 4, 12, 0]));
+    // 従業員から選択タブ: 従業員dropdown / メアド自動 / 初期PW / 確認PW
+    sessionStorage.setItem('b0Draft_5', JSON.stringify([
+      { inputs: ['', 'pass5678', 'pass5678'], selects: [2], checks: [false, true, false, false], tabType: 'emp' }
     ]));
     sessionStorage.setItem('b0EmptyMode', 'alert');
     saveSetupActiveStep(5);
