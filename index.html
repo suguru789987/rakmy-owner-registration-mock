@@ -3157,6 +3157,24 @@ function refreshB0ResumeBanner(forceShow) {
     if (raw) importInProgress = JSON.parse(raw);
   } catch (e) {}
 
+  // ★ シナリオ排他制御 (抜本的コンタミ回避):
+  //   設定画面 (b0Draft_*) と CSV (importInProgress) が両方存在する場合、
+  //   最後に保存された方を「現在のアクティブシナリオ」として表示し、もう片方は描画しない。
+  //   ユーザー指示「設定画面登録 ⇄ CSV一括インポートは独立、同時シナリオ想定外」
+  if (draftSteps.length > 0 && importInProgress) {
+    var setupSavedAt = 0;
+    var csvSavedAt = 0;
+    try { setupSavedAt = parseInt(sessionStorage.getItem('b0DraftSavedAt') || '0', 10); } catch (e) {}
+    csvSavedAt = (importInProgress.savedAt || importInProgress.startedAt || 0);
+    if (setupSavedAt > csvSavedAt) {
+      // 設定画面シナリオが新しい → CSV を隠す
+      importInProgress = null;
+    } else {
+      // CSV シナリオが新しい (or 同点) → 設定画面 draftSteps を隠す
+      draftSteps = [];
+    }
+  }
+
   // 中断要素がない & 完了済(done>=4) & 強制でない場合はバナー非表示
   if (done >= 4 && !forceShow && draftSteps.length === 0 && !importInProgress) {
     banner.style.display = 'none';
@@ -4880,7 +4898,12 @@ function b0SaveDraft(stepNum) {
     row.querySelectorAll('select').forEach(function(el) { rowData.selects.push(el.selectedIndex); });
     draftData.push(rowData);
   });
-  try { sessionStorage.setItem('b0Draft_' + stepNum, JSON.stringify(draftData)); } catch (e) {}
+  try {
+    sessionStorage.setItem('b0Draft_' + stepNum, JSON.stringify(draftData));
+    // ★ 抜本的コンタミ回避: 設定画面シナリオ突入を明示 + CSV側状態クリア
+    sessionStorage.setItem('b0DraftSavedAt', String(Date.now()));
+    localStorage.removeItem('import_in_progress');
+  } catch (e) {}
   bCloseStep();
   // setupモード中ならバナー再描画(下書きバッジ表示)
   var activeStep = loadSetupActiveStep();
@@ -4966,7 +4989,12 @@ function b0SaveAdminDraft() {
   });
   // ★ 整合性: 他STEP同様、空入力でも保存可 (ガードを撤去)
   var draftData = [{ inputs: inputs, selects: selects, checks: checks, tabType: tabType }];
-  try { sessionStorage.setItem('b0Draft_5', JSON.stringify(draftData)); } catch (e) {}
+  try {
+    sessionStorage.setItem('b0Draft_5', JSON.stringify(draftData));
+    // ★ 抜本的コンタミ回避: 設定画面シナリオ突入を明示 + CSV側状態クリア
+    sessionStorage.setItem('b0DraftSavedAt', String(Date.now()));
+    localStorage.removeItem('import_in_progress');
+  } catch (e) {}
   bCloseSetupAdminModal();
   bShowSetupSaveDraftModal(5, 1);
 }
