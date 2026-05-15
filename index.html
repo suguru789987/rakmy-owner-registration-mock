@@ -2932,10 +2932,20 @@ function refreshB0ResumeBanner(forceShow) {
   } else if (done === 0) {
     if (icon) icon.textContent = '⚠️';
     mainMsg = '<strong>初期セットアップが未完了です（0/4）</strong> <span style="font-size:11px;color:#666;">不足: ' + missingNames.join('、') + '</span>';
+    // ★ 設定画面登録 (b0Draft_N) の一時保存明示: CSV側(importInProgress)とは別分岐なので干渉なし
+    if (draftSteps.length > 0) {
+      var partialSummary0 = draftSteps.map(function(d) { return 'STEP ' + d.step + ' ' + d.name + '(' + d.count + '件)'; }).join(' / ');
+      mainMsg += '<div style="font-size:11px;color:#9c4d12;margin-top:6px;">💾 設定画面 一時保存中: ' + partialSummary0 + '</div>';
+    }
     openSetupLabel = 'セットアップを開く →';
   } else if (done < 4) {
     if (icon) icon.textContent = '🔄';
     mainMsg = '<strong>初期セットアップ進行中（' + done + '/4 ・ あと ' + remaining + ' 項目）</strong> <span style="font-size:11px;color:#666;">不足: ' + missingNames.join('、') + '</span>';
+    // ★ 設定画面登録 (b0Draft_N) の一時保存明示
+    if (draftSteps.length > 0) {
+      var partialSummary1 = draftSteps.map(function(d) { return 'STEP ' + d.step + ' ' + d.name + '(' + d.count + '件)'; }).join(' / ');
+      mainMsg += '<div style="font-size:11px;color:#9c4d12;margin-top:6px;">💾 設定画面 一時保存中: ' + partialSummary1 + '</div>';
+    }
     openSetupLabel = '続きから再開する →';
   } else {
     if (icon) icon.textContent = '⚠️';
