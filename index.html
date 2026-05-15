@@ -4445,12 +4445,15 @@ function b0SaveDraft(stepNum) {
 }
 
 // 新規登録セットアップステップ用 中断地点保存モーダル
+// 文言整合性: refreshB0ResumeBanner と統一 (stepLabels = 短縮版「業態/店舗/雇用区分/従業員」)
 function bShowSetupSaveDraftModal(stepNum, n) {
-  var stepNames = ['', '業態・ブランド', '店舗', '雇用区分', '従業員', '管理者(任意)'];
+  // バナーと同じ短縮ステップ名 (refreshB0ResumeBanner の stepLabels 参照)
+  var stepLabels = ['', '業態', '店舗', '雇用区分', '従業員'];
   var detail = document.getElementById('b-setup-save-draft-detail');
   if (detail) {
-    detail.innerHTML = '<strong>初期セットアップ STEP ' + stepNum + '</strong> の中断地点を保存しました。<br>' +
-                       '中断地点: <strong>' + stepNames[stepNum] + '(下書き ' + n + ' 件)</strong>';
+    detail.innerHTML = '<strong>初期セットアップ取込</strong> の中断地点を保存しました。<br>' +
+                       '中断地点: <strong>STEP ' + stepNum + ' ' + stepLabels[stepNum] + '(下書き ' + n + ' 件)</strong>' +
+                       ' <span style="font-size:11px;color:#666;">(進捗 ' + stepNum + '/4)</span>';
   }
   var ov = document.getElementById('b-setup-save-draft-overlay');
   if (ov) ov.classList.add('act');
