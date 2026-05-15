@@ -2544,6 +2544,16 @@ function go(id) {
     applyB0EmptyMode(loadB0EmptyMode());
   }
   // 打刻記録 (b0 / b0-empty / admin-b0) 上部の「管理者登録されました」バナー再描画
+  // admin-b0 (管理者ログイン後 TOP) はデモ目的で adminRegisteredAt が未設定なら自動セット
+  if (id === 'admin-b0') {
+    try {
+      if (!sessionStorage.getItem('adminRegisteredAt')) {
+        var today = new Date();
+        sessionStorage.setItem('adminRegisteredAt', today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate());
+        sessionStorage.setItem('adminRegisteredWhich', 'new');
+      }
+    } catch (e) {}
+  }
   if ((id === 'b0' || id === 'b0-empty' || id === 'admin-b0') && typeof refreshAdminRegisteredBanner === 'function') {
     refreshAdminRegisteredBanner();
   }
