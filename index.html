@@ -2565,6 +2565,10 @@ function go(id) {
   if ((id === 'b0' || id === 'b0-empty' || id === 'admin-b0') && typeof refreshAdminRegisteredBanner === 'function') {
     refreshAdminRegisteredBanner();
   }
+  // page-b0 (完了画面) 上部 STEP 5 一時保存 再開バナー
+  if (id === 'b0' && typeof refreshSetupDraftBannerOnB0 === 'function') {
+    refreshSetupDraftBannerOnB0();
+  }
   // サイドバー「📋 初期セットアップ」リンクの表示制御(完了前のみ)
   refreshSidebarSetupLink();
   // URLハッシュ同期(ディープリンク対応)
@@ -4954,14 +4958,58 @@ function bCloseSetupSaveDraftModal() {
 // 「⏱ 打刻記録画面へ（TOP）」: モーダル閉じて打刻記録画面に遷移
 function bSetupSaveDraftGoTop() {
   bCloseSetupSaveDraftModal();
-  // ★ 設定画面シナリオに集中するため、CSV側の中断状態 (localStorage.import_in_progress) をクリア
-  //   理由: ユーザー指示「設定画面登録とCSV一括インポートは独立、同時シナリオは想定外」
-  //   コンタミ回避: 打刻記録バナーで両系の再開CTAが併記される状態を防ぐ
+  // ★ 設定画面シナリオに集中するため、CSV側の中断状態をクリア (シナリオ排他)
   try { localStorage.removeItem('import_in_progress'); } catch (e) {}
-  // 一時保存中バナー表示のため b0EmptyMode='alert' を強制セット
-  try { sessionStorage.setItem('b0EmptyMode', 'alert'); } catch (e) {}
-  if (typeof go === 'function') go('b0-empty');
-  if (typeof applyB0EmptyMode === 'function') applyB0EmptyMode('alert');
+  // 遷移先: done<4 なら b0-empty (未セットアップ画面)、done>=4 なら b0 (完了画面、STEP 5任意の一時保存ケース)
+  var done = (typeof b0LoadDone === 'function') ? b0LoadDone() : 0;
+  if (done >= 4) {
+    // STEP 5 一時保存ケース: 完了画面 (page-b0) に遷移し、上部に STEP 5 再開CTAを表示
+    if (typeof go === 'function') go('b0');
+    if (typeof refreshSetupDraftBannerOnB0 === 'function') refreshSetupDraftBannerOnB0();
+  } else {
+    // STEP 1〜4 一時保存ケース: 未セットアップ画面 (page-b0-empty) に遷移してアラート表示
+    try { sessionStorage.setItem('b0EmptyMode', 'alert'); } catch (e) {}
+    if (typeof go === 'function') go('b0-empty');
+    if (typeof applyB0EmptyMode === 'function') applyB0EmptyMode('alert');
+  }
+}
+
+// page-b0 (完了画面) 上部に STEP 5 一時保存の再開バナーを動的挿入
+// (STEP 5 = 任意なので done=4 完了後の打刻記録画面で表示)
+function refreshSetupDraftBannerOnB0() {
+  var page = document.getElementById('page-b0');
+  if (!page) return;
+  var main = page.querySelector('main.mc');
+  if (!main) return;
+  var existing = page.querySelector('.b0-step5-resume-banner');
+  // STEP 5 のみ対象、それ以下のSTEPは page-b0-empty で扱う
+  var hasStep5Draft = (typeof b0HasDraft === 'function') && b0HasDraft(5);
+  if (!hasStep5Draft) {
+    if (existing) existing.remove();
+    return;
+  }
+  // タブ種別取得
+  var d = b0LoadDraft(5);
+  var name = '管理者(任意)';
+  if (d && d[0] && d[0].tabType) {
+    name = '管理者(任意・' + (d[0].tabType === 'emp' ? '従業員から選択' : '新規登録') + ')';
+  }
+  var count = (d && d.length) || 1;
+  if (existing) {
+    var titleEl = existing.querySelector('.adm-step5-name');
+    if (titleEl) titleEl.textContent = name;
+    var ctaEl = existing.querySelector('.adm-step5-cta');
+    if (ctaEl) ctaEl.textContent = '▶ STEP 5 ' + name + '(下書き' + count + '件) から再開';
+    return;
+  }
+  var banner = document.createElement('div');
+  banner.className = 'b0-step5-resume-banner';
+  banner.style.cssText = 'background:#fff8ed;border:1px solid #fde68a;color:#9c4d12;border-radius:8px;padding:12px 14px;margin:12px 0;font-size:12px;line-height:1.7;max-width:760px;';
+  banner.innerHTML =
+    '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><span style="font-size:14px;">💾</span>' +
+      '<span>設定画面 一時保存中: <strong>STEP 5 <span class="adm-step5-name">' + name + '</span>(' + count + '件)</strong></span></div>' +
+    '<button class="btn btn-p btn-sm adm-step5-cta" onclick="b0ResumeDraftStep(5)">▶ STEP 5 ' + name + '(下書き' + count + '件) から再開</button>';
+  main.insertBefore(banner, main.firstChild);
 }
 
 function b0LoadDraft(stepNum) {
