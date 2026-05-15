@@ -1085,9 +1085,11 @@
         <div class="dv" style="margin:14px 0;"></div>
         <div class="fg">
           <label>担当店舗 <span class="req">✳</span></label>
-          <div class="store-chk-grid" style="grid-template-columns:1fr;">
-            <!-- 現行版準拠: 設定された店舗のみ表示 (モック上は代表サンプル「アリランロードサイド」) -->
-            <label class="store-chk"><input type="checkbox"> アリランロードサイド</label>
+          <div class="store-chk-grid">
+            <label class="store-chk"><input type="checkbox"> 渋谷店</label>
+            <label class="store-chk"><input type="checkbox"> 新宿店</label>
+            <label class="store-chk"><input type="checkbox"> 池袋店</label>
+            <label class="store-chk"><input type="checkbox"> 北海道支店</label>
           </div>
           <div class="hint" style="margin-top:6px;">担当店舗の従業員管理・勤怠管理が可能になります</div>
         </div>
@@ -1119,9 +1121,11 @@
         <div class="dv" style="margin:14px 0;"></div>
         <div class="fg">
           <label>担当店舗 <span class="req">✳</span></label>
-          <div class="store-chk-grid" style="grid-template-columns:1fr;">
-            <!-- 現行版準拠: 設定された店舗のみ表示 (モック上は代表サンプル「アリランロードサイド」) -->
-            <label class="store-chk"><input type="checkbox"> アリランロードサイド</label>
+          <div class="store-chk-grid">
+            <label class="store-chk"><input type="checkbox"> 渋谷店</label>
+            <label class="store-chk"><input type="checkbox"> 新宿店</label>
+            <label class="store-chk"><input type="checkbox"> 池袋店</label>
+            <label class="store-chk"><input type="checkbox"> 北海道支店</label>
           </div>
           <div class="hint" style="margin-top:6px;">担当店舗の従業員管理・勤怠管理が可能になります</div>
         </div>
@@ -2110,8 +2114,8 @@
             <div class="al al-i"><span>💡</span><div>管理者がパスワードを忘れた場合は、ログイン画面の「パスワードを忘れた」から自分でリセットできます。</div></div>
             <div class="btn-grp">
               <button class="btn btn-s" onclick="go('d1')">キャンセル</button>
-              <button class="btn btn-s" onclick="d2SubmitRegisterOnly()">登録のみ (招待は後で)</button>
-              <button class="btn btn-p" onclick="d2SubmitWithInvite()">登録 & 招待送信</button>
+              <button id="d2-btn-register-only" class="btn btn-s" onclick="d2SubmitRegisterOnly()">登録のみ (招待は後で)</button>
+              <button id="d2-btn-with-invite" class="btn btn-p" onclick="d2SubmitWithInvite()">登録 & 招待送信</button>
             </div>
           </div>
         </div>
@@ -3380,6 +3384,17 @@ function d2SwitchTab(which) {
   var pEmp = document.getElementById('d2-panel-emp');
   if (pNew) pNew.classList.toggle('act', which === 'new');
   if (pEmp) pEmp.classList.toggle('act', which === 'emp');
+  // 「従業員から選択」タブの時はボタンを「管理者を登録」1つだけ (登録&招待送信は非表示)
+  // 「新規登録」タブの時は既存の2ボタン (登録のみ / 登録&招待送信) を維持
+  var d2RegOnly = document.getElementById('d2-btn-register-only');
+  var d2WithInvite = document.getElementById('d2-btn-with-invite');
+  if (which === 'emp') {
+    if (d2RegOnly) d2RegOnly.textContent = '管理者を登録';
+    if (d2WithInvite) d2WithInvite.style.display = 'none';
+  } else {
+    if (d2RegOnly) d2RegOnly.textContent = '登録のみ (招待は後で)';
+    if (d2WithInvite) d2WithInvite.style.display = '';
+  }
 }
 
 /* D-2: 従業員選択時にメール/雇用区分/店舗を自動表示 */
@@ -3507,7 +3522,7 @@ function bDemoB0EmptyDraftAdminStep5New() {
     sessionStorage.setItem('b0Done', '4');
     sessionStorage.setItem('b0Counts', JSON.stringify([2, 3, 4, 12, 0]));
     sessionStorage.setItem('b0Draft_5', JSON.stringify([
-      { inputs: ['佐藤 一郎', 'sato@example.jp', 'pass1234', 'pass1234'], selects: [0], checks: [true], tabType: 'new' }
+      { inputs: ['佐藤 一郎', 'sato@example.jp', 'pass1234', 'pass1234'], selects: [0], checks: [true, false, false, false], tabType: 'new' }
     ]));
     sessionStorage.setItem('b0EmptyMode', 'alert');
     saveSetupActiveStep(5);
@@ -3522,7 +3537,7 @@ function bDemoB0EmptyDraftAdminStep5Emp() {
     sessionStorage.setItem('b0Counts', JSON.stringify([2, 3, 4, 12, 0]));
     // 従業員から選択タブ: 従業員dropdown / メアド自動 / 初期PW / 確認PW
     sessionStorage.setItem('b0Draft_5', JSON.stringify([
-      { inputs: ['', 'pass5678', 'pass5678'], selects: [2], checks: [true], tabType: 'emp' }
+      { inputs: ['', 'pass5678', 'pass5678'], selects: [2], checks: [true, false, false, false], tabType: 'emp' }
     ]));
     sessionStorage.setItem('b0EmptyMode', 'alert');
     saveSetupActiveStep(5);
