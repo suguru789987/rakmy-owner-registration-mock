@@ -919,6 +919,13 @@
             <a href="#d1" onclick="event.preventDefault();b0Go(5)" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">👥 管理者を追加 (STEP 5・任意)</a>
           </div>
         </div>
+
+        <!-- モック確認用: 未完了状態に戻す (デモ専用、本番では非表示想定) -->
+        <div style="margin-top:14px;padding:10px 14px;background:#fff3e0;border:1px dashed #e67e22;border-radius:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <span style="font-size:10px;color:#e67e22;font-weight:700;">🛠 モック確認用:</span>
+          <button class="btn btn-s btn-sm" onclick="b0DemoReset()" style="color:#c62828;border-color:#f5c2c2;font-weight:700;">🔄 未完了に戻す</button>
+          <span style="font-size:10px;color:#888;">初期セットアップ進捗・下書き・CSV中断状態を全てリセット</span>
+        </div>
       </div>
 
       <!-- 登録方法選択 -->
@@ -2931,11 +2938,17 @@ function b0Go(stepNum) {
 
 // b0画面のメインエリアをSTEP 5パネルに切り替える(他パネルは隠す + サイドナビをsetup-navに)
 function b0ShowStep5Panel() {
+  // STEP 5パネル表示中は他のセットアップ完了系UIを全て隠す (管理者一覧画面と完了画面の混在回避)
   var panels = ['b0-method-picker', 'b0-import-panel', 'b0-wizard-card', 'b0-completion-view'];
   panels.forEach(function(id) {
     var el = document.getElementById(id);
     if (el) el.style.display = 'none';
   });
+  // セットアップ完了お祝いバナー (b0-completed-banner) と「初期セットアップ」見出しも隠す
+  var compBanner = document.getElementById('b0-completed-banner');
+  if (compBanner) compBanner.style.display = 'none';
+  var pageTitle = document.getElementById('b0-page-title');
+  if (pageTitle) pageTitle.textContent = '管理者一覧 (STEP 5・任意)';
   var step5 = document.getElementById('b0-step5-panel');
   if (step5) step5.style.display = '';
   refreshStep5Panel();
