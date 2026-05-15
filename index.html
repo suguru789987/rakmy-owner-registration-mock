@@ -2029,15 +2029,22 @@
           </div>
         </div>
 
+        <!-- オーナー指定の初期パスワード明示バナー -->
+        <div style="background:#fff8ed;border:1px solid #fde68a;border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:11px;color:#9c4d12;line-height:1.7;">
+          🔒 下記パスワードは <strong>オーナー (株式会社サンプル) が指定した初期パスワード</strong> です。<br>
+          このまま「登録を完了してログイン」を押してください。<br>
+          <span style="color:#666;">※ ご自身のパスワードに変更したい場合は、<strong>ログイン後に「アカウント設定」</strong> から行えます。</span>
+        </div>
+
         <div style="margin-bottom:14px;">
-          <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;color:#333;">パスワード <span style="color:#2ec4a5;">*</span></label>
-          <input id="admin-pw-input" type="text" value="pass1234" style="width:100%;padding:11px 12px;border:1px solid #ddd;border-radius:4px;font-size:14px;box-sizing:border-box;background:#fff;">
-          <div style="font-size:11px;color:#888;margin-top:4px;">8文字以上・強度「強い」以上が必要です</div>
+          <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;color:#333;">パスワード <span style="color:#2ec4a5;">*</span> <span style="font-size:10px;color:#9c4d12;font-weight:600;">(オーナー指定 / 編集不可)</span></label>
+          <input id="admin-pw-input" type="text" value="pass1234" readonly style="width:100%;padding:11px 12px;border:1px solid #ddd;border-radius:4px;font-size:14px;box-sizing:border-box;background:#f5f5f5;color:#555;font-family:monospace;font-weight:700;letter-spacing:1px;cursor:not-allowed;">
+          <div style="font-size:11px;color:#888;margin-top:4px;">オーナーから別途共有された初期パスワードがプリセット済</div>
         </div>
 
         <div style="margin-bottom:20px;">
-          <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;color:#333;">パスワード（確認） <span style="color:#2ec4a5;">*</span></label>
-          <input id="admin-pw-confirm" type="text" value="pass1234" style="width:100%;padding:11px 12px;border:1px solid #ddd;border-radius:4px;font-size:14px;box-sizing:border-box;background:#fff;">
+          <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;color:#333;">パスワード（確認） <span style="color:#2ec4a5;">*</span> <span style="font-size:10px;color:#9c4d12;font-weight:600;">(自動同期 / 編集不可)</span></label>
+          <input id="admin-pw-confirm" type="text" value="pass1234" readonly style="width:100%;padding:11px 12px;border:1px solid #ddd;border-radius:4px;font-size:14px;box-sizing:border-box;background:#f5f5f5;color:#555;font-family:monospace;font-weight:700;letter-spacing:1px;cursor:not-allowed;">
         </div>
 
         <button onclick="adminPwSetupCompleteLogin()" style="width:100%;padding:14px;font-size:14px;font-weight:700;background:#2ec4a5;color:#fff;border:none;border-radius:4px;cursor:pointer;">登録を完了してログイン</button>
@@ -2062,7 +2069,9 @@
       • 現行の従業員招待メール遷移先アカウント設定画面に <strong>合わせた</strong> デザイン<br>
       • <strong>「区分: 管理者」</strong> の表記で通常の従業員招待 (区分: 社員B等) と区別<br>
       • PW欄に <strong>管理者登録モーダル(新規登録タブ)で設定した初期パスワード</strong> がプリセット済 (pass1234)<br>
-      • ユーザーはそのまま「登録を完了してログイン」押下で即時ログイン可能 (PW変更も可)
+      • PW欄は <strong>readonly (編集不可)</strong> — オーナー指定のPWを尊重<br>
+      • 管理者本人によるPW変更は <strong>ログイン後の「アカウント設定」</strong>で可能 (このタイミングでは変更させない)<br>
+      • 「オーナー指定 / 編集不可」 のラベルとオレンジ警告バナーでオーナー指定パスワードであることを明示
     </div>
   </main>
 </div>
