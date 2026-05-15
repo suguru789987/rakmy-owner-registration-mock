@@ -4544,8 +4544,9 @@ function refreshAdminRegisteredBanner() {
     if (existing) { existing.querySelector('.adm-date').textContent = ymd; return; }
     var banner = document.createElement('div');
     banner.className = 'admin-registered-banner';
-    banner.style.cssText = 'background:#e3f2fd;border:1px solid #90caf9;color:#0d47a1;border-radius:8px;padding:10px 14px;margin:12px 0;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;';
-    banner.innerHTML = '<span style="font-size:16px;">👤</span> 管理者登録されました（<span class="adm-date">' + ymd + '</span>）';
+    // スクショの「💡 管理者がパスワードを...」と同じシンプル スタイル
+    banner.style.cssText = 'background:#e3f2fd;border:1px solid #b3d9f0;color:#333;border-radius:6px;padding:10px 14px;margin:12px 0;font-size:12px;display:flex;align-items:center;gap:8px;line-height:1.6;';
+    banner.innerHTML = '<span style="font-size:14px;">💡</span> 管理者登録されました（<span class="adm-date">' + ymd + '</span>）';
     // ページ最上部 (main.mc 直下) に挿入
     var main = page.querySelector('main.mc');
     if (main) main.insertBefore(banner, main.firstChild);
