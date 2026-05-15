@@ -2123,8 +2123,8 @@
             <div class="al al-i"><span>💡</span><div>管理者がパスワードを忘れた場合は、ログイン画面の「パスワードを忘れた」から自分でリセットできます。</div></div>
             <div class="btn-grp">
               <button class="btn btn-s" onclick="go('d1')">キャンセル</button>
-              <button id="d2-btn-register-only" class="btn btn-s" onclick="d2SubmitRegisterOnly()">登録のみ (招待は後で)</button>
-              <button id="d2-btn-with-invite" class="btn btn-p" onclick="d2SubmitWithInvite()">登録 & 招待送信</button>
+              <!-- 2026-05-15 仕様変更: 両タブ共通「管理者を登録」1ボタンに統一。「登録&招待送信」は削除済 -->
+              <button id="d2-btn-register-only" class="btn btn-p" onclick="d2SubmitRegisterOnly()">管理者を登録</button>
             </div>
           </div>
         </div>
@@ -3384,7 +3384,7 @@ function bPulseNextStep() {
   setTimeout(function(){ nextStep.classList.remove('is-pulse'); }, 3500);
 }
 
-/* D-2: 管理者登録モーダル タブ切替 */
+/* D-2: 管理者登録モーダル タブ切替 (2026-05-15 仕様変更により単純化: ボタン文言は固定) */
 function d2SwitchTab(which) {
   document.querySelectorAll('#d2-tabs .mtab').forEach(function(el) {
     el.classList.toggle('act', el.getAttribute('data-mtab') === which);
@@ -3393,17 +3393,6 @@ function d2SwitchTab(which) {
   var pEmp = document.getElementById('d2-panel-emp');
   if (pNew) pNew.classList.toggle('act', which === 'new');
   if (pEmp) pEmp.classList.toggle('act', which === 'emp');
-  // 「従業員から選択」タブの時はボタンを「管理者を登録」1つだけ (登録&招待送信は非表示)
-  // 「新規登録」タブの時は既存の2ボタン (登録のみ / 登録&招待送信) を維持
-  var d2RegOnly = document.getElementById('d2-btn-register-only');
-  var d2WithInvite = document.getElementById('d2-btn-with-invite');
-  if (which === 'emp') {
-    if (d2RegOnly) d2RegOnly.textContent = '管理者を登録';
-    if (d2WithInvite) d2WithInvite.style.display = 'none';
-  } else {
-    if (d2RegOnly) d2RegOnly.textContent = '登録のみ (招待は後で)';
-    if (d2WithInvite) d2WithInvite.style.display = '';
-  }
 }
 
 /* D-2: 従業員選択時にメール/雇用区分/店舗を自動表示 */
