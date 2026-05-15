@@ -1132,7 +1132,7 @@
         <button class="btn btn-s" onclick="bCloseSetupAdminModal()">キャンセル</button>
         <!-- 整合性: 他STEP (1〜4) と同じく一時保存ボタンを設置 (任意STEP 5 でも離脱時に状態保持できるよう) -->
         <button class="btn btn-s" onclick="b0SaveAdminDraft()" style="background:#fff3e0;border-color:#e67e22;color:#e67e22;font-weight:700;">💾 一時保存</button>
-        <button class="btn btn-p" onclick="b0SubmitAdminEntry()">管理者を登録</button>
+        <button class="btn btn-p" onclick="b0SubmitAdminEntry()">管理者を登録する</button>
       </div>
     </div>
   </div>
@@ -2305,6 +2305,10 @@ function go(id) {
   // 打刻記録(b0-empty)の中断再開バナー + デモ切替モード適用
   if (id === 'b0-empty') {
     applyB0EmptyMode(loadB0EmptyMode());
+  }
+  // 打刻記録 (b0 / b0-empty) 上部の「管理者登録されました」バナー再描画
+  if ((id === 'b0' || id === 'b0-empty') && typeof refreshAdminRegisteredBanner === 'function') {
+    refreshAdminRegisteredBanner();
   }
   // サイドバー「📋 初期セットアップ」リンクの表示制御(完了前のみ)
   refreshSidebarSetupLink();
@@ -4190,10 +4194,10 @@ function setupAdminSwitchTab(which) {
   var primary = document.querySelector('#b-setup-admin-overlay .btn-grp .btn-p');
   if (primary) {
     primary.setAttribute('data-which', which);
-    primary.innerHTML = '管理者を登録';
+    primary.innerHTML = '管理者を登録する';  // 両タブ統一 (2026-05-15 仕様変更)
     primary.title = (which === 'new')
-      ? '従業員台帳に新規アカウントを作成し、オーナーが設定した初期パスワードで登録'
-      : '既存従業員に管理者権限を付与(既存PWで管理者画面にログイン可能)';
+      ? '従業員台帳に新規アカウントを作成し、管理者権限付き招待メールを送付します'
+      : '既存従業員に管理者権限を付与します (招待メールなし、既存PWで管理者画面にログイン可)';
   }
 }
 
@@ -4291,23 +4295,64 @@ function b0SubmitAdminEntry() {
   var counts = b0LoadCounts();
   counts[4] = (counts[4] || 0) + 1;
   b0SaveCounts(counts);
-  b0ClearDraft(5); // 登録完了で STEP 5 下書きクリア (他STEPと整合性)
+  b0ClearDraft(5);
+  // ★ 2026-05-15 仕様変更: 管理者登録時に打刻記録画面上部に「管理者登録されました(YYYY/M/D)」表示
+  //   - 招待メール (新規登録タブ) は管理者権限付き従業員招待として送付
+  //   - 従業員から選択タブは招待メールなし、設定内完結
+  try {
+    var today = new Date();
+    var ymd = today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate();
+    sessionStorage.setItem('adminRegisteredAt', ymd);
+    sessionStorage.setItem('adminRegisteredWhich', which);
+  } catch (e) {}
   bCloseSetupAdminModal();
   refreshStep5Panel();
+  // 打刻記録画面 (b0 / b0-empty) のバナー再描画
+  if (typeof refreshAdminRegisteredBanner === 'function') refreshAdminRegisteredBanner();
   setTimeout(function(){ bShowSetupAdminCompleteModal(counts[4], which); }, 200);
+}
+
+// 打刻記録画面 (page-b0 / page-b0-empty) 上部の「管理者登録されました」バナー再描画
+function refreshAdminRegisteredBanner() {
+  var ymd;
+  try { ymd = sessionStorage.getItem('adminRegisteredAt'); } catch (e) {}
+  ['page-b0', 'page-b0-empty'].forEach(function(pageId) {
+    var page = document.getElementById(pageId);
+    if (!page) return;
+    var existing = page.querySelector('.admin-registered-banner');
+    if (!ymd) {
+      if (existing) existing.remove();
+      return;
+    }
+    if (existing) { existing.querySelector('.adm-date').textContent = ymd; return; }
+    var banner = document.createElement('div');
+    banner.className = 'admin-registered-banner';
+    banner.style.cssText = 'background:#e3f2fd;border:1px solid #90caf9;color:#0d47a1;border-radius:8px;padding:10px 14px;margin:12px 0;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;';
+    banner.innerHTML = '<span style="font-size:16px;">👤</span> 管理者登録されました（<span class="adm-date">' + ymd + '</span>）';
+    // ページ最上部 (main.mc 直下) に挿入
+    var main = page.querySelector('main.mc');
+    if (main) main.insertBefore(banner, main.firstChild);
+    else page.insertBefore(banner, page.firstChild);
+  });
 }
 
 function bShowSetupAdminCompleteModal(totalAdmins, which) {
   var titleEl = document.getElementById('b-bridge-title');
   var textEl = document.getElementById('b-bridge-text');
   var actEl = document.getElementById('b-bridge-actions');
-  // ステージング版準拠: オーナーが設定した初期PWで登録、口頭/チャットで共有
+  // 2026-05-15 仕様変更:
+  // - 新規登録タブ: 従業員登録の招待メール送付 (ただし管理者権限付き)
+  // - 従業員から選択タブ: 招待メールなし、設定内完結
   if (which === 'emp') {
     titleEl.innerHTML = '✓ 既存従業員を管理者に昇格しました (累計 ' + totalAdmins + ' 名)';
-    textEl.innerHTML = '従業員台帳の既存アカウントに管理者権限を付与しました。<br>既存のパスワードで管理者画面にログイン可能です。';
+    textEl.innerHTML = '従業員台帳の既存アカウントに <strong>管理者権限を付与</strong> しました。<br>' +
+                       '<strong>招待メールは送付されません</strong> (設定内で完結)。既存のパスワードで管理者画面にログイン可能です。<br><br>' +
+                       '<span style="color:#0d47a1;background:#e3f2fd;padding:4px 8px;border-radius:4px;font-size:11px;">💡 打刻記録画面の上部に「管理者登録されました」コメントが表示されます。</span>';
   } else {
-    titleEl.innerHTML = '✓ 管理者を1名登録しました (累計 ' + totalAdmins + ' 名)';
-    textEl.innerHTML = '初期パスワードはオーナーが設定済みです。<br>管理者へ <strong>口頭やチャット等で初期パスワードを共有</strong> してください。';
+    titleEl.innerHTML = '✓ 管理者を1名登録し、招待メールを送付しました (累計 ' + totalAdmins + ' 名)';
+    textEl.innerHTML = '新規アカウントを作成し、<strong>管理者権限付きの招待メール</strong> を送付しました。<br>' +
+                       '受信者が招待メールから PW を設定すると <strong>管理者権限付きアカウント</strong> として管理者画面にログイン可能になります。<br><br>' +
+                       '<span style="color:#0d47a1;background:#e3f2fd;padding:4px 8px;border-radius:4px;font-size:11px;">💡 打刻記録画面の上部に「管理者登録されました」コメントが表示されます。</span>';
   }
   actEl.innerHTML =
     '<div class="b-bridge-primary">' +
