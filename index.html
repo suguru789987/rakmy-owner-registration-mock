@@ -1852,116 +1852,134 @@
 <!-- ===== D-1: 管理者一覧（直接登録方式） ===== -->
 <!-- ===== 管理者権限付き 招待メール プレビュー (新規登録タブ送付分のサンプル) ===== -->
 <div class="page" id="page-admin-invite-email">
-  <main class="mc" style="max-width:760px;margin:40px auto;padding:0 20px;">
-    <h1 style="font-size:20px;margin-bottom:18px;">📧 招待メール プレビュー (管理者権限付き)</h1>
-    <div class="al al-i" style="margin-bottom:20px;font-size:12px;">受信者にはこのメールが届きます。<strong>通常の従業員招待メールと同じフォーマット</strong>ですが、招待URLからのアクティブ化で<strong>管理者権限付きアカウント</strong>として登録されます。</div>
+  <main class="mc" style="max-width:720px;margin:30px auto;padding:0 20px;">
+    <div style="margin-bottom:14px;font-size:12px;color:#666;">📧 招待メール プレビュー — <strong>管理者登録モーダル（新規登録タブ）専用</strong></div>
 
-    <div style="background:#fff;border:1px solid #ddd;border-radius:8px;padding:24px;font-size:13px;line-height:1.8;color:#333;font-family:'Hiragino Kaku Gothic ProN', sans-serif;">
-      <div style="border-bottom:1px solid #eee;padding-bottom:14px;margin-bottom:14px;">
-        <div style="font-size:11px;color:#888;">From: noreply@rakmy.jp</div>
-        <div style="font-size:11px;color:#888;">To: sato@example.jp</div>
-        <div style="font-size:11px;color:#888;">Date: 2026/5/15 13:15</div>
-        <div style="font-weight:700;margin-top:8px;font-size:15px;">件名: 【ラクミー タイムレコード】 アカウント招待のお知らせ</div>
+    <!-- メール本体 (現行版ヘッダー帯エミュレート) -->
+    <div style="background:#fff;border:1px solid #ddd;border-radius:10px;overflow:hidden;font-family:'Hiragino Kaku Gothic ProN', sans-serif;">
+      <!-- メーラーヘッダー -->
+      <div style="background:#fff;border-bottom:1px solid #eee;padding:14px 22px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <div style="font-size:15px;font-weight:600;color:#202124;flex:1;min-width:200px;">
+          <span style="color:#888;">[Development]</span> ラクミータイムレコードへの招待
+          <span style="background:#f9c74f;color:#7a5500;font-size:10px;font-weight:700;padding:2px 6px;border-radius:3px;margin-left:6px;">External</span>
+          <span style="background:#e0e0e0;color:#444;font-size:10px;padding:2px 6px;border-radius:3px;margin-left:4px;">受信トレイ</span>
+        </div>
+      </div>
+      <div style="padding:10px 22px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;gap:10px;font-size:12px;color:#555;">
+        <div style="width:32px;height:32px;background:#ccc;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;">👤</div>
+        <div style="flex:1;">
+          <div style="font-weight:700;color:#333;">ラクミー タイムレコード <span style="color:#888;font-weight:400;">&lt;invitations@accounts.dev&gt;</span></div>
+          <div style="font-size:11px;color:#888;">To: sato@example.jp</div>
+        </div>
+        <div style="font-size:11px;color:#888;">2026/5/15 13:15</div>
       </div>
 
-      <div>佐藤 一郎 様</div>
-      <br>
-      <div>このたび、株式会社サンプル の <strong>ラクミー タイムレコード</strong> に</div>
-      <div><strong>従業員アカウント（管理者権限付き）</strong> としてご招待いただきました。</div>
-      <br>
-      <div style="background:#fafafa;border-left:3px solid #0e9077;padding:10px 14px;margin:8px 0;font-size:12px;line-height:1.7;">
-        <strong>【招待内容】</strong><br>
-        ・従業員アカウントの発行<br>
-        ・管理者権限の付与<br>
-        ・有効化後、<strong>管理者として打刻記録・勤怠管理画面にログイン可能</strong>
+      <!-- メール本文 -->
+      <div style="padding:40px 22px;text-align:center;background:#fff;">
+        <div style="margin-bottom:32px;">
+          <span style="display:inline-block;background:#2ec4a5;color:#fff;font-size:14px;font-weight:700;padding:4px 10px;border-radius:5px;letter-spacing:1px;">ラクミー</span>
+          <span style="font-size:15px;font-weight:700;margin-left:8px;color:#333;">タイムレコード</span>
+        </div>
+
+        <div style="text-align:left;font-size:13px;line-height:1.8;color:#333;max-width:480px;margin:0 auto 28px;">
+          <div>佐藤 一郎 様</div>
+          <br>
+          <div><strong>株式会社サンプル</strong> の <strong>従業員（管理者権限付き）</strong> として招待されました。</div>
+          <div style="margin-top:6px;color:#555;font-size:12px;">この招待は <strong>管理者登録モーダル（新規登録タブ）</strong> から発行されたものです。<br>従業員登録（新規アカウント発行）と管理者権限付与が同時に行われます。</div>
+          <div style="margin-top:14px;">以下のボタンからパスワードを設定してログインしてください。</div>
+        </div>
+
+        <a href="#" onclick="event.preventDefault();go('admin-pw-setup')" style="display:inline-block;background:#2ec4a5;color:#fff;padding:14px 36px;border-radius:6px;font-weight:700;text-decoration:none;font-size:14px;">パスワードを設定する</a>
+
+        <div style="margin-top:32px;background:#f5f5f5;border-radius:6px;padding:12px 16px;font-size:11px;color:#555;text-align:left;max-width:480px;margin-left:auto;margin-right:auto;">
+          <strong>会社:</strong> 株式会社サンプル <span style="color:#ddd;margin:0 6px;">/</span>
+          <strong>店舗:</strong> 渋谷店 <span style="color:#ddd;margin:0 6px;">/</span>
+          <strong>区分:</strong> 管理者 <span style="color:#ddd;margin:0 6px;">/</span>
+          <strong>有効期限:</strong> 72時間
+        </div>
+
+        <div style="margin-top:18px;font-size:11px;color:#888;">※ 心当たりのない場合は無視してください</div>
       </div>
-      <br>
-      <div>下記の URL にアクセスし、パスワードを設定して <strong>アカウントを有効化</strong> してください。</div>
-      <br>
-      <div style="background:#f5f5f5;border-radius:6px;padding:14px;margin:10px 0;">
-        <div style="font-size:11px;color:#666;margin-bottom:6px;">▼ アカウント有効化URL</div>
-        <a href="#" onclick="event.preventDefault();go('admin-pw-setup')" style="color:#0e9077;font-weight:700;text-decoration:underline;word-break:break-all;">https://rakmy.jp/invite?t=admin-3a9f8e2c1b...</a>
-      </div>
-      <br>
-      <div style="background:#e3f2fd;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:12px;line-height:1.7;color:#0d47a1;">
-        <strong>【有効化の手順】</strong><br>
-        1. 上記URLをクリック<br>
-        2. パスワード設定画面で初期パスワード（オーナー設定済）を確認 → 必要に応じて変更<br>
-        3. 「アカウントを有効化してログイン」を押下<br>
-        4. <strong>管理者として打刻記録画面にログイン</strong>
-      </div>
-      <br>
-      <div style="font-size:11px;color:#666;line-height:1.7;">
-        ※ オーナーが初期パスワードを設定済みです（口頭/チャット等で別途共有されます）<br>
-        ※ 招待URLは <strong>1回のみ有効</strong>。再発行はオーナーにご依頼ください<br>
-        ※ ご不明な点はオーナー (株式会社サンプル) までお問い合わせください
-      </div>
-      <br>
-      <hr style="border:none;border-top:1px solid #eee;margin:14px 0;">
-      <div style="font-size:11px;color:#888;">ラクミー タイムレコード サポート<br>support@rakmy.jp</div>
     </div>
 
-    <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap;">
-      <button class="btn btn-p" onclick="go('admin-pw-setup')">▶ アカウント有効化URL をクリック (PW設定画面へ)</button>
+    <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+      <button class="btn btn-p" onclick="go('admin-pw-setup')">▶ 「パスワードを設定する」をクリック (PW設定画面へ)</button>
       <button class="btn btn-s" onclick="go('b0')">← 打刻記録に戻る</button>
     </div>
 
-    <div style="margin-top:30px;padding:14px;background:#fff8ed;border:1px solid #fde68a;border-radius:8px;font-size:11px;color:#9c4d12;line-height:1.7;">
+    <div style="margin-top:24px;padding:12px 14px;background:#fff8ed;border:1px solid #fde68a;border-radius:8px;font-size:11px;color:#9c4d12;line-height:1.7;">
       💡 <strong>仕様メモ:</strong><br>
-      • メールフォーマット自体は通常の従業員招待メールと同一<br>
-      • 違いは「招待URL」のトークン (?t=admin-... vs ?t=emp-...) で識別<br>
-      • 招待URL先のPW設定画面で、管理者権限バッジを表示 + 初期PWプリセット
+      • 現行の従業員招待メールと <strong>同じフォーマット</strong> ・同じデザイン<br>
+      • <strong>管理者登録モーダル(新規登録タブ)専用</strong> — 従業員登録 + 管理者権限付与が1メールで完結<br>
+      • 「区分: <strong>管理者</strong>」 と表記して通常の従業員招待 (区分:社員B等) と区別<br>
+      • PW設定画面 (admin-pw-setup) に管理者登録モーダルで設定した初期PWがペースト済
     </div>
   </main>
 </div>
 
-<!-- ===== 招待URL先 PW設定画面 (管理者権限付き、初期PWプリセット) ===== -->
+<!-- ===== 招待URL先 アカウント設定画面 (管理者新規登録専用、初期PWプリセット、現行版デザイン準拠) ===== -->
 <div class="page" id="page-admin-pw-setup">
-  <main class="mc" style="max-width:520px;margin:40px auto;padding:0 20px;">
-    <div style="text-align:center;margin-bottom:28px;">
-      <div style="font-size:28px;color:#0e9077;font-weight:800;letter-spacing:1px;">ラクミー <span style="font-size:13px;color:#888;">タイムレコード</span></div>
+  <main class="mc" style="margin:0;padding:0;background:#f6f6f6;min-height:100vh;">
+    <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;min-height:100vh;align-items:center;gap:40px;padding:40px 20px;">
+
+      <!-- 左カラム: アカウント設定フォーム -->
+      <div style="background:#fff;padding:36px 32px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+        <div style="margin-bottom:24px;">
+          <span style="display:inline-block;background:#2ec4a5;color:#fff;font-size:13px;font-weight:700;padding:3px 9px;border-radius:5px;letter-spacing:1px;">ラクミー</span>
+          <span style="font-size:14px;font-weight:700;margin-left:6px;color:#333;">タイムレコード</span>
+        </div>
+
+        <h1 style="font-size:26px;font-weight:800;margin:0 0 6px 0;color:#202124;">アカウント設定</h1>
+        <div style="font-size:13px;color:#666;margin-bottom:6px;">パスワードを設定してアカウントを有効化してください</div>
+        <div style="font-size:11px;color:#0d47a1;background:#e3f2fd;border-radius:4px;padding:6px 10px;margin-bottom:20px;line-height:1.6;">
+          💡 この招待は <strong>管理者登録モーダル（新規登録タブ）</strong> から発行されました。<br>
+          従業員登録（新規アカウント発行）と管理者権限付与が同時に行われます。
+        </div>
+
+        <!-- ユーザー情報ブロック (現行版に合わせる) -->
+        <div style="background:#f5f5f5;border-radius:6px;padding:14px 18px;margin-bottom:24px;font-size:13px;line-height:1.9;">
+          <div style="display:grid;grid-template-columns:60px 1fr;column-gap:10px;">
+            <div style="color:#888;">会社:</div><div style="font-weight:700;">株式会社サンプル</div>
+            <div style="color:#888;">店舗:</div><div style="font-weight:700;">渋谷店</div>
+            <div style="color:#888;">名前:</div><div style="font-weight:700;">佐藤 一郎</div>
+            <div style="color:#888;">区分:</div><div style="font-weight:700;color:#0d47a1;">管理者</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;color:#333;">パスワード <span style="color:#2ec4a5;">*</span></label>
+          <input id="admin-pw-input" type="text" value="pass1234" style="width:100%;padding:11px 12px;border:1px solid #ddd;border-radius:4px;font-size:14px;box-sizing:border-box;background:#fff;">
+          <div style="font-size:11px;color:#888;margin-top:4px;">8文字以上・強度「強い」以上が必要です</div>
+        </div>
+
+        <div style="margin-bottom:20px;">
+          <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;color:#333;">パスワード（確認） <span style="color:#2ec4a5;">*</span></label>
+          <input id="admin-pw-confirm" type="text" value="pass1234" style="width:100%;padding:11px 12px;border:1px solid #ddd;border-radius:4px;font-size:14px;box-sizing:border-box;background:#fff;">
+        </div>
+
+        <button onclick="adminPwSetupCompleteLogin()" style="width:100%;padding:14px;font-size:14px;font-weight:700;background:#2ec4a5;color:#fff;border:none;border-radius:4px;cursor:pointer;">登録を完了してログイン</button>
+
+        <div style="margin-top:16px;background:#e3f2fd;border:1px solid #90caf9;color:#0d47a1;border-radius:4px;padding:10px 14px;font-size:12px;display:flex;align-items:center;gap:6px;">
+          <span style="font-size:14px;">📱</span> ログイン後、スマートフォンから打刻できるようになります。
+        </div>
+
+        <div style="margin-top:14px;text-align:center;font-size:10px;color:#aaa;">Secured by Clerk</div>
+      </div>
+
+      <!-- 右カラム: タイムレコード打刻ボタン イメージ -->
+      <div style="display:flex;align-items:center;justify-content:center;">
+        <div style="width:300px;height:300px;border-radius:50%;background:#fff;border:3px solid #202124;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.06);">
+          <div style="width:160px;height:50px;background:#2ec4a5;border-radius:25px;"></div>
+        </div>
+      </div>
     </div>
 
-    <div style="background:#fff;border:1px solid #ddd;border-radius:10px;padding:30px 28px;">
-      <div style="text-align:center;margin-bottom:18px;">
-        <div style="display:inline-block;background:#e3f2fd;color:#0d47a1;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:10px;">👑 管理者権限付きアカウント</div>
-        <h1 style="font-size:18px;font-weight:800;margin:0;">パスワード設定</h1>
-        <div style="font-size:12px;color:#666;margin-top:6px;">招待メールから来ました。下記情報を確認し、パスワードを設定して有効化してください。</div>
-      </div>
-
-      <div style="background:#f9f9f9;border-radius:6px;padding:12px 14px;margin-bottom:18px;font-size:12px;line-height:1.8;">
-        <div><strong>名前:</strong> 佐藤 一郎</div>
-        <div><strong>メールアドレス:</strong> sato@example.jp</div>
-        <div><strong>所属:</strong> 株式会社サンプル</div>
-        <div><strong>担当店舗:</strong> 渋谷店</div>
-        <div><strong>権限:</strong> <span style="color:#0d47a1;font-weight:700;">管理者</span></div>
-      </div>
-
-      <div class="al al-w" style="font-size:11px;margin-bottom:18px;">
-        ⚠️ オーナーが設定した初期パスワードが下記に入力済みです。<br>
-        必要に応じて変更してから「アカウントを有効化」を押してください。
-      </div>
-
-      <div style="margin-bottom:14px;">
-        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:6px;">パスワード <span style="color:#e74c3c;">✳</span></label>
-        <input id="admin-pw-input" type="password" value="pass1234" style="width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:6px;font-size:13px;box-sizing:border-box;">
-        <div style="font-size:10px;color:#888;margin-top:4px;">8文字以上 / 強度「強い」以上推奨</div>
-      </div>
-
-      <div style="margin-bottom:18px;">
-        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:6px;">パスワード(確認) <span style="color:#e74c3c;">✳</span></label>
-        <input id="admin-pw-confirm" type="password" value="pass1234" style="width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:6px;font-size:13px;box-sizing:border-box;">
-      </div>
-
-      <button class="btn btn-p" style="width:100%;padding:12px;font-size:14px;font-weight:700;" onclick="alert('✓ アカウントを有効化しました。管理者として打刻記録画面にログインします。');go('b0');">アカウントを有効化してログイン</button>
-    </div>
-
-    <div style="margin-top:30px;padding:14px;background:#fff8ed;border:1px solid #fde68a;border-radius:8px;font-size:11px;color:#9c4d12;line-height:1.7;">
+    <div style="max-width:1200px;margin:30px auto;padding:14px 20px;background:#fff8ed;border:1px solid #fde68a;border-radius:8px;font-size:11px;color:#9c4d12;line-height:1.7;">
       💡 <strong>仕様メモ:</strong><br>
-      • 通常の従業員招待リンク (?t=emp-...) なら「管理者権限付き」バッジは表示されず権限=従業員<br>
-      • 管理者招待リンク (?t=admin-...) なら 上部に「👑 管理者権限付きアカウント」バッジ表示<br>
-      • PW欄の初期値は管理者登録モーダルで設定した初期PW (pass1234 等) がプリセット済<br>
-      • ユーザーは変更可能 (推奨は変更だがそのままでも有効化可能)
+      • 現行の従業員招待メール遷移先アカウント設定画面に <strong>合わせた</strong> デザイン<br>
+      • <strong>「区分: 管理者」</strong> の表記で通常の従業員招待 (区分: 社員B等) と区別<br>
+      • PW欄に <strong>管理者登録モーダル(新規登録タブ)で設定した初期パスワード</strong> がプリセット済 (pass1234)<br>
+      • ユーザーはそのまま「登録を完了してログイン」押下で即時ログイン可能 (PW変更も可)
     </div>
   </main>
 </div>
@@ -4428,6 +4446,18 @@ function b0SubmitAdminEntry() {
   // 打刻記録画面 (b0 / b0-empty) のバナー再描画
   if (typeof refreshAdminRegisteredBanner === 'function') refreshAdminRegisteredBanner();
   setTimeout(function(){ bShowSetupAdminCompleteModal(counts[4], which); }, 200);
+}
+
+// 招待PW設定画面の「登録を完了してログイン」: adminRegisteredAt 記録 → 打刻記録画面に遷移してバナー表示
+function adminPwSetupCompleteLogin() {
+  try {
+    var today = new Date();
+    var ymd = today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate();
+    sessionStorage.setItem('adminRegisteredAt', ymd);
+    sessionStorage.setItem('adminRegisteredWhich', 'new');
+  } catch (e) {}
+  if (typeof go === 'function') go('b0');
+  if (typeof refreshAdminRegisteredBanner === 'function') refreshAdminRegisteredBanner();
 }
 
 // 打刻記録画面 (page-b0 / page-b0-empty) 上部の「管理者登録されました」バナー再描画
