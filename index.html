@@ -3633,6 +3633,7 @@ function bDemoB0EmptyDraftSettings() {
       { inputs: ['渋谷店', '東京都渋谷区道玄坂1-1-1', '11:00', '23:00'], selects: [0] },
       { inputs: ['新宿店', '東京都新宿区西新宿2-2-2', '11:00', '22:00'], selects: [0] }
     ]));
+    sessionStorage.setItem('b0DraftSavedAt', String(Date.now())); // ★ シナリオ排他用
     sessionStorage.setItem('b0EmptyMode', 'alert');
     clearSetupActiveStep();
   } catch (e) {}
@@ -3648,6 +3649,7 @@ function bDemoB0EmptyDraftAdminStep5New() {
     sessionStorage.setItem('b0Draft_5', JSON.stringify([
       { inputs: ['佐藤 一郎', 'sato@example.jp', 'pass1234', 'pass1234'], selects: [0], checks: [true, false, false, false], tabType: 'new' }
     ]));
+    sessionStorage.setItem('b0DraftSavedAt', String(Date.now())); // ★ シナリオ排他用
     sessionStorage.setItem('b0EmptyMode', 'alert');
     saveSetupActiveStep(5);
   } catch (e) {}
@@ -3663,6 +3665,7 @@ function bDemoB0EmptyDraftAdminStep5Emp() {
     sessionStorage.setItem('b0Draft_5', JSON.stringify([
       { inputs: ['', 'pass5678', 'pass5678'], selects: [2], checks: [true, false, false, false], tabType: 'emp' }
     ]));
+    sessionStorage.setItem('b0DraftSavedAt', String(Date.now())); // ★ シナリオ排他用
     sessionStorage.setItem('b0EmptyMode', 'alert');
     saveSetupActiveStep(5);
   } catch (e) {}
@@ -3803,6 +3806,8 @@ function _bDemoClearAll() {
     sessionStorage.removeItem('b0Draft_2');
     sessionStorage.removeItem('b0Draft_3');
     sessionStorage.removeItem('b0Draft_4');
+    sessionStorage.removeItem('b0Draft_5');
+    sessionStorage.removeItem('b0DraftSavedAt'); // ★ シナリオ排他用タイムスタンプも初期化
     localStorage.removeItem('import_in_progress');
   } catch (e) {}
 }
