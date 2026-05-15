@@ -3808,7 +3808,8 @@ function clearSetupActiveStep() {
 }
 
 function applySetupModeOnSettings(stepNum) {
-  // ★ done ベースで一意判定: done<4=新規登録中 → setup mode UI / done>=4=運用中 → ops UI
+  // ★ D案: page-*-settings は setup mode 専用 / done>=4 で来た場合は ops 画面にリダイレクト
+  //   (setup と ops のコンタミ撲滅のため、画面と mode を 1対1 対応にする)
   if (b0LoadDone() < 4) {
     // 新規登録中: setup mode UI 表示
     if (loadSetupActiveStep() !== stepNum) saveSetupActiveStep(stepNum);
@@ -3818,7 +3819,6 @@ function applySetupModeOnSettings(stepNum) {
       // setup mode 進行中は常に「設定前」モードを初期表示
       if (info) switchSettingMode(info.id, 'empty');
       // setup mode 進行中は ops 用デモトグル(設定前/設定後切替)を非表示にして混在回避
-      // (CTA は新規登録=モーダル / 運用更新=トースト で完全分離するため、ops UI は出さない)
       if (info) {
         var settingPage = document.getElementById('page-' + info.id);
         if (settingPage) {
@@ -3828,10 +3828,23 @@ function applySetupModeOnSettings(stepNum) {
       }
     }
   } else {
-    // 運用中(done>=4): setup UI 完全クリア → 通常の設定画面表示
+    // 運用中(done>=4) で setup 画面(page-*-settings) に来てしまった
+    // → D案: page-*-ops-settings (運用専用画面) にリダイレクト
+    if (stepNum >= 1 && stepNum <= 4) {
+      var sInfo = SETTING_PAGES[stepNum - 1];
+      var opsPageBaseId = sInfo ? sInfo.id.replace('-settings', '-ops-settings') : null;
+      var opsPageEl = opsPageBaseId ? document.getElementById('page-' + opsPageBaseId) : null;
+      if (opsPageEl) {
+        // setup UI クリア → ops 画面に強制遷移
+        clearSetupActiveStep();
+        clearSetupSettingsUI();
+        setTimeout(function(){ go(opsPageBaseId); }, 30);
+        return;
+      }
+    }
+    // ops 画面が無い場合 (STEP5 管理者 等) → 既存挙動 (setup UI クリア)
     clearSetupActiveStep();
     clearSetupSettingsUI();
-    // ops用デモトグルを復活(通常運用モード)
     SETTING_PAGES.forEach(function(p) {
       var sp = document.getElementById('page-' + p.id);
       if (!sp) return;
@@ -4646,20 +4659,20 @@ function b0SubmitBatch(stepNum, withInvite) {
   b0SaveCounts(counts);
   bCloseStep();
 
-  // ★ 画面ID + done ベースで判定:
-  // 設定画面A(*-settings) + done<4 → setupモード(モーダル)
-  // 設定画面B(*-ops-settings) → 必ずops(トースト)
-  // それ以外 → done<4 ならsetup、>=4 ならops
+  // ★ D案: 画面ID で 1対1 判定 (page-*-settings = setup mode 専用 / page-*-ops-settings = ops mode 専用)
+  //   コンタミ撲滅のため done に依存しない判定にする。
+  //   page-*-settings で done>=4 はそもそも到達しない (applySetupModeOnSettings でリダイレクト済)。
   var activePage = document.querySelector('.page.active');
   var pageId = activePage ? activePage.id : '';
   var isOpsPage = /^page-(brand|store|emptype|emp)-ops-settings$/.test(pageId);
   var isSetupPage = /^page-(brand|store|emptype|emp)-settings$/.test(pageId);
 
   if (isOpsPage) {
-    // 設定画面B(運用) → トースト
+    // page-*-ops-settings (運用専用) → 常にトースト
     bShowToast(stepNum);
-  } else if (b0LoadDone() < 4 && (isSetupPage || pageId === 'page-b0')) {
-    // 設定画面A(新規) または b0画面 + 未完了 → 橋渡しCTAモーダル
+  } else if (isSetupPage || pageId === 'page-b0') {
+    // page-*-settings (setup mode 専用) or page-b0 → 常に橋渡しCTAモーダル
+    // ※ done>=4 は applySetupModeOnSettings で ops 画面リダイレクト済のためここに来ない想定
     var info = SETTING_PAGES[stepNum - 1];
     if (info) switchSettingMode(info.id, 'filled');
     var prevDone = b0LoadDone();
@@ -4669,7 +4682,7 @@ function b0SubmitBatch(stepNum, withInvite) {
     renderSetupSettingsUI(stepNum);
     bShowSetupBatchModal(stepNum, n);
   } else {
-    // 完了済または不明 → トースト
+    // フォールバック (不明な画面) → トースト (実用上ありえないが安全のため)
     bShowToast(stepNum);
   }
 }
