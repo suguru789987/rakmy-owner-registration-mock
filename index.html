@@ -2051,6 +2051,18 @@
 <!-- ===== 招待差し替え予告 カスタムモーダル (共通) =====
      emp タブで invited 従業員を選択した時に表示。
      ブラウザ素の alert() に代わるサイトUI 統一版。-->
+<!-- ===== 汎用カスタム confirm モーダル (再送・差し替えなど) ===== -->
+<div id="custom-confirm-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;font-family:'Hiragino Kaku Gothic ProN', sans-serif;">
+  <div style="background:#fff;border-radius:10px;padding:24px 30px;max-width:480px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.3);">
+    <h3 id="custom-confirm-title" style="margin:0 0 14px 0;font-size:15px;font-weight:700;color:#333;">確認</h3>
+    <div id="custom-confirm-body" style="font-size:13px;color:#333;line-height:1.7;margin-bottom:20px;"></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button onclick="closeCustomConfirm(true)" style="padding:8px 18px;border:1px solid #ccc;border-radius:6px;background:#fff;cursor:pointer;font-size:13px;color:#555;">キャンセル</button>
+      <button id="custom-confirm-ok-btn" onclick="closeCustomConfirm(false)" style="padding:8px 18px;border:none;border-radius:6px;background:#2ec4a5;color:#fff;cursor:pointer;font-size:13px;font-weight:700;">OK</button>
+    </div>
+  </div>
+</div>
+
 <div id="invite-replacement-warning-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;font-family:'Hiragino Kaku Gothic ProN', sans-serif;">
   <div style="background:#fff;border-radius:10px;padding:24px 30px;max-width:420px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.3);">
     <h3 style="margin:0 0 14px 0;font-size:15px;font-weight:700;color:#333;">⚠️ 招待差し替え</h3>
@@ -4933,6 +4945,28 @@ function adminImportExecute() {
   go('d1');
 }
 
+// ===== 汎用カスタム confirm モーダル制御 =====
+var _customConfirmOnOk = null;
+function showCustomConfirm(title, bodyHtml, okLabel, onOk) {
+  var ov = document.getElementById('custom-confirm-overlay');
+  var titleEl = document.getElementById('custom-confirm-title');
+  var bodyEl = document.getElementById('custom-confirm-body');
+  var okBtn = document.getElementById('custom-confirm-ok-btn');
+  if (titleEl) titleEl.textContent = title || '確認';
+  if (bodyEl) bodyEl.innerHTML = bodyHtml || '';
+  if (okBtn) okBtn.textContent = okLabel || 'OK';
+  _customConfirmOnOk = (typeof onOk === 'function') ? onOk : null;
+  if (ov) ov.style.display = 'flex';
+}
+function closeCustomConfirm(cancelled) {
+  var ov = document.getElementById('custom-confirm-overlay');
+  if (ov) ov.style.display = 'none';
+  if (!cancelled && typeof _customConfirmOnOk === 'function') {
+    _customConfirmOnOk();
+  }
+  _customConfirmOnOk = null;
+}
+
 // ===== 招待差し替え予告 カスタムモーダル制御 =====
 // 旧: ブラウザ素の alert() → 新: カスタムモーダル (キャンセル選択可)
 var _inviteReplacementCancelCallback = null;
@@ -5332,51 +5366,44 @@ function d1RevokeAdmin(name) {
 // - which='replacement': 既存・差し替え(invited由来) → 招待差し替え版を再送
 function d1ResendInvite(which, name, email) {
   if (which === 'replacement') {
-    var okR = confirm(
-      '📧 招待差し替えメールを再送します (🔄 既存・差し替え)\n\n' +
-      '宛先: ' + name + ' <' + email + '>\n\n' +
-      '💡 元々「招待中(PW未設定)」の従業員に管理者権限が付与された方です。\n' +
-      '⚠ 旧トークン (従業員招待 + 前回差し替え版) は引き続き無効化されたままです。\n' +
-      '新たな差し替え版招待メール(管理者権限付き)が再発行されます。\n\n' +
-      '送信してよろしいですか？'
+    showCustomConfirm(
+      '📧 招待差し替えを再送',
+      '<strong>' + name + '</strong> へ差し替え版メールを再発行します。',
+      '再送',
+      function() {
+        try { sessionStorage.setItem('adminPwSetupWhich', 'new'); } catch (e) {}
+        go('admin-invite-replacement');
+      }
     );
-    if (!okR) return;
-    alert('✓ 招待差し替え版メールを再送しました。\n\n再送メール プレビューを表示します。');
-    try { sessionStorage.setItem('adminPwSetupWhich', 'new'); } catch (e) {}
-    go('admin-invite-replacement');
     return;
   }
   if (which === 'new') {
     var newPw = (typeof generateAdminInitialPw === 'function') ? generateAdminInitialPw() : 'auto' + Date.now();
-    var ok = confirm(
-      '📧 招待メールを再送します (🆕 新規登録)\n\n' +
-      '宛先: ' + name + ' <' + email + '>\n\n' +
-      '⚠ 初期パスワードが自動で再生成され、招待メール本文にペーストされます。\n' +
-      '前回のパスワードは無効になります。\n\n' +
-      '新しいパスワード: ' + newPw + '\n\n' +
-      '送信してよろしいですか？'
+    showCustomConfirm(
+      '📧 招待メールを再送',
+      '<strong>' + name + '</strong> へ再送 (PWを再生成、前回PWは無効)。<br>新PW: <code style="background:#f5f5f5;padding:2px 8px;border-radius:4px;font-weight:700;">' + newPw + '</code>',
+      '再送',
+      function() {
+        var pwInput = document.getElementById('admin-pw-input');
+        var pwConfirm = document.getElementById('admin-pw-confirm');
+        if (pwInput) pwInput.value = newPw;
+        if (pwConfirm) pwConfirm.value = newPw;
+        try { sessionStorage.setItem('adminPwSetupWhich', 'new'); } catch (e) {}
+        go('admin-invite-email');
+      }
     );
-    if (!ok) return;
-    var pwInput = document.getElementById('admin-pw-input');
-    var pwConfirm = document.getElementById('admin-pw-confirm');
-    if (pwInput) pwInput.value = newPw;
-    if (pwConfirm) pwConfirm.value = newPw;
-    alert('✓ 招待メール(新規版)を再送しました。\n初期パスワードは更新されました。\n\n再送メール プレビューを表示します。');
-    try { sessionStorage.setItem('adminPwSetupWhich', 'new'); } catch (e) {}
-    go('admin-invite-email');
-  } else {
-    var ok2 = confirm(
-      '📧 通知メールを再送します (👥 既存登録)\n\n' +
-      '宛先: ' + name + ' <' + email + '>\n\n' +
-      '💡 既存の従業員パスワードを引き継ぐため、パスワードは変更されません。\n' +
-      'ログイン案内のみの通知メール(既存登録版)が再送されます。\n\n' +
-      '送信してよろしいですか？'
-    );
-    if (!ok2) return;
-    alert('✓ 通知メール(既存登録版)を再送しました。\n既存PWは変更されていません。\n\n再送メール プレビューを表示します。');
-    try { sessionStorage.setItem('adminPwSetupWhich', 'emp'); } catch (e) {}
-    go('admin-invite-email-emp');
+    return;
   }
+  // which === 'emp'
+  showCustomConfirm(
+    '📧 通知メールを再送',
+    '<strong>' + name + '</strong> へ通知メールを再送 (既存PW維持)。',
+    '再送',
+    function() {
+      try { sessionStorage.setItem('adminPwSetupWhich', 'emp'); } catch (e) {}
+      go('admin-invite-email-emp');
+    }
+  );
 }
 
 // 招待PW設定画面の「登録を完了してログイン」: adminRegisteredAt 記録 → 管理者専用画面 (page-admin-b0) に遷移
