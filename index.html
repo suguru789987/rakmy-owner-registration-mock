@@ -4926,21 +4926,24 @@ function closeCsvMethodModal() {
 }
 function csvMethodChoose(method) {
   if (!_csvMethodType) { closeCsvMethodModal(); return; }
-  // 案B: 店舗/雇用区分の外部勤怠選択 → 派生取込確認
+  // 案B: 店舗/雇用区分の外部勤怠選択 → カスタム派生取込確認モーダル
   if (method === 'saas' && (_csvMethodType === 'store' || _csvMethodType === 'emptype')) {
     var origType = _csvMethodType;
     var origLabel = _csvMethodLabel;
     closeCsvMethodModal();
-    var ok = confirm(
-      '⚠️ ' + origLabel + ' は外部勤怠サービスから直接取り込めません\n\n' +
-      origLabel + ' は <従業員データ取込> から **派生取込** (自動仕分け) されます。\n' +
-      'これから「従業員データ取込画面」に進みます。\n\n' +
-      '進んでよろしいですか？'
+    showCustomConfirm(
+      '🔄 派生取込の確認',
+      '<div style="margin-bottom:10px;"><strong>' + origLabel + '</strong> は外部勤怠サービスから<strong>直接取り込めません</strong>。</div>' +
+      '<div style="background:#fff8e1;border:1px solid #ffe0a3;border-radius:6px;padding:10px 12px;font-size:12px;color:#9c4d12;line-height:1.7;">' +
+      '<strong>従業員データ取込</strong> を実行すると、システムが自動的に ' + origLabel + ' データを<strong>派生取込</strong>してマスタテーブルに登録します。<br>' +
+      'これから <strong>従業員データ取込画面</strong> に進みます。' +
+      '</div>',
+      '従業員データ取込へ進む',
+      function() {
+        var url = 'https://suguru789987.github.io/rakmy-timerecord-import-spec/?type=employee&mode=saas&derived=' + encodeURIComponent(origType);
+        window.open(url, '_blank', 'noopener');
+      }
     );
-    if (!ok) return;
-    // 派生取込フラグを保持して従業員データ取込に遷移
-    var url = 'https://suguru789987.github.io/rakmy-timerecord-import-spec/?type=employee&mode=saas&derived=' + encodeURIComponent(origType);
-    window.open(url, '_blank', 'noopener');
     return;
   }
   var url = 'https://suguru789987.github.io/rakmy-timerecord-import-spec/?type=' + encodeURIComponent(_csvMethodType) + '&mode=' + method;
