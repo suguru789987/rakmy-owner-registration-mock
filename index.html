@@ -4882,13 +4882,17 @@ function openCsvMethodModal(type, label) {
   _csvMethodLabel = label || type;
   var lblEl = document.getElementById('csv-method-data-label');
   if (lblEl) lblEl.textContent = label;
-  // 外部勤怠で取得不可な種別の場合、SaaS ボタンを disabled + 案内に変更
+  // 外部勤怠の取得可否:
+  // - 業態: 取得不可 (disabled)
+  // - 店舗/雇用区分: 派生取込可能 (KoT.location_name / employment_type から) (active)
+  // - 従業員/管理者: 直接取得可能 (active)
   var saasBtn = document.getElementById('csv-method-saas-btn');
   var saasDesc = document.getElementById('csv-method-saas-desc');
   var saasArrow = document.getElementById('csv-method-saas-arrow');
-  var saasOnly = (type === 'brand' || type === 'store' || type === 'emptype');
+  var saasUnavailable = (type === 'brand');
+  var saasDerived = (type === 'store' || type === 'emptype');
   if (saasBtn) {
-    if (saasOnly) {
+    if (saasUnavailable) {
       saasBtn.disabled = true;
       saasBtn.style.background = '#f5f5f5';
       saasBtn.style.borderColor = '#ddd';
@@ -4902,7 +4906,13 @@ function openCsvMethodModal(type, label) {
       saasBtn.style.borderColor = '#1a73e8';
       saasBtn.style.cursor = 'pointer';
       saasBtn.style.opacity = '1';
-      if (saasDesc) saasDesc.textContent = 'キングオブタイム / ジョブカン の CSV データを列マッピングしてインポート';
+      if (saasDesc) {
+        if (saasDerived) {
+          saasDesc.innerHTML = '従業員データから <strong>派生取込</strong> されます (KoT / ジョブカンの該当列から自動仕分け)';
+        } else {
+          saasDesc.textContent = 'キングオブタイム / ジョブカン の CSV データを列マッピングしてインポート';
+        }
+      }
       if (saasArrow) saasArrow.textContent = '→';
     }
   }
