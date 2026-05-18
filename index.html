@@ -1215,7 +1215,7 @@
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc" style="background:#f8f9fa;">
-      <div class="ph"><h2>従業員 <span style="font-size:10px;color:#1a73e8;font-weight:600;background:#e3f2fd;padding:3px 10px;border-radius:12px;margin-left:8px;">運用更新</span></h2><div style="display:flex;gap:8px;"><a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/?type=employee" target="_blank" rel="noopener" class="btn btn-s btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">📥 CSVインポート ↗</a><button class="btn btn-p" onclick="bOpenStep(4, 'ops')">+ 従業員を追加</button></div></div>
+      <div class="ph"><h2>従業員 <span style="font-size:10px;color:#1a73e8;font-weight:600;background:#e3f2fd;padding:3px 10px;border-radius:12px;margin-left:8px;">運用更新</span></h2><div style="display:flex;gap:8px;"><button class="btn btn-s btn-sm" onclick="openCsvMethodModal('employee','従業員')" style="display:inline-flex;align-items:center;">📥 CSVインポート</button><button class="btn btn-p" onclick="bOpenStep(4, 'ops')">+ 従業員を追加</button></div></div>
       <div class="post-list"><div class="pl-row"><div class="nm">吉田 七美</div><div class="meta">渋谷店 / 正社員 / <span style="color:#f0960a;">招待中</span></div></div><div class="pl-row"><div class="nm">鈴木 太郎</div><div class="meta">新宿店 / アルバイト / <span style="color:#1a9e7e;">有効</span></div></div><div class="pl-row"><div class="nm">田中 花子</div><div class="meta">池袋店 / 契約社員 / <span style="color:#1a9e7e;">有効</span></div></div><div class="pl-row"><div class="nm">山田 健一</div><div class="meta">表参道店 / 正社員 / <span style="color:#1a9e7e;">有効</span></div></div><div class="pl-row"><div class="nm">佐藤 美咲</div><div class="meta">六本木店 / アルバイト / <span style="color:#1a9e7e;">有効</span></div></div><div class="pl-row"><div class="nm">高橋 直樹</div><div class="meta">渋谷店 / 業務委託 / <span style="color:#1a9e7e;">有効</span></div></div><div class="pl-row"><div class="nm">伊藤 由佳</div><div class="meta">新宿店 / アルバイト / <span style="color:#1a9e7e;">有効</span></div></div><div style="padding:8px 4px;color:#888;font-size:11px;text-align:center;">他 12 名</div></div>
     </main>
   </div>
@@ -1283,7 +1283,7 @@
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc" style="background:#f8f9fa;">
-      <div class="ph"><h2>従業員</h2><div style="display:flex;gap:8px;"><a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/?type=employee" target="_blank" rel="noopener" class="btn btn-s btn-sm csv-import-link" style="text-decoration:none;display:inline-flex;align-items:center;">📥 CSVインポート ↗</a><button class="btn btn-p" onclick="bOpenStep(4, 'ops')">+ 従業員を追加</button></div></div>
+      <div class="ph"><h2>従業員</h2><div style="display:flex;gap:8px;"><button class="btn btn-s btn-sm csv-import-link" onclick="openCsvMethodModal('employee','従業員')" style="display:inline-flex;align-items:center;">📥 CSVインポート</button><button class="btn btn-p" onclick="bOpenStep(4, 'ops')">+ 従業員を追加</button></div></div>
       <div class="csv-import-caption" style="font-size:10px;color:#888;margin-bottom:10px;">💡 「📥 CSVインポート」を押すと、別タブで <strong>タイムレコード インポート画面</strong> が開きます。本番では取込完了後この一覧に反映されます。</div>
       <div class="post-list" id="list-emp"><div class="pl-row"><div class="nm">吉田 七美</div><div class="meta">渋谷店 / 正社員 / <span style="color:#f0960a;">招待中</span></div></div><div class="pl-row"><div class="nm">鈴木 太郎</div><div class="meta">新宿店 / アルバイト / <span style="color:#1a9e7e;">有効</span></div></div><div class="pl-row"><div class="nm">田中 花子</div><div class="meta">池袋店 / 契約社員 / <span style="color:#1a9e7e;">有効</span></div></div><div class="pl-row"><div class="nm">山田 健一</div><div class="meta">表参道店 / 正社員 / <span style="color:#1a9e7e;">有効</span></div></div><div class="pl-row"><div class="nm">佐藤 美咲</div><div class="meta">六本木店 / アルバイト / <span style="color:#1a9e7e;">有効</span></div></div><div class="pl-row"><div class="nm">高橋 直樹</div><div class="meta">渋谷店 / 業務委託 / <span style="color:#1a9e7e;">有効</span></div></div><div class="pl-row"><div class="nm">伊藤 由佳</div><div class="meta">新宿店 / アルバイト / <span style="color:#1a9e7e;">有効</span></div></div><div style="padding:8px 4px;color:#888;font-size:11px;text-align:center;">他 12 名</div></div>
       <div style="margin-top:10px;font-size:11px;color:#888;">※ 招待中ステータスの従業員は「招待送信」ボタンから招待メールを送信できます（既存機能）</div>
@@ -2006,6 +2006,36 @@
 <!-- ===== 招待差し替え予告 カスタムモーダル (共通) =====
      emp タブで invited 従業員を選択した時に表示。
      ブラウザ素の alert() に代わるサイトUI 統一版。-->
+<!-- ===== CSVインポート方式選択モーダル (従業員/管理者用) =====
+     設定画面の「CSVインポート」ボタン → このモーダル → 方式選択 → 専用画面に新タブで遷移 -->
+<div id="csv-import-method-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;font-family:'Hiragino Kaku Gothic ProN', sans-serif;">
+  <div style="background:#fff;border-radius:10px;padding:24px 30px;max-width:520px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.3);">
+    <h3 style="margin:0 0 6px 0;font-size:16px;font-weight:700;color:#333;">📥 CSVインポート方式を選択</h3>
+    <div style="font-size:12px;color:#666;margin-bottom:18px;"><span id="csv-method-data-label">対象データ</span> のインポート方式を選択してください。</div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px;">
+      <button onclick="csvMethodChoose('tpl')" style="padding:14px 18px;border:1px solid #2ec4a5;border-radius:8px;background:#fff;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;">
+        <span style="font-size:24px;">📄</span>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:700;color:#0e9077;">テンプレートで取り込み</div>
+          <div style="font-size:11px;color:#666;margin-top:2px;">ラクミー専用テンプレートにデータを入力してインポート</div>
+        </div>
+        <span style="font-size:18px;color:#2ec4a5;">→</span>
+      </button>
+      <button onclick="csvMethodChoose('saas')" style="padding:14px 18px;border:1px solid #1a73e8;border-radius:8px;background:#fff;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;">
+        <span style="font-size:24px;">🔄</span>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:700;color:#0d47a1;">外部勤怠サービスから取り込み</div>
+          <div style="font-size:11px;color:#666;margin-top:2px;">キングオブタイム / ジョブカン の CSV データを列マッピングしてインポート</div>
+        </div>
+        <span style="font-size:18px;color:#1a73e8;">→</span>
+      </button>
+    </div>
+    <div style="display:flex;justify-content:flex-end;">
+      <button onclick="closeCsvMethodModal()" style="padding:8px 18px;border:1px solid #ccc;border-radius:6px;background:#fff;cursor:pointer;font-size:13px;color:#555;">キャンセル</button>
+    </div>
+  </div>
+</div>
+
 <!-- ===== 汎用カスタム confirm モーダル (再送・差し替えなど) ===== -->
 <div id="custom-confirm-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;font-family:'Hiragino Kaku Gothic ProN', sans-serif;">
   <div style="background:#fff;border-radius:10px;padding:24px 30px;max-width:480px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.3);">
@@ -2231,7 +2261,7 @@
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc">
-      <div class="ph"><h2>管理者一覧</h2><div style="display:flex;gap:8px;"><a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/?type=admin" target="_blank" rel="noopener" class="btn btn-s btn-sm csv-import-link" style="text-decoration:none;display:inline-flex;align-items:center;">📥 CSVインポート ↗</a><button class="btn btn-p" onclick="go('d2')">+ 管理者を登録</button></div></div>
+      <div class="ph"><h2>管理者一覧</h2><div style="display:flex;gap:8px;"><button class="btn btn-s btn-sm csv-import-link" onclick="openCsvMethodModal('admin','管理者')" style="display:inline-flex;align-items:center;">📥 CSVインポート</button><button class="btn btn-p" onclick="go('d2')">+ 管理者を登録</button></div></div>
       <div style="font-size:10px;color:#888;margin-bottom:10px;">💡 「📥 CSVインポート」を押すと、別タブで <strong>タイムレコード インポート画面</strong> が開きます。「⑤ 管理者」テンプレートを選択して複数管理者を一括登録できます（外部勤怠サービス連携対象外）。</div>
       <table class="dt">
         <thead><tr><th>名前</th><th>メール</th><th>権限</th><th>ステータス</th><th>担当店舗</th><th>操作</th></tr></thead>
@@ -4841,6 +4871,30 @@ function _setupAdminBuildStoreChecks() {
 // 2026-05-18: CSVインポートプレビュー関連 (admin-import-preview) は廃止。
 // 5分岐判定 + 一括メール送信仕様は rakmy-timerecord-import-spec の既存テンプレ/外部勤怠
 // プレビュー画面に統合する仕様 (MD仕様書 §23.19 参照)。
+
+// ===== CSVインポート方式選択モーダル制御 (2026-05-18 追加 / 案B 動線改善) =====
+// 設定画面の「CSVインポート」ボタン → モーダル → 方式選択 → 専用画面に新タブで遷移
+var _csvMethodType = null;
+var _csvMethodLabel = '';
+function openCsvMethodModal(type, label) {
+  _csvMethodType = type;
+  _csvMethodLabel = label || type;
+  var lblEl = document.getElementById('csv-method-data-label');
+  if (lblEl) lblEl.textContent = label;
+  var ov = document.getElementById('csv-import-method-overlay');
+  if (ov) ov.style.display = 'flex';
+}
+function closeCsvMethodModal() {
+  var ov = document.getElementById('csv-import-method-overlay');
+  if (ov) ov.style.display = 'none';
+  _csvMethodType = null;
+}
+function csvMethodChoose(method) {
+  if (!_csvMethodType) { closeCsvMethodModal(); return; }
+  var url = 'https://suguru789987.github.io/rakmy-timerecord-import-spec/?type=' + encodeURIComponent(_csvMethodType) + '&mode=' + method;
+  window.open(url, '_blank', 'noopener');
+  closeCsvMethodModal();
+}
 
 // ===== 汎用カスタム confirm モーダル制御 =====
 var _customConfirmOnOk = null;
