@@ -1101,7 +1101,6 @@
 
       <!-- パネル1: 新規登録 (行/列バッチUI) -->
       <div class="mtab-panel act" id="setup-admin-panel-new">
-        <div class="al al-i" style="margin-bottom:10px;font-size:11px;"><span>💡</span><div>新規アカウントを発行して管理者権限を付与します。各行が1名の管理者です。<strong>初期パスワード</strong>は自動生成され招待メールにペーストされます。</div></div>
         <div class="al al-w" style="margin-bottom:10px;font-size:11px;background:#e3f2fd;border:1px solid #b3d9f0;color:#0d47a1;"><span>📧</span><div>「<strong>管理者を登録する (N件)</strong>」ボタン押下時に、入力した <strong>全N名分</strong> の <strong>招待メール(新規版)</strong> が一括送信されます (72h有効)。</div></div>
         <div class="batch-table-wrap">
           <table class="batch-table" id="setup-admin-new-table">
@@ -1126,8 +1125,7 @@
 
       <!-- パネル2: 従業員から選択 (行/列バッチUI) -->
       <div class="mtab-panel" id="setup-admin-panel-emp">
-        <div class="al al-i" style="margin-bottom:10px;font-size:11px;"><span>💡</span><div>既存の従業員アカウントに管理者権限を付与します（複数行入力可）。<strong>初期パスワード設定は不要</strong>です（従業員が既に設定済みのパスワードでログイン）。在籍中の従業員のみ表示されます。</div></div>
-        <div class="al al-w" style="margin-bottom:10px;font-size:11px;background:#ede7f6;border:1px solid #c5b6e1;color:#5c4dac;"><span>📧</span><div>「<strong>管理者を登録する (N件)</strong>」ボタン押下時に、選択した <strong>全N名分</strong> の <strong>通知メール(既存登録版)</strong> が自動送信されます (既存PW継承、新規PW設定なし)。</div></div>
+        <div class="al al-w" style="margin-bottom:10px;font-size:11px;background:#ede7f6;border:1px solid #c5b6e1;color:#5c4dac;"><span>📧</span><div>「<strong>管理者を登録する (N件)</strong>」ボタン押下時に、選択した <strong>全N名分</strong> の <strong>通知メール(既存登録版)</strong> が自動送信されます (既存PW継承)。在籍中の従業員のみ表示。</div></div>
         <div class="batch-table-wrap">
           <table class="batch-table" id="setup-admin-emp-table">
             <thead>
@@ -2156,7 +2154,6 @@
 
             <!-- パネル1: 新規登録（従来仕様） -->
             <div class="mtab-panel act" id="d2-panel-new">
-              <div class="al al-i" style="margin-bottom:14px;"><span>💡</span><div>従業員台帳には登録されていない方を、管理者として直接追加します。登録後、初期パスワードはオーナーが管理者へ口頭/チャット等で共有してください。</div></div>
               <div class="fg"><label>名前 <span class="req">✳</span></label><input id="d2-new-name" value="" placeholder="例: 鈴木 花子" style="max-width:100%;"></div>
               <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input id="d2-new-email" type="email" value="" placeholder="例: suzuki@example.jp" style="max-width:100%;"></div>
               <div class="fg">
@@ -2190,8 +2187,7 @@
 
             <!-- パネル2: 従業員から選択 -->
             <div class="mtab-panel" id="d2-panel-emp">
-              <div class="al al-i" style="margin-bottom:14px;"><span>💡</span><div>既に従業員台帳に登録済みの方を、管理者として追加します。氏名を選択するとメールアドレスが自動入力されます（従業員台帳の値を参照）。<strong>在籍中の従業員のみ表示</strong>されます。</div></div>
-              <div class="al al-w" style="margin-bottom:14px;background:#ede7f6;border:1px solid #c5b6e1;color:#5c4dac;font-size:11px;"><span>📧</span><div>「<strong>管理者を登録</strong>」ボタン押下時に、選択した従業員へ <strong>通知メール(既存登録版)</strong> が自動送信されます (既存PW継承)。</div></div>
+              <div class="al al-w" style="margin-bottom:14px;background:#ede7f6;border:1px solid #c5b6e1;color:#5c4dac;font-size:11px;"><span>📧</span><div>「<strong>管理者を登録</strong>」ボタン押下時に、選択した従業員へ <strong>通知メール(既存登録版)</strong> が自動送信されます (既存PW継承)。在籍中の従業員のみ表示。</div></div>
 
               <div class="fg">
                 <label>従業員を選択 <span class="req">✳</span></label>
