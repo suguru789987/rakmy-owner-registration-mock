@@ -2362,14 +2362,13 @@
                 <label>従業員を選択 <span class="req">✳</span></label>
                 <select id="d2-emp-select" onchange="d2OnEmpSelect()" style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
                   <option value="">-- 従業員を選択してください --</option>
-                  <option value="emp-001" data-email="nishikata+test2@example.com" data-store="渋谷店" data-type="業務委託">test（業務委託 / 渋谷店）</option>
-                  <option value="emp-002" data-email="nishikata+test@wshoulder.com" data-store="渋谷店" data-type="代表取締役">TEST TARO（代表取締役 / 渋谷店）</option>
-                  <option value="emp-003" data-email="employee02@example.com" data-store="新宿店" data-type="バイトさん">岩田（バイトさん / 新宿店）</option>
-                  <option value="emp-004" data-email="employee03@example.com" data-store="池袋店" data-type="業務委託">佐々木（業務委託 / 池袋店）</option>
-                  <option value="emp-005" data-email="manager01@example.com" data-store="池袋店" data-type="業務委託">にしかた（業務委託 / 池袋店）</option>
-                  <option value="emp-006" data-email="takahashi@example.jp" data-store="渋谷店" data-type="バイトさん">高橋 三郎（バイトさん / 渋谷店）</option>
+                  <option value="emp-001" data-email="nishikata+test2@example.com" data-store="渋谷店" data-type="業務委託" data-status="active">test（業務委託 / 渋谷店）</option>
+                  <option value="emp-002" data-email="nishikata+test@wshoulder.com" data-store="渋谷店" data-type="代表取締役" data-status="active">TEST TARO（代表取締役 / 渋谷店）</option>
+                  <option value="emp-004" data-email="employee03@example.com" data-store="池袋店" data-type="業務委託" data-status="active">佐々木（業務委託 / 池袋店）</option>
+                  <option value="emp-005" data-email="manager01@example.com" data-store="池袋店" data-type="業務委託" data-status="active">にしかた（業務委託 / 池袋店）</option>
+                  <option value="emp-006" data-email="takahashi@example.jp" data-store="渋谷店" data-type="バイトさん" data-status="invited">高橋 三郎（バイトさん / 渋谷店）  ⏳ 招待中(要差し替え)</option>
                 </select>
-                <div class="hint" style="margin-top:6px;">従業員一覧に登録済みのユーザーから選択できます</div>
+                <div class="hint" style="margin-top:6px;">従業員一覧に登録済みのユーザーから選択できます（既管理者 岩田・鈴木・田中 は重複登録防止のため非表示）</div>
               </div>
 
               <!-- 選択された従業員の情報サマリ -->
@@ -3769,6 +3768,11 @@ function d2OnEmpSelect() {
     // 担当店舗チェックを全解除
     document.querySelectorAll('#d2-emp-stores input[type="checkbox"]').forEach(function(cb){ cb.checked = false; });
     return;
+  }
+  // 招待中従業員選択時の予告 alert (招待差し替え)
+  var status = opt.getAttribute('data-status') || '';
+  if (status === 'invited') {
+    alert('⚠️ この従業員は現在「招待中(PW未設定)」です。\n\n登録時に既存の招待メールを無効化し、「従業員(管理者権限付き)・差し替え版」を再送します。\n\n受信者は差し替えメール1通から PW設定 + 管理者画面ログインが可能になります。');
   }
   var email = opt.getAttribute('data-email') || '';
   var store = opt.getAttribute('data-store') || '';
