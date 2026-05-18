@@ -4926,6 +4926,23 @@ function closeCsvMethodModal() {
 }
 function csvMethodChoose(method) {
   if (!_csvMethodType) { closeCsvMethodModal(); return; }
+  // 案B: 店舗/雇用区分の外部勤怠選択 → 派生取込確認
+  if (method === 'saas' && (_csvMethodType === 'store' || _csvMethodType === 'emptype')) {
+    var origType = _csvMethodType;
+    var origLabel = _csvMethodLabel;
+    closeCsvMethodModal();
+    var ok = confirm(
+      '⚠️ ' + origLabel + ' は外部勤怠サービスから直接取り込めません\n\n' +
+      origLabel + ' は <従業員データ取込> から **派生取込** (自動仕分け) されます。\n' +
+      'これから「従業員データ取込画面」に進みます。\n\n' +
+      '進んでよろしいですか？'
+    );
+    if (!ok) return;
+    // 派生取込フラグを保持して従業員データ取込に遷移
+    var url = 'https://suguru789987.github.io/rakmy-timerecord-import-spec/?type=employee&mode=saas&derived=' + encodeURIComponent(origType);
+    window.open(url, '_blank', 'noopener');
+    return;
+  }
   var url = 'https://suguru789987.github.io/rakmy-timerecord-import-spec/?type=' + encodeURIComponent(_csvMethodType) + '&mode=' + method;
   window.open(url, '_blank', 'noopener');
   closeCsvMethodModal();
