@@ -508,7 +508,8 @@
     <span class="nav-tab" onclick="go('d2')" id="nav-d2">管理者登録</span>
     <span class="nav-tab" onclick="go('admin-invite-email')" id="nav-admin-invite-email">📧 招待メール(新規)</span>
     <span class="nav-tab" onclick="go('admin-invite-email-emp')" id="nav-admin-invite-email-emp">📧 招待メール(既存登録)</span>
-    <span class="nav-tab" onclick="go('admin-pw-setup')" id="nav-admin-pw-setup">🔑 招待URL先 PW設定 (新規/既存 両対応)</span>
+    <span class="nav-tab" onclick="try{sessionStorage.setItem('adminPwSetupWhich','new');}catch(e){}go('admin-pw-setup')" id="nav-admin-pw-setup-new">🔑 招待URL先 PW設定 (🆕 新規)</span>
+    <span class="nav-tab" onclick="try{sessionStorage.setItem('adminPwSetupWhich','emp');}catch(e){}go('admin-pw-setup')" id="nav-admin-pw-setup-emp">🔑 招待URL先 PW設定 (👥 既存)</span>
     <span class="nav-tab" onclick="go('admin-b0')" id="nav-admin-b0">👑 管理者ログイン後 TOP</span>
     <span class="nav-tab" onclick="go('d3')" id="nav-d3">登録完了メール(新規)</span>
     <span class="nav-tab" onclick="go('d4')" id="nav-d4">登録完了メール(既存登録)</span>
@@ -2002,10 +2003,17 @@
   </main>
 </div>
 
-<!-- ===== 招待URL先 アカウント設定画面 (管理者新規登録専用、初期PWプリセット、現行版デザイン準拠) ===== -->
+<!-- ===== 招待URL先 アカウント設定画面 (1シート両対応: 新規登録 / 既存登録) ===== -->
 <div class="page" id="page-admin-pw-setup">
   <main class="mc" style="margin:0;padding:0;background:#f6f6f6;min-height:100vh;">
-    <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;min-height:100vh;align-items:center;gap:40px;padding:40px 20px;">
+    <!-- 画面上部に常時表示の切替トグル (デモ確認用) -->
+    <div style="background:#202124;color:#fff;padding:10px 20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:center;font-size:11px;">
+      <span style="color:#999;">🛠 モック確認用 モード切替:</span>
+      <button onclick="applyAdminPwSetupMode('new')" style="padding:4px 12px;border:1px solid #2ec4a5;border-radius:4px;background:#2ec4a5;color:#fff;cursor:pointer;font-weight:700;font-size:11px;">🆕 新規登録 モード</button>
+      <button onclick="applyAdminPwSetupMode('emp')" style="padding:4px 12px;border:1px solid #5c4dac;border-radius:4px;background:#5c4dac;color:#fff;cursor:pointer;font-weight:700;font-size:11px;">👥 既存登録 モード</button>
+      <span style="color:#999;">| 現在: <strong id="admin-pw-current-mode" style="color:#fff;">--</strong></span>
+    </div>
+    <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;min-height:calc(100vh - 40px);align-items:center;gap:40px;padding:40px 20px;">
 
       <!-- 左カラム: アカウント設定フォーム (1シート両対応: 新規登録 / 既存登録) -->
       <div style="background:#fff;padding:36px 32px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
@@ -2069,12 +2077,6 @@
       • 管理者本人によるPW変更は <strong>ログイン後の「アカウント設定」</strong>で可能<br>
       • モード切替: ヘッダーバッジ + タイトル/サブタイトル + 説明バナー + 区分表記 + CTAボタン文言 + PW確認欄表示 を JS で動的切替 (applyAdminPwSetupMode)<br>
       • <strong>デモ切替</strong>: ↓ 下のボタンで両モードの表示を切替可能
-    </div>
-    <div style="max-width:1200px;margin:14px auto;padding:12px 20px;background:#fff;border:1px dashed #2ec4a5;border-radius:8px;font-size:11px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-      <span style="color:#0e9077;font-weight:700;">🛠 デモ用 モード切替:</span>
-      <button class="btn btn-s btn-sm" onclick="applyAdminPwSetupMode('new')" style="font-size:11px;">🆕 新規登録モード</button>
-      <button class="btn btn-s btn-sm" onclick="applyAdminPwSetupMode('emp')" style="font-size:11px;">👥 既存登録モード</button>
-      <span style="font-size:10px;color:#888;margin-left:8px;">実機では sessionStorage.adminPwSetupWhich で自動判定</span>
     </div>
   </main>
 </div>
@@ -4966,6 +4968,8 @@ function adminPwSetupCompleteLogin() {
 function applyAdminPwSetupMode(which) {
   if (which !== 'new' && which !== 'emp') which = 'new';
   try { sessionStorage.setItem('adminPwSetupWhich', which); } catch (e) {}
+  var cur = document.getElementById('admin-pw-current-mode');
+  if (cur) cur.textContent = (which === 'emp') ? '👥 既存登録モード' : '🆕 新規登録モード';
   var badge = document.getElementById('admin-pw-mode-badge');
   var title = document.getElementById('admin-pw-title');
   var sub = document.getElementById('admin-pw-subtitle');
