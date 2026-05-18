@@ -2391,9 +2391,9 @@
                   <option value="emp-002" data-email="nishikata+test@wshoulder.com" data-store="渋谷店" data-type="代表取締役" data-status="active">TEST TARO（代表取締役 / 渋谷店）</option>
                   <option value="emp-004" data-email="employee03@example.com" data-store="池袋店" data-type="業務委託" data-status="active">佐々木（業務委託 / 池袋店）</option>
                   <option value="emp-005" data-email="manager01@example.com" data-store="池袋店" data-type="業務委託" data-status="active">にしかた（業務委託 / 池袋店）</option>
-                  <option value="emp-006" data-email="takahashi@example.jp" data-store="渋谷店" data-type="バイトさん" data-status="invited">高橋 三郎（バイトさん / 渋谷店）  ⏳ 招待中(要差し替え)</option>
+                  <option value="emp-011" data-email="hayashi@example.jp" data-store="新宿店" data-type="業務委託" data-status="invited">林 健次郎（業務委託 / 新宿店）  ⏳ 招待中(要差し替え)</option>
                 </select>
-                <div class="hint" style="margin-top:6px;">従業員一覧に登録済みのユーザーから選択できます（既管理者 岩田・鈴木・田中 は重複登録防止のため非表示）</div>
+                <div class="hint" style="margin-top:6px;">従業員一覧に登録済みのユーザーから選択できます（既管理者 岩田・鈴木・田中・高橋 は重複登録防止のため非表示）</div>
               </div>
 
               <!-- 選択された従業員の情報サマリ -->
@@ -4715,12 +4715,21 @@ var SETUP_ADMIN_EMPS = [
   { v:'emp-002', l:'TEST TARO（代表取締役 / 渋谷店）', email:'taro@example.com', status:'active' },
   { v:'emp-003', l:'岩田（バイトさん / 新宿店）', email:'iwata@example.jp', status:'active' },
   { v:'emp-004', l:'佐々木（業務委託 / 池袋店）', email:'sasaki@example.com', status:'active' },
-  // 招待中 (PW未設定) - 招待差し替え動作デモ用
+  // 招待中 (PW未設定 / まだ管理者でない) - 招待差し替え動作デモ用
+  { v:'emp-011', l:'林 健次郎（業務委託 / 新宿店）', email:'hayashi@example.jp', status:'invited' },
+  // 招待中 + 既に管理者として登録済 (高橋三郎) - デモシミュレーション用
   { v:'emp-010', l:'高橋 三郎（バイトさん / 渋谷店）', email:'takahashi@example.jp', status:'invited' }
 ];
 
 // 既に管理者として登録済のメアド (重複登録防止)
-var ADMIN_REGISTERED_EMAILS = ['suzuki@example.jp','tanaka@example.jp','iwata@example.jp','yamada@example.jp'];
+// 管理者一覧 (page-d1) の登録済メンバーと完全一致させる
+var ADMIN_REGISTERED_EMAILS = [
+  'yamada@example.jp',      // オーナー
+  'suzuki@example.jp',      // 🆕 新規登録 / ⏳ 招待中
+  'tanaka@example.jp',      // 🆕 新規登録 / ✓ 有効
+  'iwata@example.jp',       // 👥 既存登録 / ✓ 有効
+  'takahashi@example.jp'    // 🔄 既存・差し替え / ⏳ 招待中
+];
 
 /* ===== 管理者登録 4分岐 識別ロジック (2026-05-18 仕様追加 / retired は後続実装) =====
  * 全動線 (モーダル / バッチUI / CSVインポート) で共通使用。
@@ -4872,7 +4881,7 @@ var ADMIN_IMPORT_PREVIEW_ROWS = [
   { name:'山本 健一',  email:'yamamoto@example.jp',     store:'渋谷店' },     // new
   { name:'佐藤 一郎',  email:'sato@example.jp',         store:'新宿店' },     // new
   { name:'test',       email:'test@example.com',        store:'渋谷店' },     // emp_active
-  { name:'高橋 三郎',  email:'takahashi@example.jp',    store:'渋谷店' },     // emp_invited (差し替え)
+  { name:'林 健次郎',  email:'hayashi@example.jp',      store:'新宿店' },     // emp_invited (差し替え)
   { name:'鈴木 花子',  email:'suzuki@example.jp',       store:'渋谷店' }      // already_admin
 ];
 
