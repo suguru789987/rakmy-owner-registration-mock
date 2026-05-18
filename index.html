@@ -2301,7 +2301,7 @@
             <td>新宿店</td>
             <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" onclick="d1ResendInvite('emp','岩田','iwata@example.jp')" style="background:#ede7f6;border-color:#b39ddb;color:#5c4dac;font-weight:600;" title="管理者権限が付与された旨の通知メール(既存登録版)を再送します">📧 再送</button> <button class="btn btn-s btn-sm" onclick="go('d1e')">編集</button> <button class="btn btn-s btn-sm" onclick="d1RevokeAdmin('岩田')" style="color:#c62828;" title="管理者権限のみ解除。従業員アカウントは残ります">削除</button></td>
           </tr>
-          <tr>
+          <tr id="d1-row-takahashi">
             <td><strong>高橋 三郎</strong></td>
             <td>takahashi@example.jp</td>
             <td><span class="rb rb-mgr">管理者</span> <span style="font-size:9px;color:#f0960a;background:#fff8e1;border:1px solid #ffe0a3;padding:1px 8px;border-radius:10px;font-weight:700;margin-left:4px;" title="元々招待中(invited)の従業員 → 招待差し替えで管理者権限付き招待を再発行">🔄 既存・差し替え</span></td>
@@ -2313,6 +2313,17 @@
       </table>
 
       <div class="al al-i" style="margin-top:16px;max-width:760px;"><span>💡</span><div>管理者はオーナーが直接登録します。登録由来 3区分:<br>　・<span style="color:#0e9077;background:#e8f8f5;border:1px solid #b8e6d6;padding:1px 8px;border-radius:10px;font-weight:700;font-size:10px;">🆕 新規登録</span> ラクミー未登録 → 新規アカウント発行 + 自動PWを招待メールに記載<br>　・<span style="color:#5c4dac;background:#ede7f6;border:1px solid #c5b6e1;padding:1px 8px;border-radius:10px;font-weight:700;font-size:10px;">👥 既存登録</span> 既存の active 従業員 (PW設定済) → 既存PW継承、通知メールのみ送信<br>　・<span style="color:#f0960a;background:#fff8e1;border:1px solid #ffe0a3;padding:1px 8px;border-radius:10px;font-weight:700;font-size:10px;">🔄 既存・差し替え</span> 既存の invited 従業員 (PW未設定) → 旧招待を無効化、管理者権限付き差し替え版を1通再発行</div></div>
+
+      <!-- ★ モック確認用 デモエリア (本番UI とは物理分離、橙ダッシュ枠で明示) -->
+      <div style="margin-top:24px;padding:14px 18px;background:#fff3e0;border:2px dashed #e67e22;border-radius:8px;max-width:900px;">
+        <div style="font-size:11px;font-weight:700;color:#e67e22;margin-bottom:8px;">🛠 モック確認用 (デモ専用・本番UIではありません)</div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:11px;">
+          <span style="color:#5d4037;">高橋 三郎 (🔄 既存・差し替え) ステータス遷移シミュレート:</span>
+          <button onclick="d1DemoTransitionTakahashi('active')" style="padding:4px 12px;border:1px solid #0e9077;border-radius:4px;background:#fff;color:#0e9077;cursor:pointer;font-weight:700;font-size:11px;">✓ PW設定完了 → active 遷移</button>
+          <button onclick="d1DemoTransitionTakahashi('invited')" style="padding:4px 12px;border:1px solid #f0960a;border-radius:4px;background:#fff;color:#f0960a;cursor:pointer;font-weight:700;font-size:11px;">⏳ 招待中に戻す</button>
+        </div>
+        <div style="margin-top:6px;font-size:10px;color:#888;">※ 全画面 (D-2 emp タブ select / CSV プレビュー / 管理者一覧バッジ) の判定が連動します</div>
+      </div>
     </main>
   </div>
 </div>
@@ -5249,6 +5260,47 @@ function b0SubmitAdminEntry() {
   refreshStep5Panel();
   if (typeof refreshAdminRegisteredBanner === 'function') refreshAdminRegisteredBanner();
   setTimeout(function(){ bShowSetupAdminCompleteModal(counts[4], which, n); }, 200);
+}
+
+// ★ モック確認用デモ: 高橋 三郎 (invited由来) のステータス遷移シミュレート
+// 全画面の判定 (SETUP_ADMIN_EMPS.status / d2-emp-select / 管理者一覧行) を連動更新
+function d1DemoTransitionTakahashi(targetStatus) {
+  if (targetStatus !== 'active' && targetStatus !== 'invited') return;
+  // 1. SETUP_ADMIN_EMPS の高橋三郎を更新 (resolveAdminRegistrationType の判定が変わる)
+  SETUP_ADMIN_EMPS.forEach(function(e) {
+    if (e.email && e.email.toLowerCase() === 'takahashi@example.jp') e.status = targetStatus;
+  });
+  // 2. d2-emp-select の高橋三郎 option を更新
+  var d2sel = document.getElementById('d2-emp-select');
+  if (d2sel) {
+    Array.prototype.forEach.call(d2sel.options, function(op) {
+      if (op.value === 'emp-006') {
+        op.setAttribute('data-status', targetStatus);
+        op.textContent = '高橋 三郎（バイトさん / 渋谷店）' + (targetStatus === 'invited' ? '  ⏳ 招待中(要差し替え)' : '');
+      }
+    });
+  }
+  // 3. 管理者一覧 (page-d1) の高橋三郎行を更新 (バッジ・ステータス・再送ボタン)
+  var row = document.getElementById('d1-row-takahashi');
+  if (row) {
+    if (targetStatus === 'active') {
+      row.innerHTML =
+        '<td><strong>高橋 三郎</strong></td>' +
+        '<td>takahashi@example.jp</td>' +
+        '<td><span class="rb rb-mgr">管理者</span> <span style="font-size:9px;color:#5c4dac;background:#ede7f6;border:1px solid #c5b6e1;padding:1px 8px;border-radius:10px;font-weight:700;margin-left:4px;">👥 既存登録</span></td>' +
+        '<td><span style="font-size:10px;color:#0e9077;background:#e8f8f5;border:1px solid #b8e6d6;padding:2px 8px;border-radius:10px;font-weight:700;" title="PW設定完了、ログイン経験あり">✓ 有効</span></td>' +
+        '<td>渋谷店</td>' +
+        '<td style="white-space:nowrap;"><button class="btn btn-s btn-sm" onclick="d1ResendInvite(\'emp\',\'高橋 三郎\',\'takahashi@example.jp\')" style="background:#ede7f6;border-color:#b39ddb;color:#5c4dac;font-weight:600;" title="通知メール(既存登録版)を再送">📧 再送</button> <button class="btn btn-s btn-sm" onclick="go(\'d1e\')">編集</button> <button class="btn btn-s btn-sm" onclick="d1RevokeAdmin(\'高橋 三郎\')" style="color:#c62828;" title="管理者権限のみ解除">削除</button></td>';
+    } else {
+      row.innerHTML =
+        '<td><strong>高橋 三郎</strong></td>' +
+        '<td>takahashi@example.jp</td>' +
+        '<td><span class="rb rb-mgr">管理者</span> <span style="font-size:9px;color:#f0960a;background:#fff8e1;border:1px solid #ffe0a3;padding:1px 8px;border-radius:10px;font-weight:700;margin-left:4px;" title="元々招待中(invited)の従業員 → 招待差し替えで管理者権限付き招待を再発行">🔄 既存・差し替え</span></td>' +
+        '<td><span style="font-size:10px;color:#f0960a;background:#fff8e1;border:1px solid #ffe0a3;padding:2px 8px;border-radius:10px;font-weight:700;" title="招待差し替えメール送信済、PW設定待ち">⏳ 招待中</span></td>' +
+        '<td>渋谷店</td>' +
+        '<td style="white-space:nowrap;"><button class="btn btn-s btn-sm" onclick="d1ResendInvite(\'replacement\',\'高橋 三郎\',\'takahashi@example.jp\')" style="background:#fff8e1;border-color:#ffe0a3;color:#f0960a;font-weight:600;" title="招待差し替え版メールを再送します (旧トークンは引き続き無効)">📧 再送</button> <button class="btn btn-s btn-sm" onclick="go(\'d1e\')">編集</button> <button class="btn btn-s btn-sm" onclick="d1RevokeAdmin(\'高橋 三郎\')" style="color:#c62828;" title="管理者権限のみ解除。従業員アカウントは残ります">削除</button></td>';
+    }
+  }
 }
 
 // 管理者一覧 (page-d1) 「削除」ボタン: 管理者権限のみ解除 (従業員アカウントは残る)
