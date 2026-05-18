@@ -4922,7 +4922,9 @@ function csvMethodChoose(method) {
   if (!_csvMethodType) { closeCsvMethodModal(); return; }
   // 案A (2026-05-18): 派生取込仕様廃止。業態/店舗/雇用区分の外部勤怠ボタンは disabled なので
   // このパスには到達しない (UI で防止)。常に通常ルーティング。
-  var url = 'https://suguru789987.github.io/rakmy-timerecord-import-spec/?type=' + encodeURIComponent(_csvMethodType) + '&mode=' + method;
+  // cache-buster 付与でブラウザキャッシュを回避 (?v=t<timestamp>)
+  var cb = 't' + Date.now();
+  var url = 'https://suguru789987.github.io/rakmy-timerecord-import-spec/?type=' + encodeURIComponent(_csvMethodType) + '&mode=' + method + '&v=' + cb;
   window.open(url, '_blank', 'noopener');
   closeCsvMethodModal();
 }
