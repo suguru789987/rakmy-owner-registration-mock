@@ -2283,10 +2283,18 @@
             <td>新宿店</td>
             <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" onclick="d1ResendInvite('emp','岩田','iwata@example.jp')" style="background:#ede7f6;border-color:#b39ddb;color:#5c4dac;font-weight:600;" title="管理者権限が付与された旨の通知メール(既存登録版)を再送します">📧 再送</button> <button class="btn btn-s btn-sm" onclick="go('d1e')">編集</button> <button class="btn btn-s btn-sm" onclick="d1RevokeAdmin('岩田')" style="color:#c62828;" title="管理者権限のみ解除。従業員アカウントは残ります">削除</button></td>
           </tr>
+          <tr>
+            <td><strong>高橋 三郎</strong></td>
+            <td>takahashi@example.jp</td>
+            <td><span class="rb rb-mgr">管理者</span> <span style="font-size:9px;color:#f0960a;background:#fff8e1;border:1px solid #ffe0a3;padding:1px 8px;border-radius:10px;font-weight:700;margin-left:4px;" title="元々招待中(invited)の従業員 → 招待差し替えで管理者権限付き招待を再発行">🔄 既存・差し替え</span></td>
+            <td><span style="font-size:10px;color:#f0960a;background:#fff8e1;border:1px solid #ffe0a3;padding:2px 8px;border-radius:10px;font-weight:700;" title="招待差し替えメール送信済、PW設定待ち">⏳ 招待中</span></td>
+            <td>渋谷店</td>
+            <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" onclick="d1ResendInvite('replacement','高橋 三郎','takahashi@example.jp')" style="background:#fff8e1;border-color:#ffe0a3;color:#f0960a;font-weight:600;" title="招待差し替え版メールを再送します (旧トークンは引き続き無効)">📧 再送</button> <button class="btn btn-s btn-sm" onclick="go('d1e')">編集</button> <button class="btn btn-s btn-sm" onclick="d1RevokeAdmin('高橋 三郎')" style="color:#c62828;" title="管理者権限のみ解除。従業員アカウントは残ります">削除</button></td>
+          </tr>
         </tbody>
       </table>
 
-      <div class="al al-i" style="margin-top:16px;max-width:680px;"><span>💡</span><div>管理者はオーナーが直接登録します。<br>　・<span style="color:#0e9077;background:#e8f8f5;border:1px solid #b8e6d6;padding:1px 8px;border-radius:10px;font-weight:700;font-size:10px;">🆕 新規登録</span> <strong>初期パスワードは自動生成され、招待メールに記載されます</strong> (オーナーの設定不要)。<br>　・<span style="color:#5c4dac;background:#ede7f6;border:1px solid #c5b6e1;padding:1px 8px;border-radius:10px;font-weight:700;font-size:10px;">👥 既存登録</span> 既存の従業員パスワードがそのまま引き継がれます (新規PW設定なし)。</div></div>
+      <div class="al al-i" style="margin-top:16px;max-width:760px;"><span>💡</span><div>管理者はオーナーが直接登録します。登録由来 3区分:<br>　・<span style="color:#0e9077;background:#e8f8f5;border:1px solid #b8e6d6;padding:1px 8px;border-radius:10px;font-weight:700;font-size:10px;">🆕 新規登録</span> ラクミー未登録 → 新規アカウント発行 + 自動PWを招待メールに記載<br>　・<span style="color:#5c4dac;background:#ede7f6;border:1px solid #c5b6e1;padding:1px 8px;border-radius:10px;font-weight:700;font-size:10px;">👥 既存登録</span> 既存の active 従業員 (PW設定済) → 既存PW継承、通知メールのみ送信<br>　・<span style="color:#f0960a;background:#fff8e1;border:1px solid #ffe0a3;padding:1px 8px;border-radius:10px;font-weight:700;font-size:10px;">🔄 既存・差し替え</span> 既存の invited 従業員 (PW未設定) → 旧招待を無効化、管理者権限付き差し替え版を1通再発行</div></div>
     </main>
   </div>
 </div>
@@ -5210,10 +5218,26 @@ function d1RevokeAdmin(name) {
   // 本実装では行を削除する処理になるが、モックでは表示維持
 }
 
-// 管理者一覧 (page-d1) 「📧 再送」ボタン: タブ種別で動作出し分け
-// - which='new': 自動振り出しPWを再生成し、新規版招待メール(page-admin-invite-email)を再送
-// - which='emp': 既存PWは触らず、既存登録版通知メール(page-admin-invite-email-emp)を再送
+// 管理者一覧 (page-d1) 「📧 再送」ボタン: 由来別 (3区分) に動作出し分け
+// - which='new':         新規登録由来 → PW再生成 + 招待メール(新規版)再送
+// - which='emp':         既存登録(active) → 通知メール(既存登録版)再送
+// - which='replacement': 既存・差し替え(invited由来) → 招待差し替え版を再送
 function d1ResendInvite(which, name, email) {
+  if (which === 'replacement') {
+    var okR = confirm(
+      '📧 招待差し替えメールを再送します (🔄 既存・差し替え)\n\n' +
+      '宛先: ' + name + ' <' + email + '>\n\n' +
+      '💡 元々「招待中(PW未設定)」の従業員に管理者権限が付与された方です。\n' +
+      '⚠ 旧トークン (従業員招待 + 前回差し替え版) は引き続き無効化されたままです。\n' +
+      '新たな差し替え版招待メール(管理者権限付き)が再発行されます。\n\n' +
+      '送信してよろしいですか？'
+    );
+    if (!okR) return;
+    alert('✓ 招待差し替え版メールを再送しました。\n\n再送メール プレビューを表示します。');
+    try { sessionStorage.setItem('adminPwSetupWhich', 'new'); } catch (e) {}
+    go('admin-invite-replacement');
+    return;
+  }
   if (which === 'new') {
     var newPw = (typeof generateAdminInitialPw === 'function') ? generateAdminInitialPw() : 'auto' + Date.now();
     var ok = confirm(
