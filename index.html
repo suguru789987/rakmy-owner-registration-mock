@@ -506,7 +506,8 @@
     <span class="nav-flow">D 管理者</span>
     <span class="nav-tab" onclick="go('d1')" id="nav-d1">管理者一覧</span>
     <span class="nav-tab" onclick="go('d2')" id="nav-d2">管理者登録</span>
-    <span class="nav-tab" onclick="go('admin-invite-email')" id="nav-admin-invite-email">📧 管理者招待メール</span>
+    <span class="nav-tab" onclick="go('admin-invite-email')" id="nav-admin-invite-email">📧 招待メール(新規)</span>
+    <span class="nav-tab" onclick="go('admin-invite-email-emp')" id="nav-admin-invite-email-emp">📧 招待メール(従業員昇格)</span>
     <span class="nav-tab" onclick="go('admin-pw-setup')" id="nav-admin-pw-setup">🔑 招待URL先 PW設定</span>
     <span class="nav-tab" onclick="go('admin-b0')" id="nav-admin-b0">👑 管理者ログイン後 TOP</span>
     <span class="nav-tab" onclick="go('d3')" id="nav-d3">登録完了メール(新規)</span>
@@ -1123,9 +1124,10 @@
 </div>
 
 <!-- ===== 管理者登録オーバーレイモーダル(setup mode用) ===== -->
+<!-- 2026-05-18 仕様変更: STEP 1〜4 と同じ「行追加型バッチUI」に改修。連続して複数登録できる -->
 <div class="b-step-overlay" id="b-setup-admin-overlay">
-  <div class="b-step-modal" style="max-width:560px;">
-    <div class="mh"><h3>管理者を登録</h3><button class="mx" onclick="bCloseSetupAdminModal()">✕</button></div>
+  <div class="b-step-modal b-step-modal-wide" style="max-width:1100px;">
+    <div class="mh"><h3>管理者を登録 (複数行入力)</h3><button class="mx" onclick="bCloseSetupAdminModal()">✕</button></div>
     <div class="mb">
       <!-- タブ: 新規入力 / 従業員から選択 -->
       <div class="mtabs" id="setup-admin-tabs" style="margin-bottom:14px;">
@@ -1133,72 +1135,58 @@
         <div class="mtab" data-stab="emp" onclick="setupAdminSwitchTab('emp')">従業員から選択</div>
       </div>
 
-      <!-- パネル1: 新規登録 (ステージング版準拠: 名前/メアド/初期PW×2/担当店舗+警告) -->
+      <!-- パネル1: 新規登録 (行/列バッチUI) -->
       <div class="mtab-panel act" id="setup-admin-panel-new">
-        <div class="fg"><label>名前 <span class="req">✳</span></label><input id="setup-admin-new-name" value="" placeholder="例: 佐藤 一郎" style="max-width:100%;"></div>
-        <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input id="setup-admin-new-email" type="email" value="" placeholder="例: sato@example.jp" style="max-width:100%;"></div>
-        <div class="fg">
-          <label>初期パスワード <span class="req">✳</span> <span style="font-size:10px;color:#0e9077;font-weight:600;">(自動生成済)</span></label>
-          <div style="display:flex;gap:6px;align-items:center;">
-            <input id="setup-admin-new-pw" type="text" value="" readonly style="flex:1;background:#f9f9f9;font-family:monospace;font-size:14px;letter-spacing:1px;font-weight:700;">
-            <button type="button" onclick="regenerateAdminPw('setup-admin-new-pw','setup-admin-new-pw2')" style="padding:8px 12px;border:1px solid #ccc;border-radius:6px;background:#fff;cursor:pointer;font-size:11px;font-weight:700;">🔄 再生成</button>
-            <button type="button" onclick="copyAdminPw('setup-admin-new-pw')" style="padding:8px 12px;border:1px solid #ccc;border-radius:6px;background:#fff;cursor:pointer;font-size:11px;font-weight:700;">📋 コピー</button>
-          </div>
-          <div class="hint" style="margin-top:6px;">8文字以上・強度「強い」以上を自動生成。<strong>管理者に口頭やチャット等でこのパスワードを共有してください</strong>。「🔄 再生成」で作り直せます。</div>
+        <div class="al al-i" style="margin-bottom:10px;font-size:11px;"><span>💡</span><div>新規アカウントを発行して管理者権限を付与します。各行が1名の管理者です。<strong>初期パスワード</strong>は自動生成され招待メールにペーストされます。</div></div>
+        <div class="batch-table-wrap">
+          <table class="batch-table" id="setup-admin-new-table">
+            <thead>
+              <tr>
+                <th style="width:36px;text-align:center;">#</th>
+                <th>名前 <span class="req">✳</span></th>
+                <th>メールアドレス <span class="req">✳</span></th>
+                <th>初期パスワード <span class="req">✳</span><div class="batch-hint">自動生成。「🔄」で行毎に再生成</div></th>
+                <th>担当店舗 <span class="req">✳</span><div class="batch-hint">複数選択可</div></th>
+                <th style="width:60px;text-align:center;">操作</th>
+              </tr>
+            </thead>
+            <tbody class="batch-tbody" id="setup-admin-new-tbody">
+              <!-- 行は JS (setupAdminInitBatch) で動的に生成 -->
+            </tbody>
+          </table>
         </div>
-        <div class="fg">
-          <label>初期パスワード（確認）<span class="req">✳</span></label>
-          <input id="setup-admin-new-pw2" type="text" value="" readonly style="max-width:100%;background:#f9f9f9;font-family:monospace;font-size:14px;letter-spacing:1px;font-weight:700;">
-          <div class="hint" style="margin-top:6px;">自動生成のため確認欄も自動同期されます</div>
-        </div>
-        <div class="dv" style="margin:14px 0;"></div>
-        <div class="fg">
-          <label>担当店舗 <span class="req">✳</span></label>
-          <div class="store-chk-grid">
-            <label class="store-chk"><input type="checkbox"> 渋谷店</label>
-            <label class="store-chk"><input type="checkbox"> 新宿店</label>
-            <label class="store-chk"><input type="checkbox"> 池袋店</label>
-            <label class="store-chk"><input type="checkbox"> 北海道支店</label>
-          </div>
-          <div class="hint" style="margin-top:6px;">担当店舗の従業員管理・勤怠管理が可能になります</div>
-        </div>
-        <div class="al al-w" style="margin-top:14px;font-size:11px;align-items:center;"><span>⚠️</span><div>管理者は担当店舗の従業員情報・勤怠データにアクセスできます。</div></div>
+        <button type="button" class="btn btn-s" onclick="setupAdminAddRow('new')" style="margin-bottom:14px;border:1px dashed #2ec4a5;color:#0e9077;background:#fff;width:100%;">+ 行を追加</button>
+        <div class="al al-w" style="margin-top:6px;font-size:11px;align-items:center;"><span>⚠️</span><div>管理者は担当店舗の従業員情報・勤怠データにアクセスできます。</div></div>
       </div>
 
-      <!-- パネル2: 従業員から選択 (ステージング版準拠) -->
+      <!-- パネル2: 従業員から選択 (行/列バッチUI) -->
       <div class="mtab-panel" id="setup-admin-panel-emp">
-        <div class="fg">
-          <label>従業員を選択 <span class="req">✳</span></label>
-          <select id="setup-admin-emp-select" style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-            <option value="">-- 従業員を選択してください --</option>
-            <option value="emp-001">test（業務委託 / 渋谷店）</option>
-            <option value="emp-002">TEST TARO（代表取締役 / 渋谷店）</option>
-            <option value="emp-003">岩田（バイトさん / 新宿店）</option>
-            <option value="emp-004">佐々木（業務委託 / 池袋店）</option>
-          </select>
+        <div class="al al-i" style="margin-bottom:10px;font-size:11px;"><span>💡</span><div>既存の従業員アカウントに管理者権限を付与します（複数行入力可）。<strong>初期パスワード設定は不要</strong>です（従業員が既に設定済みのパスワードでログイン）。</div></div>
+        <div class="batch-table-wrap">
+          <table class="batch-table" id="setup-admin-emp-table">
+            <thead>
+              <tr>
+                <th style="width:36px;text-align:center;">#</th>
+                <th>従業員を選択 <span class="req">✳</span></th>
+                <th>メールアドレス<div class="batch-hint">従業員台帳から自動入力</div></th>
+                <th>担当店舗 <span class="req">✳</span><div class="batch-hint">複数選択可</div></th>
+                <th style="width:60px;text-align:center;">操作</th>
+              </tr>
+            </thead>
+            <tbody class="batch-tbody" id="setup-admin-emp-tbody">
+              <!-- 行は JS (setupAdminInitBatch) で動的に生成 -->
+            </tbody>
+          </table>
         </div>
-        <div class="fg"><label>メールアドレス（従業員台帳より自動入力）</label><input class="ro-input" value="" readonly placeholder="従業員を選択すると自動入力されます" style="max-width:100%;"></div>
-        <!-- 仕様: 従業員から選択は既存従業員アカウントへの権限昇格のため、初期パスワード設定は不要 -->
-        <div class="al al-i" style="margin-top:6px;font-size:11px;align-items:center;"><span>💡</span><div>既存の従業員アカウントに管理者権限を付与します。<strong>初期パスワードは不要</strong>です（従業員が既に設定済みのパスワードでログインします）。</div></div>
-        <div class="dv" style="margin:14px 0;"></div>
-        <div class="fg">
-          <label>担当店舗 <span class="req">✳</span></label>
-          <div class="store-chk-grid">
-            <label class="store-chk"><input type="checkbox"> 渋谷店</label>
-            <label class="store-chk"><input type="checkbox"> 新宿店</label>
-            <label class="store-chk"><input type="checkbox"> 池袋店</label>
-            <label class="store-chk"><input type="checkbox"> 北海道支店</label>
-          </div>
-          <div class="hint" style="margin-top:6px;">担当店舗の従業員管理・勤怠管理が可能になります</div>
-        </div>
-        <div class="al al-w" style="margin-top:14px;font-size:11px;align-items:center;"><span>⚠️</span><div>管理者は担当店舗の従業員情報・勤怠データにアクセスできます。</div></div>
+        <button type="button" class="btn btn-s" onclick="setupAdminAddRow('emp')" style="margin-bottom:14px;border:1px dashed #2ec4a5;color:#0e9077;background:#fff;width:100%;">+ 行を追加</button>
+        <div class="al al-w" style="margin-top:6px;font-size:11px;align-items:center;"><span>⚠️</span><div>管理者は担当店舗の従業員情報・勤怠データにアクセスできます。</div></div>
       </div>
 
       <div class="btn-grp">
         <button class="btn btn-s" onclick="bCloseSetupAdminModal()">キャンセル</button>
         <!-- 整合性: 他STEP (1〜4) と同じく一時保存ボタンを設置 (任意STEP 5 でも離脱時に状態保持できるよう) -->
         <button class="btn btn-s" onclick="b0SaveAdminDraft()" style="background:#fff3e0;border-color:#e67e22;color:#e67e22;font-weight:700;">💾 一時保存</button>
-        <button class="btn btn-p" onclick="b0SubmitAdminEntry()">管理者を登録する</button>
+        <button class="btn btn-p" onclick="b0SubmitAdminEntry()">管理者を登録する (<span id="setup-admin-count-display">1</span>件)</button>
       </div>
     </div>
   </div>
@@ -1981,6 +1969,76 @@
   </main>
 </div>
 
+<!-- ===== 招待メール (従業員から選択タブ用 / 既存従業員の管理者昇格通知) ===== -->
+<!-- 仕様: emp タブでは新規アカウント発行は行わない。既存PWでログインのみのため、
+     PW設定ボタンではなく「ログインする」ボタンを配置。フォーマットも文面で出し分け。 -->
+<div class="page" id="page-admin-invite-email-emp">
+  <main class="mc" style="max-width:720px;margin:30px auto;padding:0 20px;">
+    <div style="margin-bottom:14px;font-size:12px;color:#666;">📧 招待メール プレビュー — <strong>管理者登録モーダル（従業員から選択タブ）専用</strong></div>
+
+    <div style="background:#fff;border:1px solid #ddd;border-radius:10px;overflow:hidden;font-family:'Hiragino Kaku Gothic ProN', sans-serif;">
+      <!-- メーラーヘッダー -->
+      <div style="background:#fff;border-bottom:1px solid #eee;padding:14px 22px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <div style="font-size:15px;font-weight:600;color:#202124;flex:1;min-width:200px;">
+          <span style="color:#888;">[Development]</span> ラクミータイムレコード 管理者権限が付与されました
+          <span style="background:#f9c74f;color:#7a5500;font-size:10px;font-weight:700;padding:2px 6px;border-radius:3px;margin-left:6px;">External</span>
+          <span style="background:#e0e0e0;color:#444;font-size:10px;padding:2px 6px;border-radius:3px;margin-left:4px;">受信トレイ</span>
+        </div>
+      </div>
+      <div style="padding:10px 22px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;gap:10px;font-size:12px;color:#555;">
+        <div style="width:32px;height:32px;background:#ccc;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;">👤</div>
+        <div style="flex:1;">
+          <div style="font-weight:700;color:#333;">ラクミー タイムレコード <span style="color:#888;font-weight:400;">&lt;invitations@accounts.dev&gt;</span></div>
+          <div style="font-size:11px;color:#888;">To: iwata@example.jp</div>
+        </div>
+        <div style="font-size:11px;color:#888;">2026/5/18 10:00</div>
+      </div>
+
+      <!-- メール本文 -->
+      <div style="padding:40px 22px;text-align:center;background:#fff;">
+        <div style="margin-bottom:32px;">
+          <span style="display:inline-block;background:#2ec4a5;color:#fff;font-size:14px;font-weight:700;padding:4px 10px;border-radius:5px;letter-spacing:1px;">ラクミー</span>
+          <span style="font-size:15px;font-weight:700;margin-left:8px;color:#333;">タイムレコード</span>
+        </div>
+
+        <div style="text-align:left;font-size:13px;line-height:1.8;color:#333;max-width:480px;margin:0 auto 28px;">
+          <div>岩田 様</div>
+          <br>
+          <div><strong>株式会社サンプル</strong> より <strong>管理者権限</strong> が付与されました。</div>
+          <div style="margin-top:6px;color:#555;font-size:12px;">この通知は <strong>管理者登録モーダル（従業員から選択タブ）</strong> から発行されたものです。<br>すでにラクミー従業員アカウントをお持ちのため、<strong>新たな初期パスワード設定は不要</strong>です。<br><strong>これまでお使いのパスワード</strong>でログインしてください。</div>
+          <div style="margin-top:14px;">以下のボタンからログインしてください。</div>
+        </div>
+
+        <a href="#" onclick="event.preventDefault();go('login')" style="display:inline-block;background:#2ec4a5;color:#fff;padding:14px 36px;border-radius:6px;font-weight:700;text-decoration:none;font-size:14px;">ログインする</a>
+
+        <div style="margin-top:32px;background:#f5f5f5;border-radius:6px;padding:12px 16px;font-size:11px;color:#555;text-align:left;max-width:480px;margin-left:auto;margin-right:auto;">
+          <strong>会社:</strong> 株式会社サンプル <span style="color:#ddd;margin:0 6px;">/</span>
+          <strong>店舗:</strong> 新宿店 <span style="color:#ddd;margin:0 6px;">/</span>
+          <strong>区分:</strong> 管理者(従業員昇格) <span style="color:#ddd;margin:0 6px;">/</span>
+          <strong>付与日:</strong> 2026/5/18
+        </div>
+
+        <div style="margin-top:18px;font-size:11px;color:#888;">※ パスワードを忘れた場合はログイン画面の「パスワードを忘れた」からリセットできます</div>
+      </div>
+    </div>
+
+    <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+      <button class="btn btn-p" onclick="go('login')">▶ 「ログインする」をクリック (ログイン画面へ)</button>
+      <button class="btn btn-s" onclick="go('d1')">← 管理者一覧に戻る</button>
+    </div>
+
+    <div style="margin-top:24px;padding:12px 14px;background:#fff8ed;border:1px solid #fde68a;border-radius:8px;font-size:11px;color:#9c4d12;line-height:1.7;">
+      💡 <strong>仕様メモ (出し分け):</strong><br>
+      • <strong>従業員から選択タブ専用</strong> — 既存従業員アカウントへの管理者権限付与通知<br>
+      • <strong>件名</strong>: 「ラクミータイムレコード 管理者権限が付与されました」(新規版「ラクミータイムレコードへの招待」と区別)<br>
+      • <strong>CTA</strong>: 「ログインする」 (新規版「パスワードを設定する」と異なる)<br>
+      • <strong>PW設定なし</strong> — 既存の従業員PWをそのまま使用<br>
+      • <strong>付与日</strong>表記 (新規版「有効期限: 72時間」と異なる、トークン無効化の概念がない)<br>
+      • 再送ボタン (管理者一覧) からも本フォーマットが送付される
+    </div>
+  </main>
+</div>
+
 <!-- ===== 招待URL先 アカウント設定画面 (管理者新規登録専用、初期PWプリセット、現行版デザイン準拠) ===== -->
 <div class="page" id="page-admin-pw-setup">
   <main class="mc" style="margin:0;padding:0;background:#f6f6f6;min-height:100vh;">
@@ -2074,21 +2132,29 @@
           <tr>
             <td><strong>鈴木 花子</strong></td>
             <td>suzuki@example.jp</td>
-            <td><span class="rb rb-mgr">管理者</span></td>
+            <td><span class="rb rb-mgr">管理者</span> <span style="font-size:9px;color:#0e9077;background:#e8f8f5;padding:1px 6px;border-radius:8px;font-weight:600;margin-left:4px;">新規登録由来</span></td>
             <td>渋谷店</td>
-            <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" onclick="go('d1e')">編集</button> <button class="btn btn-s btn-sm" style="color:#c62828;">削除</button></td>
+            <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" onclick="d1ResendInvite('new','鈴木 花子','suzuki@example.jp')" style="background:#e3f2fd;border-color:#90caf9;color:#0d47a1;font-weight:600;" title="自動振り出しPWを更新し、招待メール(新規版)を再送します">📧 再送</button> <button class="btn btn-s btn-sm" onclick="go('d1e')">編集</button> <button class="btn btn-s btn-sm" style="color:#c62828;">削除</button></td>
           </tr>
           <tr>
             <td><strong>田中 次郎</strong></td>
             <td>tanaka@example.jp</td>
-            <td><span class="rb rb-mgr">管理者</span></td>
+            <td><span class="rb rb-mgr">管理者</span> <span style="font-size:9px;color:#7a5500;background:#fff8e1;padding:1px 6px;border-radius:8px;font-weight:600;margin-left:4px;">新規登録由来</span></td>
             <td>新宿店, 池袋店</td>
-            <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" onclick="go('d1e')">編集</button> <button class="btn btn-s btn-sm" style="color:#c62828;">削除</button></td>
+            <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" onclick="d1ResendInvite('new','田中 次郎','tanaka@example.jp')" style="background:#e3f2fd;border-color:#90caf9;color:#0d47a1;font-weight:600;" title="自動振り出しPWを更新し、招待メール(新規版)を再送します">📧 再送</button> <button class="btn btn-s btn-sm" onclick="go('d1e')">編集</button> <button class="btn btn-s btn-sm" style="color:#c62828;">削除</button></td>
+          </tr>
+          <tr>
+            <td><strong>岩田</strong></td>
+            <td>iwata@example.jp</td>
+            <td><span class="rb rb-mgr">管理者</span> <span style="font-size:9px;color:#5c4dac;background:#ede7f6;padding:1px 6px;border-radius:8px;font-weight:600;margin-left:4px;">従業員昇格</span></td>
+            <td>新宿店</td>
+            <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" onclick="d1ResendInvite('emp','岩田','iwata@example.jp')" style="background:#ede7f6;border-color:#b39ddb;color:#5c4dac;font-weight:600;" title="既存PWでログインを案内する通知メール(従業員昇格版)を再送します">📧 再送</button> <button class="btn btn-s btn-sm" onclick="go('d1e')">編集</button> <button class="btn btn-s btn-sm" style="color:#c62828;">削除</button></td>
           </tr>
         </tbody>
       </table>
 
       <div class="al al-i" style="margin-top:16px;max-width:600px;"><span>💡</span><div>管理者はオーナーが直接登録します。初期パスワードを設定し、口頭やチャット等で管理者に共有してください。管理者がパスワードを忘れた場合は、ログイン画面の「パスワードを忘れた」から自分でリセットできます。</div></div>
+      <div class="al al-i" style="margin-top:8px;max-width:680px;background:#e3f2fd;border:1px solid #b3d9f0;"><span>📧</span><div>「<strong>再送</strong>」ボタン: 招待メールを再送できます。<br>　・<strong>新規登録由来</strong>: 自動振り出しの初期パスワードを<strong>更新</strong>し、新しいパスワードをペーストした招待メール(新規版)を再送<br>　・<strong>従業員昇格</strong>: 既存パスワードを引き継ぎ、ログイン案内のみの通知メール(昇格版)を再送</div></div>
     </main>
   </div>
 </div>
@@ -3300,43 +3366,43 @@ function refreshB0ResumeBanner(forceShow) {
 function b0ResumeDraftStep(stepNum) {
   saveSetupActiveStep(stepNum);
   if (stepNum === 5) {
-    // STEP 5: 管理者 (任意) — page-b0 のSTEP5パネル → 管理者モーダルを開いて下書き復元
+    // STEP 5: 管理者 (任意) — page-b0 のSTEP5パネル → 管理者モーダルを開いて下書き復元 (バッチ対応)
     go('b0');
     setTimeout(function(){
       if (typeof b0ShowStep5Panel === 'function') b0ShowStep5Panel();
       if (typeof bOpenSetupAdminModal === 'function') bOpenSetupAdminModal();
-      // 管理者モーダルへ下書き復元
       setTimeout(function(){
         var draft = b0LoadDraft(5);
-        if (!draft || !draft[0]) return;
-        var d = draft[0];
-        var modal = document.getElementById('b-setup-admin-overlay');
-        if (!modal) return;
-        // タブ復元
-        if (d.tabType && typeof setupAdminSwitchTab === 'function') setupAdminSwitchTab(d.tabType);
-        // 入力値復元
-        var inputEls = [];
-        modal.querySelectorAll('input[type="text"], input[type="email"], input[type="password"]').forEach(function(el) {
-          if (el.offsetParent !== null) inputEls.push(el);
+        if (!draft || !draft.length) return;
+        var tabType = draft[0].tabType || 'new';
+        if (typeof setupAdminSwitchTab === 'function') setupAdminSwitchTab(tabType);
+        // バッチUI: 全行リセット → draft 件数分復元
+        if (typeof setupAdminResetAllRows === 'function') setupAdminResetAllRows();
+        draft.forEach(function(d) {
+          if (typeof setupAdminAddRow === 'function') setupAdminAddRow(tabType);
+          var tbodyId = (tabType === 'new') ? 'setup-admin-new-tbody' : 'setup-admin-emp-tbody';
+          var tbody = document.getElementById(tbodyId);
+          if (!tbody) return;
+          var tr = tbody.children[tbody.children.length - 1];
+          if (!tr) return;
+          var r = d.rowData || {};
+          if (tabType === 'new') {
+            if (tr.querySelector('.adm-name')) tr.querySelector('.adm-name').value = r.name || (d.inputs || [])[0] || '';
+            if (tr.querySelector('.adm-email')) tr.querySelector('.adm-email').value = r.email || (d.inputs || [])[1] || '';
+            if (tr.querySelector('.adm-pw')) tr.querySelector('.adm-pw').value = r.pw || (d.inputs || [])[2] || '';
+          } else {
+            if (tr.querySelector('.adm-emp-select')) tr.querySelector('.adm-emp-select').value = r.empValue || '';
+            if (tr.querySelector('.adm-emp-email')) tr.querySelector('.adm-emp-email').value = r.email || (d.inputs || [])[0] || '';
+          }
+          // 担当店舗チェック復元 (checks[i] は SETUP_ADMIN_STORES の順序)
+          var checks = tr.querySelectorAll('.adm-store-chk');
+          (d.checks || []).forEach(function(b, i) { if (checks[i]) checks[i].checked = !!b; });
         });
-        (d.inputs || []).forEach(function(v, i) { if (inputEls[i]) inputEls[i].value = v; });
-        // チェック復元
-        var checkEls = [];
-        modal.querySelectorAll('input[type="checkbox"]').forEach(function(el) {
-          if (el.offsetParent !== null) checkEls.push(el);
-        });
-        (d.checks || []).forEach(function(b, i) { if (checkEls[i]) checkEls[i].checked = !!b; });
-        // select復元
-        var selectEls = [];
-        modal.querySelectorAll('select').forEach(function(el) {
-          if (el.offsetParent !== null) selectEls.push(el);
-        });
-        (d.selects || []).forEach(function(idx, i) { if (selectEls[i]) selectEls[i].selectedIndex = idx; });
+        if (typeof setupAdminUpdateCountDisplay === 'function') setupAdminUpdateCountDisplay();
       }, 200);
     }, 200);
     return;
   }
-  // STEP 1〜4: 設定画面 + 下書きモーダル復元 (既存)
   go(SETTINGS_PAGES[stepNum]);
   setTimeout(function(){ bOpenStep(stepNum); }, 250);
 }
@@ -3663,32 +3729,35 @@ function bDemoB0EmptyDraftSettings() {
 }
 
 // STEP 5 管理者(任意・新規登録タブ) で一時保存中の状態を再現
+// 2026-05-18 仕様変更: バッチUI 対応 — 複数行 draft 形式 (rowData フィールド含む)
 function bDemoB0EmptyDraftAdminStep5New() {
   _bDemoClearAll();
   try {
     sessionStorage.setItem('b0Done', '4');
     sessionStorage.setItem('b0Counts', JSON.stringify([2, 3, 4, 12, 0]));
     sessionStorage.setItem('b0Draft_5', JSON.stringify([
-      { inputs: ['佐藤 一郎', 'sato@example.jp', 'pass1234', 'pass1234'], selects: [0], checks: [true, false, false, false], tabType: 'new' }
+      { tabType:'new', inputs:['佐藤 一郎','sato@example.jp','pass1234'], selects:[], checks:[true,false,false,false],
+        rowData:{ name:'佐藤 一郎', email:'sato@example.jp', pw:'pass1234', stores:['渋谷店'] } },
+      { tabType:'new', inputs:['鈴木 花子','suzuki@example.jp','pass5678'], selects:[], checks:[false,true,false,false],
+        rowData:{ name:'鈴木 花子', email:'suzuki@example.jp', pw:'pass5678', stores:['新宿店'] } }
     ]));
-    sessionStorage.setItem('b0DraftSavedAt', String(Date.now())); // ★ シナリオ排他用
+    sessionStorage.setItem('b0DraftSavedAt', String(Date.now()));
     sessionStorage.setItem('b0EmptyMode', 'alert');
     saveSetupActiveStep(5);
   } catch (e) {}
   applyB0EmptyMode('alert');
 }
 // STEP 5 管理者(任意・従業員から選択タブ) で一時保存中の状態を再現
-// 仕様変更 (2026-05-15): 従業員から選択タブには PW フィールドなし → inputs はメアド (auto) のみ
 function bDemoB0EmptyDraftAdminStep5Emp() {
   _bDemoClearAll();
   try {
     sessionStorage.setItem('b0Done', '4');
     sessionStorage.setItem('b0Counts', JSON.stringify([2, 3, 4, 12, 0]));
-    // 従業員から選択タブ: 従業員dropdown(select) / メアド自動(readonly) / 担当店舗(checks)
     sessionStorage.setItem('b0Draft_5', JSON.stringify([
-      { inputs: [''], selects: [2], checks: [true, false, false, false], tabType: 'emp' }
+      { tabType:'emp', inputs:['iwata@example.jp'], selects:[], checks:[false,true,false,false],
+        rowData:{ empValue:'emp-003', email:'iwata@example.jp', stores:['新宿店'] } }
     ]));
-    sessionStorage.setItem('b0DraftSavedAt', String(Date.now())); // ★ シナリオ排他用
+    sessionStorage.setItem('b0DraftSavedAt', String(Date.now()));
     sessionStorage.setItem('b0EmptyMode', 'alert');
     saveSetupActiveStep(5);
   } catch (e) {}
@@ -4477,8 +4546,219 @@ function bOpenSetupAdminModal() {
   if (ov) ov.classList.add('act');
   // 開いた時点で「新規登録」タブ初期化(ボタン文言も合わせて切替)
   setupAdminSwitchTab('new');
-  // ★ 初期パスワード自動生成 (オーナーが毎回考えなくていいよう)
-  regenerateAdminPw('setup-admin-new-pw', 'setup-admin-new-pw2');
+  // 2026-05-18 仕様変更: バッチUI初期化 (両タブ 1行目を生成)
+  setupAdminInitBatchIfEmpty('new');
+  setupAdminInitBatchIfEmpty('emp');
+  setupAdminUpdateCountDisplay();
+}
+
+/* ===== 管理者バッチUI (2026-05-18 仕様変更: 連続登録対応) =====
+ * STEP 1〜4 と同じ「行追加型バッチ」を管理者登録モーダル内で実装。
+ * - new タブ: 名前/メアド/初期PW(自動生成)/担当店舗4チェック
+ * - emp タブ: 従業員select/メアド(自動・readonly)/担当店舗4チェック
+ * - 各行に「✕」削除ボタン、表外に「+ 行を追加」ボタン
+ * - btn-grp の登録ボタン件数表示 (両タブ合算) */
+var SETUP_ADMIN_STORES = ['渋谷店','新宿店','池袋店','北海道支店'];
+var SETUP_ADMIN_EMPS = [
+  { v:'', l:'-- 従業員を選択 --' },
+  { v:'emp-001', l:'test（業務委託 / 渋谷店）', email:'test@example.com' },
+  { v:'emp-002', l:'TEST TARO（代表取締役 / 渋谷店）', email:'taro@example.com' },
+  { v:'emp-003', l:'岩田（バイトさん / 新宿店）', email:'iwata@example.jp' },
+  { v:'emp-004', l:'佐々木（業務委託 / 池袋店）', email:'sasaki@example.com' }
+];
+
+function setupAdminInitBatchIfEmpty(which) {
+  var tbodyId = (which === 'new') ? 'setup-admin-new-tbody' : 'setup-admin-emp-tbody';
+  var tbody = document.getElementById(tbodyId);
+  if (!tbody) return;
+  if (tbody.children.length === 0) setupAdminAddRow(which);
+}
+
+function setupAdminAddRow(which) {
+  var tbodyId = (which === 'new') ? 'setup-admin-new-tbody' : 'setup-admin-emp-tbody';
+  var tbody = document.getElementById(tbodyId);
+  if (!tbody) return;
+  var rowNum = tbody.children.length + 1;
+  var tr = document.createElement('tr');
+  tr.className = 'batch-tr';
+  tr.setAttribute('data-which', which);
+
+  // 行番号
+  var numTd = document.createElement('td');
+  numTd.className = 'batch-row-num';
+  numTd.style.textAlign = 'center';
+  numTd.textContent = rowNum;
+  tr.appendChild(numTd);
+
+  if (which === 'new') {
+    // 名前
+    var nameTd = document.createElement('td');
+    nameTd.innerHTML = '<input type="text" class="adm-name" placeholder="例: 佐藤 一郎" style="width:100%;padding:6px 8px;border:1px solid #ddd;border-radius:4px;font-size:12px;">';
+    tr.appendChild(nameTd);
+    // メアド
+    var emailTd = document.createElement('td');
+    emailTd.innerHTML = '<input type="email" class="adm-email" placeholder="例: sato@example.jp" style="width:100%;padding:6px 8px;border:1px solid #ddd;border-radius:4px;font-size:12px;">';
+    tr.appendChild(emailTd);
+    // 初期PW (自動生成 + 🔄 再生成)
+    var pwTd = document.createElement('td');
+    var autoPw = (typeof generateAdminInitialPw === 'function') ? generateAdminInitialPw() : 'auto' + Date.now();
+    pwTd.innerHTML =
+      '<div style="display:flex;gap:4px;align-items:center;">' +
+        '<input type="text" class="adm-pw" value="' + autoPw + '" readonly style="flex:1;min-width:110px;padding:6px 8px;border:1px solid #ddd;border-radius:4px;background:#f9f9f9;font-family:monospace;font-size:12px;font-weight:700;letter-spacing:1px;">' +
+        '<button type="button" onclick="setupAdminRegenRowPw(this)" style="padding:4px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;font-size:10px;font-weight:700;" title="この行のPWを再生成">🔄</button>' +
+        '<button type="button" onclick="setupAdminCopyRowPw(this)" style="padding:4px 8px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;font-size:10px;font-weight:700;" title="この行のPWをコピー">📋</button>' +
+      '</div>';
+    tr.appendChild(pwTd);
+    // 担当店舗
+    var stTd = document.createElement('td');
+    stTd.appendChild(_setupAdminBuildStoreChecks());
+    tr.appendChild(stTd);
+  } else {
+    // 従業員 select
+    var empTd = document.createElement('td');
+    var sel = document.createElement('select');
+    sel.className = 'adm-emp-select';
+    sel.style.cssText = 'width:100%;min-width:200px;padding:6px 8px;border:1px solid #ddd;border-radius:4px;font-size:12px;';
+    SETUP_ADMIN_EMPS.forEach(function(e) {
+      var op = document.createElement('option');
+      op.value = e.v; op.textContent = e.l;
+      if (e.email) op.setAttribute('data-email', e.email);
+      sel.appendChild(op);
+    });
+    sel.onchange = function() { setupAdminOnEmpSelectChange(this); };
+    empTd.appendChild(sel);
+    tr.appendChild(empTd);
+    // メアド (readonly auto-fill)
+    var emTd2 = document.createElement('td');
+    emTd2.innerHTML = '<input type="email" class="adm-emp-email" readonly placeholder="従業員選択で自動入力" style="width:100%;min-width:160px;padding:6px 8px;border:1px solid #ddd;border-radius:4px;background:#f9f9f9;font-size:12px;color:#666;">';
+    tr.appendChild(emTd2);
+    // 担当店舗
+    var stTd2 = document.createElement('td');
+    stTd2.appendChild(_setupAdminBuildStoreChecks());
+    tr.appendChild(stTd2);
+  }
+
+  // 操作 (✕)
+  var rmTd = document.createElement('td');
+  rmTd.style.textAlign = 'center';
+  var rmBtn = document.createElement('button');
+  rmBtn.type = 'button';
+  rmBtn.className = 'batch-row-remove';
+  rmBtn.innerHTML = '✕';
+  rmBtn.onclick = function() { setupAdminRemoveRow(this); };
+  rmTd.appendChild(rmBtn);
+  tr.appendChild(rmTd);
+
+  tbody.appendChild(tr);
+  setupAdminRenumber(which);
+  setupAdminUpdateCountDisplay();
+}
+
+function _setupAdminBuildStoreChecks() {
+  var wrap = document.createElement('div');
+  wrap.style.cssText = 'display:flex;flex-wrap:wrap;gap:4px 8px;min-width:200px;';
+  SETUP_ADMIN_STORES.forEach(function(s) {
+    var lbl = document.createElement('label');
+    lbl.className = 'adm-store-lbl';
+    lbl.style.cssText = 'display:inline-flex;align-items:center;gap:3px;font-size:11px;color:#555;cursor:pointer;';
+    lbl.innerHTML = '<input type="checkbox" class="adm-store-chk" data-store="' + s + '" style="margin:0;">' + s;
+    wrap.appendChild(lbl);
+  });
+  return wrap;
+}
+
+function setupAdminOnEmpSelectChange(sel) {
+  var op = sel.options[sel.selectedIndex];
+  var em = op ? op.getAttribute('data-email') : '';
+  var tr = sel.closest('tr');
+  if (!tr) return;
+  var emInput = tr.querySelector('.adm-emp-email');
+  if (emInput) emInput.value = em || '';
+}
+
+function setupAdminRegenRowPw(btn) {
+  var tr = btn.closest('tr');
+  if (!tr) return;
+  var pwInput = tr.querySelector('.adm-pw');
+  if (pwInput) pwInput.value = (typeof generateAdminInitialPw === 'function') ? generateAdminInitialPw() : 'auto' + Date.now();
+}
+
+function setupAdminCopyRowPw(btn) {
+  var tr = btn.closest('tr');
+  if (!tr) return;
+  var pwInput = tr.querySelector('.adm-pw');
+  if (!pwInput) return;
+  try {
+    if (navigator.clipboard) navigator.clipboard.writeText(pwInput.value);
+    else { pwInput.select(); document.execCommand('copy'); }
+    alert('📋 PWをコピーしました: ' + pwInput.value);
+  } catch (e) { alert('コピー失敗: ' + pwInput.value); }
+}
+
+function setupAdminRemoveRow(btn) {
+  var tr = btn.closest('tr');
+  if (!tr) return;
+  var tbody = tr.parentNode;
+  var which = tr.getAttribute('data-which') || 'new';
+  if (tbody.children.length <= 1) {
+    alert('最低1行は必要です。削除する場合は「キャンセル」でモーダルを閉じてください。');
+    return;
+  }
+  tbody.removeChild(tr);
+  setupAdminRenumber(which);
+  setupAdminUpdateCountDisplay();
+}
+
+function setupAdminRenumber(which) {
+  var tbodyId = (which === 'new') ? 'setup-admin-new-tbody' : 'setup-admin-emp-tbody';
+  var tbody = document.getElementById(tbodyId);
+  if (!tbody) return;
+  Array.prototype.forEach.call(tbody.children, function(tr, i) {
+    var numTd = tr.querySelector('.batch-row-num');
+    if (numTd) numTd.textContent = String(i + 1);
+  });
+}
+
+function setupAdminUpdateCountDisplay() {
+  var newCnt = (document.getElementById('setup-admin-new-tbody') || {}).children;
+  var empCnt = (document.getElementById('setup-admin-emp-tbody') || {}).children;
+  // active なタブの行数を表示 (両タブ合算ではなく単純に active タブの件数)
+  var activeTab = document.querySelector('#setup-admin-tabs .mtab.act');
+  var which = activeTab ? activeTab.getAttribute('data-stab') : 'new';
+  var n = (which === 'new') ? (newCnt ? newCnt.length : 0) : (empCnt ? empCnt.length : 0);
+  var disp = document.getElementById('setup-admin-count-display');
+  if (disp) disp.textContent = String(n);
+}
+
+function setupAdminCollectRows(which) {
+  var tbodyId = (which === 'new') ? 'setup-admin-new-tbody' : 'setup-admin-emp-tbody';
+  var tbody = document.getElementById(tbodyId);
+  if (!tbody) return [];
+  var rows = [];
+  Array.prototype.forEach.call(tbody.children, function(tr) {
+    if (which === 'new') {
+      rows.push({
+        name: (tr.querySelector('.adm-name') || {}).value || '',
+        email: (tr.querySelector('.adm-email') || {}).value || '',
+        pw: (tr.querySelector('.adm-pw') || {}).value || '',
+        stores: Array.prototype.filter.call(tr.querySelectorAll('.adm-store-chk'), function(c){ return c.checked; }).map(function(c){ return c.getAttribute('data-store'); })
+      });
+    } else {
+      rows.push({
+        empValue: (tr.querySelector('.adm-emp-select') || {}).value || '',
+        email: (tr.querySelector('.adm-emp-email') || {}).value || '',
+        stores: Array.prototype.filter.call(tr.querySelectorAll('.adm-store-chk'), function(c){ return c.checked; }).map(function(c){ return c.getAttribute('data-store'); })
+      });
+    }
+  });
+  return rows;
+}
+
+function setupAdminResetAllRows() {
+  ['setup-admin-new-tbody', 'setup-admin-emp-tbody'].forEach(function(id) {
+    var tb = document.getElementById(id);
+    if (tb) tb.innerHTML = '';
+  });
 }
 
 // 管理者初期パスワード自動生成: 英大文字+英小文字+数字を混在で12文字
@@ -4539,11 +4819,13 @@ function setupAdminSwitchTab(which) {
   var primary = document.querySelector('#b-setup-admin-overlay .btn-grp .btn-p');
   if (primary) {
     primary.setAttribute('data-which', which);
-    primary.innerHTML = '管理者を登録する';  // 両タブ統一 (2026-05-15 仕様変更)
+    primary.innerHTML = '管理者を登録する (<span id="setup-admin-count-display">1</span>件)';
     primary.title = (which === 'new')
-      ? '従業員台帳に新規アカウントを作成し、管理者権限付き招待メールを送付します'
-      : '既存従業員に管理者権限を付与します (招待メールなし、既存PWで管理者画面にログイン可)';
+      ? '従業員台帳に新規アカウントを作成し、管理者権限付き招待メールを送付します (複数行を一括処理)'
+      : '既存従業員に管理者権限を付与します (招待メールは従業員昇格版、複数行を一括処理)';
   }
+  // active タブの件数表示を更新
+  if (typeof setupAdminUpdateCountDisplay === 'function') setupAdminUpdateCountDisplay();
 }
 
 /* d2 ページ(モーダル風)を setupモードで開いた時、登録ボタンを STEP 5 完了処理に書き換える */
@@ -4634,16 +4916,17 @@ function applySetupModeOnD2() {
 
 // オーバーレイモーダル登録ボタン (タブ別にメール種別が異なる)
 // 注: このオーバーレイは b0画面内STEP 5 パネル経由でのみ発火する=setup mode 専用動線
+// 2026-05-18 仕様変更: バッチUI対応 — active タブの全行を一括登録
 function b0SubmitAdminEntry() {
   var primary = document.querySelector('#b-setup-admin-overlay .btn-grp .btn-p');
   var which = primary ? primary.getAttribute('data-which') : 'new';
+  var rows = (typeof setupAdminCollectRows === 'function') ? setupAdminCollectRows(which) : [];
+  var n = rows.length;
+  if (n < 1) { alert('最低1行は必要です'); return; }
   var counts = b0LoadCounts();
-  counts[4] = (counts[4] || 0) + 1;
+  counts[4] = (counts[4] || 0) + n;
   b0SaveCounts(counts);
   b0ClearDraft(5);
-  // ★ 2026-05-15 仕様変更: 管理者登録時に打刻記録画面上部に「管理者登録されました(YYYY/M/D)」表示
-  //   - 招待メール (新規登録タブ) は管理者権限付き従業員招待として送付
-  //   - 従業員から選択タブは招待メールなし、設定内完結
   try {
     var today = new Date();
     var ymd = today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate();
@@ -4651,10 +4934,46 @@ function b0SubmitAdminEntry() {
     sessionStorage.setItem('adminRegisteredWhich', which);
   } catch (e) {}
   bCloseSetupAdminModal();
+  // 次回オープン時のために行リセット
+  if (typeof setupAdminResetAllRows === 'function') setupAdminResetAllRows();
   refreshStep5Panel();
-  // 打刻記録画面 (b0 / b0-empty) のバナー再描画
   if (typeof refreshAdminRegisteredBanner === 'function') refreshAdminRegisteredBanner();
-  setTimeout(function(){ bShowSetupAdminCompleteModal(counts[4], which); }, 200);
+  setTimeout(function(){ bShowSetupAdminCompleteModal(counts[4], which, n); }, 200);
+}
+
+// 管理者一覧 (page-d1) 「📧 再送」ボタン: タブ種別で動作出し分け
+// - which='new': 自動振り出しPWを再生成し、新規版招待メール(page-admin-invite-email)を再送
+// - which='emp': 既存PWは触らず、従業員昇格版通知メール(page-admin-invite-email-emp)を再送
+function d1ResendInvite(which, name, email) {
+  if (which === 'new') {
+    var newPw = (typeof generateAdminInitialPw === 'function') ? generateAdminInitialPw() : 'auto' + Date.now();
+    var ok = confirm(
+      '📧 招待メールを再送します (新規登録由来)\n\n' +
+      '宛先: ' + name + ' <' + email + '>\n\n' +
+      '⚠ 初期パスワードが自動で再生成され、招待メール本文にペーストされます。\n' +
+      '前回のパスワードは無効になります。\n\n' +
+      '新しいパスワード: ' + newPw + '\n\n' +
+      '送信してよろしいですか？'
+    );
+    if (!ok) return;
+    var pwInput = document.getElementById('admin-pw-input');
+    var pwConfirm = document.getElementById('admin-pw-confirm');
+    if (pwInput) pwInput.value = newPw;
+    if (pwConfirm) pwConfirm.value = newPw;
+    alert('✓ 招待メール(新規版)を再送しました。\n初期パスワードは更新されました。\n\n再送メール プレビューを表示します。');
+    go('admin-invite-email');
+  } else {
+    var ok2 = confirm(
+      '📧 通知メールを再送します (従業員昇格由来)\n\n' +
+      '宛先: ' + name + ' <' + email + '>\n\n' +
+      '💡 既存の従業員パスワードを引き継ぐため、パスワードは変更されません。\n' +
+      'ログイン案内のみの通知メール(昇格版)が再送されます。\n\n' +
+      '送信してよろしいですか？'
+    );
+    if (!ok2) return;
+    alert('✓ 通知メール(従業員昇格版)を再送しました。\n既存PWは変更されていません。\n\n再送メール プレビューを表示します。');
+    go('admin-invite-email-emp');
+  }
 }
 
 // 招待PW設定画面の「登録を完了してログイン」: adminRegisteredAt 記録 → 管理者専用画面 (page-admin-b0) に遷移
@@ -4695,24 +5014,25 @@ function refreshAdminRegisteredBanner() {
   });
 }
 
-function bShowSetupAdminCompleteModal(totalAdmins, which) {
+function bShowSetupAdminCompleteModal(totalAdmins, which, batchN) {
   var titleEl = document.getElementById('b-bridge-title');
   var textEl = document.getElementById('b-bridge-text');
   var actEl = document.getElementById('b-bridge-actions');
-  // 2026-05-15 仕様変更:
-  // - 新規登録タブ: 従業員登録の招待メール送付 (ただし管理者権限付き)
-  // - 従業員から選択タブ: 招待メールなし、設定内完結
+  var n = (typeof batchN === 'number' && batchN > 0) ? batchN : 1;
+  // 2026-05-18 仕様変更: バッチUI で複数名一括登録に対応 (batchN 件)
   if (which === 'emp') {
-    titleEl.innerHTML = '✓ 既存従業員を管理者に昇格しました (累計 ' + totalAdmins + ' 名)';
-    textEl.innerHTML = '従業員台帳の既存アカウントに <strong>管理者権限を付与</strong> しました。<br>' +
-                       '<strong>招待メールは送付されません</strong> (設定内で完結)。既存のパスワードで管理者画面にログイン可能です。<br><br>' +
-                       '<span style="color:#0d47a1;background:#e3f2fd;padding:4px 8px;border-radius:4px;font-size:11px;">💡 打刻記録画面の上部に「管理者登録されました」コメントが表示されます。</span>';
+    titleEl.innerHTML = '✓ 既存従業員を管理者に昇格しました (' + n + ' 名 / 累計 ' + totalAdmins + ' 名)';
+    textEl.innerHTML = '従業員台帳の既存アカウント <strong>' + n + ' 名</strong> に <strong>管理者権限を付与</strong> しました。<br>' +
+                       '<strong>管理者権限が付与された通知メール (従業員昇格版)</strong> を送付しました。<br>' +
+                       '受信者は既存パスワードで管理者画面にログイン可能です。<br><br>' +
+                       '<span style="color:#0d47a1;background:#e3f2fd;padding:4px 8px;border-radius:4px;font-size:11px;">💡 打刻記録画面の上部に「管理者登録されました」コメントが表示されます。</span><br><br>' +
+                       '<button class="btn btn-s btn-sm" onclick="bSetupBridgeDismiss();go(\'admin-invite-email-emp\')" style="background:#ede7f6;border:1px solid #b39ddb;color:#5c4dac;font-weight:700;">📧 送付された通知メール(従業員昇格版)を確認</button>';
   } else {
-    titleEl.innerHTML = '✓ 管理者を1名登録し、招待メールを送付しました (累計 ' + totalAdmins + ' 名)';
-    textEl.innerHTML = '新規アカウントを作成し、<strong>管理者権限付きの招待メール</strong> を送付しました。<br>' +
+    titleEl.innerHTML = '✓ 管理者 ' + n + ' 名を登録し、招待メールを送付しました (累計 ' + totalAdmins + ' 名)';
+    textEl.innerHTML = '新規アカウント <strong>' + n + ' 名</strong> を作成し、<strong>管理者権限付きの招待メール (新規版)</strong> を送付しました。<br>' +
                        '受信者が招待メールから PW を設定すると <strong>管理者権限付きアカウント</strong> として管理者画面にログイン可能になります。<br><br>' +
                        '<span style="color:#0d47a1;background:#e3f2fd;padding:4px 8px;border-radius:4px;font-size:11px;">💡 打刻記録画面の上部に「管理者登録されました」コメントが表示されます。</span><br><br>' +
-                       '<button class="btn btn-s btn-sm" onclick="bSetupBridgeDismiss();go(\'admin-invite-email\')" style="background:#e3f2fd;border:1px solid #90caf9;color:#0d47a1;font-weight:700;">📧 送付された招待メールを確認</button>';
+                       '<button class="btn btn-s btn-sm" onclick="bSetupBridgeDismiss();go(\'admin-invite-email\')" style="background:#e3f2fd;border:1px solid #90caf9;color:#0d47a1;font-weight:700;">📧 送付された招待メール(新規版)を確認</button>';
   }
   actEl.innerHTML =
     '<div class="b-bridge-primary">' +
@@ -4727,23 +5047,8 @@ function bShowSetupAdminCompleteModal(totalAdmins, which) {
 
 function bSetupAdminAddMore() {
   document.getElementById('b-bridge-overlay').classList.remove('act');
-  // 入力値をクリアしてからモーダルを再オープン
-  var newPanel = document.getElementById('setup-admin-panel-new');
-  if (newPanel) {
-    newPanel.querySelectorAll('input').forEach(function(el) {
-      if (el.type === 'checkbox') el.checked = false;
-      else el.value = '';
-    });
-  }
-  var empPanel = document.getElementById('setup-admin-panel-emp');
-  if (empPanel) {
-    empPanel.querySelectorAll('input').forEach(function(el) {
-      if (el.type === 'checkbox') el.checked = false;
-      else el.value = '';
-    });
-    var sel = empPanel.querySelector('select');
-    if (sel) sel.selectedIndex = 0;
-  }
+  // 2026-05-18 仕様変更: バッチUI 行を全てリセットしてから再オープン
+  if (typeof setupAdminResetAllRows === 'function') setupAdminResetAllRows();
   setupAdminSwitchTab('new');
   bOpenSetupAdminModal();
 }
@@ -5006,35 +5311,49 @@ function b0ClearDraft(stepNum) {
 }
 
 // STEP 5 管理者登録モーダル用 一時保存
-// 整合性: 他STEP (1〜4) の b0SaveDraft と同様、空入力でも保存可 (ガードなし)
+// 2026-05-18 仕様変更: バッチUI 対応 — active タブの全行を draft 保存
 function b0SaveAdminDraft() {
   var modal = document.getElementById('b-setup-admin-overlay');
   if (!modal) return;
-  // 現在 active なタブ (新規登録 / 従業員から選択) を判定し、入力値を保存
   var activeTab = modal.querySelector('.mtab.act');
   var tabType = activeTab ? activeTab.getAttribute('data-stab') : 'new';
-  var inputs = [];
-  modal.querySelectorAll('input[type="text"], input[type="email"], input[type="password"]').forEach(function(el) {
-    if (el.offsetParent !== null) inputs.push(el.value || '');
+  var rows = (typeof setupAdminCollectRows === 'function') ? setupAdminCollectRows(tabType) : [];
+  // 旧スキーマ互換 (b0Draft_5 = [ { inputs, selects, checks, tabType, rowData } , ... ])
+  var draftData = rows.map(function(r) {
+    if (tabType === 'new') {
+      return {
+        tabType: 'new',
+        inputs: [r.name || '', r.email || '', r.pw || ''],
+        selects: [],
+        checks: (function(){
+          var arr = [];
+          SETUP_ADMIN_STORES.forEach(function(s){ arr.push((r.stores || []).indexOf(s) !== -1); });
+          return arr;
+        })(),
+        rowData: r
+      };
+    } else {
+      return {
+        tabType: 'emp',
+        inputs: [r.email || ''],
+        selects: [], // empValue は rowData に保持
+        checks: (function(){
+          var arr = [];
+          SETUP_ADMIN_STORES.forEach(function(s){ arr.push((r.stores || []).indexOf(s) !== -1); });
+          return arr;
+        })(),
+        rowData: r
+      };
+    }
   });
-  var checks = [];
-  modal.querySelectorAll('input[type="checkbox"]').forEach(function(el) {
-    if (el.offsetParent !== null) checks.push(!!el.checked);
-  });
-  var selects = [];
-  modal.querySelectorAll('select').forEach(function(el) {
-    if (el.offsetParent !== null) selects.push(el.selectedIndex);
-  });
-  // ★ 整合性: 他STEP同様、空入力でも保存可 (ガードを撤去)
-  var draftData = [{ inputs: inputs, selects: selects, checks: checks, tabType: tabType }];
+  // 0行の場合でも空配列で保存 (他STEP同様、ガードなし)
   try {
     sessionStorage.setItem('b0Draft_5', JSON.stringify(draftData));
-    // ★ 抜本的コンタミ回避: 設定画面シナリオ突入を明示 + CSV側状態クリア
     sessionStorage.setItem('b0DraftSavedAt', String(Date.now()));
     localStorage.removeItem('import_in_progress');
   } catch (e) {}
   bCloseSetupAdminModal();
-  bShowSetupSaveDraftModal(5, 1);
+  bShowSetupSaveDraftModal(5, draftData.length);
 }
 
 function bResumeDraft(stepNum) {
