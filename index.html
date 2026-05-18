@@ -2052,23 +2052,14 @@
      emp タブで invited 従業員を選択した時に表示。
      ブラウザ素の alert() に代わるサイトUI 統一版。-->
 <div id="invite-replacement-warning-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;font-family:'Hiragino Kaku Gothic ProN', sans-serif;">
-  <div style="background:#fff;border-radius:10px;padding:24px 30px;max-width:480px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.3);">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-      <span style="font-size:24px;">⚠️</span>
-      <h3 style="margin:0;font-size:16px;font-weight:700;color:#333;">招待差し替えの確認</h3>
-    </div>
-    <div style="font-size:13px;color:#333;line-height:1.7;margin-bottom:14px;">
-      <strong id="invite-replacement-target-name">対象従業員</strong> さんは現在 <span style="background:#fff8e1;color:#f0960a;padding:2px 8px;border-radius:10px;font-weight:700;font-size:11px;">⏳ 招待中(PW未設定)</span> です。
-    </div>
-    <div style="background:#fff8e1;border:1px solid #ffe0a3;border-radius:6px;padding:12px 14px;font-size:12px;color:#9c4d12;line-height:1.8;margin-bottom:20px;">
-      <strong>登録すると:</strong><br>
-      ・ 旧招待メール (従業員) を <strong>無効化</strong><br>
-      ・ <strong>「管理者権限付き 差し替え版」</strong> を 1通だけ再送<br>
-      ・ 受信者は差し替えメール 1通から PW設定 + 管理者画面ログインが可能
+  <div style="background:#fff;border-radius:10px;padding:24px 30px;max-width:420px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.3);">
+    <h3 style="margin:0 0 14px 0;font-size:15px;font-weight:700;color:#333;">⚠️ 招待差し替え</h3>
+    <div style="font-size:13px;color:#333;line-height:1.7;margin-bottom:20px;">
+      <strong id="invite-replacement-target-name">対象</strong> さんの旧招待を無効化し、管理者権限付き差し替えメールを再送します。
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end;">
-      <button onclick="closeInviteReplacementWarning(true)" style="padding:10px 20px;border:1px solid #ccc;border-radius:6px;background:#fff;cursor:pointer;font-size:13px;font-weight:600;color:#555;">キャンセル</button>
-      <button onclick="closeInviteReplacementWarning(false)" style="padding:10px 20px;border:none;border-radius:6px;background:#2ec4a5;color:#fff;cursor:pointer;font-size:13px;font-weight:700;">差し替えで進める</button>
+      <button onclick="closeInviteReplacementWarning(true)" style="padding:8px 18px;border:1px solid #ccc;border-radius:6px;background:#fff;cursor:pointer;font-size:13px;color:#555;">キャンセル</button>
+      <button onclick="closeInviteReplacementWarning(false)" style="padding:8px 18px;border:none;border-radius:6px;background:#2ec4a5;color:#fff;cursor:pointer;font-size:13px;font-weight:700;">OK</button>
     </div>
   </div>
 </div>
