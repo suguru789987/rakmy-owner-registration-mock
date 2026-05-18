@@ -507,11 +507,11 @@
     <span class="nav-tab" onclick="go('d1')" id="nav-d1">管理者一覧</span>
     <span class="nav-tab" onclick="go('d2')" id="nav-d2">管理者登録</span>
     <span class="nav-tab" onclick="go('admin-invite-email')" id="nav-admin-invite-email">📧 招待メール(新規)</span>
-    <span class="nav-tab" onclick="go('admin-invite-email-emp')" id="nav-admin-invite-email-emp">📧 招待メール(従業員昇格)</span>
+    <span class="nav-tab" onclick="go('admin-invite-email-emp')" id="nav-admin-invite-email-emp">📧 招待メール(既存登録)</span>
     <span class="nav-tab" onclick="go('admin-pw-setup')" id="nav-admin-pw-setup">🔑 招待URL先 PW設定</span>
     <span class="nav-tab" onclick="go('admin-b0')" id="nav-admin-b0">👑 管理者ログイン後 TOP</span>
     <span class="nav-tab" onclick="go('d3')" id="nav-d3">登録完了メール(新規)</span>
-    <span class="nav-tab" onclick="go('d4')" id="nav-d4">登録完了メール(昇格)</span>
+    <span class="nav-tab" onclick="go('d4')" id="nav-d4">登録完了メール(既存登録)</span>
     <span class="nav-tab" onclick="go('d1e')" id="nav-d1e">管理者編集</span>
     <span class="nav-sep"></span>
     <span class="nav-flow">E PW</span>
@@ -1968,7 +1968,7 @@
   </main>
 </div>
 
-<!-- ===== 招待メール (従業員から選択タブ用 / 既存従業員の管理者昇格通知) ===== -->
+<!-- ===== 招待メール (従業員から選択タブ用 / 既存従業員アカウントへの管理者権限付与通知) ===== -->
 <!-- 仕様: emp タブでは新規アカウント発行は行わない。既存PWでログインのみのため、
      PW設定ボタンではなく「ログインする」ボタンを配置。フォーマットも文面で出し分け。 -->
 <div class="page" id="page-admin-invite-email-emp">
@@ -2013,7 +2013,7 @@
         <div style="margin-top:32px;background:#f5f5f5;border-radius:6px;padding:12px 16px;font-size:11px;color:#555;text-align:left;max-width:480px;margin-left:auto;margin-right:auto;">
           <strong>会社:</strong> 株式会社サンプル <span style="color:#ddd;margin:0 6px;">/</span>
           <strong>店舗:</strong> 新宿店 <span style="color:#ddd;margin:0 6px;">/</span>
-          <strong>区分:</strong> 管理者(従業員昇格) <span style="color:#ddd;margin:0 6px;">/</span>
+          <strong>区分:</strong> 管理者(既存登録) <span style="color:#ddd;margin:0 6px;">/</span>
           <strong>付与日:</strong> 2026/5/18
         </div>
 
@@ -2303,10 +2303,10 @@
   </div>
 </div>
 
-<!-- ===== D-4: 管理者登録完了メール（昇格パターン: D-2タブ2 既存従業員から管理者登録時に自動送信） ===== -->
+<!-- ===== D-4: 管理者登録完了メール（既存登録パターン: D-2タブ2 既存従業員から管理者登録時に自動送信） ===== -->
 <div class="page" id="page-d4">
   <div style="background:#f0f0f0; min-height:calc(100vh - 86px); padding:32px 16px;">
-    <div class="tc" style="margin-bottom:16px;"><span style="font-size:10px;color:#999;background:#fff;padding:4px 12px;border-radius:20px;">自動送信メール プレビュー（管理者登録 / 既存従業員からの昇格パターン）</span></div>
+    <div class="tc" style="margin-bottom:16px;"><span style="font-size:10px;color:#999;background:#fff;padding:4px 12px;border-radius:20px;">自動送信メール プレビュー（管理者登録 / 既存登録パターン）</span></div>
     <div class="ep">
       <div class="ep-hdr">
         <strong>From:</strong> ラクミー タイムレコード &lt;noreply@timerecord.rakmy.jp&gt;<br>
@@ -4827,7 +4827,7 @@ function setupAdminSwitchTab(which) {
     primary.innerHTML = '管理者を登録する (<span id="setup-admin-count-display">1</span>件)';
     primary.title = (which === 'new')
       ? '従業員台帳に新規アカウントを作成し、管理者権限付き招待メールを送付します (複数行を一括処理)'
-      : '既存従業員に管理者権限を付与します (招待メールは従業員昇格版、複数行を一括処理)';
+      : '既存従業員アカウントに管理者権限を付与します (招待メールは既存登録版、複数行を一括処理)';
   }
   // active タブの件数表示を更新
   if (typeof setupAdminUpdateCountDisplay === 'function') setupAdminUpdateCountDisplay();
@@ -4948,7 +4948,7 @@ function b0SubmitAdminEntry() {
 
 // 管理者一覧 (page-d1) 「📧 再送」ボタン: タブ種別で動作出し分け
 // - which='new': 自動振り出しPWを再生成し、新規版招待メール(page-admin-invite-email)を再送
-// - which='emp': 既存PWは触らず、従業員昇格版通知メール(page-admin-invite-email-emp)を再送
+// - which='emp': 既存PWは触らず、既存登録版通知メール(page-admin-invite-email-emp)を再送
 function d1ResendInvite(which, name, email) {
   if (which === 'new') {
     var newPw = (typeof generateAdminInitialPw === 'function') ? generateAdminInitialPw() : 'auto' + Date.now();
@@ -4972,11 +4972,11 @@ function d1ResendInvite(which, name, email) {
       '📧 通知メールを再送します (👥 既存登録)\n\n' +
       '宛先: ' + name + ' <' + email + '>\n\n' +
       '💡 既存の従業員パスワードを引き継ぐため、パスワードは変更されません。\n' +
-      'ログイン案内のみの通知メール(昇格版)が再送されます。\n\n' +
+      'ログイン案内のみの通知メール(既存登録版)が再送されます。\n\n' +
       '送信してよろしいですか？'
     );
     if (!ok2) return;
-    alert('✓ 通知メール(従業員昇格版)を再送しました。\n既存PWは変更されていません。\n\n再送メール プレビューを表示します。');
+    alert('✓ 通知メール(既存登録版)を再送しました。\n既存PWは変更されていません。\n\n再送メール プレビューを表示します。');
     go('admin-invite-email-emp');
   }
 }
@@ -5026,12 +5026,12 @@ function bShowSetupAdminCompleteModal(totalAdmins, which, batchN) {
   var n = (typeof batchN === 'number' && batchN > 0) ? batchN : 1;
   // 2026-05-18 仕様変更: バッチUI で複数名一括登録に対応 (batchN 件)
   if (which === 'emp') {
-    titleEl.innerHTML = '✓ 既存従業員を管理者に昇格しました (' + n + ' 名 / 累計 ' + totalAdmins + ' 名)';
+    titleEl.innerHTML = '✓ 既存従業員に管理者権限を付与しました (' + n + ' 名 / 累計 ' + totalAdmins + ' 名)';
     textEl.innerHTML = '従業員台帳の既存アカウント <strong>' + n + ' 名</strong> に <strong>管理者権限を付与</strong> しました。<br>' +
-                       '<strong>管理者権限が付与された通知メール (従業員昇格版)</strong> を送付しました。<br>' +
+                       '<strong>管理者権限が付与された通知メール (既存登録版)</strong> を送付しました。<br>' +
                        '受信者は既存パスワードで管理者画面にログイン可能です。<br><br>' +
                        '<span style="color:#0d47a1;background:#e3f2fd;padding:4px 8px;border-radius:4px;font-size:11px;">💡 打刻記録画面の上部に「管理者登録されました」コメントが表示されます。</span><br><br>' +
-                       '<button class="btn btn-s btn-sm" onclick="bSetupBridgeDismiss();go(\'admin-invite-email-emp\')" style="background:#ede7f6;border:1px solid #b39ddb;color:#5c4dac;font-weight:700;">📧 送付された通知メール(従業員昇格版)を確認</button>';
+                       '<button class="btn btn-s btn-sm" onclick="bSetupBridgeDismiss();go(\'admin-invite-email-emp\')" style="background:#ede7f6;border:1px solid #b39ddb;color:#5c4dac;font-weight:700;">📧 送付された通知メール(既存登録版)を確認</button>';
   } else {
     titleEl.innerHTML = '✓ 管理者 ' + n + ' 名を登録し、招待メールを送付しました (累計 ' + totalAdmins + ' 名)';
     textEl.innerHTML = '新規アカウント <strong>' + n + ' 名</strong> を作成し、<strong>管理者権限付きの招待メール (新規版)</strong> を送付しました。<br>' +
