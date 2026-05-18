@@ -1076,43 +1076,9 @@
 
 <!-- (2026-05-13: setup-* 専用ページ群を廃止、*-settings を setupモードで再利用) -->
 
-<!-- ===== STEP 5 (管理者・任意) 専用画面: 管理者一覧画面(d1運用更新とは別) ===== -->
-<div class="page" id="page-setup-admin">
-  <div class="dash">
-    <aside class="sb">
-      <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
-      <!-- setup-nav が JS により動的注入される -->
-      <div class="sb-sec sb-init-link" style="display:none;"><a href="#" onclick="event.preventDefault();go('b0')"><span class="ic">📋</span>初期セットアップ</a></div>
-      <div class="sb-sec"><div class="sl">業務メニュー（登録完了後に利用可）</div><a href="#" style="opacity:0.5;"><span class="ic">⏱</span>打刻記録</a><a href="#" style="opacity:0.5;"><span class="ic">📊</span>勤務時間集計</a><a href="#" style="opacity:0.5;"><span class="ic">💰</span>給与</a></div>
-      <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
-    </aside>
-    <main class="mc" style="background:#f8f9fa;">
-      <!-- setupバナーは applySetupModeOnSettings(5) → renderSetupSettingsUI(5) で動的挿入 -->
-
-      <!-- 管理者一覧ヘッダー -->
-      <div class="ph">
-        <h2>管理者一覧</h2>
-        <div style="display:flex;gap:8px;">
-          <button class="btn btn-s" id="setup-admin-edit-btn" disabled title="管理者が登録されていません" style="opacity:0.5;">編集</button>
-          <button class="btn btn-p" onclick="bOpenSetupAdminModal()">+ 新規追加</button>
-        </div>
-      </div>
-
-      <!-- 0件: 空状態ヒーロー -->
-      <div id="setup-admin-empty" style="background:#fff;border:1px dashed #ddd;border-radius:10px;padding:54px 30px;text-align:center;color:#888;">
-        <div style="font-size:42px;margin-bottom:14px;">👥</div>
-        <div style="font-size:15px;font-weight:700;color:#555;margin-bottom:8px;">まだ管理者が登録されていません</div>
-        <button class="btn btn-p" onclick="bOpenSetupAdminModal()">+ 管理者を登録する</button>
-      </div>
-
-      <!-- 1件以上: 一覧表示 -->
-      <div id="setup-admin-list-wrap" style="display:none;">
-        <div class="post-list" id="setup-admin-list"></div>
-        <div style="margin-top:14px;font-size:11px;color:#888;">※ 管理者には登録時に招待メール(72時間有効)が自動送信されています。一覧で「招待中」状態の管理者には、再送・編集が可能です。</div>
-      </div>
-    </main>
-  </div>
-</div>
+<!-- ===== STEP 5 (管理者・任意) 専用画面 page-setup-admin は廃止 (2026-05-18) =====
+     代替: page-b0 内の b0-step5-panel に統合。
+     旧動線: d2 キャンセル時に setup-admin に戻る → 廃止に伴い b0 に戻すよう変更。 -->
 
 <!-- ===== 管理者登録オーバーレイモーダル(setup mode用 / 初期セットアップ STEP 5 専用) ===== -->
 <!-- 2026-05-18 仕様変更: STEP 1〜4 と同じ「行追加型バッチUI」に改修。連続して複数登録できる -->
@@ -1137,6 +1103,7 @@
       <!-- パネル1: 新規登録 (行/列バッチUI) -->
       <div class="mtab-panel act" id="setup-admin-panel-new">
         <div class="al al-i" style="margin-bottom:10px;font-size:11px;"><span>💡</span><div>新規アカウントを発行して管理者権限を付与します。各行が1名の管理者です。<strong>初期パスワード</strong>は自動生成され招待メールにペーストされます。</div></div>
+        <div class="al al-w" style="margin-bottom:10px;font-size:11px;background:#e3f2fd;border:1px solid #b3d9f0;color:#0d47a1;"><span>📧</span><div>「<strong>管理者を登録する (N件)</strong>」ボタン押下時に、入力した <strong>全N名分</strong> の <strong>招待メール(新規版)</strong> が一括送信されます (72h有効)。</div></div>
         <div class="batch-table-wrap">
           <table class="batch-table" id="setup-admin-new-table">
             <thead>
@@ -1160,7 +1127,8 @@
 
       <!-- パネル2: 従業員から選択 (行/列バッチUI) -->
       <div class="mtab-panel" id="setup-admin-panel-emp">
-        <div class="al al-i" style="margin-bottom:10px;font-size:11px;"><span>💡</span><div>既存の従業員アカウントに管理者権限を付与します（複数行入力可）。<strong>初期パスワード設定は不要</strong>です（従業員が既に設定済みのパスワードでログイン）。</div></div>
+        <div class="al al-i" style="margin-bottom:10px;font-size:11px;"><span>💡</span><div>既存の従業員アカウントに管理者権限を付与します（複数行入力可）。<strong>初期パスワード設定は不要</strong>です（従業員が既に設定済みのパスワードでログイン）。在籍中の従業員のみ表示されます。</div></div>
+        <div class="al al-w" style="margin-bottom:10px;font-size:11px;background:#ede7f6;border:1px solid #c5b6e1;color:#5c4dac;"><span>📧</span><div>「<strong>管理者を登録する (N件)</strong>」ボタン押下時に、選択した <strong>全N名分</strong> の <strong>通知メール(既存登録版)</strong> が自動送信されます (既存PW継承、新規PW設定なし)。</div></div>
         <div class="batch-table-wrap">
           <table class="batch-table" id="setup-admin-emp-table">
             <thead>
@@ -2118,12 +2086,13 @@
       <div class="ph"><h2>管理者一覧</h2><div style="display:flex;gap:8px;"><a href="https://suguru789987.github.io/rakmy-timerecord-import-spec/" target="_blank" rel="noopener" class="btn btn-s btn-sm csv-import-link" style="text-decoration:none;display:inline-flex;align-items:center;">📥 CSVインポート ↗</a><button class="btn btn-p" onclick="go('d2')">+ 管理者を登録</button></div></div>
       <div style="font-size:10px;color:#888;margin-bottom:10px;">💡 「📥 CSVインポート」を押すと、別タブで <strong>タイムレコード インポート画面</strong> が開きます。「⑤ 管理者」テンプレートを選択して複数管理者を一括登録できます（外部勤怠サービス連携対象外）。</div>
       <table class="dt">
-        <thead><tr><th>名前</th><th>メール</th><th>権限</th><th>担当店舗</th><th>操作</th></tr></thead>
+        <thead><tr><th>名前</th><th>メール</th><th>権限</th><th>ステータス</th><th>担当店舗</th><th>操作</th></tr></thead>
         <tbody>
           <tr>
             <td><strong>山田 太郎</strong></td>
             <td>yamada@example.jp</td>
             <td><span class="rb rb-owner">オーナー</span></td>
+            <td><span style="font-size:10px;color:#0e9077;background:#e8f8f5;border:1px solid #b8e6d6;padding:2px 8px;border-radius:10px;font-weight:700;">✓ 有効</span></td>
             <td>全店舗</td>
             <td><span style="color:#999;font-size:10px;">（自分）</span></td>
           </tr>
@@ -2131,27 +2100,30 @@
             <td><strong>鈴木 花子</strong></td>
             <td>suzuki@example.jp</td>
             <td><span class="rb rb-mgr">管理者</span> <span style="font-size:9px;color:#0e9077;background:#e8f8f5;border:1px solid #b8e6d6;padding:1px 8px;border-radius:10px;font-weight:700;margin-left:4px;">🆕 新規登録</span></td>
+            <td><span style="font-size:10px;color:#f0960a;background:#fff8e1;border:1px solid #ffe0a3;padding:2px 8px;border-radius:10px;font-weight:700;" title="招待メール送信済 (72h有効)。受信者がPW設定すると有効になります。">⏳ 招待中</span></td>
             <td>渋谷店</td>
-            <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" onclick="d1ResendInvite('new','鈴木 花子','suzuki@example.jp')" style="background:#e3f2fd;border-color:#90caf9;color:#0d47a1;font-weight:600;" title="自動振り出しPWを更新し、招待メール(新規版)を再送します">📧 再送</button> <button class="btn btn-s btn-sm" onclick="go('d1e')">編集</button> <button class="btn btn-s btn-sm" style="color:#c62828;">削除</button></td>
+            <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" onclick="d1ResendInvite('new','鈴木 花子','suzuki@example.jp')" style="background:#e3f2fd;border-color:#90caf9;color:#0d47a1;font-weight:600;" title="自動振り出しPWを更新し、招待メール(新規版)を再送します">📧 再送</button> <button class="btn btn-s btn-sm" onclick="go('d1e')">編集</button> <button class="btn btn-s btn-sm" onclick="d1RevokeAdmin('鈴木 花子')" style="color:#c62828;" title="管理者権限のみ解除。従業員アカウントは残ります">削除</button></td>
           </tr>
           <tr>
             <td><strong>田中 次郎</strong></td>
             <td>tanaka@example.jp</td>
             <td><span class="rb rb-mgr">管理者</span> <span style="font-size:9px;color:#0e9077;background:#e8f8f5;border:1px solid #b8e6d6;padding:1px 8px;border-radius:10px;font-weight:700;margin-left:4px;">🆕 新規登録</span></td>
+            <td><span style="font-size:10px;color:#0e9077;background:#e8f8f5;border:1px solid #b8e6d6;padding:2px 8px;border-radius:10px;font-weight:700;" title="ログイン済 = 管理者画面利用中">✓ 有効</span></td>
             <td>新宿店, 池袋店</td>
-            <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" onclick="d1ResendInvite('new','田中 次郎','tanaka@example.jp')" style="background:#e3f2fd;border-color:#90caf9;color:#0d47a1;font-weight:600;" title="自動振り出しPWを更新し、招待メール(新規版)を再送します">📧 再送</button> <button class="btn btn-s btn-sm" onclick="go('d1e')">編集</button> <button class="btn btn-s btn-sm" style="color:#c62828;">削除</button></td>
+            <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" disabled style="background:#f5f5f5;border-color:#ddd;color:#aaa;cursor:not-allowed;" title="有効化済の管理者には再送不要。PWを忘れた場合はログイン画面の「パスワードを忘れた」からリセット">📧 再送</button> <button class="btn btn-s btn-sm" onclick="go('d1e')">編集</button> <button class="btn btn-s btn-sm" onclick="d1RevokeAdmin('田中 次郎')" style="color:#c62828;" title="管理者権限のみ解除。従業員アカウントは残ります">削除</button></td>
           </tr>
           <tr>
             <td><strong>岩田</strong></td>
             <td>iwata@example.jp</td>
             <td><span class="rb rb-mgr">管理者</span> <span style="font-size:9px;color:#5c4dac;background:#ede7f6;border:1px solid #c5b6e1;padding:1px 8px;border-radius:10px;font-weight:700;margin-left:4px;">👥 既存登録</span></td>
+            <td><span style="font-size:10px;color:#0e9077;background:#e8f8f5;border:1px solid #b8e6d6;padding:2px 8px;border-radius:10px;font-weight:700;" title="既存従業員アカウントで即時有効">✓ 有効</span></td>
             <td>新宿店</td>
-            <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" onclick="d1ResendInvite('emp','岩田','iwata@example.jp')" style="background:#ede7f6;border-color:#b39ddb;color:#5c4dac;font-weight:600;" title="既存PWでログインを案内する通知メール(既存登録版)を再送します">📧 再送</button> <button class="btn btn-s btn-sm" onclick="go('d1e')">編集</button> <button class="btn btn-s btn-sm" style="color:#c62828;">削除</button></td>
+            <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" onclick="d1ResendInvite('emp','岩田','iwata@example.jp')" style="background:#ede7f6;border-color:#b39ddb;color:#5c4dac;font-weight:600;" title="管理者権限が付与された旨の通知メール(既存登録版)を再送します">📧 再送</button> <button class="btn btn-s btn-sm" onclick="go('d1e')">編集</button> <button class="btn btn-s btn-sm" onclick="d1RevokeAdmin('岩田')" style="color:#c62828;" title="管理者権限のみ解除。従業員アカウントは残ります">削除</button></td>
           </tr>
         </tbody>
       </table>
 
-      <div class="al al-i" style="margin-top:16px;max-width:600px;"><span>💡</span><div>管理者はオーナーが直接登録します。初期パスワードを設定し、口頭やチャット等で管理者に共有してください。管理者がパスワードを忘れた場合は、ログイン画面の「パスワードを忘れた」から自分でリセットできます。</div></div>
+      <div class="al al-i" style="margin-top:16px;max-width:680px;"><span>💡</span><div>管理者はオーナーが直接登録します。<br>　・<span style="color:#0e9077;background:#e8f8f5;border:1px solid #b8e6d6;padding:1px 8px;border-radius:10px;font-weight:700;font-size:10px;">🆕 新規登録</span> <strong>初期パスワードは自動生成され、招待メールに記載されます</strong> (オーナーの設定不要)。<br>　・<span style="color:#5c4dac;background:#ede7f6;border:1px solid #c5b6e1;padding:1px 8px;border-radius:10px;font-weight:700;font-size:10px;">👥 既存登録</span> 既存の従業員パスワードがそのまま引き継がれます (新規PW設定なし)。<br>　・管理者がパスワードを忘れた場合は、ログイン画面の「パスワードを忘れた」から自分でリセットできます。</div></div>
     </main>
   </div>
 </div>
@@ -2220,7 +2192,8 @@
 
             <!-- パネル2: 従業員から選択 -->
             <div class="mtab-panel" id="d2-panel-emp">
-              <div class="al al-i" style="margin-bottom:14px;"><span>💡</span><div>既に従業員台帳に登録済みの方を、管理者として追加します。氏名を選択するとメールアドレスが自動入力されます（従業員台帳の値を参照）。</div></div>
+              <div class="al al-i" style="margin-bottom:14px;"><span>💡</span><div>既に従業員台帳に登録済みの方を、管理者として追加します。氏名を選択するとメールアドレスが自動入力されます（従業員台帳の値を参照）。<strong>在籍中の従業員のみ表示</strong>されます。</div></div>
+              <div class="al al-w" style="margin-bottom:14px;background:#ede7f6;border:1px solid #c5b6e1;color:#5c4dac;font-size:11px;"><span>📧</span><div>「<strong>管理者を登録</strong>」ボタン押下時に、選択した従業員へ <strong>通知メール(既存登録版)</strong> が自動送信されます (既存PW継承)。</div></div>
 
               <div class="fg">
                 <label>従業員を選択 <span class="req">✳</span></label>
@@ -4271,7 +4244,7 @@ function applySetupModeOnSettings(stepNum) {
 }
 
 function renderSetupSettingsUI(stepNum) {
-  var pageIds = ['', 'page-brand-settings', 'page-store-settings', 'page-emptype-settings', 'page-emp-settings', 'page-setup-admin'];
+  var pageIds = ['', 'page-brand-settings', 'page-store-settings', 'page-emptype-settings', 'page-emp-settings', 'page-b0'];
   var stepNames = ['', '業態・ブランド', '店舗', '雇用区分', '従業員', '管理者 (任意)'];
   var pageEl = document.getElementById(pageIds[stepNum]);
   if (!pageEl) return;
@@ -4381,7 +4354,7 @@ function renderSetupSidebarNav(sb, currentStep) {
   var counts = b0LoadCounts();
   var stepLabels = ['', '業態・ブランド', '店舗', '雇用区分', '従業員', '管理者'];
   var stepIcons = ['', '①', '②', '③', '④', '⑤'];
-  var pages = ['', 'brand-settings', 'store-settings', 'emptype-settings', 'emp-settings', 'setup-admin'];
+  var pages = ['', 'brand-settings', 'store-settings', 'emptype-settings', 'emp-settings', 'b0'];
   var html = '<a href="#" onclick="event.preventDefault();go(\'b0\')"><span class="ic">📋</span>初期セットアップ TOP</a>';
   html += '<div class="sl">初期登録ステップ</div>';
   for (var i = 1; i <= 5; i++) {
@@ -4505,44 +4478,8 @@ function d2SubmitWithInvite() {
   }, 200);
 }
 
-/* ===== STEP 5 (管理者・任意) 専用画面 =====
- * page-setup-admin: 初期登録専用「管理者一覧」画面(d1運用更新画面とは別)
- * 流れ: setup-admin(一覧+新規追加ボタン) → +新規追加 → オーバーレイモーダル(b-setup-admin-overlay)
- *       → b0SubmitAdminEntry → 一覧に反映 + ブリッジモーダル */
-function refreshSetupAdminPage() {
-  var counts = b0LoadCounts();
-  var adminN = counts[4] || 0;
-  var emptyEl = document.getElementById('setup-admin-empty');
-  var listWrap = document.getElementById('setup-admin-list-wrap');
-  var listEl = document.getElementById('setup-admin-list');
-  var editBtn = document.getElementById('setup-admin-edit-btn');
-  if (adminN > 0) {
-    if (emptyEl) emptyEl.style.display = 'none';
-    if (listWrap) listWrap.style.display = '';
-    if (editBtn) { editBtn.disabled = false; editBtn.style.opacity = ''; editBtn.title = ''; }
-    if (listEl) {
-      var rows = '';
-      for (var i = 0; i < adminN; i++) {
-        rows +=
-          '<div class="pl-row" style="justify-content:space-between;align-items:center;">' +
-            '<div>' +
-              '<div class="nm">管理者' + (i + 1) + ' <span style="font-size:10px;color:#f0960a;background:#fff8e1;padding:2px 8px;border-radius:20px;font-weight:600;margin-left:6px;">招待中</span></div>' +
-              '<div class="meta">admin' + (i + 1) + '@example.jp ・ 渋谷店 ・ 招待メール送信済(72h有効)</div>' +
-            '</div>' +
-            '<div style="display:flex;gap:6px;">' +
-              '<button class="btn btn-o btn-sm">再送</button>' +
-              '<button class="btn btn-s btn-sm">編集</button>' +
-            '</div>' +
-          '</div>';
-      }
-      listEl.innerHTML = rows;
-    }
-  } else {
-    if (emptyEl) emptyEl.style.display = '';
-    if (listWrap) listWrap.style.display = 'none';
-    if (editBtn) { editBtn.disabled = true; editBtn.style.opacity = '0.5'; editBtn.title = '管理者が登録されていません'; }
-  }
-}
+/* ===== STEP 5 (管理者・任意) 管理者一覧 =====
+ * 2026-05-18: page-setup-admin 廃止。一覧表示は page-b0 内の b0-step5-panel に統合済 (refreshStep5Panel) */
 
 // オーバーレイモーダル開閉
 function bOpenSetupAdminModal() {
@@ -4563,12 +4500,15 @@ function bOpenSetupAdminModal() {
  * - 各行に「✕」削除ボタン、表外に「+ 行を追加」ボタン
  * - btn-grp の登録ボタン件数表示 (両タブ合算) */
 var SETUP_ADMIN_STORES = ['渋谷店','新宿店','池袋店','北海道支店'];
+// 在籍ステータス: 'active' = 在籍中、'retired' = 退職 (selectに表示しない)、'admin' = 既に管理者 (重複登録防止表示)
 var SETUP_ADMIN_EMPS = [
-  { v:'', l:'-- 従業員を選択 --' },
-  { v:'emp-001', l:'test（業務委託 / 渋谷店）', email:'test@example.com' },
-  { v:'emp-002', l:'TEST TARO（代表取締役 / 渋谷店）', email:'taro@example.com' },
-  { v:'emp-003', l:'岩田（バイトさん / 新宿店）', email:'iwata@example.jp' },
-  { v:'emp-004', l:'佐々木（業務委託 / 池袋店）', email:'sasaki@example.com' }
+  { v:'', l:'-- 従業員を選択 --', status:'placeholder' },
+  { v:'emp-001', l:'test（業務委託 / 渋谷店）', email:'test@example.com', status:'active' },
+  { v:'emp-002', l:'TEST TARO（代表取締役 / 渋谷店）', email:'taro@example.com', status:'active' },
+  { v:'emp-003', l:'岩田（バイトさん / 新宿店）', email:'iwata@example.jp', status:'active' },
+  { v:'emp-004', l:'佐々木（業務委託 / 池袋店）', email:'sasaki@example.com', status:'active' },
+  // 以下は退職者 — 在籍中フィルターで除外される (デモ用)
+  { v:'emp-099', l:'退職田（バイトさん / 渋谷店 / 退職済）', email:'taishokuda@example.com', status:'retired' }
 ];
 
 function setupAdminInitBatchIfEmpty(which) {
@@ -4623,7 +4563,8 @@ function setupAdminAddRow(which) {
     var sel = document.createElement('select');
     sel.className = 'adm-emp-select';
     sel.style.cssText = 'width:100%;min-width:200px;padding:6px 8px;border:1px solid #ddd;border-radius:4px;font-size:12px;';
-    SETUP_ADMIN_EMPS.forEach(function(e) {
+    // 在籍中フィルター: status='active' または placeholder のみ表示。退職者は除外。
+    SETUP_ADMIN_EMPS.filter(function(e){ return e.status === 'placeholder' || e.status === 'active'; }).forEach(function(e) {
       var op = document.createElement('option');
       op.value = e.v; op.textContent = e.l;
       if (e.email) op.setAttribute('data-email', e.email);
@@ -4858,7 +4799,7 @@ function applySetupModeOnD2() {
       '<div style="background:#888;color:#fff;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;">任意STEP 5 / 5</div>' +
       '<div style="font-size:12px;color:#0e9077;font-weight:700;">管理者を登録 (任意・現在 ' + adminN + ' 名登録済)</div>' +
       '<div style="flex:1;min-width:10px;"></div>' +
-      '<button class="btn btn-s btn-sm" onclick="go(\'setup-admin\')">← 一覧画面へ戻る</button>' +
+      '<button class="btn btn-s btn-sm" onclick="go(\'b0\')">← STEP 5 パネルへ戻る</button>' +
       '<button class="btn btn-s btn-sm" onclick="setupCompleteAll()">✓ 初期セットアップを完了</button>';
     mainEl.insertBefore(banner, mainEl.firstChild);
   }
@@ -4874,14 +4815,14 @@ function applySetupModeOnD2() {
     var cancel = g.querySelector('.btn-s');
     if (cancel && /キャンセル/.test(cancel.textContent) && !cancel.hasAttribute('data-setup-rewired')) {
       cancel.setAttribute('data-setup-rewired', '1');
-      cancel.setAttribute('onclick', "go('setup-admin')");
+      cancel.setAttribute('onclick', "go('b0')");
     }
   });
   // d2 内のモーダル右上「✕」も setup-admin に戻すよう書き換え
   pageEl.querySelectorAll('.mx').forEach(function(x) {
     if (!x.hasAttribute('data-setup-rewired')) {
       x.setAttribute('data-setup-rewired', '1');
-      x.setAttribute('onclick', "go('setup-admin')");
+      x.setAttribute('onclick', "go('b0')");
     }
   });
 
@@ -4943,6 +4884,22 @@ function b0SubmitAdminEntry() {
   refreshStep5Panel();
   if (typeof refreshAdminRegisteredBanner === 'function') refreshAdminRegisteredBanner();
   setTimeout(function(){ bShowSetupAdminCompleteModal(counts[4], which, n); }, 200);
+}
+
+// 管理者一覧 (page-d1) 「削除」ボタン: 管理者権限のみ解除 (従業員アカウントは残る)
+function d1RevokeAdmin(name) {
+  var ok = confirm(
+    '⚠ 管理者権限を解除します\n\n' +
+    '対象: ' + name + '\n\n' +
+    '【動作】\n' +
+    '・「管理者」権限のみが解除されます (通常の従業員に戻ります)\n' +
+    '・従業員アカウント自体は削除されません (打刻・勤怠記録は保持)\n' +
+    '・解除後はラクミー従業員アカウントとして引き続きログイン可能\n\n' +
+    '実行してよろしいですか？'
+  );
+  if (!ok) return;
+  alert('✓ ' + name + ' の管理者権限を解除しました。\n従業員アカウントは引き続き有効です。');
+  // 本実装では行を削除する処理になるが、モックでは表示維持
 }
 
 // 管理者一覧 (page-d1) 「📧 再送」ボタン: タブ種別で動作出し分け
