@@ -510,7 +510,6 @@
     <span class="nav-tab" onclick="go('admin-invite-email-emp')" id="nav-admin-invite-email-emp">📧 招待メール(既存登録)</span>
     <span class="nav-tab" onclick="go('admin-invite-replacement')" id="nav-admin-invite-replacement">📧 招待差し替え版</span>
     <span class="nav-tab" onclick="go('invite-invalid-admin')" id="nav-invite-invalid-admin">⚠️ 旧URL無効</span>
-    <span class="nav-tab" onclick="go('admin-import-preview')" id="nav-admin-import-preview">📊 CSV取込プレビュー</span>
     <span class="nav-tab" onclick="try{sessionStorage.setItem('adminPwSetupWhich','new');}catch(e){}go('admin-pw-setup')" id="nav-admin-pw-setup-new">🔑 招待URL先 PW設定 (🆕 新規)</span>
     <span class="nav-tab" onclick="try{sessionStorage.setItem('adminPwSetupWhich','emp');}catch(e){}go('admin-pw-setup')" id="nav-admin-pw-setup-emp">🔑 招待URL先 PW設定 (👥 既存)</span>
     <span class="nav-tab" onclick="go('admin-b0')" id="nav-admin-b0">👑 管理者ログイン後 TOP</span>
@@ -1998,55 +1997,11 @@
   </main>
 </div>
 
-<!-- ===== CSVインポート プレビュー画面 (管理者・5分岐自動判定) =====
-     対象: 管理者CSV アップロード後、確定登録前のプレビュー段階で各行を5分岐表示。
-     ユーザーが行ごとに判定結果を確認 + 必要に応じて手動上書きできる。 -->
-<div class="page" id="page-admin-import-preview">
-  <main class="mc" style="max-width:1200px;margin:30px auto;padding:0 20px;">
-    <div style="margin-bottom:14px;">
-      <h2 style="font-size:20px;margin:0 0 6px 0;">管理者CSVインポート プレビュー</h2>
-      <div style="font-size:12px;color:#666;">アップロードされた CSV を 5分岐自動判定しました。各行を確認後、「登録実行」を押してください。</div>
-    </div>
-
-    <!-- サマリブロック -->
-    <div style="background:#f8f9fa;border:1px solid #e0e0e0;border-radius:8px;padding:14px 18px;margin-bottom:16px;">
-      <div style="font-size:12px;font-weight:700;margin-bottom:10px;">📊 サマリ (合計 5 行)</div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;font-size:11px;">
-        <div style="padding:6px 12px;background:#e8f8f5;border:1px solid #b8e6d6;border-radius:6px;color:#0e9077;font-weight:700;">🆕 新規登録: 2 件 → 招待メール(新規版) 送信</div>
-        <div style="padding:6px 12px;background:#ede7f6;border:1px solid #c5b6e1;border-radius:6px;color:#5c4dac;font-weight:700;">👥 既存登録(active): 1 件 → 通知メール(既存登録版) 送信</div>
-        <div style="padding:6px 12px;background:#fff8e1;border:1px solid #ffe0a3;border-radius:6px;color:#f0960a;font-weight:700;">⚠️ 既存登録(招待中): 1 件 → 招待差し替え</div>
-        <div style="padding:6px 12px;background:#ffebee;border:1px solid #ffcdd2;border-radius:6px;color:#c62828;font-weight:700;">❌ エラー: 1 件 (既管理者)</div>
-      </div>
-    </div>
-
-    <!-- 行リスト -->
-    <table class="dt" style="margin-bottom:16px;">
-      <thead><tr><th style="width:36px;text-align:center;">#</th><th>名前</th><th>メアド</th><th>店舗</th><th>判定 (自動)</th><th>手動上書き</th><th>動作</th></tr></thead>
-      <tbody id="admin-import-preview-tbody">
-        <!-- 動的生成 -->
-      </tbody>
-    </table>
-
-    <!-- 整合性チェック完了時のロック -->
-    <div style="display:flex;gap:10px;justify-content:flex-end;align-items:center;flex-wrap:wrap;">
-      <div style="font-size:11px;color:#666;margin-right:auto;">⚠️ エラー行は登録対象から自動除外されます (4 件のみ実行)</div>
-      <button class="btn btn-s" onclick="alert('CSVアップロード画面に戻ります');">← CSV再アップロード</button>
-      <button class="btn btn-p" onclick="adminImportExecute()">✓ 登録実行 (4 件)</button>
-    </div>
-    <div style="margin-top:8px;font-size:10px;color:#888;">※ 退職者除外フィルターは後続実装事項 (現バックエンドに status カラム未実装のため)</div>
-
-    <div style="margin-top:24px;padding:12px 14px;background:#fff8ed;border:1px solid #fde68a;border-radius:8px;font-size:11px;color:#9c4d12;line-height:1.7;">
-      💡 <strong>仕様メモ (CSVインポート プレビュー):</strong><br>
-      • アップロード時に各行のメアドを <strong>resolveAdminRegistrationType()</strong> で 4分岐判定<br>
-      • 判定結果バッジ + 手動上書きセレクトを各行に表示<br>
-      • エラー行 (既管理者・形式不正) は登録対象から除外<br>
-      • <strong>「招待差し替え」行</strong>はユーザー確認後、旧トークン無効化 + 新発行<br>
-      • 登録実行 → 行別に該当メール送信 (3種類): 新規/既存登録/差し替え<br>
-      • <strong>前提</strong>: 従業員インポートが <code>import_jobs.status='committed'</code> 状態でないと本画面ロック<br>
-      • ⚠️ <strong>退職者除外フィルターは後続実装事項</strong> (現バックエンドに status カラム未実装のため)
-    </div>
-  </main>
-</div>
+<!-- ===== CSV インポート プレビュー画面 削除 (2026-05-18) =====
+     混同回避のため独立画面 page-admin-import-preview は廃止。
+     5分岐判定 + 一括メール送信仕様は、別リポジトリ rakmy-timerecord-import-spec
+     の既存テンプレ/外部勤怠プレビュー画面に統合する仕様とする。
+     詳細は MD仕様書 §23.19 参照。 -->
 
 <!-- ===== 招待差し替え予告 カスタムモーダル (共通) =====
      emp タブで invited 従業員を選択した時に表示。
@@ -2747,10 +2702,6 @@ function go(id) {
     var which = 'new';
     try { which = sessionStorage.getItem('adminPwSetupWhich') || 'new'; } catch (e) {}
     if (typeof applyAdminPwSetupMode === 'function') applyAdminPwSetupMode(which);
-  }
-  // 管理者CSVインポート プレビュー画面を開いた際は行リスト生成
-  if (id === 'admin-import-preview') {
-    if (typeof renderAdminImportPreview === 'function') renderAdminImportPreview();
   }
   // b0(初期セットアップ)を開いた際は保存済み進捗とメソッド選択を反映
   if (id === 'b0') {
@@ -4887,63 +4838,9 @@ function _setupAdminBuildStoreChecks() {
   return wrap;
 }
 
-// CSVインポート プレビュー用デモデータ (現実は CSV パース結果)
-// ★ 注意 (2026-05-18): retired 判定は後続実装事項のため、退職行のデモは削除
-var ADMIN_IMPORT_PREVIEW_ROWS = [
-  { name:'山本 健一',  email:'yamamoto@example.jp',     store:'渋谷店' },     // new
-  { name:'佐藤 一郎',  email:'sato@example.jp',         store:'新宿店' },     // new
-  { name:'test',       email:'test@example.com',        store:'渋谷店' },     // emp_active
-  { name:'林 健次郎',  email:'hayashi@example.jp',      store:'新宿店' },     // emp_invited (差し替え)
-  { name:'鈴木 花子',  email:'suzuki@example.jp',       store:'渋谷店' }      // already_admin
-];
-
-function renderAdminImportPreview() {
-  var tbody = document.getElementById('admin-import-preview-tbody');
-  if (!tbody) return;
-  tbody.innerHTML = '';
-  ADMIN_IMPORT_PREVIEW_ROWS.forEach(function(row, i) {
-    var r = resolveAdminRegistrationType(row.email);
-    var actionText = '';
-    switch (r.type) {
-      case 'new':           actionText = '招待メール(新規版)を送信'; break;
-      case 'emp_active':    actionText = '通知メール(既存登録版)を送信'; break;
-      case 'emp_invited':   actionText = '招待差し替え (旧無効化+新発行)'; break;
-      case 'already_admin': actionText = 'スキップ (重複)'; break;
-      case 'retired':       actionText = 'スキップ (退職)'; break;
-      default:              actionText = 'スキップ (形式)';
-    }
-    var isError = (r.type === 'already_admin' || r.type === 'retired' || r.type === 'invalid_format');
-    var bg = isError ? 'background:#fffafa;' : '';
-    var tr = document.createElement('tr');
-    tr.setAttribute('style', bg);
-    tr.innerHTML =
-      '<td style="text-align:center;">' + (i + 1) + '</td>' +
-      '<td><strong>' + row.name + '</strong></td>' +
-      '<td style="font-family:monospace;font-size:11px;">' + row.email + '</td>' +
-      '<td>' + row.store + '</td>' +
-      '<td><span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;color:' + r.color + ';background:' + r.bg + ';border:1px solid ' + r.border + ';">' + r.label + '</span></td>' +
-      '<td>' +
-        '<select onchange="adminImportOverride(' + i + ', this.value)" style="font-size:11px;padding:3px 6px;border:1px solid #ccc;border-radius:4px;">' +
-          '<option value="auto" selected>自動判定 (' + r.type + ')</option>' +
-          '<option value="new">🆕 強制 新規</option>' +
-          '<option value="emp_active">👥 強制 既存(active)</option>' +
-          '<option value="skip">❌ スキップ</option>' +
-        '</select>' +
-      '</td>' +
-      '<td style="font-size:11px;color:#555;">' + actionText + '</td>';
-    tbody.appendChild(tr);
-  });
-}
-
-function adminImportOverride(idx, val) {
-  alert('行 ' + (idx + 1) + ' を「' + val + '」に上書きしました (モック上の表示変更は省略)');
-}
-
-function adminImportExecute() {
-  if (!confirm('✓ 4 件 を登録実行します:\n  🆕 新規 2件 → 招待メール\n  👥 既存(active) 1件 → 通知メール\n  ⚠️ 既存(招待中) 1件 → 招待差し替え\n  ❌ エラー1件 (既管理者) はスキップ\n\n実行してよろしいですか？')) return;
-  alert('✓ 登録完了\n  - 招待メール (新規版) 2通 送信\n  - 通知メール (既存登録版) 1通 送信\n  - 招待差し替えメール 1通 送信\n  - エラー1件はスキップ');
-  go('d1');
-}
+// 2026-05-18: CSVインポートプレビュー関連 (admin-import-preview) は廃止。
+// 5分岐判定 + 一括メール送信仕様は rakmy-timerecord-import-spec の既存テンプレ/外部勤怠
+// プレビュー画面に統合する仕様 (MD仕様書 §23.19 参照)。
 
 // ===== 汎用カスタム confirm モーダル制御 =====
 var _customConfirmOnOk = null;
