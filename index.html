@@ -5092,9 +5092,12 @@ function _setupAdminBuildStoreChecks() {
 // 5分岐判定 + 一括メール送信仕様は rakmy-timerecord-import-spec の既存テンプレ/外部勤怠
 // プレビュー画面に統合する仕様 (MD仕様書 §23.19 参照)。
 
-// ===== CSVインポート方式選択モーダル制御 (2026-05-18 / 全データ種別共通) =====
+// ===== CSVインポート方式選択モーダル制御 (2026-05-19 / 全データ種別共通) =====
 // 設定画面の「CSVインポート」ボタン → モーダル → 方式選択 → 専用画面に新タブで遷移
-// 外部勤怠で取れない種別 (brand/store/emptype) の場合は SaaS ボタンを disabled
+// 2026-05-19 設計変更: SaaS の取得可否は顧客の SaaS 契約/設定で千差万別、
+//   「全種別アップ可能なUIを用意 → 実データが無ければ顧客が判断してスキップ/テンプレ補完」
+//   が現実的との判断で 5 種すべてで SaaS ボタンを enabled に統一。
+// 派生取込 (顧客カスタムテンプレ→内部仕分け) は担保が得られず非推奨 (旧仕様)。
 var _csvMethodType = null;
 var _csvMethodLabel = '';
 function openCsvMethodModal(type, label) {
@@ -5102,33 +5105,20 @@ function openCsvMethodModal(type, label) {
   _csvMethodLabel = label || type;
   var lblEl = document.getElementById('csv-method-data-label');
   if (lblEl) lblEl.textContent = label;
-  // 外部勤怠の取得可否 (案A 派生取込廃止: 2026-05-18):
-  // - 業態/店舗/雇用区分: 取得不可 (disabled、テンプレ取込専用)
-  // - 従業員/管理者: 直接取得可能 (active)
+  // 5種すべて SaaS 取込可能 (実データ無ければ顧客が判断)
   var saasBtn = document.getElementById('csv-method-saas-btn');
   var saasDesc = document.getElementById('csv-method-saas-desc');
   var saasArrow = document.getElementById('csv-method-saas-arrow');
-  var saasUnavailable = (type === 'brand' || type === 'store' || type === 'emptype');
   if (saasBtn) {
-    if (saasUnavailable) {
-      saasBtn.disabled = true;
-      saasBtn.style.background = '#f5f5f5';
-      saasBtn.style.borderColor = '#ddd';
-      saasBtn.style.cursor = 'not-allowed';
-      saasBtn.style.opacity = '0.6';
-      if (saasDesc) saasDesc.innerHTML = '<span style="color:#c62828;">⚠️ ' + label + ' は外部勤怠サービスから取得できません。テンプレ取込で別途登録してください。</span>';
-      if (saasArrow) saasArrow.textContent = '✕';
-    } else {
-      saasBtn.disabled = false;
-      saasBtn.style.background = '#fff';
-      saasBtn.style.borderColor = '#1a73e8';
-      saasBtn.style.cursor = 'pointer';
-      saasBtn.style.opacity = '1';
-      if (saasDesc) {
-        saasDesc.textContent = 'キングオブタイム / ジョブカン の CSV データを列マッピングしてインポート';
-      }
-      if (saasArrow) saasArrow.textContent = '→';
+    saasBtn.disabled = false;
+    saasBtn.style.background = '#fff';
+    saasBtn.style.borderColor = '#1a73e8';
+    saasBtn.style.cursor = 'pointer';
+    saasBtn.style.opacity = '1';
+    if (saasDesc) {
+      saasDesc.textContent = 'キングオブタイム / ジョブカン の CSV データを列マッピングしてインポート (種別ごとに別エクスポート)';
     }
+    if (saasArrow) saasArrow.textContent = '→';
   }
   var ov = document.getElementById('csv-import-method-overlay');
   if (ov) ov.style.display = 'flex';
