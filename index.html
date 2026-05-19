@@ -1240,7 +1240,9 @@
     <main class="mc" style="background:#f8f9fa;">
       <div class="ph">
         <h2>📥 CSV取込設定 <span style="font-size:14px;color:#888;font-weight:600;margin-left:8px;">/ マッピングプロファイル管理</span></h2>
-        <div style="display:flex;gap:8px;">
+        <div style="display:flex;gap:8px;align-items:center;">
+          <!-- ← マッピング設定画面に戻る (起点経由時のみ表示) -->
+          <button id="mapping-list-back-btn" type="button" style="display:none;font-size:12px;padding:7px 14px;border:1px solid #2ec4a0;color:#0e9077;background:#f0faf6;border-radius:6px;cursor:pointer;font-weight:600;white-space:nowrap;" onclick="mappingListGoBackToMappingScreen()" title="このプロファイル一覧を開いた元のマッピング設定画面に戻る">← <span id="mapping-list-back-btn-label">マッピング</span>設定画面に戻る</button>
           <button class="btn btn-s btn-sm" onclick="alert('新規プロファイル作成: 種別と連携元を選択 → マッピング設定画面 (デモ)');">+ 新規プロファイル作成</button>
         </div>
       </div>
@@ -2903,18 +2905,27 @@ function filterMappingList(key) {
 }
 
 // URL クエリ ?openSavedMappingList={type} で開かれた場合、
-// 一覧画面に遷移して該当データ項目で自動フィルタする
+// 一覧画面に遷移して該当データ項目で自動フィルタ + 「マッピング設定画面に戻る」ボタンを有効化
+var _mappingListSourceKey = null; // 起点 (戻るボタン用)
+var TYPE_LABEL_JA = { all:'マッピング', brand:'業態・ブランド', store:'店舗', emptype:'雇用区分', employee:'従業員', admin:'管理者' };
 (function() {
   function applyMappingListFilterFromUrl() {
     try {
       var params = new URLSearchParams(window.location.search);
       var t = params.get('openSavedMappingList');
       if (!t) return;
-      // すべて / 5種別 の値のみ許容
       var valid = ['all','brand','store','emptype','employee','admin'];
       if (valid.indexOf(t) === -1) return;
       if (typeof go === 'function') go('saas-mapping-list');
       if (typeof filterMappingList === 'function') filterMappingList(t);
+      // 戻るボタン表示 (all は起点不定なので表示しない)
+      if (t !== 'all') {
+        _mappingListSourceKey = t;
+        var btn = document.getElementById('mapping-list-back-btn');
+        var lbl = document.getElementById('mapping-list-back-btn-label');
+        if (btn) btn.style.display = '';
+        if (lbl) lbl.textContent = (TYPE_LABEL_JA[t] || t) + ' のマッピング';
+      }
     } catch (e) { console.error('applyMappingListFilterFromUrl error:', e); }
   }
   if (document.readyState === 'loading') {
@@ -2923,6 +2934,15 @@ function filterMappingList(key) {
     setTimeout(applyMappingListFilterFromUrl, 80);
   }
 })();
+
+// 「マッピング設定画面に戻る」: import-spec の s-saas-mapping-single-{key} を新規タブで開く
+function mappingListGoBackToMappingScreen() {
+  var key = _mappingListSourceKey;
+  if (!key) return;
+  var cb = 't' + Date.now();
+  var url = 'https://suguru789987.github.io/rakmy-timerecord-import-spec/?type=' + encodeURIComponent(key) + '&mode=saas&goto=mapping&v=' + cb;
+  window.open(url, '_blank', 'noopener');
+}
 
 // 保存済みマッピングプロファイル編集 → import-spec のマッピング設定画面を開く
 function openSavedMapping(typeKey) {
