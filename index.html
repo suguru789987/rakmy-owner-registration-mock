@@ -2898,6 +2898,28 @@ function filterMappingList(key) {
   }
 }
 
+// URL クエリ ?openSavedMappingList={type} で開かれた場合、
+// 一覧画面に遷移して該当データ項目で自動フィルタする
+(function() {
+  function applyMappingListFilterFromUrl() {
+    try {
+      var params = new URLSearchParams(window.location.search);
+      var t = params.get('openSavedMappingList');
+      if (!t) return;
+      // すべて / 5種別 の値のみ許容
+      var valid = ['all','brand','store','emptype','employee','admin'];
+      if (valid.indexOf(t) === -1) return;
+      if (typeof go === 'function') go('saas-mapping-list');
+      if (typeof filterMappingList === 'function') filterMappingList(t);
+    } catch (e) { console.error('applyMappingListFilterFromUrl error:', e); }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyMappingListFilterFromUrl, 80); });
+  } else {
+    setTimeout(applyMappingListFilterFromUrl, 80);
+  }
+})();
+
 // 保存済みマッピングプロファイル編集 → import-spec のマッピング設定画面を開く
 function openSavedMapping(typeKey) {
   // 5種のいずれか: brand/store/emptype/employee/admin
