@@ -854,7 +854,7 @@
         <a href="#" id="b0-sb-biz-4" style="opacity:0.5;"><span class="ic">📥</span>エクスポート</a>
         <a href="#" id="b0-sb-biz-5" style="opacity:0.5;"><span class="ic">📈</span>経営管理</a>
       </div>
-      <div class="sb-sec sb-init-link" style="display:none;"><a href="#" onclick="event.preventDefault();go('b0')"><span class="ic">📋</span>初期セットアップ</a></div><div class="sb-sec"><div class="sl">設定</div><a href="#"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="event.preventDefault();go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a><a href="#" onclick="event.preventDefault();go('saas-mapping-list')"><span class="ic">🔗</span>外部連携</a></div>
+      <div class="sb-sec sb-init-link" style="display:none;"><a href="#" onclick="event.preventDefault();go('b0')"><span class="ic">📋</span>初期セットアップ</a></div><div class="sb-sec"><div class="sl">設定</div><a href="#"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="event.preventDefault();go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a><a href="#"><span class="ic">🔗</span>外部連携</a><a href="#" onclick="event.preventDefault();go('saas-mapping-list')"><span class="ic">📥</span>CSV取込設定</a></div>
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc" style="background:#f8f9fa;">
@@ -1222,7 +1222,10 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- 外部連携 > マッピングプロファイル管理 (2026-05-19 新設) -->
+<!-- CSV取込設定 > マッピングプロファイル管理 (2026-05-19 新設) -->
+<!--   設定メニュー新規項目「📥 CSV取込設定」配下の専用画面。 -->
+<!--   外部連携 (= ラクミー経営管理との API キー連携) とは責務が違うため -->
+<!--   独立した CSV 取込フロー設定ページとして配置。 -->
 <!--   import-spec の s-saas-mapping-single-{key} で保存されたマッピング -->
 <!--   プロファイルの一括管理画面。種別横断で確認・編集・削除・適用可能。 -->
 <!-- ============================================================ -->
@@ -1231,12 +1234,12 @@
     <aside class="sb">
       <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
       <div class="sb-sec"><a href="#" onclick="event.preventDefault();go('b0-empty')"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📥</span>エクスポート</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
-      <div class="sb-sec"><div class="sl">設定(運用)</div><a href="#" onclick="event.preventDefault();go('emp-ops-settings')"><span class="ic">👤</span>従業員</a><a href="#" onclick="event.preventDefault();go('emptype-ops-settings')"><span class="ic">📋</span>雇用区分</a><a href="#" onclick="event.preventDefault();go('store-ops-settings')"><span class="ic">🏠</span>店舗情報</a><a href="#" onclick="event.preventDefault();go('brand-ops-settings')"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="event.preventDefault();go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a><a href="#" class="act"><span class="ic">🔗</span>外部連携</a></div>
+      <div class="sb-sec"><div class="sl">設定(運用)</div><a href="#" onclick="event.preventDefault();go('emp-ops-settings')"><span class="ic">👤</span>従業員</a><a href="#" onclick="event.preventDefault();go('emptype-ops-settings')"><span class="ic">📋</span>雇用区分</a><a href="#" onclick="event.preventDefault();go('store-ops-settings')"><span class="ic">🏠</span>店舗情報</a><a href="#" onclick="event.preventDefault();go('brand-ops-settings')"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="event.preventDefault();go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a><a href="#"><span class="ic">🔗</span>外部連携</a><a href="#" class="act"><span class="ic">📥</span>CSV取込設定</a></div>
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc" style="background:#f8f9fa;">
       <div class="ph">
-        <h2>外部連携 <span style="font-size:14px;color:#888;font-weight:600;margin-left:8px;">/ 📁 マッピングプロファイル管理</span></h2>
+        <h2>📥 CSV取込設定 <span style="font-size:14px;color:#888;font-weight:600;margin-left:8px;">/ マッピングプロファイル管理</span></h2>
         <div style="display:flex;gap:8px;">
           <button class="btn btn-s btn-sm" onclick="alert('新規プロファイル作成: 種別と連携元を選択 → マッピング設定画面 (デモ)');">+ 新規プロファイル作成</button>
         </div>
@@ -1356,7 +1359,8 @@
 
       <!-- 仕様メモ -->
       <div style="margin-top:16px;padding:12px 14px;background:#fff8ed;border:1px solid #fde68a;border-radius:8px;font-size:11px;color:#9c4d12;line-height:1.7;">
-        💡 <strong>仕様メモ:</strong> マッピングプロファイル一覧画面 (id: <code>page-saas-mapping-list</code>) — 外部連携配下の一括管理。<br>
+        💡 <strong>仕様メモ:</strong> マッピングプロファイル一覧画面 (id: <code>page-saas-mapping-list</code>) — 設定 > <strong>📥 CSV取込設定</strong> 配下の一括管理画面。<br>
+        ・<strong>配置責務</strong>: 「外部連携」(= ラクミー経営管理との API キー連携) とは責務が違うため独立メニュー化。CSV取込フロー固有の付帯設定はこちらに集約。<br>
         ・<strong>種別タブ (データ項目画面ごとの出し分け)</strong>: 各タブクリックで該当種別のプロファイルのみ表示 (件数バッジ + 空状態メッセージ対応)。<br>
         ・<strong>「✏️ 編集」</strong>: import-spec の対応する種別のマッピング設定画面 (<code>s-saas-mapping-single-{key}</code>) を新規タブで開く。<br>
         ・<strong>「▶️ 適用」</strong>: そのプロファイルを次回取込で適用するよう設定 (ボタン押下=即適用テストではない)。<br>
@@ -1567,7 +1571,7 @@
     <aside class="sb">
       <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
       <div class="sb-sec"><a href="#" class="act"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📥</span>エクスポート</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
-      <div class="sb-sec sb-init-link" style="display:none;"><a href="#" onclick="event.preventDefault();go('b0')"><span class="ic">📋</span>初期セットアップ</a></div><div class="sb-sec"><div class="sl">設定</div><a href="#" onclick="event.preventDefault();go('c1')"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="event.preventDefault();go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a><a href="#" onclick="event.preventDefault();go('saas-mapping-list')"><span class="ic">🔗</span>外部連携</a></div>
+      <div class="sb-sec sb-init-link" style="display:none;"><a href="#" onclick="event.preventDefault();go('b0')"><span class="ic">📋</span>初期セットアップ</a></div><div class="sb-sec"><div class="sl">設定</div><a href="#" onclick="event.preventDefault();go('c1')"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="event.preventDefault();go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a><a href="#"><span class="ic">🔗</span>外部連携</a><a href="#" onclick="event.preventDefault();go('saas-mapping-list')"><span class="ic">📥</span>CSV取込設定</a></div>
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc">
@@ -1655,7 +1659,7 @@
     <aside class="sb">
       <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
       <div class="sb-sec"><a href="#" onclick="event.preventDefault();go('b0-empty')"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📥</span>エクスポート</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
-      <div class="sb-sec sb-init-link" style="display:none;"><a href="#" onclick="event.preventDefault();go('b0')"><span class="ic">📋</span>初期セットアップ</a></div><div class="sb-sec"><div class="sl">設定</div><a href="#" class="act"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#" onclick="event.preventDefault();go('b1')"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="event.preventDefault();go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a><a href="#" onclick="event.preventDefault();go('saas-mapping-list')"><span class="ic">🔗</span>外部連携</a></div>
+      <div class="sb-sec sb-init-link" style="display:none;"><a href="#" onclick="event.preventDefault();go('b0')"><span class="ic">📋</span>初期セットアップ</a></div><div class="sb-sec"><div class="sl">設定</div><a href="#" class="act"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#" onclick="event.preventDefault();go('b1')"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="event.preventDefault();go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a><a href="#"><span class="ic">🔗</span>外部連携</a><a href="#" onclick="event.preventDefault();go('saas-mapping-list')"><span class="ic">📥</span>CSV取込設定</a></div>
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc">
@@ -1778,7 +1782,7 @@
     <aside class="sb">
       <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
       <div class="sb-sec"><a href="#" onclick="event.preventDefault();go('b0-empty')"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
-      <div class="sb-sec"><div class="sl">店舗管理</div><a href="#" class="act"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#" onclick="event.preventDefault();go('saas-mapping-list')"><span class="ic">🔗</span>外部連携</a></div>
+      <div class="sb-sec"><div class="sl">店舗管理</div><a href="#" class="act"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#"><span class="ic">🔗</span>外部連携</a><a href="#" onclick="event.preventDefault();go('saas-mapping-list')"><span class="ic">📥</span>CSV取込設定</a></div>
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#eef0ff;color:#5264f0;">伊</div><div><div class="sb-name">伊藤 四郎</div><div class="sb-role">管理者 ・ 池袋店</div></div></div></div>
     </aside>
     <main class="mc">
@@ -1868,7 +1872,7 @@
     <aside class="sb">
       <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
       <div class="sb-sec"><a href="#" onclick="event.preventDefault();go('b0-empty')"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📥</span>エクスポート</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
-      <div class="sb-sec sb-init-link" style="display:none;"><a href="#" onclick="event.preventDefault();go('b0')"><span class="ic">📋</span>初期セットアップ</a></div><div class="sb-sec"><div class="sl">設定</div><a href="#" class="act"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#" onclick="event.preventDefault();go('b1')"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="event.preventDefault();go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a><a href="#" onclick="event.preventDefault();go('saas-mapping-list')"><span class="ic">🔗</span>外部連携</a></div>
+      <div class="sb-sec sb-init-link" style="display:none;"><a href="#" onclick="event.preventDefault();go('b0')"><span class="ic">📋</span>初期セットアップ</a></div><div class="sb-sec"><div class="sl">設定</div><a href="#" class="act"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#" onclick="event.preventDefault();go('b1')"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="event.preventDefault();go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a><a href="#"><span class="ic">🔗</span>外部連携</a><a href="#" onclick="event.preventDefault();go('saas-mapping-list')"><span class="ic">📥</span>CSV取込設定</a></div>
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc">
@@ -1918,7 +1922,7 @@
     <aside class="sb">
       <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
       <div class="sb-sec"><a href="#" onclick="event.preventDefault();go('b0-empty')"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📥</span>エクスポート</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
-      <div class="sb-sec sb-init-link" style="display:none;"><a href="#" onclick="event.preventDefault();go('b0')"><span class="ic">📋</span>初期セットアップ</a></div><div class="sb-sec"><div class="sl">設定</div><a href="#" class="act"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#" onclick="event.preventDefault();go('b1')"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="event.preventDefault();go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a><a href="#" onclick="event.preventDefault();go('saas-mapping-list')"><span class="ic">🔗</span>外部連携</a></div>
+      <div class="sb-sec sb-init-link" style="display:none;"><a href="#" onclick="event.preventDefault();go('b0')"><span class="ic">📋</span>初期セットアップ</a></div><div class="sb-sec"><div class="sl">設定</div><a href="#" class="act"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#" onclick="event.preventDefault();go('b1')"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" onclick="event.preventDefault();go('d1')"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a><a href="#"><span class="ic">🔗</span>外部連携</a><a href="#" onclick="event.preventDefault();go('saas-mapping-list')"><span class="ic">📥</span>CSV取込設定</a></div>
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc">
@@ -2404,7 +2408,7 @@
     <aside class="sb">
       <div class="slogo"><span class="lb">ラクミー</span><span class="lt">タイムレコード</span></div>
       <div class="sb-sec"><a href="#" onclick="event.preventDefault();go('b0-empty')"><span class="ic">⏱</span>打刻記録</a><a href="#"><span class="ic">📊</span>勤務時間集計</a><a href="#"><span class="ic">💰</span>給与</a><a href="#"><span class="ic">📥</span>エクスポート</a><a href="#"><span class="ic">📈</span>経営管理</a></div>
-      <div class="sb-sec sb-init-link" style="display:none;"><a href="#" onclick="event.preventDefault();go('b0')"><span class="ic">📋</span>初期セットアップ</a></div><div class="sb-sec"><div class="sl">設定</div><a href="#" onclick="event.preventDefault();go('c1')"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#" onclick="event.preventDefault();go('b1')"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" class="act"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a><a href="#" onclick="event.preventDefault();go('saas-mapping-list')"><span class="ic">🔗</span>外部連携</a></div>
+      <div class="sb-sec sb-init-link" style="display:none;"><a href="#" onclick="event.preventDefault();go('b0')"><span class="ic">📋</span>初期セットアップ</a></div><div class="sb-sec"><div class="sl">設定</div><a href="#" onclick="event.preventDefault();go('c1')"><span class="ic">👤</span>従業員</a><a href="#"><span class="ic">📋</span>雇用区分</a><a href="#" onclick="event.preventDefault();go('b1')"><span class="ic">🏠</span>店舗情報</a><a href="#"><span class="ic">🏷</span>業態・ブランド</a><a href="#" class="act"><span class="ic">👥</span>管理者</a><a href="#"><span class="ic">🏢</span>会社情報</a><a href="#"><span class="ic">🔗</span>外部連携</a><a href="#" onclick="event.preventDefault();go('saas-mapping-list')"><span class="ic">📥</span>CSV取込設定</a></div>
       <div class="sb-bot"><div class="sb-user"><div class="sb-av" style="background:#fef3e2;color:#e67e22;">山</div><div><div class="sb-name">山田 太郎</div><div class="sb-role">オーナー</div></div></div></div>
     </aside>
     <main class="mc">
