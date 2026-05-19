@@ -1267,10 +1267,10 @@
       <div style="background:#fff;border:1px solid #e0e0e0;border-top:none;border-radius:0 0 8px 8px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
         <div style="display:flex;align-items:center;gap:8px;">
           <label style="font-size:11px;color:#666;font-weight:600;">連携元:</label>
-          <select style="padding:5px 10px;border:1px solid #ccc;border-radius:5px;font-size:12px;">
-            <option>すべて</option>
-            <option>キングオブタイム</option>
-            <option>ジョブカン</option>
+          <select id="mapping-list-src-select" onchange="filterMappingListBySrc(this.value)" style="padding:5px 10px;border:1px solid #ccc;border-radius:5px;font-size:12px;">
+            <option value="all">すべて</option>
+            <option value="kot">キングオブタイム</option>
+            <option value="jobcan">ジョブカン</option>
           </select>
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
@@ -1299,7 +1299,7 @@
             </tr>
           </thead>
           <tbody id="mapping-list-tbody">
-            <tr data-mtype="admin" style="border-bottom:1px solid #eee;">
+            <tr data-mtype="admin" data-src="kot" style="border-bottom:1px solid #eee;">
               <td style="padding:12px 14px;font-weight:600;color:#333;">📋 管理者_default_mapping</td>
               <td style="padding:12px 14px;"><span style="font-size:10px;padding:2px 8px;background:#fef3e2;color:#e67e22;border-radius:10px;font-weight:600;">管理者</span></td>
               <td style="padding:12px 14px;color:#555;">⏰ キングオブタイム</td>
@@ -1311,7 +1311,7 @@
                 <button style="font-size:11px;padding:4px 10px;border:1px solid #ffcdd2;color:#c62828;background:#fff;border-radius:4px;cursor:pointer;" onclick="if(confirm('このマッピングプロファイルを削除しますか？'))alert('削除しました (デモ)');">🗑 削除</button>
               </td>
             </tr>
-            <tr data-mtype="employee" style="border-bottom:1px solid #eee;">
+            <tr data-mtype="employee" data-src="kot" style="border-bottom:1px solid #eee;">
               <td style="padding:12px 14px;font-weight:600;color:#333;">📋 従業員_default_mapping</td>
               <td style="padding:12px 14px;"><span style="font-size:10px;padding:2px 8px;background:#e8f9f4;color:#0e9077;border-radius:10px;font-weight:600;">従業員</span></td>
               <td style="padding:12px 14px;color:#555;">⏰ キングオブタイム</td>
@@ -1323,7 +1323,7 @@
                 <button style="font-size:11px;padding:4px 10px;border:1px solid #ffcdd2;color:#c62828;background:#fff;border-radius:4px;cursor:pointer;" onclick="if(confirm('削除しますか？'))alert('削除しました (デモ)');">🗑 削除</button>
               </td>
             </tr>
-            <tr data-mtype="employee" style="border-bottom:1px solid #eee;">
+            <tr data-mtype="employee" data-src="jobcan" style="border-bottom:1px solid #eee;">
               <td style="padding:12px 14px;font-weight:600;color:#333;">📋 従業員_jobcan_v2</td>
               <td style="padding:12px 14px;"><span style="font-size:10px;padding:2px 8px;background:#e8f9f4;color:#0e9077;border-radius:10px;font-weight:600;">従業員</span></td>
               <td style="padding:12px 14px;color:#555;">📋 ジョブカン</td>
@@ -1335,7 +1335,7 @@
                 <button style="font-size:11px;padding:4px 10px;border:1px solid #ffcdd2;color:#c62828;background:#fff;border-radius:4px;cursor:pointer;" onclick="if(confirm('削除しますか？'))alert('削除しました (デモ)');">🗑 削除</button>
               </td>
             </tr>
-            <tr data-mtype="store" style="border-bottom:1px solid #eee;background:#fafafa;">
+            <tr data-mtype="store" data-src="kot" style="border-bottom:1px solid #eee;background:#fafafa;">
               <td style="padding:12px 14px;font-weight:600;color:#999;">📋 店舗_default_mapping <span style="font-size:10px;color:#5c4dac;background:#ede7f6;padding:1px 6px;border-radius:8px;margin-left:4px;">将来対応</span></td>
               <td style="padding:12px 14px;"><span style="font-size:10px;padding:2px 8px;background:#fff;color:#888;border:1px solid #ddd;border-radius:10px;font-weight:600;">店舗</span></td>
               <td style="padding:12px 14px;color:#999;">— (エクスポート未提供)</td>
@@ -1343,7 +1343,7 @@
               <td style="padding:12px 14px;color:#aaa;font-style:italic;">未設定 (枠のみ)</td>
               <td style="padding:12px 14px;text-align:right;color:#bbb;font-size:11px;">将来対応時に有効化</td>
             </tr>
-            <tr data-mtype="admin">
+            <tr data-mtype="admin" data-src="kot">
               <td style="padding:12px 14px;font-weight:600;color:#333;">📋 管理者_kot_role_custom</td>
               <td style="padding:12px 14px;"><span style="font-size:10px;padding:2px 8px;background:#fef3e2;color:#e67e22;border-radius:10px;font-weight:600;">管理者</span></td>
               <td style="padding:12px 14px;color:#555;">⏰ キングオブタイム</td>
@@ -2867,17 +2867,22 @@
 
 <script>
 // マッピングプロファイル一覧: 種別タブで行を絞り込み表示
-function filterMappingList(key) {
+// 現在のフィルタ状態 (種別タブ + 連携元プルダウン)
+var _mappingListFilter = { mtype: 'all', src: 'all' };
+
+function applyMappingListFilters() {
   var rows = document.querySelectorAll('#mapping-list-tbody tr[data-mtype]');
   var shown = 0;
   rows.forEach(function(r) {
-    var match = (key === 'all') || (r.getAttribute('data-mtype') === key);
+    var typeOk = (_mappingListFilter.mtype === 'all') || (r.getAttribute('data-mtype') === _mappingListFilter.mtype);
+    var srcOk  = (_mappingListFilter.src === 'all') || (r.getAttribute('data-src') === _mappingListFilter.src);
+    var match = typeOk && srcOk;
     r.style.display = match ? '' : 'none';
     if (match) shown++;
   });
   // タブ active 状態切替
   document.querySelectorAll('#mapping-list-tabs button[data-mtype-tab]').forEach(function(b){
-    var active = (b.getAttribute('data-mtype-tab') === key);
+    var active = (b.getAttribute('data-mtype-tab') === _mappingListFilter.mtype);
     b.style.background = active ? '#fff' : '#f5f7f9';
     b.style.borderBottom = active ? '3px solid #2ec4a0' : '3px solid transparent';
     b.style.color = active ? '#0e9077' : '#555';
@@ -2889,19 +2894,28 @@ function filterMappingList(key) {
   if (cnt) cnt.textContent = shown + '件 / 全 ' + total + '件';
   // 空状態表示
   var tbody = document.getElementById('mapping-list-tbody');
-  var emptyRow = tbody.querySelector('tr[data-empty-row]');
+  var emptyRow = tbody && tbody.querySelector('tr[data-empty-row]');
   if (shown === 0) {
-    if (!emptyRow) {
+    if (!emptyRow && tbody) {
       emptyRow = document.createElement('tr');
       emptyRow.setAttribute('data-empty-row','1');
-      emptyRow.innerHTML = '<td colspan="6" style="padding:30px;text-align:center;color:#888;font-size:12px;">この種別に保存済プロファイルはありません。<br><span style="color:#aaa;font-size:11px;">各設定画面の CSVインポート → マッピング設定画面で「次回も保存」を ON にすると、ここに表示されます。</span></td>';
+      emptyRow.innerHTML = '<td colspan="6" style="padding:30px;text-align:center;color:#888;font-size:12px;">該当する保存済プロファイルはありません。<br><span style="color:#aaa;font-size:11px;">各設定画面の CSVインポート → マッピング設定画面で「次回も保存」を ON にすると、ここに表示されます。</span></td>';
       tbody.appendChild(emptyRow);
-    } else {
+    } else if (emptyRow) {
       emptyRow.style.display = '';
     }
   } else if (emptyRow) {
     emptyRow.style.display = 'none';
   }
+}
+
+function filterMappingList(key) {
+  _mappingListFilter.mtype = key;
+  applyMappingListFilters();
+}
+function filterMappingListBySrc(srcValue) {
+  _mappingListFilter.src = srcValue || 'all';
+  applyMappingListFilters();
 }
 
 // URL クエリ ?openSavedMappingList={type} で開かれた場合、
@@ -2918,6 +2932,13 @@ var TYPE_LABEL_JA = { all:'マッピング', brand:'業態・ブランド', stor
       if (valid.indexOf(t) === -1) return;
       if (typeof go === 'function') go('saas-mapping-list');
       if (typeof filterMappingList === 'function') filterMappingList(t);
+      // ?src= で連携元プルダウンも連動
+      var src = params.get('src');
+      if (src === 'kot' || src === 'jobcan') {
+        var sel = document.getElementById('mapping-list-src-select');
+        if (sel) sel.value = src;
+        if (typeof filterMappingListBySrc === 'function') filterMappingListBySrc(src);
+      }
       // 戻るボタン表示 (all は起点不定なので表示しない)
       if (t !== 'all') {
         _mappingListSourceKey = t;
