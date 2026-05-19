@@ -1245,22 +1245,21 @@
       <!-- 説明帯 -->
       <div style="background:#e8f4fd;border:1px solid #b3d9f0;border-radius:8px;padding:12px 16px;margin-bottom:14px;font-size:12px;color:#0d47a1;line-height:1.7;">
         💡 各設定画面の「📥 CSVインポート」→ 外部勤怠サービスから取り込み → マッピング設定画面で「<strong>☑ 次回もこのマッピング設定を保存</strong>」を ON にした際に保存されたプロファイルが、ここで一括管理できます。<br>
-        次回以降の同種別・同連携元の取込時に <strong>自動適用</strong> ⇄ <strong>手動選択</strong> を切り替えられます。
+        下のタブで <strong>データ項目 (設定画面) 別に出し分け</strong> できます。
       </div>
 
-      <!-- フィルタバー -->
-      <div style="background:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <label style="font-size:11px;color:#666;font-weight:600;">種別:</label>
-          <select style="padding:5px 10px;border:1px solid #ccc;border-radius:5px;font-size:12px;">
-            <option>すべて</option>
-            <option>業態・ブランド</option>
-            <option>店舗</option>
-            <option>雇用区分</option>
-            <option>従業員</option>
-            <option>管理者</option>
-          </select>
-        </div>
+      <!-- 種別タブ (データ項目画面ごとの出し分け) -->
+      <div id="mapping-list-tabs" style="display:flex;align-items:stretch;gap:0;background:#f5f7f9;border:1px solid #e0e0e0;border-radius:8px 8px 0 0;margin-bottom:0;overflow:hidden;flex-wrap:wrap;">
+        <button data-mtype-tab="all"      onclick="filterMappingList('all')"      style="flex:1;min-width:120px;padding:12px 14px;border:none;background:#fff;border-bottom:3px solid #2ec4a0;cursor:pointer;font-size:12px;font-weight:700;color:#0e9077;">📋 すべて <span data-mtype-count="all" style="font-size:10px;color:#888;font-weight:400;">(5)</span></button>
+        <button data-mtype-tab="brand"    onclick="filterMappingList('brand')"    style="flex:1;min-width:120px;padding:12px 14px;border:none;background:#f5f7f9;border-bottom:3px solid transparent;cursor:pointer;font-size:12px;font-weight:600;color:#555;">🏷 業態・ブランド <span data-mtype-count="brand" style="font-size:10px;color:#888;font-weight:400;">(0)</span></button>
+        <button data-mtype-tab="store"    onclick="filterMappingList('store')"    style="flex:1;min-width:120px;padding:12px 14px;border:none;background:#f5f7f9;border-bottom:3px solid transparent;cursor:pointer;font-size:12px;font-weight:600;color:#555;">🏠 店舗 <span data-mtype-count="store" style="font-size:10px;color:#888;font-weight:400;">(1)</span></button>
+        <button data-mtype-tab="emptype"  onclick="filterMappingList('emptype')"  style="flex:1;min-width:120px;padding:12px 14px;border:none;background:#f5f7f9;border-bottom:3px solid transparent;cursor:pointer;font-size:12px;font-weight:600;color:#555;">📋 雇用区分 <span data-mtype-count="emptype" style="font-size:10px;color:#888;font-weight:400;">(0)</span></button>
+        <button data-mtype-tab="employee" onclick="filterMappingList('employee')" style="flex:1;min-width:120px;padding:12px 14px;border:none;background:#f5f7f9;border-bottom:3px solid transparent;cursor:pointer;font-size:12px;font-weight:600;color:#555;">👤 従業員 <span data-mtype-count="employee" style="font-size:10px;color:#888;font-weight:400;">(2)</span></button>
+        <button data-mtype-tab="admin"    onclick="filterMappingList('admin')"    style="flex:1;min-width:120px;padding:12px 14px;border:none;background:#f5f7f9;border-bottom:3px solid transparent;cursor:pointer;font-size:12px;font-weight:600;color:#555;">👥 管理者 <span data-mtype-count="admin" style="font-size:10px;color:#888;font-weight:400;">(2)</span></button>
+      </div>
+
+      <!-- 補助フィルタ (連携元・自動適用) -->
+      <div style="background:#fff;border:1px solid #e0e0e0;border-top:none;border-radius:0 0 8px 8px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
         <div style="display:flex;align-items:center;gap:8px;">
           <label style="font-size:11px;color:#666;font-weight:600;">連携元:</label>
           <select style="padding:5px 10px;border:1px solid #ccc;border-radius:5px;font-size:12px;">
@@ -1278,7 +1277,7 @@
           </select>
         </div>
         <div style="flex:1;"></div>
-        <span style="font-size:11px;color:#888;">5件 / 全 5件</span>
+        <span style="font-size:11px;color:#888;" id="mapping-list-count">5件 / 全 5件</span>
       </div>
 
       <!-- プロファイル一覧テーブル -->
@@ -1294,8 +1293,8 @@
               <th style="padding:10px 14px;text-align:right;font-weight:700;color:#555;">アクション</th>
             </tr>
           </thead>
-          <tbody>
-            <tr style="border-bottom:1px solid #eee;">
+          <tbody id="mapping-list-tbody">
+            <tr data-mtype="admin" style="border-bottom:1px solid #eee;">
               <td style="padding:12px 14px;font-weight:600;color:#333;">📋 管理者_default_mapping</td>
               <td style="padding:12px 14px;"><span style="font-size:10px;padding:2px 8px;background:#fef3e2;color:#e67e22;border-radius:10px;font-weight:600;">管理者</span></td>
               <td style="padding:12px 14px;color:#555;">⏰ キングオブタイム</td>
@@ -1307,7 +1306,7 @@
                 <button style="font-size:11px;padding:4px 10px;border:1px solid #ffcdd2;color:#c62828;background:#fff;border-radius:4px;cursor:pointer;" onclick="if(confirm('このマッピングプロファイルを削除しますか？'))alert('削除しました (デモ)');">🗑 削除</button>
               </td>
             </tr>
-            <tr style="border-bottom:1px solid #eee;">
+            <tr data-mtype="employee" style="border-bottom:1px solid #eee;">
               <td style="padding:12px 14px;font-weight:600;color:#333;">📋 従業員_default_mapping</td>
               <td style="padding:12px 14px;"><span style="font-size:10px;padding:2px 8px;background:#e8f9f4;color:#0e9077;border-radius:10px;font-weight:600;">従業員</span></td>
               <td style="padding:12px 14px;color:#555;">⏰ キングオブタイム</td>
@@ -1319,7 +1318,7 @@
                 <button style="font-size:11px;padding:4px 10px;border:1px solid #ffcdd2;color:#c62828;background:#fff;border-radius:4px;cursor:pointer;" onclick="if(confirm('削除しますか？'))alert('削除しました (デモ)');">🗑 削除</button>
               </td>
             </tr>
-            <tr style="border-bottom:1px solid #eee;">
+            <tr data-mtype="employee" style="border-bottom:1px solid #eee;">
               <td style="padding:12px 14px;font-weight:600;color:#333;">📋 従業員_jobcan_v2</td>
               <td style="padding:12px 14px;"><span style="font-size:10px;padding:2px 8px;background:#e8f9f4;color:#0e9077;border-radius:10px;font-weight:600;">従業員</span></td>
               <td style="padding:12px 14px;color:#555;">📋 ジョブカン</td>
@@ -1331,7 +1330,7 @@
                 <button style="font-size:11px;padding:4px 10px;border:1px solid #ffcdd2;color:#c62828;background:#fff;border-radius:4px;cursor:pointer;" onclick="if(confirm('削除しますか？'))alert('削除しました (デモ)');">🗑 削除</button>
               </td>
             </tr>
-            <tr style="border-bottom:1px solid #eee;background:#fafafa;">
+            <tr data-mtype="store" style="border-bottom:1px solid #eee;background:#fafafa;">
               <td style="padding:12px 14px;font-weight:600;color:#999;">📋 店舗_default_mapping <span style="font-size:10px;color:#5c4dac;background:#ede7f6;padding:1px 6px;border-radius:8px;margin-left:4px;">将来対応</span></td>
               <td style="padding:12px 14px;"><span style="font-size:10px;padding:2px 8px;background:#fff;color:#888;border:1px solid #ddd;border-radius:10px;font-weight:600;">店舗</span></td>
               <td style="padding:12px 14px;color:#999;">— (エクスポート未提供)</td>
@@ -1339,7 +1338,7 @@
               <td style="padding:12px 14px;color:#aaa;font-style:italic;">未設定 (枠のみ)</td>
               <td style="padding:12px 14px;text-align:right;color:#bbb;font-size:11px;">将来対応時に有効化</td>
             </tr>
-            <tr>
+            <tr data-mtype="admin">
               <td style="padding:12px 14px;font-weight:600;color:#333;">📋 管理者_kot_role_custom</td>
               <td style="padding:12px 14px;"><span style="font-size:10px;padding:2px 8px;background:#fef3e2;color:#e67e22;border-radius:10px;font-weight:600;">管理者</span></td>
               <td style="padding:12px 14px;color:#555;">⏰ キングオブタイム</td>
@@ -1358,6 +1357,7 @@
       <!-- 仕様メモ -->
       <div style="margin-top:16px;padding:12px 14px;background:#fff8ed;border:1px solid #fde68a;border-radius:8px;font-size:11px;color:#9c4d12;line-height:1.7;">
         💡 <strong>仕様メモ:</strong> マッピングプロファイル一覧画面 (id: <code>page-saas-mapping-list</code>) — 外部連携配下の一括管理。<br>
+        ・<strong>種別タブ (データ項目画面ごとの出し分け)</strong>: 各タブクリックで該当種別のプロファイルのみ表示 (件数バッジ + 空状態メッセージ対応)。<br>
         ・<strong>「✏️ 編集」</strong>: import-spec の対応する種別のマッピング設定画面 (<code>s-saas-mapping-single-{key}</code>) を新規タブで開く。<br>
         ・<strong>「▶️ 適用」</strong>: そのプロファイルを次回取込で適用するよう設定 (ボタン押下=即適用テストではない)。<br>
         ・<strong>「🗑 削除」</strong>: プロファイル削除 (確認ダイアログ後)。自動適用 ON だった場合は OFF に戻る。<br>
@@ -2860,6 +2860,44 @@
 </div>
 
 <script>
+// マッピングプロファイル一覧: 種別タブで行を絞り込み表示
+function filterMappingList(key) {
+  var rows = document.querySelectorAll('#mapping-list-tbody tr[data-mtype]');
+  var shown = 0;
+  rows.forEach(function(r) {
+    var match = (key === 'all') || (r.getAttribute('data-mtype') === key);
+    r.style.display = match ? '' : 'none';
+    if (match) shown++;
+  });
+  // タブ active 状態切替
+  document.querySelectorAll('#mapping-list-tabs button[data-mtype-tab]').forEach(function(b){
+    var active = (b.getAttribute('data-mtype-tab') === key);
+    b.style.background = active ? '#fff' : '#f5f7f9';
+    b.style.borderBottom = active ? '3px solid #2ec4a0' : '3px solid transparent';
+    b.style.color = active ? '#0e9077' : '#555';
+    b.style.fontWeight = active ? '700' : '600';
+  });
+  // 件数表示
+  var total = rows.length;
+  var cnt = document.getElementById('mapping-list-count');
+  if (cnt) cnt.textContent = shown + '件 / 全 ' + total + '件';
+  // 空状態表示
+  var tbody = document.getElementById('mapping-list-tbody');
+  var emptyRow = tbody.querySelector('tr[data-empty-row]');
+  if (shown === 0) {
+    if (!emptyRow) {
+      emptyRow = document.createElement('tr');
+      emptyRow.setAttribute('data-empty-row','1');
+      emptyRow.innerHTML = '<td colspan="6" style="padding:30px;text-align:center;color:#888;font-size:12px;">この種別に保存済プロファイルはありません。<br><span style="color:#aaa;font-size:11px;">各設定画面の CSVインポート → マッピング設定画面で「次回も保存」を ON にすると、ここに表示されます。</span></td>';
+      tbody.appendChild(emptyRow);
+    } else {
+      emptyRow.style.display = '';
+    }
+  } else if (emptyRow) {
+    emptyRow.style.display = 'none';
+  }
+}
+
 // 保存済みマッピングプロファイル編集 → import-spec のマッピング設定画面を開く
 function openSavedMapping(typeKey) {
   // 5種のいずれか: brand/store/emptype/employee/admin
