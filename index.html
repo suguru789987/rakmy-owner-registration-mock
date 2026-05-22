@@ -2213,6 +2213,23 @@
   </div>
 </div>
 
+<!-- ===== 招待メール再送 確定ハードモーダル (2026-05-22) =====
+     背景クリック・ESCでは閉じない (ハードモーダル)。再送はメール再発行を伴うため、
+     必ず「再送する／キャンセル」のいずれかを明示選択させる。
+     新規版(PW再生成)は不可逆な結果を赤い警告ボックスで明示する。
+     旧: ブラウザネイティブ confirm() (仮実装) を置き換え。 -->
+<div id="resend-confirm-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:10000;align-items:center;justify-content:center;font-family:'Hiragino Kaku Gothic ProN', sans-serif;">
+  <div role="dialog" aria-modal="true" style="background:#fff;border-radius:12px;padding:26px 30px;max-width:460px;width:90%;box-shadow:0 12px 40px rgba(0,0,0,0.35);">
+    <h3 id="resend-confirm-title" style="margin:0 0 14px 0;font-size:16px;font-weight:800;color:#333;">📧 招待メールを再送</h3>
+    <div id="resend-confirm-body" style="font-size:13px;color:#333;line-height:1.8;margin-bottom:14px;"></div>
+    <div id="resend-confirm-warning" style="display:none;background:#fff5f5;border:1px solid #f3b5b5;border-radius:8px;padding:12px 14px;font-size:12px;color:#c0392b;line-height:1.7;margin-bottom:18px;font-weight:600;"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;">
+      <button onclick="closeResendConfirm(true)" style="padding:9px 20px;border:1px solid #ccc;border-radius:7px;background:#fff;cursor:pointer;font-size:13px;color:#555;font-weight:600;">キャンセル</button>
+      <button id="resend-confirm-ok-btn" onclick="closeResendConfirm(false)" style="padding:9px 22px;border:none;border-radius:7px;background:#2ec4a5;color:#fff;cursor:pointer;font-size:13px;font-weight:800;">再送する</button>
+    </div>
+  </div>
+</div>
+
 <!-- ===== 招待差し替え後の旧URL アクセス時エラー画面 (管理者向け) =====
      対象: 招待差し替えが発生した後、受信者が「旧招待メールのリンク」をクリックした時に表示。 -->
 <div class="page" id="page-invite-invalid-admin">
@@ -5201,6 +5218,39 @@ function closeCustomConfirm(cancelled) {
   _customConfirmOnOk = null;
 }
 
+// ===== 招待メール再送 確定ハードモーダル (2026-05-22) =====
+// opts: { title, body(html), warning(html|null), okLabel, danger(bool), onOk(fn) }
+// 背景クリック/ESCでは閉じない。OKボタンは danger 時に赤系へ。
+var _resendConfirmOnOk = null;
+function showResendConfirm(opts) {
+  opts = opts || {};
+  var ov = document.getElementById('resend-confirm-overlay');
+  var titleEl = document.getElementById('resend-confirm-title');
+  var bodyEl = document.getElementById('resend-confirm-body');
+  var warnEl = document.getElementById('resend-confirm-warning');
+  var okBtn = document.getElementById('resend-confirm-ok-btn');
+  if (titleEl) titleEl.textContent = opts.title || '📧 招待メールを再送';
+  if (bodyEl) bodyEl.innerHTML = opts.body || '';
+  if (warnEl) {
+    if (opts.warning) { warnEl.innerHTML = opts.warning; warnEl.style.display = 'block'; }
+    else { warnEl.style.display = 'none'; warnEl.innerHTML = ''; }
+  }
+  if (okBtn) {
+    okBtn.textContent = opts.okLabel || '再送する';
+    okBtn.style.background = opts.danger ? '#e74c3c' : '#2ec4a5';
+  }
+  _resendConfirmOnOk = (typeof opts.onOk === 'function') ? opts.onOk : null;
+  if (ov) ov.style.display = 'flex';
+}
+function closeResendConfirm(cancelled) {
+  var ov = document.getElementById('resend-confirm-overlay');
+  if (ov) ov.style.display = 'none';
+  if (!cancelled && typeof _resendConfirmOnOk === 'function') {
+    _resendConfirmOnOk();
+  }
+  _resendConfirmOnOk = null;
+}
+
 // ===== 招待差し替え予告 カスタムモーダル制御 =====
 // 旧: ブラウザ素の alert() → 新: カスタムモーダル (キャンセル選択可)
 var _inviteReplacementCancelCallback = null;
@@ -5600,24 +5650,28 @@ function d1RevokeAdmin(name) {
 // - which='replacement': 既存・差し替え(invited由来) → 招待差し替え版を再送
 function d1ResendInvite(which, name, email) {
   if (which === 'replacement') {
-    showCustomConfirm(
-      '📧 招待差し替えを再送',
-      '<strong>' + name + '</strong> へ差し替え版メールを再発行します。',
-      '再送',
-      function() {
+    showResendConfirm({
+      title: '📧 招待メールを再送 (差し替え版)',
+      body: '<strong>' + name + '</strong> へ招待メール (差し替え版) を再送します。',
+      warning: '旧招待メールのログインリンクは<strong>無効化</strong>されます。<br>受信者は最新の差し替えメールからのみログインできます。',
+      okLabel: '再送する',
+      danger: false,
+      onOk: function() {
         try { sessionStorage.setItem('adminPwSetupWhich', 'new'); } catch (e) {}
         go('admin-invite-replacement');
       }
-    );
+    });
     return;
   }
   if (which === 'new') {
     var newPw = (typeof generateAdminInitialPw === 'function') ? generateAdminInitialPw() : 'auto' + Date.now();
-    showCustomConfirm(
-      '📧 招待メールを再送',
-      '<strong>' + name + '</strong> へ再送 (PWを再生成、前回PWは無効)。<br>新PW: <code style="background:#f5f5f5;padding:2px 8px;border-radius:4px;font-weight:700;">' + newPw + '</code>',
-      '再送',
-      function() {
+    showResendConfirm({
+      title: '📧 招待メールを再送 (新規版)',
+      body: '<strong>' + name + '</strong> へ招待メール (新規版) を再送します。<br>新しい初期パスワード: <code style="background:#f5f5f5;padding:2px 8px;border-radius:4px;font-weight:700;">' + newPw + '</code>',
+      warning: '⚠ 初期パスワードが<strong>再生成</strong>され、<strong>前回のパスワードは無効</strong>になります。',
+      okLabel: '再生成して再送する',
+      danger: true,
+      onOk: function() {
         var pwInput = document.getElementById('admin-pw-input');
         var pwConfirm = document.getElementById('admin-pw-confirm');
         if (pwInput) pwInput.value = newPw;
@@ -5625,19 +5679,21 @@ function d1ResendInvite(which, name, email) {
         try { sessionStorage.setItem('adminPwSetupWhich', 'new'); } catch (e) {}
         go('admin-invite-email');
       }
-    );
+    });
     return;
   }
   // which === 'emp'
-  showCustomConfirm(
-    '📧 通知メールを再送',
-    '<strong>' + name + '</strong> へ通知メールを再送 (既存PW維持)。',
-    '再送',
-    function() {
+  showResendConfirm({
+    title: '📧 通知メールを再送',
+    body: '<strong>' + name + '</strong> へ通知メールを再送します。',
+    warning: null,
+    okLabel: '再送する',
+    danger: false,
+    onOk: function() {
       try { sessionStorage.setItem('adminPwSetupWhich', 'emp'); } catch (e) {}
       go('admin-invite-email-emp');
     }
-  );
+  });
 }
 
 // 招待PW設定画面の「登録を完了してログイン」: adminRegisteredAt 記録 → 管理者専用画面 (page-admin-b0) に遷移
