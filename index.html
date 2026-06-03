@@ -1307,7 +1307,7 @@
               <td style="padding:12px 14px;text-align:right;">
                 <button style="font-size:11px;padding:4px 10px;border:1px solid #2ec4a0;color:#2ec4a0;background:#fff;border-radius:4px;cursor:pointer;margin-right:4px;" onclick="alert('プロファイル適用: このマッピングで取込画面を開きます (デモ)');">▶️ 適用</button>
                 <button style="font-size:11px;padding:4px 10px;border:1px solid #ccc;background:#fff;border-radius:4px;cursor:pointer;margin-right:4px;" onclick="openSavedMapping('admin');">✏️ 編集</button>
-                <button style="font-size:11px;padding:4px 10px;border:1px solid #ffcdd2;color:#c62828;background:#fff;border-radius:4px;cursor:pointer;" onclick="if(confirm('このマッピングプロファイルを削除しますか？'))alert('削除しました (デモ)');">🗑 削除</button>
+                <button style="font-size:11px;padding:4px 10px;border:1px solid #ffcdd2;color:#c62828;background:#fff;border-radius:4px;cursor:pointer;" onclick="showCustomConfirm('削除の確認','このマッピングプロファイルを削除しますか？','削除',function(){alert('削除しました (デモ)');});">🗑 削除</button>
               </td>
             </tr>
             <tr data-mtype="employee" data-src="kot" style="border-bottom:1px solid #eee;">
@@ -1319,7 +1319,7 @@
               <td style="padding:12px 14px;text-align:right;">
                 <button style="font-size:11px;padding:4px 10px;border:1px solid #2ec4a0;color:#2ec4a0;background:#fff;border-radius:4px;cursor:pointer;margin-right:4px;" onclick="alert('プロファイル適用 (デモ)');">▶️ 適用</button>
                 <button style="font-size:11px;padding:4px 10px;border:1px solid #ccc;background:#fff;border-radius:4px;cursor:pointer;margin-right:4px;" onclick="openSavedMapping('employee');">✏️ 編集</button>
-                <button style="font-size:11px;padding:4px 10px;border:1px solid #ffcdd2;color:#c62828;background:#fff;border-radius:4px;cursor:pointer;" onclick="if(confirm('削除しますか？'))alert('削除しました (デモ)');">🗑 削除</button>
+                <button style="font-size:11px;padding:4px 10px;border:1px solid #ffcdd2;color:#c62828;background:#fff;border-radius:4px;cursor:pointer;" onclick="showCustomConfirm('削除の確認','削除しますか？','削除',function(){alert('削除しました (デモ)');});">🗑 削除</button>
               </td>
             </tr>
             <tr data-mtype="employee" data-src="jobcan" style="border-bottom:1px solid #eee;">
@@ -1331,7 +1331,7 @@
               <td style="padding:12px 14px;text-align:right;">
                 <button style="font-size:11px;padding:4px 10px;border:1px solid #2ec4a0;color:#2ec4a0;background:#fff;border-radius:4px;cursor:pointer;margin-right:4px;" onclick="alert('プロファイル適用 (デモ)');">▶️ 適用</button>
                 <button style="font-size:11px;padding:4px 10px;border:1px solid #ccc;background:#fff;border-radius:4px;cursor:pointer;margin-right:4px;" onclick="openSavedMapping('employee');">✏️ 編集</button>
-                <button style="font-size:11px;padding:4px 10px;border:1px solid #ffcdd2;color:#c62828;background:#fff;border-radius:4px;cursor:pointer;" onclick="if(confirm('削除しますか？'))alert('削除しました (デモ)');">🗑 削除</button>
+                <button style="font-size:11px;padding:4px 10px;border:1px solid #ffcdd2;color:#c62828;background:#fff;border-radius:4px;cursor:pointer;" onclick="showCustomConfirm('削除の確認','削除しますか？','削除',function(){alert('削除しました (デモ)');});">🗑 削除</button>
               </td>
             </tr>
             <tr data-mtype="store" data-src="kot" style="border-bottom:1px solid #eee;background:#fafafa;">
@@ -1351,7 +1351,7 @@
               <td style="padding:12px 14px;text-align:right;">
                 <button style="font-size:11px;padding:4px 10px;border:1px solid #2ec4a0;color:#2ec4a0;background:#fff;border-radius:4px;cursor:pointer;margin-right:4px;" onclick="alert('プロファイル適用 (デモ)');">▶️ 適用</button>
                 <button style="font-size:11px;padding:4px 10px;border:1px solid #ccc;background:#fff;border-radius:4px;cursor:pointer;margin-right:4px;" onclick="openSavedMapping('admin');">✏️ 編集</button>
-                <button style="font-size:11px;padding:4px 10px;border:1px solid #ffcdd2;color:#c62828;background:#fff;border-radius:4px;cursor:pointer;" onclick="if(confirm('削除しますか？'))alert('削除しました (デモ)');">🗑 削除</button>
+                <button style="font-size:11px;padding:4px 10px;border:1px solid #ffcdd2;color:#c62828;background:#fff;border-radius:4px;cursor:pointer;" onclick="showCustomConfirm('削除の確認','削除しますか？','削除',function(){alert('削除しました (デモ)');});">🗑 削除</button>
               </td>
             </tr>
           </tbody>
@@ -4439,12 +4439,13 @@ function bDemoDraftSaas() {
 
 // デモ用: セッション状態を完全リセット(モック開発確認用)
 function b0DemoReset() {
-  if (!confirm('初期セットアップの進捗・件数・下書きを全てリセットしますか？')) return;
-  try {
-    sessionStorage.clear();
-    localStorage.removeItem('import_in_progress'); // CSV中断状態もクリア
-  } catch (e) {}
-  window.location.replace(location.pathname + '?reset=' + Date.now() + '#b0');
+  showCustomConfirm('リセットの確認', '初期セットアップの進捗・件数・下書きを全てリセットしますか？', 'リセット', function() {
+    try {
+      sessionStorage.clear();
+      localStorage.removeItem('import_in_progress'); // CSV中断状態もクリア
+    } catch (e) {}
+    window.location.replace(location.pathname + '?reset=' + Date.now() + '#b0');
+  });
 }
 
 /* デモ用: 設定画面の 設定前(empty) ↔ 設定後(filled) 切替 */
@@ -4645,15 +4646,14 @@ function empDelete(btn, status) {
     default:
       msg = '「' + name + '」を削除しますか？';
   }
-  if (confirm(msg)) {
+  showCustomConfirm('削除の確認', msg, '削除', function() {
     btn.closest('tr').style.display = 'none';
-  }
+  });
 }
 
 function showConfirm(btn) {
   var name = btn.closest('tr').querySelector('strong').textContent;
-  var ok = confirm('「' + name + '」のパスワードを無効化し、再設定メールを送信します。\n\n現在のパスワードは使えなくなります。よろしいですか？');
-  if (ok) {
+  showCustomConfirm('パスワード無効化の確認', '「' + name + '」のパスワードを無効化し、再設定メールを送信します。<br><br>現在のパスワードは使えなくなります。よろしいですか？', '無効化して再送', function() {
     var tr = btn.closest('tr');
     var tds = tr.querySelectorAll('td');
     for (var i = 0; i < tds.length; i++) {
@@ -4663,7 +4663,7 @@ function showConfirm(btn) {
         break;
       }
     }
-  }
+  });
 }
 
 /* ===========================================================
@@ -5644,18 +5644,18 @@ function d1DemoTransitionTakahashi(targetStatus) {
 
 // 管理者一覧 (page-d1) 「削除」ボタン: 管理者権限のみ解除 (従業員アカウントは残る)
 function d1RevokeAdmin(name) {
-  var ok = confirm(
-    '⚠ 管理者権限を解除します\n\n' +
-    '対象: ' + name + '\n\n' +
-    '【動作】\n' +
-    '・「管理者」権限のみが解除されます (通常の従業員に戻ります)\n' +
-    '・従業員アカウント自体は削除されません (打刻・勤怠記録は保持)\n' +
-    '・解除後はラクミー従業員アカウントとして引き続きログイン可能\n\n' +
-    '実行してよろしいですか？'
-  );
-  if (!ok) return;
-  alert('✓ ' + name + ' の管理者権限を解除しました。\n従業員アカウントは引き続き有効です。');
-  // 本実装では行を削除する処理になるが、モックでは表示維持
+  showCustomConfirm('管理者権限の解除',
+    '⚠ 管理者権限を解除します<br><br>' +
+    '対象: ' + name + '<br><br>' +
+    '【動作】<br>' +
+    '・「管理者」権限のみが解除されます (通常の従業員に戻ります)<br>' +
+    '・従業員アカウント自体は削除されません (打刻・勤怠記録は保持)<br>' +
+    '・解除後はラクミー従業員アカウントとして引き続きログイン可能<br><br>' +
+    '実行してよろしいですか？',
+    '解除する', function() {
+    alert('✓ ' + name + ' の管理者権限を解除しました。\n従業員アカウントは引き続き有効です。');
+    // 本実装では行を削除する処理になるが、モックでは表示維持
+  });
 }
 
 // 管理者一覧 (page-d1) 「📧 再送」ボタン: 由来別 (3区分) に動作出し分け
@@ -6148,11 +6148,12 @@ function bResumeDraft(stepNum) {
 }
 
 function b0DiscardDraft(stepNum) {
-  if (!confirm('一時保存中の入力内容を破棄しますか？')) return;
-  b0ClearDraft(stepNum);
-  // バナー再描画
-  var activeStep = loadSetupActiveStep();
-  if (activeStep === stepNum) renderSetupSettingsUI(stepNum);
+  showCustomConfirm('破棄の確認', '一時保存中の入力内容を破棄しますか？', '破棄', function() {
+    b0ClearDraft(stepNum);
+    // バナー再描画
+    var activeStep = loadSetupActiveStep();
+    if (activeStep === stepNum) renderSetupSettingsUI(stepNum);
+  });
 }
 
 function restoreDraftToModal(stepNum, draft) {
