@@ -515,6 +515,7 @@
     <span class="nav-tab" onclick="go('admin-b0')" id="nav-admin-b0">👑 管理者ログイン後 TOP</span>
     <span class="nav-tab" onclick="go('d3')" id="nav-d3">登録完了メール(新規)</span>
     <span class="nav-tab" onclick="go('d4')" id="nav-d4">登録完了メール(既存登録)</span>
+    <span class="nav-tab" onclick="go('mail-formats')" id="nav-mail-formats">📧 条件別メールフォーマット</span>
     <span class="nav-tab" onclick="go('d1e')" id="nav-d1e">管理者編集</span>
     <span class="nav-sep"></span>
     <span class="nav-flow">E PW</span>
@@ -2353,6 +2354,122 @@
       • 旧URL アクセス時は <code>page-invite-invalid-admin</code> 画面 (「この招待は無効です」) 表示<br>
       • 件名先頭に <strong>「【再送・差し替え】」</strong> を付けて区別<br>
       • 受信者に「以前の招待は無効化されました」を本文上部に明示 (黄色帯)
+    </div>
+  </main>
+</div>
+
+<!-- ===== 条件別 メールフォーマット 早見 (§16.3 4パターン × §16.6 メール種別) ===== -->
+<div class="page" id="page-mail-formats">
+  <main class="mc" style="max-width:920px;margin:30px auto;padding:0 20px;">
+    <div style="margin-bottom:6px;font-size:18px;font-weight:700;color:#333;">📧 条件別 メールフォーマット早見</div>
+    <div style="margin-bottom:20px;font-size:12px;color:#666;line-height:1.7;">アカウント衝突回避（§16）に伴い、<strong>登録条件ごとに送信メールの種別・件名・CTA・PW要否が変わります</strong>。実装は下表の条件判定に従い、正しいフォーマットを送信してください（本文の最終コピーはCS確定、本モックは構造を正とする）。</div>
+
+    <!-- 早見表 -->
+    <div style="overflow-x:auto;border:1px solid #e0e0e0;border-radius:10px;margin-bottom:26px;">
+      <table style="width:100%;border-collapse:collapse;font-size:12px;min-width:780px;">
+        <thead>
+          <tr style="background:#f6f6f6;color:#333;">
+            <th style="padding:10px 12px;text-align:left;border-bottom:1px solid #e0e0e0;">条件（§16.3）</th>
+            <th style="padding:10px 12px;text-align:left;border-bottom:1px solid #e0e0e0;">メール種別</th>
+            <th style="padding:10px 12px;text-align:left;border-bottom:1px solid #e0e0e0;">件名</th>
+            <th style="padding:10px 12px;text-align:center;border-bottom:1px solid #e0e0e0;">CTA</th>
+            <th style="padding:10px 12px;text-align:center;border-bottom:1px solid #e0e0e0;">PW設定</th>
+            <th style="padding:10px 12px;text-align:center;border-bottom:1px solid #e0e0e0;">フォーマット</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #f0f0f0;">
+            <td style="padding:10px 12px;">従業員のみ 新規登録</td>
+            <td style="padding:10px 12px;"><span style="background:#e8f8f5;color:#0e9077;padding:2px 8px;border-radius:10px;font-weight:700;">従業員招待</span></td>
+            <td style="padding:10px 12px;color:#555;">ラクミータイムレコードへの招待</td>
+            <td style="padding:10px 12px;text-align:center;">パスワードを設定する</td>
+            <td style="padding:10px 12px;text-align:center;"><span style="background:#fff3e0;color:#e65100;padding:2px 8px;border-radius:10px;font-weight:700;">必要 (72h)</span></td>
+            <td style="padding:10px 12px;text-align:center;"><a href="#" onclick="event.preventDefault();go('c4')" style="color:#1a73e8;">プレビュー →</a></td>
+          </tr>
+          <tr style="border-bottom:1px solid #f0f0f0;">
+            <td style="padding:10px 12px;">管理者 新規登録<br><span style="font-size:10px;color:#888;">(従業員+管理者ロール同時=統合)</span><br><span style="font-size:10px;color:#888;">§16.3 パターン1: 両CSV同一メアド</span></td>
+            <td style="padding:10px 12px;"><span style="background:#ede7f6;color:#5e35b1;padding:2px 8px;border-radius:10px;font-weight:700;">統合招待</span></td>
+            <td style="padding:10px 12px;color:#555;">ラクミータイムレコードへの招待</td>
+            <td style="padding:10px 12px;text-align:center;">パスワードを設定する</td>
+            <td style="padding:10px 12px;text-align:center;"><span style="background:#fff3e0;color:#e65100;padding:2px 8px;border-radius:10px;font-weight:700;">必要 (72h)</span></td>
+            <td style="padding:10px 12px;text-align:center;"><a href="#" onclick="event.preventDefault();go('admin-invite-email')" style="color:#1a73e8;">プレビュー →</a></td>
+          </tr>
+          <tr style="border-bottom:1px solid #f0f0f0;">
+            <td style="padding:10px 12px;">既存<strong>従業員</strong> → 管理者ロール追加<br><span style="font-size:10px;color:#888;">§16.3 パターン2</span></td>
+            <td style="padding:10px 12px;"><span style="background:#e3f2fd;color:#1565c0;padding:2px 8px;border-radius:10px;font-weight:700;">権限拡張通知</span></td>
+            <td style="padding:10px 12px;color:#555;">管理者権限が付与されました</td>
+            <td style="padding:10px 12px;text-align:center;">ログインする</td>
+            <td style="padding:10px 12px;text-align:center;"><span style="background:#e8f5e9;color:#2e7d32;padding:2px 8px;border-radius:10px;font-weight:700;">不要</span></td>
+            <td style="padding:10px 12px;text-align:center;"><a href="#" onclick="event.preventDefault();go('admin-invite-email-emp')" style="color:#1a73e8;">プレビュー →</a></td>
+          </tr>
+          <tr style="border-bottom:1px solid #f0f0f0;background:#fffdf5;">
+            <td style="padding:10px 12px;">既存<strong>管理者</strong> → 従業員ロール追加<br><span style="font-size:10px;color:#888;">§16.3 パターン3 (逆方向)</span></td>
+            <td style="padding:10px 12px;"><span style="background:#e3f2fd;color:#1565c0;padding:2px 8px;border-radius:10px;font-weight:700;">権限拡張通知</span></td>
+            <td style="padding:10px 12px;color:#555;">従業員ロールが追加されました</td>
+            <td style="padding:10px 12px;text-align:center;">ログインする</td>
+            <td style="padding:10px 12px;text-align:center;"><span style="background:#e8f5e9;color:#2e7d32;padding:2px 8px;border-radius:10px;font-weight:700;">不要</span></td>
+            <td style="padding:10px 12px;text-align:center;"><span style="color:#888;font-size:10px;">↓ 下のプレビュー</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid #f0f0f0;">
+            <td style="padding:10px 12px;">同一CSV内 メアド重複<br><span style="font-size:10px;color:#888;">§16.3 パターン4</span></td>
+            <td style="padding:10px 12px;"><span style="background:#ffebee;color:#c62828;padding:2px 8px;border-radius:10px;font-weight:700;">送信なし</span></td>
+            <td style="padding:10px 12px;color:#999;">—</td>
+            <td style="padding:10px 12px;text-align:center;color:#999;">—</td>
+            <td style="padding:10px 12px;text-align:center;color:#999;">—</td>
+            <td style="padding:10px 12px;text-align:center;color:#c62828;font-size:11px;">CSV修正要求<br>(バリデーションエラー)</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 12px;">招待の差し替え再送<br><span style="font-size:10px;color:#888;">(旧招待リンク無効化)</span></td>
+            <td style="padding:10px 12px;"><span style="background:#fff8e1;color:#f57f17;padding:2px 8px;border-radius:10px;font-weight:700;">差し替え招待</span></td>
+            <td style="padding:10px 12px;color:#555;">招待メール（差し替え版）</td>
+            <td style="padding:10px 12px;text-align:center;">パスワードを設定する</td>
+            <td style="padding:10px 12px;text-align:center;"><span style="background:#fff3e0;color:#e65100;padding:2px 8px;border-radius:10px;font-weight:700;">必要 (72h)</span></td>
+            <td style="padding:10px 12px;text-align:center;"><a href="#" onclick="event.preventDefault();go('admin-invite-replacement')" style="color:#1a73e8;">プレビュー →</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 不足していた逆方向の権限拡張通知（実フォーマット） -->
+    <div style="margin-bottom:10px;font-size:13px;font-weight:700;color:#333;">📩 権限拡張通知（既存管理者 → 従業員ロール追加）フォーマット</div>
+    <div style="margin-bottom:20px;font-size:11px;color:#888;">§16.6「従業員ロールが追加されました」版。フォーマットは「管理者権限が付与」版と共通で、文面のみ出し分け（PW不要・ログインボタン）。</div>
+    <div style="background:#fff;border:1px solid #ddd;border-radius:10px;overflow:hidden;font-family:'Hiragino Kaku Gothic ProN', sans-serif;max-width:560px;">
+      <div style="background:#fff;border-bottom:1px solid #eee;padding:12px 20px;font-size:14px;font-weight:600;color:#202124;">
+        <span style="color:#888;">[Development]</span> 従業員ロールが追加されました
+      </div>
+      <div style="padding:34px 22px;text-align:center;background:#fff;">
+        <div style="margin-bottom:24px;">
+          <span style="display:inline-block;background:#2ec4a5;color:#fff;font-size:13px;font-weight:700;padding:4px 10px;border-radius:5px;letter-spacing:1px;">ラクミー</span>
+          <span style="font-size:14px;font-weight:700;margin-left:8px;color:#333;">タイムレコード</span>
+        </div>
+        <div style="text-align:left;font-size:13px;line-height:1.8;color:#333;max-width:440px;margin:0 auto 24px;">
+          <div>田中 様</div>
+          <br>
+          <div>いつもラクミータイムレコードをご利用いただきありがとうございます。</div>
+          <div style="margin-top:10px;"><strong>株式会社サンプル</strong> の <strong>オーナー・本部管理権限者</strong> より、あなたのアカウントに <strong>従業員ロール</strong> が追加されました（打刻が可能になります）。</div>
+          <div style="margin-top:10px;color:#555;font-size:12px;">すでに管理者アカウントをお持ちのため、<strong>新たな初期パスワード設定は不要</strong>です。下のボタンから、これまでお使いのパスワードでログインしてください。</div>
+        </div>
+        <a href="#" onclick="event.preventDefault();go('login')" style="display:inline-block;background:#2ec4a5;color:#fff;padding:13px 34px;border-radius:6px;font-weight:700;text-decoration:none;font-size:14px;">ログインする</a>
+        <div style="margin-top:26px;background:#f5f5f5;border-radius:6px;padding:12px 16px;font-size:11px;color:#555;text-align:left;max-width:440px;margin-left:auto;margin-right:auto;">
+          <strong>会社:</strong> 株式会社サンプル <span style="color:#ddd;margin:0 6px;">/</span>
+          <strong>店舗:</strong> 渋谷店 <span style="color:#ddd;margin:0 6px;">/</span>
+          <strong>追加ロール:</strong> 従業員 <span style="color:#ddd;margin:0 6px;">/</span>
+          <strong>付与日:</strong> 2026/6/3
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:24px;padding:12px 14px;background:#fff8ed;border:1px solid #fde68a;border-radius:8px;font-size:11px;color:#9c4d12;line-height:1.7;">
+      💡 <strong>実装メモ:</strong><br>
+      • 招待系（従業員招待 / 統合招待 / 差し替え）＝ <strong>PW設定リンクあり（72h）</strong><br>
+      • 通知系（権限拡張通知 2方向）＝ <strong>PWリンク無し・「ログインする」・付与日表記</strong>（既存PW継続、トークン無効化の概念なし）<br>
+      • パターン4（同一CSV内重複）は<strong>送信なし</strong>＝CSV修正要求（インポート拒否）<br>
+      • 本文の最終コピーはCS確定。実装は<strong>本文をテンプレ差し替え可能な構造</strong>にし、上表の条件判定で版を選択すること
+    </div>
+
+    <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn btn-s" onclick="go('d1')">← 管理者一覧に戻る</button>
+      <button class="btn btn-s" onclick="go('b0')">← 打刻記録に戻る</button>
     </div>
   </main>
 </div>
