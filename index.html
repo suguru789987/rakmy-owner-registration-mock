@@ -1508,6 +1508,7 @@
           <option>ラクミー食堂</option>
         </select>
       </div>
+      <div class="fg"><label>郵便番号 <span class="req">✳</span></label><input value="" placeholder="例: 150-0002" style="max-width:100%;"></div>
       <div class="fg"><label>住所 <span class="req">✳</span></label><input value="" placeholder="例: 東京都渋谷区..." style="max-width:100%;"></div>
       <div class="fg"><label>営業時間 <span class="req">✳</span></label>
         <div class="fr"><div class="fg"><input value="" placeholder="開店 例:11:00"></div><div class="fg"><input value="" placeholder="閉店 例:23:00"></div></div>
@@ -1522,17 +1523,21 @@
   <div class="b-step-modal">
     <div class="mh"><h3>雇用区分を登録</h3><button class="mx" onclick="bCloseStep()">✕</button></div>
     <div class="mb">
-      <div class="fg"><label>区分名 <span class="req">✳</span></label><input value="" placeholder="例: 正社員 / アルバイト / 業務委託" style="max-width:100%;"></div>
-      <div class="fg">
-        <label>種別 <span class="req">✳</span></label>
-        <select style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-          <option>正社員</option><option>契約社員</option><option>アルバイト</option><option>業務委託</option><option>その他</option>
-        </select>
+      <div class="fr">
+        <div class="fg"><label>雇用区分名 <span class="req">✳</span></label><input value="" placeholder="例: 正社員 / アルバイト" style="max-width:100%;"></div>
+        <div class="fg"><label>雇用区分コード</label><input value="" placeholder="空欄で自動生成" style="max-width:100%;"></div>
       </div>
-      <div class="fg"><label>時給単位 <span class="req">✳</span></label>
-        <select style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-          <option>時給</option><option>日給</option><option>月給</option>
-        </select>
+      <div class="fr">
+        <div class="fg"><label>給与体系 <span class="req">✳</span></label>
+          <select style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+            <option>月給</option><option>日給</option><option>時給</option>
+          </select>
+        </div>
+        <div class="fg"><label>金額 <span class="req">✳</span></label><input value="" placeholder="例: 250000" style="max-width:100%;"></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label>月次契約労働時間</label><input value="" placeholder="例: 160（時間）" style="max-width:100%;"></div>
+        <div class="fg"><label>月みなし残業時間</label><input value="" placeholder="例: 20（時間）" style="max-width:100%;"></div>
       </div>
       <div class="btn-grp"><button class="btn btn-s" onclick="bCloseStep()">キャンセル</button><button class="btn btn-p" onclick="b0CompleteStep(3)">登録</button></div>
     </div>
@@ -1549,6 +1554,7 @@
         <div class="fg"><label>電話番号 <span class="req">✳</span></label><input value="" placeholder="例: 090-0000-0000" style="max-width:100%;"></div>
       </div>
       <div class="fg"><label>メールアドレス <span class="req">✳</span></label><input type="email" value="" placeholder="例: yoshida@example.jp" style="max-width:100%;"><div class="hint">登録後、従業員一覧の「招待送信」ボタンを押すと、このアドレスに招待メール（72h有効）が送信されます。</div></div>
+      <div class="fg"><label>従業員コード</label><input value="" placeholder="空欄で自動生成" style="max-width:100%;"></div>
       <div class="fr">
         <div class="fg"><label>雇用区分 <span class="req">✳</span></label>
           <select id="b-step-4-emptype" style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
@@ -1560,6 +1566,14 @@
             <option>渋谷店</option>
           </select>
         </div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label>交通費単位 <span class="req">✳</span></label>
+          <select style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+            <option>月額</option><option>日額</option>
+          </select>
+        </div>
+        <div class="fg"><label>交通費 <span class="req">✳</span></label><input value="" placeholder="例: 10000" style="max-width:100%;"></div>
       </div>
       <div class="btn-grp"><button class="btn btn-s" onclick="bCloseStep()">キャンセル</button><button class="btn btn-p" onclick="b0CompleteStep(4)">登録</button></div>
     </div>
