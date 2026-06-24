@@ -1487,12 +1487,9 @@
     <div class="mh"><h3>業態を登録</h3><button class="mx" onclick="bCloseStep()">✕</button></div>
     <div class="mb">
       <div class="fg">
-        <label>業態 <span class="req">✳</span></label>
-        <select style="width:100%;max-width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
-          <option value="" selected disabled>選択してください</option>
-          <option>飲食店</option><option>カフェ</option><option>居酒屋・バー</option><option>小売店</option><option>サービス業</option><option>その他</option>
-        </select>
-        <div class="hint">店舗が属する業態を選択します。店舗ごとにこの業態を割り当てます。</div>
+        <label>業態名 <span class="req">✳</span></label>
+        <input value="" placeholder="例: 飲食店 / カフェ / 居酒屋・バー" style="max-width:100%;">
+        <div class="hint">新しい業態の名称を入力して登録します。店舗ごとに、登録した業態を割り当てます。</div>
       </div>
       <div class="btn-grp"><button class="btn btn-s" onclick="bCloseStep()">キャンセル</button><button class="btn btn-p" onclick="b0CompleteStep(1)">登録</button></div>
     </div>
@@ -4125,14 +4122,13 @@ function settingsRowEdit(step, btn) {
   var first = tbody ? tbody.querySelector('tr') : null;
   var nm = (srcRow && srcRow.querySelector('.nm')) ? srcRow.querySelector('.nm').textContent.trim() : '';
   if (first && nm) {
-    if (step === 1) {
-      // 業態は select: 行の値に一致する選択肢を選ぶ
+    // 先頭の名称項目(業態名/店舗名/雇用区分名/従業員名)へプリフィル。他項目は実装でレコードから補完。
+    var inp = first.querySelector('input, textarea');
+    if (inp) {
+      inp.value = nm;
+    } else {
       var sel = first.querySelector('select');
       if (sel) { for (var k = 0; k < sel.options.length; k++) { if (sel.options[k].text === nm) { sel.selectedIndex = k; break; } } }
-    } else {
-      // 店舗/雇用区分/従業員は先頭テキスト入力に名称をプリフィル(他項目は実装でレコードから補完)
-      var inp = first.querySelector('input, textarea');
-      if (inp) inp.value = nm;
     }
   }
 }
