@@ -1,0 +1,40 @@
+段階	検証ID	検証内容	操作・前提条件	期待値	スクショファイル名	画面	確認ポイント	実際の値	判定	備考
+P0_前提	P-001	検証環境URL	IV-001のStaging/Pages最新URLを開く	ログイン画面が表示。本番rakmy/rakmy_serverには絶対タッチしない	-	login	memory: feedback_rakmy_server			ガバナンス厳守
+P0_前提	P-002	検証実施日	2026-06-26開始	-	-	-	-			-
+P0_前提	P-003	検証スコープ	セルフサーブ登録: (新規登録/既存での新規設定)×(UI入力/インポート)	4象限+横断(連動/編集動線/新規編集出し分け)を網羅	-	-	入力値=20260626_01b参照			-
+P0_前提	P-004	ダミーデータ確認	入力値はIV-002〜008の架空値。メールはs.tsutsui+xxx@rakmy.jp	PIIなし。デモ初期値と重複しない新規値	-	-	新規登録と連動を確認するため			-
+A_新規UI	A-01	初期セットアップ到達	初回ログイン→b0(初期セットアップ)を開く	b0に4ステップ(①業態→②店舗→③雇用区分→④従業員)と進捗0/4	ss_A01	b0	b0Done=0想定			新規=done<4
+A_新規UI	A-02	方式選択=手動入力	b0で『自分で入力して登録』(method-card-manual)を選択	手動モード。各STEP『登録する→』が活性	ss_A02	b0	b0SetMethod('manual')			UI入力パターン
+A_新規UI	A-03	STEP1 業態 新規登録	『①登録する→』→ businesstype-settings + 業態モーダル展開。業態名に『焼肉』入力→登録	モーダル名=『業態を登録』。入力欄は『テキスト入力(プルダウンでない)』。登録後 一覧に『焼肉』追加・件数1/4	ss_A03	businesstype-settings / b-step-modal-1	業態=テキスト名登録(§3.4.2/3)。新規は空欄			E-01も兼ねる
+A_新規UI	A-04	STEP1 複数行登録	業態モーダルで『+行を追加』→2行目『バー』→登録(2件)	2件登録。『焼肉』『バー』が一覧に出る	ss_A04	b-step-modal-1	batch複数行			-
+A_新規UI	A-05	STEP2 店舗+連動確認	『②登録する→』→ 店舗モーダル。所属業態プルダウンを開く	プルダウンに『焼肉』『バー』(A-03/04で登録)が出現=連動(§3.4.3)。先頭は『選択してください』	ss_A05	store-settings / b-step-modal-2	連動: 店舗.所属業態←業態			E-03の核
+A_新規UI	A-06	STEP2 店舗登録	IV-004『銀座店』(所属業態=焼肉/〒104-0061/住所/11:00-23:00)を入力→登録	登録成功。一覧に銀座店(焼肉…)追加	ss_A06	b-step-modal-2	郵便番号必須			-
+A_新規UI	A-07	STEP3 雇用区分登録	『③登録する→』→ 雇用区分『パート/時給/1100/80/0』入力(コード空欄)→登録	登録成功。コードは空欄自動生成	ss_A07	emptype-settings / b-step-modal-3	TSV6項目			-
+A_新規UI	A-08	STEP4 従業員+連動確認	『④登録する→』→ 従業員モーダル。雇用区分/所属店舗プルダウンを開く	雇用区分に『パート』、所属店舗に『銀座店』が出現=連動	ss_A08	emp-settings / b-step-modal-4	連動: 従業員←雇用区分/店舗			E-03
+A_新規UI	A-09	STEP4 従業員登録+招待	IV-007『港 みらい』(メールs.tsutsui+ss1)入力→『登録&招待送信』	登録成功+招待メール送信。done=4で必須完了	ss_A09	b-step-modal-4	招待メール72h			受信確認
+A_新規UI	A-10	初期セットアップ完了	完了サマリ→『打刻記録画面へ』	done>=4。打刻記録(b0-empty解除)へ。以降ops mode	ss_A10	b0 / b0-empty	onboarding完了			-
+A_新規UI	A-11	STEP5 管理者(任意)	STEP5パネル/ D-2 で IV-008『統括 一郎』担当店舗=銀座店→登録	管理者登録+招待。担当店舗に銀座店が選べる(連動)	ss_A11	b0 / d2	任意ステップ			-
+B_新規IMP	B-01	方式選択=インポート	b0で『データを取り込む』(method-card-import)→『テンプレートで取り込み』	import-spec #tpl-setup へ(別タブ)。5テンプレ提示	ss_B01	b0 → import-spec #tpl-setup	b0SetMethod('import')			-
+B_新規IMP	B-02	テンプレDL	①業態テンプレ『テンプレートDL』	業態名1列のtsvがDL(旧3列でない)	ss_B02	import-spec #tpl-setup	ブランド廃止反映			downloadBusinesstypeTemplate
+B_新規IMP	B-03	①業態 取込	20260626_01b の①業態tsv(焼肉/バー)をアップ→プレビュー→登録	業態名のみ。2件新規。完了で次テンプレ活性	ss_B03	import-spec s-tpl1	順序式アップロード			-
+B_新規IMP	B-04	②店舗 取込	②店舗tsv(銀座店/焼肉…)をアップ	所属業態=焼肉が①と紐付く。新規登録	ss_B04	import-spec s-tpl(store)	依存: 店舗←業態			-
+B_新規IMP	B-05	③④ 取込	③雇用区分tsv・④従業員tsvをアップ	各登録。従業員は店舗/雇用区分名で紐付け	ss_B05	import-spec	依存検証			-
+B_新規IMP	B-06	エラー対応(重複)	①業態に『飲食店』(既存重複)行を混在→アップ→プレビュー	重複エラー表示。3ボタン(➕/✏️/⊘)。⊘スキップで継続	ss_B06	import-spec プレビュー	均一3ボタン			20260626_01bエラー節
+B_新規IMP	B-07	エラー対応(マスタ未登録)	②店舗に所属業態=ラーメン(未登録)→プレビュー	業態マスタ未登録エラー→➕マスタに追加で解消・自動再判定	ss_B07	import-spec プレビュー / マスタ追加モーダル	openMasterAddRedirect			-
+B_新規IMP	B-08	完了→セットアップ戻り	テンプレ完了画面→『初期セットアップへ戻る』	owner-mock に ?completed=1 で戻り、done=4反映	ss_B08	import-spec s-tpl-complete → b0	completed=1			-
+B_新規IMP	B-09	外部連携(SaaS)パターン	b0→インポート→『外部勤怠サービス』→#saas-setup。KoT employee_info想定でアップ	初回はマッピング設定画面。列マッピング後プレビュー	ss_B09	import-spec #saas-setup / s-saas1	KoT/Jobcan			新規初回フロー
+B_新規IMP	B-10	SaaS補完	補完不可項目(電話/メール/交通費)を完了画面の補完テンプレで入力→再取込	従業員コードキーで上書き補完	ss_B10	import-spec s-saas4	マッピング不可項目補完			-
+C_既存UI	C-01	運用モード到達	done>=4状態で サイドバー設定(運用)→業態(businesstype-ops-settings)	ops UI(一覧+『+業態を追加』+各行[編集][削除])。空状態ヒーロー無し	ss_C01	businesstype-ops-settings	done>=4=ops			-
+C_既存UI	C-02	業態 新規追加(運用)	『+業態を追加』→モーダル『業態を登録』(空)→『焼肉』入力→登録(1件)	トーストCTA(右上)。一覧に焼肉追加。プルダウンでなくテキスト	ss_C02	businesstype-ops-settings / b-step-modal-1	新規=空・登録ボタン(§3.4.2)			E-01/E-02
+C_既存UI	C-03	店舗 追加+連動	店舗(運用)『+店舗を追加』→所属業態プルダウン	C-02の『焼肉』が選べる=連動。銀座店を登録	ss_C03	store-ops-settings / b-step-modal-2	連動(運用でも有効)			E-03
+C_既存UI	C-04	行の編集動線	業態一覧の『焼肉』行の[編集]を押す	モーダル『業態を編集』(タイトル変化)+値プリフィル+主ボタン『更新』+『+行追加/一時保存』なし	ss_C04	businesstype-ops-settings / b-step-modal-1	新規/編集の出し分け(§3.4.2)			E-02/E-04
+C_既存UI	C-05	行の削除+連動	『焼肉』行の[削除]→確認ダイアログ→削除	一覧から消える。店舗の所属業態プルダウンからも『焼肉』が消える=連動	ss_C05	businesstype-ops-settings	削除も連動(§3.4.3)			E-03/E-04
+C_既存UI	C-06	他エンティティ運用追加	雇用区分(運用)/従業員(運用)も+追加で登録	各ops画面で同様に追加可。従業員追加は招待送信	ss_C06	emptype-ops-settings / emp-ops-settings	-			-
+D_既存IMP	D-01	運用CSVインポート起動	業態(運用)等の『📥CSVインポート』→方式選択モーダル	openCsvMethodModal。テンプレ/外部の方式選択	ss_D01	businesstype-ops-settings	運用取込導線			-
+D_既存IMP	D-02	テンプレ取込(運用)	方式=テンプレ→import-spec該当テンプレ→アップ→プレビュー→登録	新規分のみ登録(既存はスキップ)。完了でトースト	ss_D02	import-spec s-tpl/single	運用は差分追加			-
+D_既存IMP	D-03	CSV取込設定の確認	サイドバー『📥CSV取込設定』→マッピングプロファイル一覧	保存済みマッピングが種別別タブで管理(編集/削除/適用)	ss_D03	saas-mapping-list	プロファイル管理			-
+E_横断	E-01	業態=テキスト名登録	全経路(初期/運用/空状態CTA)で業態モーダルを開く	いずれもテキスト入力(業態名)。プルダウンは出ない	ss_E01	b-step-modal-1	旧プルダウン廃止			#15
+E_横断	E-02	新規/編集 出し分け	同一エンティティで『+追加』と行『編集』を交互に開く	新規=『登録』空欄/編集=『更新』プリフィル。+行追加と一時保存は編集時に非表示	ss_E02	各 b-step-modal	§3.4.2			#16
+E_横断	E-03	マスタ参照の連動	業態/店舗/雇用区分を登録→店舗/従業員モーダルのプルダウン確認→削除して再確認	登録で出現/削除で消滅。店舗.所属業態←業態, 従業員.雇用区分←雇用区分, 従業員.所属店舗←店舗	ss_E03	b-step-modal-2/4	§3.4.3 依存グラフ			#18
+E_横断	E-04	編集/削除動線(全リスト)	業態/店舗/雇用区分/従業員 の setup・ops 全リスト行	全行に[編集][削除]が存在し機能する	ss_E04	*-settings / *-ops-settings	Q2対応			#14
+E_横断	E-05	ルーティング/ハッシュ	業態画面のURLハッシュを確認	#businesstype-ops-settings 等(旧#brand-*は無効)。本番ルート=/settings/business-types	ss_E05	businesstype-ops-settings	brand→businesstype改称			#17
