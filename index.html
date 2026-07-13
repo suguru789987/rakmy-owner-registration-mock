@@ -43,6 +43,11 @@
     .gscope-opt.store { padding-left: 26px; font-size: 12px; }
     .gscope-opt .gs-check { margin-left: auto; color: #2ec4a5; }
     .gscope-empty { padding: 18px; text-align: center; color: #aaa; font-size: 12px; }
+    /* 認証/登録/オンボーディング画面ではバー非表示 + オフセットを戻す */
+    body.no-scope-bar .product-topbar { display: none; }
+    body.no-scope-bar .page { padding-top: 86px; }
+    body.no-scope-bar .dash { min-height: calc(100vh - 86px); }
+    body.no-scope-bar .sb { top: 80px; }
 
     /* Overview */
     .overview { max-width: 1200px; margin: 0 auto; padding: 24px; }
@@ -3159,6 +3164,15 @@ var COMPANIES = [
   { name: '株式会社たつきち',     stores: ['相模大塚店', '中央林間店'] }
 ];
 var GLOBAL_SCOPE = { company: '株式会社ミライフーズ', store: null, q: '' }; // store=null=すべての店舗
+// 上部バー非表示: 認証/登録/オンボーディング画面(切替対象の会社・店舗が未確定)
+var NO_SCOPE_BAR = new Set([
+  'overview', 'login', 'a1', 'a2', 'a3', 'a4', 'e1', 'e2', 'e3',
+  'admin-pw-setup', 'c4', 'c5', 'd3', 'd4',
+  'admin-invite-email', 'admin-invite-email-emp', 'admin-invite-replacement',
+  'invite-invalid', 'invite-invalid-admin', 'mail-formats',
+  'b0',                                                                 // 初期セットアップ中(店舗作成前)
+  'businesstype-settings', 'store-settings', 'emptype-settings', 'emp-settings'  // setupモード(オンボーディング中)
+]);
 
 function _companyStores(name) {
   var c = COMPANIES.filter(function(x){ return x.name === name; })[0];
@@ -3236,6 +3250,8 @@ function go(id) {
   target.classList.add('active');
   var t = document.getElementById('nav-' + id);
   if (t) t.classList.add('active');
+  // 認証/登録/オンボーディング画面では上部の会社・店舗バーを非表示(切替対象が未確定のため)
+  document.body.classList.toggle('no-scope-bar', NO_SCOPE_BAR.has(id));
   // 上部バーの会社・店舗スコープを新しい画面に再適用(選択保持)
   if (typeof applyGlobalScope === 'function') applyGlobalScope();
   // d2(管理者登録)を開いた際は初期タブ「新規登録」にリセット
@@ -4522,6 +4538,9 @@ window.addEventListener('DOMContentLoaded', function() {
   initSettingModeToggles();
   // 上部固定バーの会社・店舗コンテキストセレクタを構築(全画面共通)
   buildGlobalScope();
+  // 初期表示のアクティブ画面にもバー表示可否を適用(go未呼出のケース)
+  var _ap0 = document.querySelector('.page.active');
+  if (_ap0) document.body.classList.toggle('no-scope-bar', NO_SCOPE_BAR.has((_ap0.id || '').replace('page-', '')));
   // マスタ登録簿から一覧を描画(連動の正本)＋各行に編集/削除動線を付与 (Q2/連動)
   renderAllEntityLists();
   decorateSettingsRows();
