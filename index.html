@@ -232,19 +232,19 @@
     .method-picker { background: #fff; border-radius: 12px; padding: 20px 24px; border: 1px solid #e8e8e8; margin-bottom: 18px; max-width: 760px; }
     .method-picker h4 { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
     .method-picker .sub { font-size: 11px; color: #666; margin-bottom: 14px; }
-    .method-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .method-options { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .import-panel.act { animation: b0SlideIn .25s ease; }
     #b0-method-picker { animation: b0SlideIn .2s ease; }
     @keyframes b0SlideIn { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: none; } }
-    .method-card { border: 2px solid #e8e8e8; border-radius: 10px; padding: 16px 18px; cursor: pointer; transition: all 0.2s; background: #fff; position: relative; }
+    .method-card { border: 2px solid #e8e8e8; border-radius: 12px; padding: 30px 28px; min-height: 110px; cursor: pointer; transition: all 0.2s; background: #fff; position: relative; }
     .method-card:hover { border-color: #2ec4a5; }
     .method-card.act { border-color: #2ec4a5; background: #f0faf7; }
-    .method-card.act::after { content: '✓'; position: absolute; top: 8px; right: 8px; width: 20px; height: 20px; background: #2ec4a5; color: #fff; border-radius: 50%; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
-    .method-card .mc-ic { font-size: 22px; margin-bottom: 8px; }
-    .method-card .mc-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
-    .method-card .mc-desc { font-size: 10px; color: #666; line-height: 1.5; }
-    .method-card .mc-meta { font-size: 9px; color: #1a9e7e; font-weight: 600; margin-top: 6px; }
-    .method-card .mc-rec { display: inline-block; font-size: 8px; padding: 1px 6px; background: #2ec4a5; color: #fff; border-radius: 10px; font-weight: 700; margin-left: 6px; vertical-align: middle; }
+    .method-card.act::after { content: '✓'; position: absolute; top: 12px; right: 12px; width: 26px; height: 26px; background: #2ec4a5; color: #fff; border-radius: 50%; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .method-card .mc-ic { font-size: 36px; margin-bottom: 14px; }
+    .method-card .mc-name { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+    .method-card .mc-desc { font-size: 12px; color: #666; line-height: 1.5; }
+    .method-card .mc-meta { font-size: 11px; color: #1a9e7e; font-weight: 600; margin-top: 6px; }
+    .method-card .mc-rec { display: inline-block; font-size: 11px; padding: 2px 10px; background: #2ec4a5; color: #fff; border-radius: 12px; font-weight: 700; margin-left: 8px; vertical-align: middle; }
 
     /* インポート登録パネル(b0内) */
     .import-panel { background: #fff; border: 1px solid #e8e8e8; border-radius: 12px; padding: 24px; max-width: 760px; margin-bottom: 18px; display: none; }
@@ -980,10 +980,7 @@
 
       <!-- インポートパネル(method=importの時のみ表示・手動/CSVからスライド遷移) -->
       <div class="import-panel" id="b0-import-panel">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
-          <button onclick="b0SetMethod('none')" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:7px 14px;border:1px solid #ccc;border-radius:8px;background:#fff;color:#555;cursor:pointer;font-weight:600;">← 戻る</button>
-          <div style="font-size:14px;font-weight:700;">📥 CSVで一括インポート ・ 取り込み方式を選択</div>
-        </div>
+        <div style="font-size:15px;font-weight:700;margin-bottom:16px;">📥 CSVで一括インポート ・ 取り込み方式を選択</div>
         <div class="method-options">
           <div class="method-card act imethod-pill" id="imp-method-template" onclick="bSetImportMethod('template', true)">
             <div class="mc-ic">📋</div>
@@ -995,6 +992,9 @@
           </div>
         </div>
         <div style="font-size:10px;color:#888;margin-top:8px;">※ 選択するとインポート画面が新しいタブで開きます。</div>
+        <div style="display:flex;justify-content:flex-end;margin-top:18px;">
+          <button onclick="b0SetMethod('none')" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:10px 20px;border:1px solid #ccc;border-radius:8px;background:#fff;color:#555;cursor:pointer;font-weight:600;">← 戻る</button>
+        </div>
 
         <!-- インポートガイド(チップ進捗)はピル選択即遷移のため撤去。
              方式選択ピル直下の案内文「※選択するとインポート画面が新しいタブで開きます」が役割を果たす。
@@ -1080,6 +1080,10 @@
             <div class="ow-step-meta empty" id="b0-meta-5">登録済み: 0 名</div>
           </div>
           <div class="ow-step-action"><button class="btn btn-s btn-sm" id="b0-btn-5" disabled onclick="b0Go(5)">登録する (任意) →</button></div>
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;margin-top:12px;">
+          <button onclick="b0SetMethod('none')" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:10px 20px;border:1px solid #ccc;border-radius:8px;background:#fff;color:#555;cursor:pointer;font-weight:600;">← 戻る</button>
         </div>
 
       </div>
@@ -3442,7 +3446,7 @@ function b0SetMethod(m) {
   // 完了時(done=4)の表示制御は b0SetState 側が優先。完了前のみここで表示切替
   if (b0LoadDone() < 4) {
     // CSV(import)を選んだら方式カード(手動/CSV)を隠して 取り込み方式選択(テンプレ/外部)へスライド
-    if (picker) picker.style.display = (m === 'import') ? 'none' : 'block';
+    if (picker) picker.style.display = (m === 'manual' || m === 'import') ? 'none' : 'block';
     if (wizard) wizard.style.display = (m === 'manual') ? '' : 'none';
     if (importPanel) {
       importPanel.classList.toggle('act', m === 'import');
