@@ -3226,15 +3226,19 @@ function selectGlobalScope(company, store) {
   var dd = document.getElementById('gscope-dd'); if (dd) dd.classList.remove('open');
   applyGlobalScope();
 }
-// 選択スコープを現在表示中の画面に適用(デモ: 店舗次元を持つ画面のみ絞り込み)
+// 選択スコープを現在表示中の一覧画面に適用(店舗次元を持つ一覧のみ行を絞り込み)
+// 対象: 従業員/管理者一覧(c1/c2/d1)・従業員/店舗 運用一覧(emp/store-ops-settings)・打刻記録(b0-empty)
+// 業態/雇用区分の一覧は会社レベル(店舗次元なし)のため行絞り込みは行わない(バーは表示=会社コンテキスト)
+var SCOPE_STORE_SCREENS = ['c1', 'c2', 'd1', 'emp-ops-settings', 'store-ops-settings', 'b0-empty'];
 function applyGlobalScope() {
   var page = document.querySelector('.page.active'); if (!page) return;
   var id = (page.id || '').replace('page-', '');
-  if (['c1', 'c2', 'd1'].indexOf(id) < 0) return;  // 店舗次元を持つ画面のみ
-  page.querySelectorAll('table.dt tbody tr').forEach(function(row){
+  if (SCOPE_STORE_SCREENS.indexOf(id) < 0) return;
+  page.querySelectorAll('table.dt tbody tr, .post-list .pl-row').forEach(function(row){
     if (!GLOBAL_SCOPE.store) { row.style.display = ''; return; }
     var txt = row.textContent || '';
     var isZensha = (txt.indexOf('全店舗') >= 0 || txt.indexOf('全社') >= 0);
+    // 店舗一覧(store-ops-settings)は行=店舗名。選択店舗の行のみ表示。
     row.style.display = (isZensha || txt.indexOf(GLOBAL_SCOPE.store) >= 0) ? '' : 'none';
   });
 }
