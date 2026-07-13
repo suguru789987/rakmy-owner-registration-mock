@@ -451,24 +451,6 @@
     .ftab { padding: 6px 14px; font-size: 11px; font-weight: 600; border-radius: 20px; cursor: pointer; border: 1px solid #e8e8e8; background: #fff; color: #666; transition: all 0.2s; }
     .ftab:hover { border-color: #2ec4a5; }
     .ftab.act { background: #2ec4a5; color: #fff; border-color: #2ec4a5; }
-    /* 会社→店舗 グループ型サジェスト検索 (従業員/管理者検索) */
-    .scope-filter { position: relative; display: inline-block; }
-    .scope-trigger { display: flex; align-items: center; gap: 6px; border: 1px solid #ddd; border-radius: 6px; padding: 7px 14px; font-size: 11px; color: #555; cursor: pointer; background: #fff; min-width: 210px; }
-    .scope-trigger .sc-caret { margin-left: auto; color: #ccc; }
-    .scope-dd { position: absolute; top: calc(100% + 4px); left: 0; z-index: 60; width: 330px; max-height: 380px; overflow-y: auto; background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 12px 32px rgba(0,0,0,0.14); display: none; }
-    .scope-dd.open { display: block; }
-    .scope-dd-search { position: sticky; top: 0; background: #fff; padding: 10px; border-bottom: 1px solid #f0f0f0; }
-    .scope-dd-search input { width: 100%; box-sizing: border-box; padding: 8px 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 12px; }
-    .scope-group-label { font-size: 11px; font-weight: 700; color: #999; padding: 10px 14px 4px; }
-    .scope-opt { display: flex; align-items: center; gap: 10px; padding: 9px 14px; font-size: 12px; color: #444; cursor: pointer; }
-    .scope-opt:hover { background: #f5faf8; }
-    .scope-opt.sel { background: #eafaf4; color: #0e9077; font-weight: 700; }
-    .scope-opt.store { padding-left: 22px; }
-    .scope-opt .sc-check { margin-left: auto; color: #2ec4a5; }
-    .scope-empty { padding: 16px; text-align: center; color: #aaa; font-size: 11px; }
-    .store-chips { display: inline-flex; flex-wrap: wrap; gap: 4px; }
-    .store-chips .chip { font-size: 10px; background: #eef3f7; border: 1px solid #dde5ec; border-radius: 10px; padding: 1px 8px; color: #4a5b6b; }
-    .store-chips .chip.zensha { background: #fff3e0; border-color: #ffd8a8; color: #b8710a; }
 
     /* Confirm dialog */
     .confirm-dialog { background: #fff; border: 2px solid #f0960a; border-radius: 10px; padding: 20px; max-width: 400px; margin: 20px auto; }
@@ -1711,9 +1693,11 @@
         </div>
       </div>
 
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
-        <span style="font-size:11px;color:#888;">絞り込み:</span>
-        <div id="scope-c1"></div>
+      <div class="filter-tabs" style="margin-bottom:14px;">
+        <span class="ftab act">全店舗（25名）</span>
+        <span class="ftab">渋谷店（12名）</span>
+        <span class="ftab">新宿店（8名）</span>
+        <span class="ftab">池袋店（5名）</span>
       </div>
 
       <table class="dt">
@@ -1737,7 +1721,7 @@
             <td><span style="border:1px solid #ddd;border-radius:4px;padding:2px 7px;font-size:10px;">業務委託</span></td>
             <td>日額</td><td>¥1</td>
             <td>nishikata+test2@example.com</td><td>090-1234-1234</td>
-            <td><span class="store-chips"><span class="chip">渋谷店</span><span class="chip">新宿店</span></span></td>
+            <td>渋谷店</td>
             <td><span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#e8f8f5;color:#2ec4a5;">有効</span></td>
             <td><button class="btn btn-s btn-sm" onclick="showConfirm(this)">PW再発行</button></td>
             <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" onclick="empEdit(this,'active')">編集</button> <button class="btn btn-s btn-sm" style="color:#c62828;" onclick="empDelete(this,'active')">削除</button></td>
@@ -1747,7 +1731,7 @@
             <td><span style="border:1px solid #ddd;border-radius:4px;padding:2px 7px;font-size:10px;">代表取締役</span></td>
             <td>日額</td><td>¥1</td>
             <td>nishikata+test@wshoulder.com</td><td>090-1234-1234</td>
-            <td><span class="store-chips"><span class="chip zensha">全社</span></span></td>
+            <td>渋谷店</td>
             <td><span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#e8f8f5;color:#2ec4a5;">有効</span></td>
             <td><button class="btn btn-s btn-sm" onclick="showConfirm(this)">PW再発行</button></td>
             <td style="white-space:nowrap;"><button class="btn btn-s btn-sm" onclick="empEdit(this,'active')">編集</button> <button class="btn btn-s btn-sm" style="color:#c62828;" onclick="empDelete(this,'active')">削除</button></td>
@@ -1832,11 +1816,7 @@
         </div>
       </div>
 
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
-        <span style="font-size:11px;color:#888;">絞り込み:</span>
-        <div id="scope-c2"></div>
-      </div>
-      <div class="al al-i" style="margin-bottom:14px;"><span>ℹ️</span><div>担当店舗（池袋店）の従業員のみ表示されています。</div></div>
+      <div class="al al-i" style="margin-bottom:14px;"><span>ℹ️</span><div>池袋店の従業員のみ表示されています。</div></div>
 
       <table class="dt">
         <thead>
@@ -2582,12 +2562,6 @@
     <main class="mc">
       <div class="ph"><h2>管理者一覧</h2><div style="display:flex;gap:8px;"><button class="btn btn-s btn-sm csv-import-link" onclick="openCsvMethodModal('admin','管理者')" style="display:inline-flex;align-items:center;">📥 CSVインポート</button><button class="btn btn-p" onclick="go('d2')">+ 管理者を登録</button></div></div>
       <div style="font-size:10px;color:#888;margin-bottom:10px;">💡 「📥 CSVインポート」を押すと、別タブで <strong>タイムレコード インポート画面</strong> が開きます。「⑤ 管理者」テンプレートを選択して複数管理者を一括登録できます（外部勤怠サービス連携対象外）。</div>
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
-        <span style="font-size:11px;color:#888;">絞り込み:</span>
-        <div id="scope-d1"></div>
-        <div style="flex:1;"></div>
-        <div style="display:flex;align-items:center;gap:5px;border:1px solid #ddd;border-radius:6px;padding:7px 14px;font-size:11px;color:#999;min-width:200px;">🔍 名前・メールで検索</div>
-      </div>
       <table class="dt">
         <thead><tr><th>名前</th><th>メール</th><th>権限</th><th>ステータス</th><th>担当店舗</th><th>操作</th></tr></thead>
         <tbody>
@@ -3154,10 +3128,6 @@ function go(id) {
   target.classList.add('active');
   var t = document.getElementById('nav-' + id);
   if (t) t.classList.add('active');
-  // 従業員/管理者一覧: 会社→店舗 グループ検索を(登録済みマスタ連動で)構築
-  if (id === 'c1') buildScopeFilter('scope-c1', { onChange: function(s){ scopeFilterTable('c1', s); } });
-  if (id === 'c2') buildScopeFilter('scope-c2', { allowedStores: ['池袋店'], defaultSel: { type: 'store', name: '池袋店' }, onChange: function(s){ scopeFilterTable('c2', s); } });
-  if (id === 'd1') buildScopeFilter('scope-d1', { onChange: function(s){ scopeFilterTable('d1', s); } });
   // d2(管理者登録)を開いた際は初期タブ「新規登録」にリセット
   if (id === 'd2') {
     d2SwitchTab('new');
@@ -4244,105 +4214,6 @@ function syncModalRefSelects(stepNum) {
   }
   modal.querySelectorAll('select[data-ref-master]').forEach(repopRefSelect);
 }
-
-/* ============================================================ */
-/* 会社→店舗 グループ型サジェスト検索 (従業員検索/管理者検索)     */
-/*   検索欄に会社名・店舗名を入力→候補が[会社(全社)→店舗]で       */
-/*   グループ表示。中カテゴリ=会社/店舗。店舗はMASTERS.storeと連動。 */
-/*   複数店舗所属=行にチップ複数、全店舗/全社は店舗絞込でも表示。   */
-/*   単一テナント方針: 会社は1社(§multitenant)。(2026-07-13)       */
-/* ============================================================ */
-var COMPANY = { name: '株式会社ミライフーズ' };  // 単一テナント(1会社)。複数会社は親product(経営管理)領域
-var _scopeInstances = {};
-
-function buildScopeFilter(mountId, opts) {
-  opts = opts || {};
-  var mount = document.getElementById(mountId);
-  if (!mount) return;
-  var st = { sel: opts.defaultSel || { type: 'company', name: '' }, q: '', opts: opts };
-  _scopeInstances[mountId] = st;
-  scopeRender(mountId);
-}
-function scopeAllowedStores(opts) {
-  var all = MASTERS.store || [];
-  if (opts && opts.allowedStores) return all.filter(function(s){ return opts.allowedStores.indexOf(s) >= 0; });
-  return all;
-}
-function scopeLabel(st) {
-  if (st.sel.type === 'company') return '全社（' + COMPANY.name + '）';
-  return st.sel.name;
-}
-function scopeRender(mountId) {
-  var st = _scopeInstances[mountId]; if (!st) return;
-  var mount = document.getElementById(mountId); if (!mount) return;
-  mount.innerHTML =
-    '<div class="scope-filter">' +
-      '<div class="scope-trigger" onclick="toggleScopeDD(\'' + mountId + '\')">' +
-        '<span>🏢</span><span class="sc-label">' + scopeLabel(st) + '</span><span class="sc-caret">▼</span>' +
-      '</div>' +
-      '<div class="scope-dd" id="' + mountId + '-dd">' +
-        '<div class="scope-dd-search"><input type="text" placeholder="会社名・店舗名で絞り込み" oninput="onScopeSearch(\'' + mountId + '\',this.value)"></div>' +
-        '<div id="' + mountId + '-list"></div>' +
-      '</div>' +
-    '</div>';
-  scopeRenderList(mountId);
-}
-function scopeRenderList(mountId) {
-  var st = _scopeInstances[mountId]; if (!st) return;
-  var listEl = document.getElementById(mountId + '-list'); if (!listEl) return;
-  var q = (st.q || '').trim();
-  var compHit = (q === '' || COMPANY.name.indexOf(q) >= 0);
-  var stores = scopeAllowedStores(st.opts).filter(function(s){ return q === '' || s.indexOf(q) >= 0 || COMPANY.name.indexOf(q) >= 0; });
-  var html = '';
-  if (compHit || stores.length) {
-    html += '<div class="scope-group-label">' + COMPANY.name + '</div>';
-    if (compHit) {
-      var selC = st.sel.type === 'company' ? ' sel' : '';
-      html += '<div class="scope-opt' + selC + '" onclick="selectScope(\'' + mountId + '\',\'company\',\'\')">' +
-        '<span>🏢</span><span>' + COMPANY.name + '（全社）</span>' + (selC ? '<span class="sc-check">✓</span>' : '') + '</div>';
-    }
-    stores.forEach(function(s){
-      var selS = (st.sel.type === 'store' && st.sel.name === s) ? ' sel' : '';
-      html += '<div class="scope-opt store' + selS + '" onclick="selectScope(\'' + mountId + '\',\'store\',\'' + s + '\')">' +
-        '<span>🏪</span><span>' + s + '</span>' + (selS ? '<span class="sc-check">✓</span>' : '') + '</div>';
-    });
-  } else {
-    html = '<div class="scope-empty">該当なし</div>';
-  }
-  listEl.innerHTML = html;
-}
-function toggleScopeDD(mountId) {
-  document.querySelectorAll('.scope-dd.open').forEach(function(d){ if (d.id !== mountId + '-dd') d.classList.remove('open'); });
-  var dd = document.getElementById(mountId + '-dd'); if (dd) dd.classList.toggle('open');
-}
-function onScopeSearch(mountId, v) {
-  var st = _scopeInstances[mountId]; if (!st) return;
-  st.q = v; scopeRenderList(mountId);
-}
-function selectScope(mountId, type, name) {
-  var st = _scopeInstances[mountId]; if (!st) return;
-  st.sel = { type: type, name: name };
-  st.q = '';
-  scopeRender(mountId);
-  var dd = document.getElementById(mountId + '-dd'); if (dd) dd.classList.remove('open');
-  if (st.opts.onChange) st.opts.onChange(st.sel);
-}
-// 選択に応じて対象ページのテーブルを絞り込み(デモ)。全店舗/全社の行は店舗絞込でも常時表示。
-function scopeFilterTable(pageId, scope) {
-  var page = document.getElementById('page-' + pageId); if (!page) return;
-  var tb = page.querySelector('table.dt tbody'); if (!tb) return;
-  tb.querySelectorAll('tr').forEach(function(tr){
-    if (scope.type === 'company') { tr.style.display = ''; return; }
-    var txt = tr.textContent || '';
-    var isZensha = (txt.indexOf('全店舗') >= 0 || txt.indexOf('全社') >= 0);
-    tr.style.display = (isZensha || txt.indexOf(scope.name) >= 0) ? '' : 'none';
-  });
-}
-document.addEventListener('click', function(e){
-  if (!e.target.closest('.scope-filter')) {
-    document.querySelectorAll('.scope-dd.open').forEach(function(d){ d.classList.remove('open'); });
-  }
-});
 
 // 設定画面に遷移時、運用画面では常にデモデータを表示(設定前モードは別途エンプティビュー)
 function refreshSettingsList(stepNum) {
