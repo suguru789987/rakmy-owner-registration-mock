@@ -3336,10 +3336,13 @@ function go(id) {
     try { which = sessionStorage.getItem('adminPwSetupWhich') || 'new'; } catch (e) {}
     if (typeof applyAdminPwSetupMode === 'function') applyAdminPwSetupMode(which);
   }
-  // b0(初期セットアップ)を開いた際は保存済み進捗とメソッド選択を反映
+  // b0(初期セットアップ)を開いた際は保存済み進捗を反映。
+  // 方式(手動/CSV)は毎回「方式選択ピッカー」から始める(=遷移起点に依らず挙動を統一)。
+  // 以前は b0LoadMethod() で前回方式を復元しており、前回「1件ずつ」を選ぶと
+  // 登録完了→初期設定を始める でもピッカーを飛ばして手動ウィザードへ直行していた。
   if (id === 'b0') {
     b0SetState(b0LoadDone());
-    b0SetMethod(b0LoadMethod());
+    b0SetMethod('none');
     bSetImportMethod(bLoadImportMethod());
   }
   // 設定画面: 初期/運用モードに応じてバナー切替
