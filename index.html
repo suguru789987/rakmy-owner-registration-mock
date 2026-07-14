@@ -4115,8 +4115,9 @@ function refreshB0ResumeBanner(forceShow) {
     } else if (importInProgress.currentStep === 's-saas-preview') {
       stateShort = 'プレビュー(マッピング確認済)';
     } else if (importInProgress.allRequiredDone) {
-      // 必須項目すべて完了済(登録前準備完了) — テンプレ4/4 or SaaS 必須カバー時
-      stateShort = '✓ 必須項目すべて完了(登録前準備完了)';
+      // 必須ファイルはアップ済みだが「本取り込み」未実行 = 初期セットアップは未完了のまま。
+      // 「完了」表記は誤解を招くため使わない(アップ済み+本取り込み前であることを明示)。
+      stateShort = '必須ファイルをすべてアップ済み';
     } else if (importInProgress.completed != null && importInProgress.total != null) {
       stateShort = 'アップ済(' + importInProgress.completed + '/' + importInProgress.total + ') 一時保存中';
     } else {
@@ -4730,7 +4731,7 @@ function bDemoB0EmptyDraftTplStep1() {
     sessionStorage.setItem('b0Counts', JSON.stringify([0, 0, 0, 0, 0]));
     localStorage.setItem('import_in_progress', JSON.stringify({
       type: 'template', completed: 4, total: 4,
-      currentStep: 's-tpl1', label: '✓ 必須項目すべて完了(登録前準備完了)',
+      currentStep: 's-tpl1', label: '必須ファイルをすべてアップ済み（本取り込み前）',
       allRequiredDone: true,
       itemsCompleted: ['businesstype', 'store', 'emptype', 'employee'],
       itemLabels: { businesstype: '① 業態', store: '② 店舗', emptype: '③ 雇用区分', employee: '④ 従業員', admin: '⑤ 管理者(任意)' },
