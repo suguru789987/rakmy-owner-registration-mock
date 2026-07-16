@@ -5,6 +5,12 @@
 
 ---
 
+## 2026-07-16
+
+### Added / Changed（運用インポート導線）
+- **サイドバーに「⬆ インポート」を追加**（全運用サイドバー16箇所・エクスポートと経営管理の間）。import-spec の運用ハブ（`s-top`）へ遷移。
+- **「📥 CSVインポート」モーダルを既定継承型に刷新**：初期設定のインポート方式（`localStorage` `hub_import_method`/`hub_saas_service`・import-spec と同一オリジン共有）を1行で表示し「次へ」で該当画面へ。右上「⚙ インポート方式を再設定」で選び直し。外部勤怠は `?src=` で連携元を import-spec に引き継ぎ（`csvMethodChoose`/`csvMethodProceedDefault`/`csvMethodPick`）。
+
 ## 2026-07-13
 
 ### Added
