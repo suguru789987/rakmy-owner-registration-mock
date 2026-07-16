@@ -2274,29 +2274,50 @@
 <!-- ===== CSVインポート方式選択モーダル (全データ種別共通) =====
      設定画面の「CSVインポート」ボタン → このモーダル → 方式選択 → 専用画面に新タブで遷移 -->
 <div id="csv-import-method-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;font-family:'Hiragino Kaku Gothic ProN', sans-serif;">
-  <div style="background:#fff;border-radius:10px;padding:24px 30px;max-width:520px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.3);">
-    <h3 style="margin:0 0 6px 0;font-size:16px;font-weight:700;color:#333;">📥 CSVインポート方式を選択</h3>
-    <div style="font-size:12px;color:#666;margin-bottom:18px;"><span id="csv-method-data-label">対象データ</span> のインポート方式を選択してください。</div>
-    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px;">
-      <button id="csv-method-tpl-btn" onclick="csvMethodChoose('tpl')" style="padding:14px 18px;border:1px solid #2ec4a5;border-radius:8px;background:#fff;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;">
-        <span style="font-size:24px;">📄</span>
-        <div style="flex:1;">
-          <div style="font-size:13px;font-weight:700;color:#0e9077;">テンプレートで取り込み</div>
-          <div style="font-size:11px;color:#666;margin-top:2px;">ラクミー専用テンプレートにデータを入力してインポート</div>
-        </div>
-        <span style="font-size:18px;color:#2ec4a5;">→</span>
-      </button>
-      <button id="csv-method-saas-btn" onclick="csvMethodChoose('saas')" style="padding:14px 18px;border:1px solid #1a73e8;border-radius:8px;background:#fff;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;">
-        <span style="font-size:24px;">🔄</span>
-        <div style="flex:1;">
-          <div style="font-size:13px;font-weight:700;color:#0d47a1;">外部勤怠サービスから取り込み</div>
-          <div id="csv-method-saas-desc" style="font-size:11px;color:#666;margin-top:2px;">キングオブタイム / ジョブカン の CSV データを列マッピングしてインポート</div>
-        </div>
-        <span id="csv-method-saas-arrow" style="font-size:18px;color:#1a73e8;">→</span>
-      </button>
+  <div style="background:#fff;border-radius:10px;padding:24px 30px;max-width:540px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.3);">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px;">
+      <h3 style="margin:0;font-size:16px;font-weight:700;color:#333;">📥 CSVインポート</h3>
+      <button id="csv-method-reconfig-btn" onclick="csvMethodShowPicker()" style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;padding:7px 12px;border:1px solid #1a73e8;border-radius:7px;background:#eef4ff;color:#1a73e8;cursor:pointer;white-space:nowrap;">⚙ インポート方式を再設定</button>
     </div>
-    <div style="display:flex;justify-content:flex-end;">
-      <button onclick="closeCsvMethodModal()" style="padding:8px 18px;border:1px solid #ccc;border-radius:6px;background:#fff;cursor:pointer;font-size:13px;color:#555;">キャンセル</button>
+    <div style="font-size:12px;color:#666;margin-bottom:18px;"><span id="csv-method-data-label">対象データ</span> を取り込みます。</div>
+
+    <!-- 既定ビュー: 初期設定のインポート方式を明示 → 次へ -->
+    <div id="csv-method-default">
+      <div style="display:flex;align-items:center;gap:10px;padding:14px 16px;background:#f0faf6;border:1px solid #b8e6d6;border-radius:8px;margin-bottom:6px;flex-wrap:wrap;">
+        <span style="font-size:12px;color:#0e9077;font-weight:700;">初期設定のインポート方式</span>
+        <span id="csv-method-cur" style="font-size:15px;font-weight:700;color:#222;">📄 テンプレート</span>
+      </div>
+      <div style="font-size:11px;color:#999;margin-bottom:18px;">この方式で取り込みます。変更する場合は右上「インポート方式を再設定」から。</div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;">
+        <button onclick="closeCsvMethodModal()" style="padding:8px 18px;border:1px solid #ccc;border-radius:6px;background:#fff;cursor:pointer;font-size:13px;color:#555;">キャンセル</button>
+        <button class="btn btn-p" onclick="csvMethodProceedDefault()" style="font-size:13px;padding:9px 22px;">次へ →</button>
+      </div>
+    </div>
+
+    <!-- ピッカービュー(再設定): 方式を選び直す -->
+    <div id="csv-method-picker" style="display:none;">
+      <div style="font-size:12px;color:#666;margin-bottom:14px;">インポート方式を選び直してください（初期設定を上書きします）。</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px;">
+        <button id="csv-method-tpl-btn" onclick="csvMethodPick('tpl')" style="padding:14px 18px;border:1px solid #2ec4a5;border-radius:8px;background:#fff;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;">
+          <span style="font-size:24px;">📄</span>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:700;color:#0e9077;">テンプレートで取り込み</div>
+            <div style="font-size:11px;color:#666;margin-top:2px;">ラクミー専用テンプレートにデータを入力してインポート</div>
+          </div>
+          <span style="font-size:18px;color:#2ec4a5;">→</span>
+        </button>
+        <button id="csv-method-saas-btn" onclick="csvMethodPick('saas')" style="padding:14px 18px;border:1px solid #1a73e8;border-radius:8px;background:#fff;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;">
+          <span style="font-size:24px;">🔄</span>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:700;color:#0d47a1;">外部勤怠サービスから取り込み</div>
+            <div id="csv-method-saas-desc" style="font-size:11px;color:#666;margin-top:2px;">キングオブタイム / ジョブカン の CSV データを列マッピングしてインポート</div>
+          </div>
+          <span id="csv-method-saas-arrow" style="font-size:18px;color:#1a73e8;">→</span>
+        </button>
+      </div>
+      <div style="display:flex;justify-content:flex-start;">
+        <button onclick="csvMethodBackToDefault()" style="padding:8px 18px;border:1px solid #ccc;border-radius:6px;background:#fff;cursor:pointer;font-size:13px;color:#555;">← 戻る</button>
+      </div>
     </div>
   </div>
 </div>
@@ -5670,28 +5691,55 @@ function _setupAdminBuildStoreChecks() {
 // 派生取込 (顧客カスタムテンプレ→内部仕分け) は担保が得られず非推奨 (旧仕様)。
 var _csvMethodType = null;
 var _csvMethodLabel = '';
+// 初期設定で決めたインポート方式(グローバル・import-spec ハブと同一 localStorage キー / 同一オリジン)
+var _csvMethodDefault = 'tpl';   // 'tpl' | 'saas'
+var _csvMethodSaasSvc = 'kot';   // 'kot' | 'jc' | 'other'
+var CSV_SAAS_NAME = { kot:'キングオブタイム', jc:'ジョブカン', other:'その他' };
+function _csvLoadDefault() {
+  try {
+    var m = localStorage.getItem('hub_import_method'); if (m==='tpl'||m==='saas') _csvMethodDefault = m;
+    var s = localStorage.getItem('hub_saas_service');  if (s==='kot'||s==='jc'||s==='other') _csvMethodSaasSvc = s;
+  } catch (e) {}
+}
+function _csvUpdateCurLabel() {
+  var el = document.getElementById('csv-method-cur');
+  if (el) el.textContent = (_csvMethodDefault==='saas')
+    ? ('🔄 外部勤怠サービス: ' + (CSV_SAAS_NAME[_csvMethodSaasSvc] || ''))
+    : '📄 テンプレート';
+}
 function openCsvMethodModal(type, label) {
   _csvMethodType = type;
   _csvMethodLabel = label || type;
   var lblEl = document.getElementById('csv-method-data-label');
   if (lblEl) lblEl.textContent = label;
-  // 5種すべて SaaS 取込可能 (実データ無ければ顧客が判断)
+  // 初期設定の方式を読み込み、既定ビューを表示
+  _csvLoadDefault();
+  _csvUpdateCurLabel();
+  csvMethodBackToDefault();
+  // ピッカーの SaaS ボタンは 5種すべて有効
   var saasBtn = document.getElementById('csv-method-saas-btn');
-  var saasDesc = document.getElementById('csv-method-saas-desc');
   var saasArrow = document.getElementById('csv-method-saas-arrow');
-  if (saasBtn) {
-    saasBtn.disabled = false;
-    saasBtn.style.background = '#fff';
-    saasBtn.style.borderColor = '#1a73e8';
-    saasBtn.style.cursor = 'pointer';
-    saasBtn.style.opacity = '1';
-    if (saasDesc) {
-      saasDesc.textContent = 'キングオブタイム / ジョブカン の CSV データを列マッピングしてインポート (種別ごとに別エクスポート)';
-    }
-    if (saasArrow) saasArrow.textContent = '→';
-  }
+  if (saasBtn) { saasBtn.disabled = false; saasBtn.style.background = '#fff'; saasBtn.style.borderColor = '#1a73e8'; saasBtn.style.cursor = 'pointer'; saasBtn.style.opacity = '1'; if (saasArrow) saasArrow.textContent = '→'; }
   var ov = document.getElementById('csv-import-method-overlay');
   if (ov) ov.style.display = 'flex';
+}
+// 既定ビュー ⇄ 方式ピッカー
+function csvMethodShowPicker() {
+  var d = document.getElementById('csv-method-default'), p = document.getElementById('csv-method-picker');
+  if (d) d.style.display = 'none'; if (p) p.style.display = '';
+}
+function csvMethodBackToDefault() {
+  var d = document.getElementById('csv-method-default'), p = document.getElementById('csv-method-picker');
+  if (d) d.style.display = ''; if (p) p.style.display = 'none';
+}
+// 既定のまま「次へ」→ 現在方式で該当インポート画面へ
+function csvMethodProceedDefault() { csvMethodChoose(_csvMethodDefault); }
+// 再設定ピッカーで方式を選び直す → 初期設定を上書きして遷移
+function csvMethodPick(method) {
+  _csvMethodDefault = (method==='saas') ? 'saas' : 'tpl';
+  try { localStorage.setItem('hub_import_method', _csvMethodDefault); } catch (e) {}
+  _csvUpdateCurLabel();
+  csvMethodChoose(_csvMethodDefault);
 }
 function closeCsvMethodModal() {
   var ov = document.getElementById('csv-import-method-overlay');
@@ -5700,11 +5748,13 @@ function closeCsvMethodModal() {
 }
 function csvMethodChoose(method) {
   if (!_csvMethodType) { closeCsvMethodModal(); return; }
-  // 案A (2026-05-18): 派生取込仕様廃止。業態/店舗/雇用区分の外部勤怠ボタンは disabled なので
-  // このパスには到達しない (UI で防止)。常に通常ルーティング。
-  // cache-buster 付与でブラウザキャッシュを回避 (?v=t<timestamp>)
   var cb = 't' + Date.now();
   var url = 'https://suguru789987.github.io/rakmy-timerecord-import-spec/?type=' + encodeURIComponent(_csvMethodType) + '&mode=' + method + '&v=' + cb;
+  // 外部勤怠は初期設定の連携元サービスを引き継ぐ (hub 形式 kot/jc/other → 単体画面形式 kot/jobcan/other)
+  if (method === 'saas') {
+    var src = (_csvMethodSaasSvc==='jc' ? 'jobcan' : (_csvMethodSaasSvc==='other' ? 'other' : 'kot'));
+    url += '&src=' + src;
+  }
   window.open(url, '_blank', 'noopener');
   closeCsvMethodModal();
 }
